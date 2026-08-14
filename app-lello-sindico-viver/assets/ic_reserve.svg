@@ -1,0 +1,21 @@
+<svg width="37" height="33" viewBox="0 0 37 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="4" width="30" height="24" rx="1" stroke="#606062" stroke-width="2"/>
+<rect x="5" width="2" height="7" rx="1" fill="#606062"/>
+<rect x="25" width="2" height="7" rx="1" fill="#606062"/>
+<rect x="1" y="9" width="30" height="2" fill="#606062"/>
+<rect x="5" y="14" width="2" height="2" fill="#606062"/>
+<rect x="9" y="14" width="2" height="2" fill="#606062"/>
+<rect x="13" y="14" width="2" height="2" fill="#606062"/>
+<rect x="17" y="14" width="2" height="2" fill="#606062"/>
+<rect x="21" y="14" width="2" height="2" fill="#606062"/>
+<rect x="25" y="14" width="2" height="2" fill="#606062"/>
+<rect x="5" y="19" width="2" height="2" fill="#606062"/>
+<rect x="9" y="19" width="2" height="2" fill="#606062"/>
+<rect x="13" y="19" width="2" height="2" fill="#606062"/>
+<rect x="17" y="19" width="2" height="2" fill="#606062"/>
+<rect x="21" y="19" width="2" height="2" fill="#606062"/>
+<rect x="25" y="19" width="2" height="2" fill="#606062"/>
+<circle cx="31" cy="27" r="6" fill="#606062"/>
+<path d="M31 25V29" stroke="#FFFFFE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M33 27L29 27" stroke="#FFFFFE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

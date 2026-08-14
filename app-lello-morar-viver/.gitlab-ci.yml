@@ -1,0 +1,552 @@
+stages:
+  - clone_dependent_projects
+  - fvm
+  - pre_build
+  - determine_environment
+  - update_provisioning_profiles
+  - firebase_deployment
+  - production_deployment
+  - remove_build_folder
+
+variables:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+  CI_COMMIT_MESSAGE: $(git log -1 --pretty=%B)
+  BUNDLER_VERSION: "2.7.1"
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "120"
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "6"
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_PIPELINE_ID/$CI_PROJECT_PATH
+  GIT_CLEAN_FLAGS: "none"
+
+# CLONE DEPENDENTS PROJECTS
+clone_shared:
+  stage: clone_dependent_projects
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  before_script:
+    - cd ..
+    - rm -rf app-lello-shared
+  script:
+    - |
+      DEP_BRANCH="${TARGET_BRANCH:-$CI_COMMIT_REF_NAME}"
+      echo "Using app-lello-shared branch: $DEP_BRANCH"
+      git clone --branch "$DEP_BRANCH" https://oauth2:$shared_token@gitcondo.lello.com.br/digital/apps/app-lello-shared.git
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+clone_essentials:
+  stage: clone_dependent_projects
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  before_script:
+    - cd ..
+    - rm -rf app-lello-essentials
+  script:
+    - |
+      DEP_BRANCH="${TARGET_BRANCH:-$CI_COMMIT_REF_NAME}"
+      echo "Using app-lello-essentials branch: $DEP_BRANCH"
+      git clone --branch "$DEP_BRANCH" https://oauth2:$essentials_token@gitcondo.lello.com.br/digital/apps/app-lello-essentials.git
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+clone_morar:
+  stage: clone_dependent_projects
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  before_script:
+    - cd ..
+    - rm -rf app-lello-morar
+  script:
+    - |
+      DEP_BRANCH="${TARGET_BRANCH:-$CI_COMMIT_REF_NAME}"
+      echo "Using app-lello-morar branch: $DEP_BRANCH"
+      git clone --branch "$DEP_BRANCH" https://oauth2:$morar_token@gitcondo.lello.com.br/digital/apps/app-lello-morar.git
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# FVM INSTALL
+fvm_install:
+  stage: fvm
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  needs:
+    - clone_essentials
+    - clone_shared
+  script:
+    - brew install dart-sdk
+    - if ! command -v fvm &> /dev/null; then dart pub global activate fvm; fi
+    - export PATH="$PATH:$HOME/.pub-cache/bin"
+    - fvm use
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+pre_build_essentials:
+  stage: pre_build
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  needs:
+    - fvm_install
+  before_script:
+    - cd ..
+  script:
+    - cd app-lello-essentials
+    - fvm flutter pub get
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+pre_build_shared:
+  stage: pre_build
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  needs:
+    - fvm_install
+    - pre_build_essentials
+  before_script:
+    - cd ..
+  script:
+    - cd app-lello-shared
+    - fvm flutter pub get
+    - cd packages/lib_facedetection
+    - fvm flutter pub get
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+pre_build_morar:
+  stage: pre_build
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  needs:
+    - fvm_install
+    - clone_morar
+    - pre_build_essentials
+    - pre_build_shared
+  before_script:
+    - cd ..
+  script:
+    - cd app-lello-morar
+    - fvm flutter pub get
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# DETERMINE ENVIRONMENT
+determine_environment:
+  stage: determine_environment
+  resource_group: $CI_PROJECT_PATH
+  needs:
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    - |
+      echo "============================================================"
+      echo "  DETERMINE ENVIRONMENT"
+      echo "============================================================"
+      echo ""
+      echo "Este job resolve qual ambiente (DEPLOY_ENV) será usado nos"
+      echo "jobs de deployment (Firebase Android/iOS)."
+      echo ""
+      echo "------------------------------------------------------------"
+      echo "  REGRAS DE RESOLUÇÃO (em ordem de prioridade)"
+      echo "------------------------------------------------------------"
+      echo "  1. Variável de override no GitLab CI/CD Settings:"
+      echo "     Nome: DEPLOY_ENV_<BRANCH_NORMALIZADA>"
+      echo "     Exemplo: branch 'feature/bella'  → DEPLOY_ENV_FEATURE_BELLA"
+      echo "     Exemplo: branch 'feature/meu-fix' → DEPLOY_ENV_FEATURE_MEU_FIX"
+      echo "     Valores aceitos: homolog | dev | dev1 | dev2 | dev3 | preprod"
+      echo "     Como configurar: GitLab → Settings → CI/CD → Variables"
+      echo ""
+      echo "  2. Branches fixas conhecidas:"
+      echo "     homolog, flutter_update → homolog"
+      echo ""
+      echo "  3. Fallback (feature/* sem override definido) → homolog"
+      echo "------------------------------------------------------------"
+      echo ""
+
+      BRANCH="$CI_COMMIT_REF_NAME"
+      echo "Branch detectada: $BRANCH"
+
+      # Deriva o nome da variável de override: feature/bella → DEPLOY_ENV_FEATURE_BELLA
+      BRANCH_VAR="DEPLOY_ENV_$(echo "$BRANCH" | tr '[:lower:]' '[:upper:]' | sed 's/[^A-Z0-9]/_/g')"
+      echo "Variável de override esperada: $BRANCH_VAR"
+      OVERRIDE="$(printenv "$BRANCH_VAR" || true)"
+
+      if [[ -n "$OVERRIDE" ]]; then
+        DEPLOY_ENV="$OVERRIDE"
+        echo ""
+        echo "✅ Override encontrado: $BRANCH_VAR=$DEPLOY_ENV"
+        echo "   → Usando ambiente definido manualmente no GitLab CI/CD Variables."
+      elif [[ "$BRANCH" == "homolog" || "$BRANCH" == "flutter_update" ]]; then
+        DEPLOY_ENV="homolog"
+        echo ""
+        echo "✅ Branch fixa reconhecida: '$BRANCH'"
+        echo "   → Usando ambiente padrão: homolog"
+      else
+        DEPLOY_ENV="homolog"
+        echo ""
+        echo "⚠️  Nenhum override encontrado para '$BRANCH_VAR'."
+        echo "   → Fallback aplicado: homolog"
+        echo ""
+        echo "   Para mudar o ambiente desta branch, adicione a variável:"
+        echo "   Nome:  $BRANCH_VAR"
+        echo "   Valor: dev | dev1 | dev2 | dev3 | homolog | preprod"
+        echo "   Local: GitLab → Settings → CI/CD → Variables"
+      fi
+
+      echo ""
+      echo "============================================================"
+      echo "  RESULTADO: DEPLOY_ENV=$DEPLOY_ENV"
+      echo "============================================================"
+      echo "DEPLOY_ENV=$DEPLOY_ENV" >> deploy.env
+  artifacts:
+    reports:
+      dotenv: deploy.env
+    expire_in: 2 hours
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# ==========================================================
+# ANDROID DEPLOYMENTS
+# ==========================================================
+
+# --- 1. FIREBASE (APK) ---
+# App Original (Lello)
+android_firebase_internal_deployment:
+  stage: firebase_deployment
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  needs:
+    - determine_environment
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  variables:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
+  before_script:
+    - fvm flutter clean
+    - fvm flutter pub get
+    - echo "storePassword=$STORE_PASSWORD" >> android/key.properties
+    - echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+    - echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+    - echo "storeFile=$STORE_FILE" >> android/key.properties
+    - cd android/
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - bundle _${BUNDLER_VERSION}_ install
+  script:
+    - bundle exec fastlane android firebase flavor:lello environment:$DEPLOY_ENV ci_commit:"$(echo $DEPLOY_ENV | tr '[:lower:]' '[:upper:]') - $(git log -1 --pretty=%B)"
+  artifacts:
+    paths:
+      - build/app/outputs/flutter-apk/*.apk
+    expire_in: 2 week
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# App Novo (Hubert)
+android_firebase_hubert_deployment:
+  stage: firebase_deployment
+  extends: android_firebase_internal_deployment
+  script:
+    - bundle exec fastlane android firebase flavor:hubert environment:$DEPLOY_ENV ci_commit:"$(echo $DEPLOY_ENV | tr '[:lower:]' '[:upper:]') - $(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# --- 2. PLAY STORE (AAB) ---
+
+# App Original (Lello)
+android_play_store_internal_deployment:
+  stage: production_deployment
+  resource_group: $CI_PROJECT_PATH
+  retry: 2
+  needs:
+    - pre_build_shared
+    - pre_build_essentials
+  variables:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
+  before_script:
+    - fvm flutter clean
+    - fvm flutter pub get
+    - echo "storePassword=$STORE_PASSWORD" >> android/key.properties
+    - echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+    - echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+    - echo "storeFile=$STORE_FILE" >> android/key.properties
+    - cd android/
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - bundle _${BUNDLER_VERSION}_ install
+  script:
+    - exec fastlane android upload_google_play_store_internal flavor:lello environment:prod ci_commit:"$(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# App Novo (Hubert)
+android_play_store_hubert_deployment:
+  stage: production_deployment
+  extends: android_play_store_internal_deployment
+  script:
+    - exec fastlane android upload_google_play_store_internal flavor:hubert environment:prod ci_commit:"$(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# ==========================================================
+# UPDATE PROVISIONING PROFILES
+# ==========================================================
+
+# App Original (Lello) - branch main
+update_provisioning_profiles_lello:
+  stage: update_provisioning_profiles
+  retry: 2
+  resource_group: ios_pipeline_lock
+  needs:
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  before_script:
+    - cd ios/
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - bundle _${BUNDLER_VERSION}_ install
+  script:
+    - bundle exec fastlane match adhoc --git_branch main --app_identifier app.lello.morarviver --team_id RNEA6DL9E4
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# App Novo (Hubert) - branch hubert
+update_provisioning_profiles_hubert:
+  stage: update_provisioning_profiles
+  retry: 2
+  resource_group: ios_pipeline_lock
+  needs:
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  before_script:
+    - cd ios/
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - bundle _${BUNDLER_VERSION}_ install
+  script:
+    - bundle exec fastlane match adhoc --git_branch hubert --app_identifier app.hubert.morador --team_id Z3H6XQP5FK
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# Renovar profiles (manual) - usa API Key do App Store Connect
+renew_profiles_lello:
+  stage: update_provisioning_profiles
+  resource_group: ios_pipeline_lock
+  before_script:
+    - cd ios/
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - bundle _${BUNDLER_VERSION}_ install
+  script:
+    - bundle exec fastlane renew_profiles flavor:lello
+  rules:
+    - when: manual
+      allow_failure: true
+
+# ==========================================================
+# IOS DEPLOYMENTS
+# ==========================================================
+
+# --- 1. FIREBASE (ADHOC) ---
+# Roda nas branches: homolog, flutter_update
+
+# App Original (Lello)
+ios_firebase_internal_deployment:
+  stage: firebase_deployment
+  retry: 2
+  resource_group: ios_pipeline_lock
+  needs:
+    - determine_environment
+    - update_provisioning_profiles_lello
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  variables:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
+  before_script:
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - fvm flutter precache --ios
+    - fvm flutter pub get
+    - cd ios/
+    - sh update_target_version.sh
+    - rm -rf Pods .symlinks
+    - bundle _${BUNDLER_VERSION}_ install
+    - bundle exec pod install --repo-update
+  script:
+    - bundle exec fastlane ios firebase flavor:lello environment:$DEPLOY_ENV ci_commit:"$(echo $DEPLOY_ENV | tr '[:lower:]' '[:upper:]') - $(git log -1 --pretty=%B)"
+  artifacts:
+    paths:
+      - ios/Runner.ipa
+      - ios/buildlog/**
+    expire_in: 2 week
+  after_script:
+    - echo "Build finished"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# App Novo (Hubert) - Herda configuração do Lello, mas muda o script
+ios_firebase_hubert_deployment:
+  stage: firebase_deployment
+  extends: ios_firebase_internal_deployment
+  resource_group: ios_pipeline_lock
+  needs:
+    - determine_environment
+    - update_provisioning_profiles_hubert
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    - bundle exec fastlane ios firebase flavor:hubert environment:$DEPLOY_ENV ci_commit:"$(echo $DEPLOY_ENV | tr '[:lower:]' '[:upper:]') - $(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+
+# App Original (Lello) PREPROD - Firebase
+ios_firebase_lello_preprod_deployment:
+  stage: firebase_deployment
+  extends: ios_firebase_internal_deployment
+  resource_group: ios_pipeline_lock
+  needs:
+    - update_provisioning_profiles_lello
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    - bundle exec fastlane ios firebase flavor:lello environment:preprod ci_commit:"PREPROD - $(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# App Novo (Hubert) PREPROD - Firebase
+ios_firebase_hubert_preprod_deployment:
+  stage: firebase_deployment
+  extends: ios_firebase_internal_deployment
+  resource_group: ios_pipeline_lock
+  needs:
+    - update_provisioning_profiles_hubert
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    - bundle exec fastlane ios firebase flavor:hubert environment:preprod ci_commit:"PREPROD - $(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# App Original (Lello) PROD - Firebase
+ios_firebase_lello_prod_deployment:
+  stage: firebase_deployment
+  extends: ios_firebase_internal_deployment
+  resource_group: ios_pipeline_lock
+  needs:
+    - update_provisioning_profiles_lello
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    - bundle exec fastlane ios firebase flavor:lello environment:prod ci_commit:"PROD - $(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# App Novo (Hubert) PROD - Firebase
+ios_firebase_hubert_prod_deployment:
+  stage: firebase_deployment
+  extends: ios_firebase_internal_deployment
+  resource_group: ios_pipeline_lock
+  needs:
+    - update_provisioning_profiles_hubert
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    - bundle exec fastlane ios firebase flavor:hubert environment:prod ci_commit:"PROD - $(git log -1 --pretty=%B)"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# --- 2. TESTFLIGHT (APP STORE) ---
+# Roda na branch: master
+
+# App Original (Lello)
+ios_testflight_beta_deployment:
+  stage: production_deployment
+  retry: 2
+  resource_group: ios_pipeline_lock
+  needs:
+    - update_provisioning_profiles_lello
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  variables:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
+  before_script:
+    - gem list bundler -i -v $BUNDLER_VERSION || gem install bundler -v $BUNDLER_VERSION
+    - fvm flutter precache --ios
+    - fvm flutter pub get
+    - cd ios/
+    - sh update_target_version.sh
+    - rm -rf Pods .symlinks
+    - bundle _${BUNDLER_VERSION}_ install
+    - bundle exec pod install --repo-update
+  script:
+    - bundle exec fastlane ios testflight_beta flavor:lello environment:prod ci_commit:"$(git log -1 --pretty=%B)"
+  after_script:
+    - echo "Build finished"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+# App Novo (Hubert)
+ios_testflight_hubert_deployment:
+  stage: production_deployment
+  extends: ios_testflight_beta_deployment
+  resource_group: ios_pipeline_lock
+  needs:
+    - update_provisioning_profiles_hubert
+    - pre_build_morar
+    - pre_build_shared
+    - pre_build_essentials
+  script:
+    # Flavor hubert
+    - bundle exec fastlane ios testflight_beta flavor:hubert environment:prod ci_commit:"$(git log -1 --pretty=%B)"
+  rules:
+    # MESMA REGRA: Roda junto na master
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+remove_build_folder:
+  stage: remove_build_folder
+  resource_group: $CI_PROJECT_PATH
+  script:
+    # 🧹 Limpa artefatos de build desta pipeline
+    - echo "🧹 Cleaning pipeline build directory..."
+    - PIPELINE_DIR="$CI_BUILDS_DIR/$CI_PIPELINE_ID"
+    - |
+      if [ -d "$PIPELINE_DIR" ]; then
+        echo "  🗑 Removing $PIPELINE_DIR"
+        rm -rf "$PIPELINE_DIR"
+      fi
+    - echo "✅ Pipeline build directory cleaned successfully."
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "homolog" || $CI_COMMIT_REF_NAME == "flutter_update" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^feature\/.*/' 
+      when: always
+    - if: "$TARGET_BRANCH && $TARGET_BRANCH == $CI_COMMIT_REF_NAME"
+      when: always

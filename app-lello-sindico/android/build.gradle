@@ -1,0 +1,36 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty('android')) {
+                project.android {
+                    if (namespace == null) {
+                        namespace project.group
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Mantém o diretório de build padrão esperado pelo Flutter (`../build`),
+// para que `flutter run/build` consiga localizar os artefatos gerados (apk/aab).
+rootProject.buildDir = new File(rootDir, '../build').absolutePath
+subprojects {
+    afterEvaluate{
+        android{
+                compileSdkVersion 36
+            }
+    }
+}
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

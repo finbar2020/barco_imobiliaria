@@ -1,0 +1,5149 @@
+{
+  "generatedAt": "2026-07-16T11:55:25.847313",
+  "rootPath": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar",
+  "projects": [
+    {
+      "name": "colaborador",
+      "folderName": "app-lello-colaborador",
+      "description": "Flutter app for Lello condominiuns employees.",
+      "version": "2.10.16+236",
+      "type": "app",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-colaborador",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "dependencies": [
+        {
+          "name": "essentials",
+          "version": "path:../app-lello-essentials/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-essentials/"
+        },
+        {
+          "name": "shared_features",
+          "version": "path:../app-lello-shared/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/"
+        },
+        {
+          "name": "lib_facedetection",
+          "version": "path:../app-lello-shared/packages/lib_facedetection/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/packages/lib_facedetection/"
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "flutter_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "integration_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "build_runner",
+          "version": "^2.1.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.9.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "^8.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^5.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.7.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mockito",
+          "version": "^5.4.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_lints",
+          "version": "^4.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Utilidades": [
+          "essentials",
+          "lib_facedetection",
+          "shared_features"
+        ]
+      },
+      "architecture": {
+        "pattern": "Feature-first + Clean Architecture",
+        "hasFeatureFolder": true,
+        "hasCoreFolder": true,
+        "hasSharedFolder": false,
+        "featureCount": 15,
+        "cleanFeatures": 12,
+        "cleanCoverage": 80,
+        "topLevelFolders": {
+          "core": 57,
+          "environment": 8,
+          "feature": 450
+        },
+        "topLevelFiles": [
+          "firebase_options.dart",
+          "firebase_options_hubert.dart",
+          "firebase_options_lello.dart",
+          "lello_app.dart",
+          "main-dev.dart",
+          "main-dev1.dart",
+          "main-dev2.dart",
+          "main-dev3.dart",
+          "main-preprod.dart",
+          "main-prod.dart",
+          "main-staging.dart",
+          "main-stagingme.dart",
+          "main.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {
+          "timesheet_assign_dialog": 1,
+          "timesheet_detail_page": 1,
+          "timesheet_email_dialog": 1,
+          "timesheet_page": 1,
+          "bloc": 11,
+          "page": 7,
+          "pages": 3,
+          "widgets": 5,
+          "benefits": 1,
+          "document_file": 1,
+          "income_report": 1,
+          "pay_stub": 1,
+          "vacation": 1,
+          "controllers": 1,
+          "widget": 4,
+          "controller": 1
+        }
+      },
+      "stateManagement": {
+        "primary": "BLoC",
+        "detectedByPubspec": [],
+        "packages": {},
+        "resolvedPackages": {
+          "bloc": {
+            "version": "9.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "9.1.1",
+            "dependency": "transitive"
+          },
+          "get": {
+            "version": "4.7.3",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.3.0",
+            "dependency": "transitive"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 20,
+          "cubit": 1,
+          "changeNotifier": 0,
+          "providerConsumer": 0,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 49,
+          "streamBuilder": 5
+        },
+        "scores": {
+          "BLoC": 105
+        }
+      },
+      "stats": {
+        "dartFiles": 528,
+        "totalLines": 39549,
+        "codeLines": 35494,
+        "generatedFiles": 52,
+        "testFiles": 1
+      },
+      "features": [
+        {
+          "name": "timesheet",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 65,
+          "lineCount": 3119,
+          "presentationSubfolders": [
+            "timesheet_assign_dialog",
+            "timesheet_detail_page",
+            "timesheet_email_dialog",
+            "timesheet_page"
+          ]
+        },
+        {
+          "name": "digital_point",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 55,
+          "lineCount": 3972,
+          "presentationSubfolders": [
+            "bloc",
+            "page"
+          ]
+        },
+        {
+          "name": "me",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 54,
+          "lineCount": 3722,
+          "presentationSubfolders": [
+            "bloc",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "documents",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 49,
+          "lineCount": 2054,
+          "presentationSubfolders": [
+            "benefits",
+            "document_file",
+            "income_report",
+            "pay_stub",
+            "vacation"
+          ]
+        },
+        {
+          "name": "home",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 45,
+          "lineCount": 4177,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "authentication_tablet",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 32,
+          "lineCount": 2445,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "employee_referral",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 27,
+          "lineCount": 1302,
+          "presentationSubfolders": [
+            "bloc",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "manual_timesheet",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 23,
+          "lineCount": 965,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "proof",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 23,
+          "lineCount": 850,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "sick_note",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 23,
+          "lineCount": 1107,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "preferences",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 22,
+          "lineCount": 747,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widget"
+          ]
+        },
+        {
+          "name": "session",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 15,
+          "lineCount": 827,
+          "presentationSubfolders": [
+            "bloc"
+          ]
+        },
+        {
+          "name": "home_cards_preferences",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 8,
+          "lineCount": 729,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "sync_digital_points",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 8,
+          "lineCount": 565,
+          "presentationSubfolders": [
+            "bloc",
+            "widget"
+          ]
+        },
+        {
+          "name": "splash",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 164,
+          "presentationSubfolders": [
+            "page"
+          ]
+        }
+      ],
+      "blocMetrics": {
+        "perFeature": [
+          {
+            "name": "documents",
+            "blocs": 5,
+            "cubits": 0,
+            "loc": 546,
+            "absImplPairs": 5,
+            "filesNoEquatable": 10,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 75,
+            "standardization": {
+              "stateClasses": 20,
+              "eventClasses": 5,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 10,
+              "outcomeEnumStates": 0,
+              "grade": 70
+            }
+          },
+          {
+            "name": "timesheet",
+            "blocs": 4,
+            "cubits": 0,
+            "loc": 472,
+            "absImplPairs": 4,
+            "filesNoEquatable": 8,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 80,
+            "standardization": {
+              "stateClasses": 20,
+              "eventClasses": 6,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 8,
+              "outcomeEnumStates": 0,
+              "grade": 76
+            }
+          },
+          {
+            "name": "home",
+            "blocs": 2,
+            "cubits": 0,
+            "loc": 310,
+            "absImplPairs": 2,
+            "filesNoEquatable": 5,
+            "inlineEvents": 1,
+            "inlineStates": 1,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 77,
+            "standardization": {
+              "stateClasses": 13,
+              "eventClasses": 10,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "authentication_tablet",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 179,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 3,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "digital_point",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 770,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 11,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "employee_referral",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 183,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 7,
+              "eventClasses": 2,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "manual_timesheet",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 110,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 1,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "me",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 691,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 23,
+              "eventClasses": 12,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 97
+            }
+          },
+          {
+            "name": "proof",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 146,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 7,
+              "eventClasses": 2,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "session",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 543,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "sick_note",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 108,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 1,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "sync_digital_points",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 160,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 1,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 97
+            }
+          },
+          {
+            "name": "preferences",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 87,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          }
+        ],
+        "totals": {
+          "features": 13,
+          "blocs": 20,
+          "cubits": 0,
+          "loc": 4305,
+          "absImplPairs": 20,
+          "filesNoEquatable": 43,
+          "inlineEvents": 1,
+          "inlineStates": 1,
+          "filesWithPrint": 0,
+          "filesWithMapEventToState": 0,
+          "grade": 85,
+          "standardization": {
+            "stateClasses": 129,
+            "eventClasses": 55,
+            "stateNoSuffix": 0,
+            "eventNoSuffix": 0,
+            "idleInitialStates": 0,
+            "singleClassStates": 0,
+            "dedicatedErrorStates": 0,
+            "nonConstBaseStates": 38,
+            "outcomeEnumStates": 0,
+            "grade": 85
+          }
+        }
+      }
+    },
+    {
+      "name": "essentials",
+      "folderName": "app-lello-essentials",
+      "description": "A new Flutter package project.",
+      "version": "0.0.1",
+      "type": "library",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-essentials",
+      "platforms": [],
+      "dependencies": [
+        {
+          "name": "drift",
+          "version": "^2.23.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_sqflite",
+          "version": "^2.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "hive_flutter",
+          "version": "^1.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "shared_preferences",
+          "version": "^2.0.13",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_bloc",
+          "version": "^9.1.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "get_it",
+          "version": "^8.0.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper",
+          "version": "^8.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dio",
+          "version": "^5.7.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "http",
+          "version": "^1.2.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "web_socket_channel",
+          "version": "^3.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_analytics",
+          "version": "^11.3.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_auth",
+          "version": "^5.3.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_core",
+          "version": "^3.6.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_crashlytics",
+          "version": "^4.1.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_in_app_messaging",
+          "version": "^0.8.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_messaging",
+          "version": "^15.1.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_remote_config",
+          "version": "^5.1.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_app_installations",
+          "version": "^0.3.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_performance",
+          "version": "^0.10.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "firebase_storage",
+          "version": "^12.3.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "cloud_firestore",
+          "version": "^5.4.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "google_mlkit_face_detection",
+          "version": "^0.13.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "datadog_flutter_plugin",
+          "version": "^2.15.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "datadog_tracking_http_client",
+          "version": "^2.3.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "camera",
+          "version": "^0.11.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "image_picker",
+          "version": "^1.1.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "image_cropper",
+          "version": "^9.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_image_compress",
+          "version": "^2.3.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "logging",
+          "version": "^1.3.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "pretty_chopper_logger",
+          "version": "^1.3.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "accordion",
+          "version": "^2.5.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dartz",
+          "version": "^0.10.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "adjust_sdk",
+          "version": "^5.0.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_contacts",
+          "version": "^1.1.9+2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "equatable",
+          "version": "^2.0.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "file_picker",
+          "version": "^8.0.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "device_info_plus",
+          "version": "^11.3.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "in_app_review",
+          "version": "^2.0.10",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "open_file",
+          "version": "^3.2.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "path_provider",
+          "version": "^2.0.5",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "permission_handler",
+          "version": "^11.4.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "sms_autofill",
+          "version": "^2.2.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "share_plus",
+          "version": "^12.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_local_notifications",
+          "version": "^18.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "html_editor_enhanced",
+          "version": "^2.6.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "fl_chart",
+          "version": "^0.70.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "pin_input_text_field",
+          "version": "^4.2.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_svg",
+          "version": "^2.2.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "sprintf",
+          "version": "^7.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "url_launcher",
+          "version": "^6.1.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "package_info_plus",
+          "version": "^8.2.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "geolocator",
+          "version": "^13.0.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "intl",
+          "version": "^0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "expandable",
+          "version": "^5.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mime",
+          "version": "^2.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_exif_rotation",
+          "version": "^0.5.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "image",
+          "version": "^4.5.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "fluttertoast",
+          "version": "^8.2.8",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "airplane_mode_checker",
+          "version": "^3.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "workmanager",
+          "version": "^0.7.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "uuid",
+          "version": "^4.5.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "connectivity_plus",
+          "version": "^6.1.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_annotation",
+          "version": "^4.8.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "local_auth",
+          "version": "^2.1.7",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "infinite_scroll_pagination",
+          "version": "^4.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "pool",
+          "version": "^1.5.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "decimal",
+          "version": "^3.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "money2",
+          "version": "^6.3.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "retry",
+          "version": "^3.1.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "wakelock_plus",
+          "version": "^1.2.11",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "another_flushbar",
+          "version": "^1.10.24",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "auto_size_text",
+          "version": "^3.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "avatar_glow",
+          "version": "^3.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "badges",
+          "version": "^3.1.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "cached_network_image",
+          "version": "^3.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "carousel_slider",
+          "version": "^5.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dotted_border",
+          "version": "^2.0.0+1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_datetime_picker_plus",
+          "version": "^2.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mask_text_input_formatter",
+          "version": "^2.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "community_charts_common",
+          "version": "^1.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "community_charts_flutter",
+          "version": "^1.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "pdfrx",
+          "version": "^1.3.5",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_pdfview",
+          "version": "^1.4.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_cache_manager",
+          "version": "^3.3.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "table_calendar",
+          "version": "^3.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "webview_flutter",
+          "version": "^4.10.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_markdown",
+          "version": "^0.7.6+2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_snake_navigationbar",
+          "version": "^0.6.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_rating_bar",
+          "version": "^4.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_widget_from_html_core",
+          "version": "^0.16.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dropdown_search",
+          "version": "^6.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mocktail",
+          "version": "^1.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "search_cep",
+          "version": "^4.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "diacritic",
+          "version": "^0.1.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "shimmer",
+          "version": "^3.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_map",
+          "version": "^8.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "lottie",
+          "version": "^3.1.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_colorpicker",
+          "version": "^1.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "toastification",
+          "version": "^3.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "linked_scroll_controller",
+          "version": "^0.2.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "brasil_fields",
+          "version": "^1.18.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_masked_text2",
+          "version": "^0.9.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "intl_utils",
+          "version": "^2.8.8",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "photo_view",
+          "version": "^0.14.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_chat_ui",
+          "version": "^2.9.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_chat_core",
+          "version": "^2.8.0",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "flutter_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "build_runner",
+          "version": "^2.5.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.23.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "^8.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^5.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Estado": [
+          "flutter_bloc"
+        ],
+        "Injeção de dependência": [
+          "get_it"
+        ],
+        "HTTP/API": [
+          "chopper",
+          "dio",
+          "http",
+          "web_socket_channel"
+        ],
+        "Banco/Storage local": [
+          "drift",
+          "drift_sqflite",
+          "hive_flutter",
+          "shared_preferences"
+        ],
+        "Firebase": [
+          "cloud_firestore",
+          "firebase_analytics",
+          "firebase_app_installations",
+          "firebase_auth",
+          "firebase_core",
+          "firebase_crashlytics",
+          "firebase_in_app_messaging",
+          "firebase_messaging",
+          "firebase_performance",
+          "firebase_remote_config",
+          "firebase_storage"
+        ],
+        "UI/Widgets": [
+          "cached_network_image",
+          "community_charts_common",
+          "community_charts_flutter",
+          "file_picker",
+          "fl_chart",
+          "flutter_cache_manager",
+          "flutter_chat_core",
+          "flutter_chat_ui",
+          "flutter_colorpicker",
+          "flutter_contacts",
+          "flutter_datetime_picker_plus",
+          "flutter_exif_rotation",
+          "flutter_image_compress",
+          "flutter_local_notifications",
+          "flutter_map",
+          "flutter_markdown",
+          "flutter_masked_text2",
+          "flutter_pdfview",
+          "flutter_rating_bar",
+          "flutter_snake_navigationbar",
+          "flutter_svg",
+          "flutter_widget_from_html_core",
+          "image",
+          "image_cropper",
+          "image_picker",
+          "uuid"
+        ],
+        "Utilidades": [
+          "accordion",
+          "adjust_sdk",
+          "airplane_mode_checker",
+          "another_flushbar",
+          "auto_size_text",
+          "avatar_glow",
+          "badges",
+          "brasil_fields",
+          "camera",
+          "carousel_slider",
+          "connectivity_plus",
+          "dartz",
+          "decimal",
+          "device_info_plus",
+          "diacritic",
+          "dotted_border",
+          "dropdown_search",
+          "equatable",
+          "expandable",
+          "fluttertoast",
+          "geolocator",
+          "google_mlkit_face_detection",
+          "html_editor_enhanced",
+          "in_app_review",
+          "infinite_scroll_pagination",
+          "intl",
+          "intl_utils",
+          "json_annotation",
+          "linked_scroll_controller",
+          "local_auth",
+          "logging",
+          "lottie",
+          "mask_text_input_formatter",
+          "mime",
+          "mocktail",
+          "money2",
+          "open_file",
+          "package_info_plus",
+          "path_provider",
+          "pdfrx",
+          "permission_handler",
+          "photo_view",
+          "pin_input_text_field",
+          "pool",
+          "pretty_chopper_logger",
+          "retry",
+          "search_cep",
+          "share_plus",
+          "shimmer",
+          "sms_autofill",
+          "sprintf",
+          "table_calendar",
+          "toastification",
+          "url_launcher",
+          "wakelock_plus",
+          "webview_flutter",
+          "workmanager"
+        ],
+        "Monitoramento": [
+          "datadog_flutter_plugin",
+          "datadog_tracking_http_client",
+          "firebase_crashlytics"
+        ]
+      },
+      "architecture": {
+        "pattern": "Misto/Indefinido",
+        "hasFeatureFolder": false,
+        "hasCoreFolder": false,
+        "hasSharedFolder": false,
+        "featureCount": 0,
+        "cleanFeatures": 0,
+        "cleanCoverage": 0,
+        "topLevelFolders": {
+          "analytics": 7,
+          "api": 1,
+          "app_update": 3,
+          "auto_size_text": 1,
+          "base": 9,
+          "configs": 8,
+          "enum": 5,
+          "extension": 4,
+          "functional": 4,
+          "input_formatter": 4,
+          "methods": 10,
+          "modal": 6,
+          "network": 5,
+          "observers": 1,
+          "paginator": 6,
+          "providers": 1,
+          "stores": 1,
+          "ui": 47,
+          "validator": 2
+        },
+        "topLevelFiles": [
+          "app_localization.dart",
+          "essentials.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {}
+      },
+      "stateManagement": {
+        "primary": "Provider",
+        "detectedByPubspec": [
+          "BLoC",
+          "GetIt/Injectable"
+        ],
+        "packages": {
+          "BLoC": [
+            "flutter_bloc"
+          ],
+          "GetIt/Injectable": [
+            "get_it"
+          ]
+        },
+        "resolvedPackages": {
+          "bloc": {
+            "version": "9.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "9.1.1",
+            "dependency": "direct main"
+          },
+          "get": {
+            "version": "4.7.3",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.3.0",
+            "dependency": "direct main"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 0,
+          "cubit": 0,
+          "changeNotifier": 1,
+          "providerConsumer": 0,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 13,
+          "streamBuilder": 0
+        },
+        "scores": {
+          "BLoC": 1,
+          "Provider": 3
+        }
+      },
+      "stats": {
+        "dartFiles": 127,
+        "totalLines": 8211,
+        "codeLines": 7073,
+        "generatedFiles": 5,
+        "testFiles": 1
+      },
+      "features": [],
+      "blocMetrics": {
+        "perFeature": [],
+        "totals": {
+          "features": 0,
+          "blocs": 0,
+          "cubits": 0,
+          "loc": 0,
+          "absImplPairs": 0,
+          "filesNoEquatable": 0,
+          "inlineEvents": 0,
+          "inlineStates": 0,
+          "filesWithPrint": 0,
+          "filesWithMapEventToState": 0,
+          "grade": 100,
+          "standardization": {
+            "stateClasses": 0,
+            "eventClasses": 0,
+            "stateNoSuffix": 0,
+            "eventNoSuffix": 0,
+            "idleInitialStates": 0,
+            "singleClassStates": 0,
+            "dedicatedErrorStates": 0,
+            "nonConstBaseStates": 0,
+            "outcomeEnumStates": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "morar",
+      "folderName": "app-lello-morar",
+      "description": "Flutter app for Lello Condominios and their clients as residents.",
+      "version": "1.33.2+545",
+      "type": "app",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-morar",
+      "platforms": [
+        "android",
+        "ios",
+        "macos",
+        "linux"
+      ],
+      "dependencies": [
+        {
+          "name": "essentials",
+          "version": "path:../app-lello-essentials/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-essentials/"
+        },
+        {
+          "name": "shared_features",
+          "version": "path:../app-lello-shared/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/"
+        },
+        {
+          "name": "lib_facedetection",
+          "version": "path:../app-lello-shared/packages/lib_facedetection/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/packages/lib_facedetection/"
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "flutter_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_annotation",
+          "version": "^4.5.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "build_runner",
+          "version": "^2.5.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.23.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "^8.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^5.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mocktail",
+          "version": "^1.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Utilidades": [
+          "essentials",
+          "lib_facedetection",
+          "shared_features"
+        ]
+      },
+      "architecture": {
+        "pattern": "Feature-first + Clean Architecture",
+        "hasFeatureFolder": true,
+        "hasCoreFolder": true,
+        "hasSharedFolder": false,
+        "featureCount": 24,
+        "cleanFeatures": 21,
+        "cleanCoverage": 88,
+        "topLevelFolders": {
+          "core": 52,
+          "environment": 8,
+          "feature": 921,
+          "generated": 4,
+          "l10n": 0
+        },
+        "topLevelFiles": [
+          "firebase_options.dart",
+          "lello_app.dart",
+          "main-dev.dart",
+          "main-dev1.dart",
+          "main-dev2.dart",
+          "main-dev3.dart",
+          "main-mock.dart",
+          "main-preprod.dart",
+          "main-prod.dart",
+          "main-staging.dart",
+          "main-stagingme.dart",
+          "main-test.dart",
+          "main.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {
+          "bloc": 17,
+          "controllers": 10,
+          "page": 10,
+          "widget": 9,
+          "pages": 10,
+          "widgets": 8,
+          "enum": 1,
+          "stores": 1,
+          "controller": 5,
+          "change_address": 1
+        }
+      },
+      "stateManagement": {
+        "primary": "BLoC",
+        "detectedByPubspec": [],
+        "packages": {},
+        "resolvedPackages": {
+          "bloc": {
+            "version": "9.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "9.1.1",
+            "dependency": "transitive"
+          },
+          "get": {
+            "version": "4.7.3",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.3.0",
+            "dependency": "transitive"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 13,
+          "cubit": 0,
+          "changeNotifier": 0,
+          "providerConsumer": 1,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 191,
+          "streamBuilder": 6
+        },
+        "scores": {
+          "BLoC": 65,
+          "Provider": 2
+        }
+      },
+      "stats": {
+        "dartFiles": 994,
+        "totalLines": 86996,
+        "codeLines": 78951,
+        "generatedFiles": 117,
+        "testFiles": 1
+      },
+      "features": [
+        {
+          "name": "access_control",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 87,
+          "lineCount": 8384,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "agreements",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 79,
+          "lineCount": 7402,
+          "presentationSubfolders": [
+            "bloc",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "sub_user",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 76,
+          "lineCount": 10475,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "enum",
+            "pages",
+            "stores",
+            "widget"
+          ]
+        },
+        {
+          "name": "reservation",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 60,
+          "lineCount": 6261,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "ia_bella",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 59,
+          "lineCount": 3794,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "me",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 57,
+          "lineCount": 3998,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "home",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 53,
+          "lineCount": 7118,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "reports_book",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 52,
+          "lineCount": 5385,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "accountability",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 50,
+          "lineCount": 2213,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "preferences",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 48,
+          "lineCount": 2664,
+          "presentationSubfolders": [
+            "pages",
+            "widget"
+          ]
+        },
+        {
+          "name": "easy_fix",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 40,
+          "lineCount": 2556,
+          "presentationSubfolders": [
+            "change_address"
+          ]
+        },
+        {
+          "name": "insurance",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 37,
+          "lineCount": 2405,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widget"
+          ]
+        },
+        {
+          "name": "vehicles",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 35,
+          "lineCount": 2905,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "my_preferences",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 32,
+          "lineCount": 3054,
+          "presentationSubfolders": [
+            "pages"
+          ]
+        },
+        {
+          "name": "change_ownership",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 30,
+          "lineCount": 2247,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "billets",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 29,
+          "lineCount": 1576,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "tdb",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 22,
+          "lineCount": 897,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "pages",
+            "widget"
+          ]
+        },
+        {
+          "name": "digital_meeting",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 20,
+          "lineCount": 1255,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "mailing",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 19,
+          "lineCount": 1144,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "session",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 15,
+          "lineCount": 863,
+          "presentationSubfolders": [
+            "bloc"
+          ]
+        },
+        {
+          "name": "splash",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 12,
+          "lineCount": 543,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "documents",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 7,
+          "lineCount": 284,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "notifications",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 1,
+          "lineCount": 20,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "onboarding",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 135,
+          "presentationSubfolders": [
+            "page"
+          ]
+        }
+      ],
+      "blocMetrics": {
+        "perFeature": [
+          {
+            "name": "home",
+            "blocs": 2,
+            "cubits": 0,
+            "loc": 574,
+            "absImplPairs": 2,
+            "filesNoEquatable": 4,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 90,
+            "standardization": {
+              "stateClasses": 12,
+              "eventClasses": 12,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "my_preferences",
+            "blocs": 2,
+            "cubits": 0,
+            "loc": 655,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 9,
+              "eventClasses": 7,
+              "stateNoSuffix": 8,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 3,
+              "outcomeEnumStates": 0,
+              "grade": 59
+            }
+          },
+          {
+            "name": "agreements",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 553,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 15,
+              "eventClasses": 11,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 2,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "digital_meeting",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 141,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 7,
+              "eventClasses": 7,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "ia_bella",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 325,
+            "absImplPairs": 0,
+            "filesNoEquatable": 1,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 99,
+            "standardization": {
+              "stateClasses": 20,
+              "eventClasses": 20,
+              "stateNoSuffix": 20,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 17
+            }
+          },
+          {
+            "name": "insurance",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 77,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 3,
+              "eventClasses": 3,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "mailing",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 58,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "me",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 459,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 24,
+              "eventClasses": 34,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 97
+            }
+          },
+          {
+            "name": "reports_book",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 820,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 1,
+            "grade": 70,
+            "standardization": {
+              "stateClasses": 15,
+              "eventClasses": 15,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "reservation",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 913,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 12,
+              "eventClasses": 10,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "session",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 603,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 1,
+            "filesWithMapEventToState": 0,
+            "grade": 91,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 6,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "access_control",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 400,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 13,
+              "eventClasses": 13,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "accountability",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 94,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 3,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "billets",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 123,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 5,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "change_ownership",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 88,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "easy_fix",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 217,
+            "absImplPairs": 0,
+            "filesNoEquatable": 3,
+            "inlineEvents": 1,
+            "inlineStates": 1,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 13,
+              "eventClasses": 13,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "preferences",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 268,
+            "absImplPairs": 0,
+            "filesNoEquatable": 5,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 13,
+              "eventClasses": 8,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 5,
+              "outcomeEnumStates": 0,
+              "grade": 85
+            }
+          },
+          {
+            "name": "sub_user",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 508,
+            "absImplPairs": 0,
+            "filesNoEquatable": 3,
+            "inlineEvents": 3,
+            "inlineStates": 3,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 34,
+              "eventClasses": 28,
+              "stateNoSuffix": 2,
+              "eventNoSuffix": 2,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 8,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 90
+            }
+          },
+          {
+            "name": "tdb",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 56,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 3,
+              "eventClasses": 3,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "vehicles",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 195,
+            "absImplPairs": 0,
+            "filesNoEquatable": 1,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 12,
+              "eventClasses": 12,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 1,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 97
+            }
+          }
+        ],
+        "totals": {
+          "features": 20,
+          "blocs": 13,
+          "cubits": 0,
+          "loc": 7127,
+          "absImplPairs": 6,
+          "filesNoEquatable": 43,
+          "inlineEvents": 4,
+          "inlineStates": 4,
+          "filesWithPrint": 1,
+          "filesWithMapEventToState": 1,
+          "grade": 94,
+          "standardization": {
+            "stateClasses": 228,
+            "eventClasses": 218,
+            "stateNoSuffix": 30,
+            "eventNoSuffix": 2,
+            "idleInitialStates": 0,
+            "singleClassStates": 0,
+            "dedicatedErrorStates": 11,
+            "nonConstBaseStates": 37,
+            "outcomeEnumStates": 0,
+            "grade": 83
+          }
+        }
+      }
+    },
+    {
+      "name": "morar_viver",
+      "folderName": "app-lello-morar-viver",
+      "description": "A new Flutter project.",
+      "version": "1.33.2+545",
+      "type": "app",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-morar-viver",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "dependencies": [
+        {
+          "name": "morar",
+          "version": "path:../app-lello-morar/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-morar/"
+        },
+        {
+          "name": "essentials",
+          "version": "path:../app-lello-essentials/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-essentials/"
+        },
+        {
+          "name": "shared_features",
+          "version": "path:../app-lello-shared/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/"
+        },
+        {
+          "name": "lib_facedetection",
+          "version": "path:../app-lello-shared/packages/lib_facedetection/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/packages/lib_facedetection/"
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "flutter_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_annotation",
+          "version": "^4.5.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "build_runner",
+          "version": "^2.5.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.23.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "^8.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^5.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mocktail",
+          "version": "^1.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Utilidades": [
+          "essentials",
+          "lib_facedetection",
+          "morar",
+          "shared_features"
+        ]
+      },
+      "architecture": {
+        "pattern": "Feature-first",
+        "hasFeatureFolder": true,
+        "hasCoreFolder": false,
+        "hasSharedFolder": false,
+        "featureCount": 2,
+        "cleanFeatures": 0,
+        "cleanCoverage": 0,
+        "topLevelFolders": {
+          "feature": 2,
+          "generated": 4,
+          "l10n": 0
+        },
+        "topLevelFiles": [
+          "firebase_options_hubert.dart",
+          "firebase_options_lello_viver.dart",
+          "lello_viver_app.dart",
+          "main-dev.dart",
+          "main-dev1.dart",
+          "main-dev2.dart",
+          "main-dev3.dart",
+          "main-preprod.dart",
+          "main-prod.dart",
+          "main-staging.dart",
+          "main-stagingme.dart",
+          "main.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {
+          "page": 2
+        }
+      },
+      "stateManagement": {
+        "primary": "setState (puro)",
+        "detectedByPubspec": [],
+        "packages": {},
+        "resolvedPackages": {
+          "bloc": {
+            "version": "7.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "7.3.3",
+            "dependency": "transitive"
+          },
+          "get": {
+            "version": "4.7.3",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.3.0",
+            "dependency": "transitive"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 0,
+          "cubit": 0,
+          "changeNotifier": 0,
+          "providerConsumer": 0,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 9,
+          "streamBuilder": 0
+        },
+        "scores": {
+          "setState (puro)": 1
+        }
+      },
+      "stats": {
+        "dartFiles": 14,
+        "totalLines": 1902,
+        "codeLines": 1687,
+        "generatedFiles": 0,
+        "testFiles": 1
+      },
+      "features": [
+        {
+          "name": "onboarding",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 135,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "splash",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 404,
+          "presentationSubfolders": [
+            "page"
+          ]
+        }
+      ],
+      "blocMetrics": {
+        "perFeature": [],
+        "totals": {
+          "features": 0,
+          "blocs": 0,
+          "cubits": 0,
+          "loc": 0,
+          "absImplPairs": 0,
+          "filesNoEquatable": 0,
+          "inlineEvents": 0,
+          "inlineStates": 0,
+          "filesWithPrint": 0,
+          "filesWithMapEventToState": 0,
+          "grade": 100,
+          "standardization": {
+            "stateClasses": 0,
+            "eventClasses": 0,
+            "stateNoSuffix": 0,
+            "eventNoSuffix": 0,
+            "idleInitialStates": 0,
+            "singleClassStates": 0,
+            "dedicatedErrorStates": 0,
+            "nonConstBaseStates": 0,
+            "outcomeEnumStates": 0,
+            "grade": 100
+          }
+        }
+      }
+    },
+    {
+      "name": "shared_features",
+      "folderName": "app-lello-shared",
+      "description": "A new Flutter package project.",
+      "version": "0.0.2",
+      "type": "package",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-shared",
+      "platforms": [],
+      "dependencies": [
+        {
+          "name": "essentials",
+          "version": "path:../app-lello-essentials/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-essentials/"
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "flutter_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_annotation",
+          "version": "^4.5.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "build_runner",
+          "version": "^2.5.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.23.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "^8.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "hive_generator",
+          "version": "^2.0.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^4.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mockito",
+          "version": "^5.4.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "dart_style",
+          "version": "^2.3.7",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "analyzer",
+          "version": "6.4.1",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "source_gen",
+          "version": "1.5.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Utilidades": [
+          "essentials"
+        ]
+      },
+      "architecture": {
+        "pattern": "Feature-first",
+        "hasFeatureFolder": true,
+        "hasCoreFolder": true,
+        "hasSharedFolder": false,
+        "featureCount": 19,
+        "cleanFeatures": 11,
+        "cleanCoverage": 58,
+        "topLevelFolders": {
+          "core": 32,
+          "feature": 685,
+          "samples": 10
+        },
+        "topLevelFiles": [
+          "shared_features.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {
+          "page": 8,
+          "comfort_my_request_item_actions": 1,
+          "comfort_my_requests": 1,
+          "comfort_partner_reviews": 1,
+          "comfort_partners": 1,
+          "comfort_to_your_condo": 1,
+          "widgets": 4,
+          "bloc": 8,
+          "store": 3,
+          "widget": 5,
+          "controller": 2,
+          "pages": 1,
+          "controllers": 2
+        }
+      },
+      "stateManagement": {
+        "primary": "BLoC",
+        "detectedByPubspec": [],
+        "packages": {},
+        "resolvedPackages": {
+          "bloc": {
+            "version": "9.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "9.1.1",
+            "dependency": "transitive"
+          },
+          "get": {
+            "version": "4.7.3",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.3.0",
+            "dependency": "transitive"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 26,
+          "cubit": 0,
+          "changeNotifier": 0,
+          "providerConsumer": 0,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 94,
+          "streamBuilder": 2
+        },
+        "scores": {
+          "BLoC": 130
+        }
+      },
+      "stats": {
+        "dartFiles": 728,
+        "totalLines": 47458,
+        "codeLines": 42208,
+        "generatedFiles": 74,
+        "testFiles": 0
+      },
+      "features": [
+        {
+          "name": "gdp",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 241,
+          "lineCount": 13384,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "comfort",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 151,
+          "lineCount": 15029,
+          "presentationSubfolders": [
+            "comfort_my_request_item_actions",
+            "comfort_my_requests",
+            "comfort_partner_reviews",
+            "comfort_partners",
+            "comfort_to_your_condo",
+            "widgets"
+          ]
+        },
+        {
+          "name": "authentication",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 48,
+          "lineCount": 1751,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "store",
+            "widget"
+          ]
+        },
+        {
+          "name": "code_validation",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 43,
+          "lineCount": 1381,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "store",
+            "widget"
+          ]
+        },
+        {
+          "name": "registration",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 42,
+          "lineCount": 3287,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "store",
+            "widget"
+          ]
+        },
+        {
+          "name": "notifications",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 36,
+          "lineCount": 2913,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "documents",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 28,
+          "lineCount": 1622,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "reset_password",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 27,
+          "lineCount": 1938,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "banners",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 25,
+          "lineCount": 1373,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "widgets"
+          ]
+        },
+        {
+          "name": "expired_session",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 11,
+          "lineCount": 279,
+          "presentationSubfolders": [
+            "bloc",
+            "page"
+          ]
+        },
+        {
+          "name": "ghost_notification",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 10,
+          "lineCount": 272,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "connection",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 7,
+          "lineCount": 219,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "attach_files",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 5,
+          "lineCount": 654,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "aws",
+          "hasData": false,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 3,
+          "lineCount": 72,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "access_settings_permission_denied",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 2,
+          "lineCount": 229,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "session",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 2,
+          "lineCount": 11,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "start_security",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 2,
+          "lineCount": 125,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "billets",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 105,
+          "presentationSubfolders": [
+            "widgets"
+          ]
+        },
+        {
+          "name": "launcher_url",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 1,
+          "lineCount": 75,
+          "presentationSubfolders": []
+        }
+      ],
+      "blocMetrics": {
+        "perFeature": [
+          {
+            "name": "gdp",
+            "blocs": 14,
+            "cubits": 0,
+            "loc": 2642,
+            "absImplPairs": 14,
+            "filesNoEquatable": 28,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 30,
+            "standardization": {
+              "stateClasses": 67,
+              "eventClasses": 27,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 1,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 28,
+              "outcomeEnumStates": 0,
+              "grade": 12
+            }
+          },
+          {
+            "name": "comfort",
+            "blocs": 4,
+            "cubits": 0,
+            "loc": 750,
+            "absImplPairs": 0,
+            "filesNoEquatable": 10,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 1,
+            "filesWithMapEventToState": 0,
+            "grade": 86,
+            "standardization": {
+              "stateClasses": 29,
+              "eventClasses": 28,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 2,
+              "nonConstBaseStates": 8,
+              "outcomeEnumStates": 0,
+              "grade": 76
+            }
+          },
+          {
+            "name": "authentication",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 124,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 6,
+              "eventClasses": 8,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "code_validation",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 98,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 5,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "expired_session",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 86,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 3,
+              "eventClasses": 1,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "registration",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 244,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 11,
+              "eventClasses": 11,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "reset_password",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 437,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 15,
+              "eventClasses": 17,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "banners",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 56,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 3,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "documents",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 192,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 7,
+              "eventClasses": 8,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "notifications",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 89,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 3,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          }
+        ],
+        "totals": {
+          "features": 10,
+          "blocs": 23,
+          "cubits": 0,
+          "loc": 4718,
+          "absImplPairs": 15,
+          "filesNoEquatable": 54,
+          "inlineEvents": 0,
+          "inlineStates": 0,
+          "filesWithPrint": 1,
+          "filesWithMapEventToState": 0,
+          "grade": 54,
+          "standardization": {
+            "stateClasses": 151,
+            "eventClasses": 111,
+            "stateNoSuffix": 0,
+            "eventNoSuffix": 0,
+            "idleInitialStates": 1,
+            "singleClassStates": 0,
+            "dedicatedErrorStates": 2,
+            "nonConstBaseStates": 52,
+            "outcomeEnumStates": 0,
+            "grade": 41
+          }
+        }
+      }
+    },
+    {
+      "name": "lello",
+      "folderName": "app-lello-sindico",
+      "description": "Flutter app for Lello Condominiuns and their clients as managers.",
+      "version": "1.32.1+561",
+      "type": "app",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-sindico",
+      "platforms": [
+        "android",
+        "ios",
+        "macos",
+        "linux"
+      ],
+      "dependencies": [
+        {
+          "name": "essentials",
+          "version": "path:../app-lello-essentials/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-essentials/"
+        },
+        {
+          "name": "shared_features",
+          "version": "path:../app-lello-shared/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/"
+        },
+        {
+          "name": "lib_facedetection",
+          "version": "path:../app-lello-shared/packages/lib_facedetection/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/packages/lib_facedetection/"
+        },
+        {
+          "name": "dropdown_button2",
+          "version": "^2.3.9",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "build_runner",
+          "version": "^2.1.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.9.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "8.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^5.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "win32",
+          "version": "^5.5.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Utilidades": [
+          "dropdown_button2",
+          "essentials",
+          "lib_facedetection",
+          "shared_features"
+        ]
+      },
+      "architecture": {
+        "pattern": "Feature-first + Clean Architecture",
+        "hasFeatureFolder": true,
+        "hasCoreFolder": true,
+        "hasSharedFolder": false,
+        "featureCount": 32,
+        "cleanFeatures": 21,
+        "cleanCoverage": 66,
+        "topLevelFolders": {
+          "core": 114,
+          "environment": 9,
+          "feature": 2335,
+          "generated": 3,
+          "l10n": 0
+        },
+        "topLevelFiles": [
+          "firebase_options.dart",
+          "lello_app.dart",
+          "main-dev.dart",
+          "main-dev1.dart",
+          "main-dev2.dart",
+          "main-dev3.dart",
+          "main-mock.dart",
+          "main-preprod.dart",
+          "main-prod.dart",
+          "main-staging.dart",
+          "main-stagingme.dart",
+          "main.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {
+          "agenda": 1,
+          "chat": 1,
+          "create_task": 1,
+          "enums": 1,
+          "home": 1,
+          "legal_obligation": 1,
+          "reports_view": 1,
+          "shared": 1,
+          "task": 1,
+          "page": 16,
+          "approval": 2,
+          "history_list": 1,
+          "list": 2,
+          "main_page": 1,
+          "payment_details": 1,
+          "pendency": 1,
+          "register": 1,
+          "register_form": 1,
+          "send_financial_department": 1,
+          "widget": 10,
+          "resin_attention_page": 1,
+          "resin_create_refund_success_error": 1,
+          "resin_history_advance": 1,
+          "resin_history_refund": 1,
+          "resin_menu": 1,
+          "resin_new_advance": 1,
+          "resin_new_bank_account": 1,
+          "resin_new_refund": 1,
+          "resin_receipt_details": 1,
+          "resin_send_receipt": 1,
+          "widgets": 6,
+          "detail": 5,
+          "question_create": 1,
+          "question_list": 1,
+          "bloc": 13,
+          "controllers": 3,
+          "history": 1,
+          "menu": 1,
+          "request": 1,
+          "billets": 1,
+          "dasboard": 1,
+          "controller": 6,
+          "pages": 3
+        }
+      },
+      "stateManagement": {
+        "primary": "BLoC",
+        "detectedByPubspec": [],
+        "packages": {},
+        "resolvedPackages": {
+          "bloc": {
+            "version": "9.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "9.1.1",
+            "dependency": "transitive"
+          },
+          "get": {
+            "version": "4.7.3",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.3.0",
+            "dependency": "transitive"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 105,
+          "cubit": 5,
+          "changeNotifier": 0,
+          "providerConsumer": 37,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 464,
+          "streamBuilder": 3
+        },
+        "scores": {
+          "BLoC": 550,
+          "Provider": 74
+        }
+      },
+      "stats": {
+        "dartFiles": 2470,
+        "totalLines": 214230,
+        "codeLines": 190603,
+        "generatedFiles": 313,
+        "testFiles": 113
+      },
+      "features": [
+        {
+          "name": "maintenance_management",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 428,
+          "lineCount": 55817,
+          "presentationSubfolders": [
+            "agenda",
+            "chat",
+            "create_task",
+            "enums",
+            "home",
+            "legal_obligation",
+            "reports_view",
+            "shared",
+            "task"
+          ]
+        },
+        {
+          "name": "gdp",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 332,
+          "lineCount": 22113,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "payment",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 319,
+          "lineCount": 23051,
+          "presentationSubfolders": [
+            "approval",
+            "history_list",
+            "list",
+            "main_page",
+            "payment_details",
+            "pendency",
+            "register",
+            "register_form",
+            "send_financial_department",
+            "widget"
+          ]
+        },
+        {
+          "name": "space",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 238,
+          "lineCount": 16531,
+          "presentationSubfolders": [
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "resin",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 157,
+          "lineCount": 10760,
+          "presentationSubfolders": [
+            "resin_attention_page",
+            "resin_create_refund_success_error",
+            "resin_history_advance",
+            "resin_history_refund",
+            "resin_menu",
+            "resin_new_advance",
+            "resin_new_bank_account",
+            "resin_new_refund",
+            "resin_receipt_details",
+            "resin_send_receipt",
+            "widgets"
+          ]
+        },
+        {
+          "name": "accountability",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 104,
+          "lineCount": 7415,
+          "presentationSubfolders": [
+            "approval",
+            "detail",
+            "list",
+            "question_create",
+            "question_list"
+          ]
+        },
+        {
+          "name": "agreements",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 92,
+          "lineCount": 7292,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "vox",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 86,
+          "lineCount": 5503,
+          "presentationSubfolders": [
+            "detail",
+            "history",
+            "menu",
+            "request",
+            "widget"
+          ]
+        },
+        {
+          "name": "income",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 63,
+          "lineCount": 3809,
+          "presentationSubfolders": [
+            "billets",
+            "dasboard",
+            "detail",
+            "page"
+          ]
+        },
+        {
+          "name": "condominium",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 61,
+          "lineCount": 3341,
+          "presentationSubfolders": [
+            "bloc",
+            "detail",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "reports_book",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 57,
+          "lineCount": 5055,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "staff_access_management",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 43,
+          "lineCount": 3638,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widget"
+          ]
+        },
+        {
+          "name": "me",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 40,
+          "lineCount": 3683,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "access_management",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 38,
+          "lineCount": 1721,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "pages",
+            "widgets"
+          ]
+        },
+        {
+          "name": "payroll",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 36,
+          "lineCount": 1274,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "unit",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 36,
+          "lineCount": 3058,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "nonpayment",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 33,
+          "lineCount": 1273,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "detail",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "dashboard",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 29,
+          "lineCount": 1424,
+          "presentationSubfolders": [
+            "bloc",
+            "page",
+            "widgets"
+          ]
+        },
+        {
+          "name": "home",
+          "hasData": false,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 28,
+          "lineCount": 4380,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "dashboard_preferences",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 21,
+          "lineCount": 1232,
+          "presentationSubfolders": [
+            "bloc",
+            "controller",
+            "page",
+            "widget"
+          ]
+        },
+        {
+          "name": "resident",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 17,
+          "lineCount": 783,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "session",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 14,
+          "lineCount": 759,
+          "presentationSubfolders": [
+            "bloc"
+          ]
+        },
+        {
+          "name": "account",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 13,
+          "lineCount": 244,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "consultant_lello",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 12,
+          "lineCount": 206,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "splash",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 12,
+          "lineCount": 536,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "vehicles",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 11,
+          "lineCount": 324,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "home_cards_preferences",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 8,
+          "lineCount": 723,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "documents",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 3,
+          "lineCount": 107,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "comfort",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 129,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "lello",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 315,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "notifications",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 1,
+          "lineCount": 17,
+          "presentationSubfolders": []
+        },
+        {
+          "name": "onboarding",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 129,
+          "presentationSubfolders": [
+            "page"
+          ]
+        }
+      ],
+      "blocMetrics": {
+        "perFeature": [
+          {
+            "name": "maintenance_management",
+            "blocs": 19,
+            "cubits": 5,
+            "loc": 7595,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 106,
+              "eventClasses": 103,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 2,
+              "dedicatedErrorStates": 27,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 90
+            }
+          },
+          {
+            "name": "gdp",
+            "blocs": 19,
+            "cubits": 0,
+            "loc": 2948,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 76,
+              "eventClasses": 53,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "space",
+            "blocs": 15,
+            "cubits": 0,
+            "loc": 3539,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 77,
+              "eventClasses": 28,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "payment",
+            "blocs": 14,
+            "cubits": 0,
+            "loc": 2463,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 108,
+              "eventClasses": 84,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 1,
+              "dedicatedErrorStates": 1,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 95
+            }
+          },
+          {
+            "name": "resin",
+            "blocs": 8,
+            "cubits": 0,
+            "loc": 1057,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 33,
+              "eventClasses": 32,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 8,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "accountability",
+            "blocs": 5,
+            "cubits": 0,
+            "loc": 753,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 27,
+              "eventClasses": 26,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "home",
+            "blocs": 3,
+            "cubits": 0,
+            "loc": 378,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 8,
+              "eventClasses": 7,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "income",
+            "blocs": 3,
+            "cubits": 0,
+            "loc": 443,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 18,
+              "eventClasses": 17,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "unit",
+            "blocs": 3,
+            "cubits": 0,
+            "loc": 369,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 15,
+              "eventClasses": 11,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "vox",
+            "blocs": 3,
+            "cubits": 0,
+            "loc": 585,
+            "absImplPairs": 0,
+            "filesNoEquatable": 3,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 97,
+            "standardization": {
+              "stateClasses": 0,
+              "eventClasses": 10,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "condominium",
+            "blocs": 2,
+            "cubits": 0,
+            "loc": 389,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 10,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "payroll",
+            "blocs": 2,
+            "cubits": 0,
+            "loc": 192,
+            "absImplPairs": 0,
+            "filesNoEquatable": 4,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 96,
+            "standardization": {
+              "stateClasses": 11,
+              "eventClasses": 11,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 4,
+              "outcomeEnumStates": 0,
+              "grade": 88
+            }
+          },
+          {
+            "name": "access_management",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 105,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 7,
+              "eventClasses": 7,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 1,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "agreements",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 96,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 6,
+              "eventClasses": 6,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 1,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "dashboard",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 388,
+            "absImplPairs": 1,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 95,
+            "standardization": {
+              "stateClasses": 8,
+              "eventClasses": 6,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 97
+            }
+          },
+          {
+            "name": "dashboard_preferences",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 142,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 6,
+              "eventClasses": 6,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 97
+            }
+          },
+          {
+            "name": "me",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 400,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 27,
+              "eventClasses": 29,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "nonpayment",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 87,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 4,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 94
+            }
+          },
+          {
+            "name": "reports_book",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 325,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 98,
+            "standardization": {
+              "stateClasses": 14,
+              "eventClasses": 21,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 1,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 93
+            }
+          },
+          {
+            "name": "session",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 538,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 4,
+              "eventClasses": 7,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "staff_access_management",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 113,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 5,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          }
+        ],
+        "totals": {
+          "features": 21,
+          "blocs": 104,
+          "cubits": 5,
+          "loc": 22905,
+          "absImplPairs": 1,
+          "filesNoEquatable": 23,
+          "inlineEvents": 0,
+          "inlineStates": 0,
+          "filesWithPrint": 0,
+          "filesWithMapEventToState": 0,
+          "grade": 100,
+          "standardization": {
+            "stateClasses": 570,
+            "eventClasses": 477,
+            "stateNoSuffix": 0,
+            "eventNoSuffix": 1,
+            "idleInitialStates": 0,
+            "singleClassStates": 3,
+            "dedicatedErrorStates": 38,
+            "nonConstBaseStates": 16,
+            "outcomeEnumStates": 0,
+            "grade": 97
+          }
+        }
+      }
+    },
+    {
+      "name": "sindico_viver",
+      "folderName": "app-lello-sindico-viver",
+      "description": "A new Flutter project.",
+      "version": "1.32.1+561",
+      "type": "app",
+      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\app-lello-morar\\app-lello-sindico-viver",
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "dependencies": [
+        {
+          "name": "lello",
+          "version": "path:../app-lello-sindico/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-sindico/"
+        },
+        {
+          "name": "essentials",
+          "version": "path:../app-lello-essentials/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-essentials/"
+        },
+        {
+          "name": "shared_features",
+          "version": "path:../app-lello-shared/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/"
+        },
+        {
+          "name": "lib_facedetection",
+          "version": "path:../app-lello-shared/packages/lib_facedetection/",
+          "isPathDependency": true,
+          "isGit": false,
+          "path": "../app-lello-shared/packages/lib_facedetection/"
+        },
+        {
+          "name": "dropdown_button2",
+          "version": "^2.3.9",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "devDependencies": [
+        {
+          "name": "flutter_test",
+          "version": "sdk:flutter",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_lints",
+          "version": "^4.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "build_runner",
+          "version": "^2.1.4",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "drift_dev",
+          "version": "^2.9.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "chopper_generator",
+          "version": "^8.1.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "dependency_validator",
+          "version": "^5.0.2",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "flutter_launcher_icons",
+          "version": "^0.14.3",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "json_serializable",
+          "version": "^6.0.0",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "mockito",
+          "version": "^5.0.16",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyOverrides": [
+        {
+          "name": "intl",
+          "version": "0.20.2",
+          "isPathDependency": false,
+          "isGit": false
+        }
+      ],
+      "dependencyCategories": {
+        "Utilidades": [
+          "dropdown_button2",
+          "essentials",
+          "lello",
+          "lib_facedetection",
+          "shared_features"
+        ]
+      },
+      "architecture": {
+        "pattern": "Feature-first",
+        "hasFeatureFolder": true,
+        "hasCoreFolder": false,
+        "hasSharedFolder": false,
+        "featureCount": 2,
+        "cleanFeatures": 0,
+        "cleanCoverage": 0,
+        "topLevelFolders": {
+          "feature": 2,
+          "generated": 3,
+          "l10n": 0
+        },
+        "topLevelFiles": [
+          "firebase_options_hubert.dart",
+          "firebase_options_lello.dart",
+          "lello_viver_app.dart",
+          "main-dev.dart",
+          "main-dev1.dart",
+          "main-dev2.dart",
+          "main-dev3.dart",
+          "main-preprod.dart",
+          "main-prod.dart",
+          "main-staging.dart",
+          "main.dart"
+        ],
+        "layerFirstFolders": [],
+        "presentationSubUsage": {
+          "page": 2
+        }
+      },
+      "stateManagement": {
+        "primary": "setState (puro)",
+        "detectedByPubspec": [],
+        "packages": {},
+        "resolvedPackages": {
+          "bloc": {
+            "version": "9.2.1",
+            "dependency": "transitive"
+          },
+          "flutter_bloc": {
+            "version": "9.1.1",
+            "dependency": "transitive"
+          },
+          "get": {
+            "version": "4.7.2",
+            "dependency": "transitive"
+          },
+          "get_it": {
+            "version": "8.2.0",
+            "dependency": "transitive"
+          },
+          "provider": {
+            "version": "6.1.5+1",
+            "dependency": "transitive"
+          }
+        },
+        "counts": {
+          "bloc": 0,
+          "cubit": 0,
+          "changeNotifier": 0,
+          "providerConsumer": 0,
+          "consumerWidget": 0,
+          "getxController": 0,
+          "mobxStore": 0,
+          "setState": 4,
+          "streamBuilder": 0
+        },
+        "scores": {
+          "setState (puro)": 1
+        }
+      },
+      "stats": {
+        "dartFiles": 13,
+        "totalLines": 1924,
+        "codeLines": 1624,
+        "generatedFiles": 0,
+        "testFiles": 0
+      },
+      "features": [
+        {
+          "name": "onboarding",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 127,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "splash",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 270,
+          "presentationSubfolders": [
+            "page"
+          ]
+        }
+      ],
+      "blocMetrics": {
+        "perFeature": [],
+        "totals": {
+          "features": 0,
+          "blocs": 0,
+          "cubits": 0,
+          "loc": 0,
+          "absImplPairs": 0,
+          "filesNoEquatable": 0,
+          "inlineEvents": 0,
+          "inlineStates": 0,
+          "filesWithPrint": 0,
+          "filesWithMapEventToState": 0,
+          "grade": 100,
+          "standardization": {
+            "stateClasses": 0,
+            "eventClasses": 0,
+            "stateNoSuffix": 0,
+            "eventNoSuffix": 0,
+            "idleInitialStates": 0,
+            "singleClassStates": 0,
+            "dedicatedErrorStates": 0,
+            "nonConstBaseStates": 0,
+            "outcomeEnumStates": 0,
+            "grade": 100
+          }
+        }
+      }
+    }
+  ]
+}

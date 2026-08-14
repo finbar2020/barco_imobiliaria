@@ -1,0 +1,332 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  # 1. Configuração centralizada dos Apps (Único lugar para editar)
+  def get_apps_config
+    {
+      "lello" => {
+        app_identifier: "app.lello.colaborador",
+        match_git_branch: "main",
+        apple_id: "1634400517",
+        team_id: "RNEA6DL9E4",
+        team_number_id: 117737132,
+        firebase_app_id: "1:567768661045:ios:f04f226da0c90aa7fe457c",
+        schemes: { "dev" => "staging", "dev1" => "staging", "dev2" => "staging", "dev3" => "staging", "homolog" => "staging", "homologme" => "staging", "preprod" => "staging", "prod" => "prod" }
+      },
+      "hubert" => {
+        app_identifier: "app.hubert.colaborador",
+        match_git_branch: "hubert",
+        apple_id: "6756135287",
+        team_id: "Z3H6XQP5FK",
+        team_number_id: 51486800,
+        firebase_app_id: "1:567768661045:ios:91e85c69f7723caafe457c",
+        schemes: { "dev" => "hubert_homolog", "dev1" => "hubert_homolog", "dev2" => "hubert_homolog", "dev3" => "hubert_homolog", "homolog" => "hubert_homolog", "stagingme" => "hubert_homolog", "preprod" => "hubert_homolog", "prod" => "hubert" }
+      }
+    }
+  end
+
+  # Função auxiliar para configurar variáveis baseadas no Flavor e Environment
+  def setup_env_for_flavor(options)
+    flavor = options[:flavor] || "lello"
+    env = options[:environment] || "homolog"
+    
+    app_info = get_apps_config[flavor]
+    env = "homolog" unless app_info[:schemes].key?(env)
+
+    dart_target = case env
+    when "prod"
+      "lib/main-prod.dart"
+    when "preprod"
+      "lib/main-preprod.dart"
+    when "dev"
+      "lib/main-dev.dart"
+    when "dev1"
+      "lib/main-dev1.dart"
+    when "dev2"
+      "lib/main-dev2.dart"
+    when "dev3"
+      "lib/main-dev3.dart"
+    when "homologme"
+      "lib/main-stagingme.dart"
+    else
+      "lib/main-staging.dart"
+    end
+    
+    # Mapeia Build Configuration baseado no flavor e environment
+    build_config = if flavor == "hubert"
+      env == "prod" ? "Release-hubert" : "Profile-hubert"
+    else
+      env == "prod" ? "Release" : "Profile"
+    end
+
+    {
+      client_flavor: flavor,
+      environment: env,
+      dart_target: dart_target,
+      app_identifier: app_info[:app_identifier],
+      match_git_branch: app_info[:match_git_branch],
+      apple_id: app_info[:apple_id],
+      team_id: app_info[:team_id],
+      team_number_id: app_info[:team_number_id],
+      scheme: app_info[:schemes][env],
+      configuration: build_config,
+      firebase_app_id: app_info[:firebase_app_id]
+    }
+  end
+
+  desc "Update Profiles and Certificates for all apps"
+  lane :certs do
+    configs = get_apps_config
+
+    # 1. Registrar dispositivos em todos os times únicos
+    configs.values.map { |v| v[:team_id] }.uniq.each do |team|
+      UI.header("Registrando dispositivos no Time: #{team}")
+      register_devices(devices_file: "./fastlane/devices.txt", platform: "ios", team_id: team)
+    end
+
+    # 2. Match para cada App e Tipo
+    ["adhoc", "development", "appstore"].each do |type|
+      configs.each do |flavor, info|
+        UI.header("Sincronizando #{type} para #{flavor}")
+        match(
+          type: type,
+          readonly: false,
+          git_branch: info[:match_git_branch],
+          team_id: info[:team_id],
+          app_identifier: [info[:app_identifier]],
+          force_for_new_devices: (type != "appstore")
+        )
+      end
+    end
+  end
+
+  desc "Create Push Notification certificate"
+  lane :create_push_cert do |options|
+    config = setup_env_for_flavor(options)
+    
+    pem(
+      app_identifier: config[:app_identifier],
+      team_id: config[:team_id],
+      username: "victor.mariano@lello.com.br",
+      generate_p12: true,
+      save_private_key: true,
+      output_path: "./certificates/"
+    )
+    
+    UI.success("✅ Push certificate criado para #{config[:app_identifier]}")
+  end
+
+  desc "Submit app to Firebase"
+  lane :firebase do |options|
+    config = setup_env_for_flavor(options)
+
+    match(
+      type: "adhoc",
+      readonly: true,
+      git_branch: config[:match_git_branch],
+      team_id: config[:team_id],
+      app_identifier: [config[:app_identifier]]
+    )
+
+    # Pod install JÁ é feito pelo before_script do CI.
+    # Para uso local, rodar pod install aqui.
+    unless ENV['CI']
+      Dir.chdir('..') do
+        sh("fvm flutter pub get")
+      end
+      cocoapods(repo_update: false)
+    end
+
+    # Copia arquivos de configuração específicos do flavor
+    UI.message("📋 Copiando arquivos de configuração para #{config[:client_flavor]}...")
+    sh("cp ../config/#{config[:client_flavor]}/GoogleService-Info.plist ../GoogleService-Info.plist")
+    sh("cp ../config/#{config[:client_flavor]}/Info.plist ../Runner/Info.plist")
+
+    # Flutter build - só passa --flavor para hubert (lello usa configs padrão)
+    flutter_build_args = [
+      "--release",
+      "--target=#{config[:dart_target]}",
+      "--dart-define=appFlavor=#{config[:client_flavor]}"
+    ]
+    
+    # Adiciona --flavor apenas para hubert
+    if config[:client_flavor] != "lello"
+      flutter_build_args.unshift(config[:client_flavor])
+      flutter_build_args.unshift("--flavor")
+    end
+    
+    Dir.chdir('..') do
+      sh("fvm flutter pub get")
+      sh("fvm flutter build ios #{flutter_build_args.join(' ')} --no-codesign")
+    end
+
+    gym_options = {
+      clean: false,
+      skip_package_ipa: false,
+      workspace: "Runner.xcworkspace",
+      scheme: config[:scheme],
+      configuration: config[:configuration],
+      destination: 'generic/platform=iOS',
+      skip_profile_detection: true,
+      export_method: 'ad-hoc',
+      export_options: {
+        compileBitcode: false,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          config[:app_identifier] => "match AdHoc #{config[:app_identifier]}"
+        },
+      },
+      output_directory: './build',
+      output_name: "#{config[:client_flavor]}-firebase.ipa"
+    }
+
+    if config[:environment] == "dev" || config[:environment] =~ /^dev\d+$/
+      gym_options[:xcargs] = "FLUTTER_TARGET=#{config[:dart_target]}"
+    end
+
+    gym(gym_options)
+    
+    firebase_app_distribution(
+      app: config[:firebase_app_id],
+      groups: "Arbit, Lello",
+      release_notes: options[:ci_commit],
+      ipa_path: "./build/#{config[:client_flavor]}-firebase.ipa"
+    )
+  end
+
+  desc "Submit a new beta build to TestFlight"
+  lane :testflight_beta do |options|
+    config = setup_env_for_flavor(options)
+
+    # Configuração da API Key do App Store Connect baseada no flavor
+    api_key = nil
+    flavor_upper = config[:client_flavor].upcase
+    
+    # Verifica as variáveis de ambiente específicas do flavor
+    key_id_var = "IOS_APP_STORE_APIKEY_ID_#{flavor_upper}"
+    issuer_id_var = "IOS_APP_STORE_APIKEY_ISSUER_#{flavor_upper}"
+    key_file_var = "IOS_APP_STORE_APIKEY_FILE_#{flavor_upper}"
+    
+    key_id = ENV[key_id_var]
+    issuer_id = ENV[issuer_id_var]
+    key_file = ENV[key_file_var]
+    
+    if key_id && issuer_id && key_file
+      UI.success("✅ Usando API Key do App Store Connect para #{config[:client_flavor]}")
+      
+      # CI/CD: Key file disponível como arquivo temporário
+      if File.exist?(key_file)
+        api_key = app_store_connect_api_key(
+          key_id: key_id,
+          issuer_id: issuer_id,
+          key_filepath: key_file,
+          in_house: false
+        )
+      else
+        UI.user_error!("❌ Arquivo da API Key não encontrado: #{key_file}")
+      end
+    else
+      # Fallback para autenticação manual
+      UI.important("ℹ️  API Key não configurada para #{config[:client_flavor]}. Usando autenticação manual com Apple ID.")
+      UI.important("Variables esperadas: #{key_id_var}, #{issuer_id_var}, #{key_file_var}")
+
+      unless ENV['FASTLANE_USERNAME'] && ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD']
+        UI.user_error!("❌ Credenciais não configuradas!\n\n" \
+          "Para executar localmente, configure as variáveis de ambiente:\n\n" \
+          "  export FASTLANE_USERNAME=\"email@lello.com.br\"\n" \
+          "  export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=\"your-app-specific-password\"\n\n" \
+          "Ou execute inline:\n\n" \
+          "  FASTLANE_USERNAME=\"email@lello.com.br\" FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=\"your-password\" bundle exec fastlane testflight_beta flavor:hubert environment:prod\n\n" \
+          "Para obter o App-Specific Password, acesse: https://appleid.apple.com/account/manage")
+      end
+      
+      UI.success("✅ Credenciais configuradas. Prosseguindo com autenticação manual.")
+    end
+
+    match(
+      type: "appstore",
+      readonly: true,
+      git_branch: config[:match_git_branch],
+      team_id: config[:team_id],
+      app_identifier: [config[:app_identifier]],
+      api_key: api_key
+    )
+
+    cocoapods(clean_install: true)
+
+    # Copia arquivos de configuração específicos do flavor
+    UI.message("📋 Copiando arquivos de configuração para #{config[:client_flavor]}...")
+    sh("cp ../config/#{config[:client_flavor]}/GoogleService-Info.plist ../GoogleService-Info.plist")
+    sh("cp ../config/#{config[:client_flavor]}/Info.plist ../Runner/Info.plist")
+
+    # Flutter build - só passa --flavor para hubert (lello usa configs padrão)
+    flutter_build_args = [
+      "--release",
+      "--target=#{config[:dart_target]}",
+      "--dart-define=appFlavor=#{config[:client_flavor]}"
+    ]
+    
+    # Adiciona --flavor apenas para hubert
+    if config[:client_flavor] != "lello"
+      flutter_build_args.unshift(config[:client_flavor])
+      flutter_build_args.unshift("--flavor")
+    end
+    
+    Dir.chdir('..') do
+      sh("fvm flutter build ios #{flutter_build_args.join(' ')} --no-codesign")
+    end
+
+    gym(
+      workspace: "Runner.xcworkspace",
+      scheme: config[:scheme],
+      configuration: config[:configuration],
+      destination: 'generic/platform=iOS',
+      skip_profile_detection: true,
+      export_method: 'app-store',
+      export_options: {
+        compileBitcode: false,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          config[:app_identifier] => "match AppStore #{config[:app_identifier]}"
+        },
+        iCloudContainerEnvironment: "Production"
+      },
+      output_directory: './build',
+      output_name: "#{config[:client_flavor]}-beta.ipa"
+    )
+
+    pilot_options = {
+      ipa: "./build/#{config[:client_flavor]}-beta.ipa",
+      app_identifier: config[:app_identifier],
+      apple_id: config[:apple_id],
+      team_id: config[:team_number_id],
+      skip_waiting_for_build_processing: true,
+      skip_submission: true
+    }
+    
+    # Adiciona api_key se disponível, senão usa username para autenticação local
+    if api_key
+      pilot_options[:api_key] = api_key
+    else
+      pilot_options[:username] = ENV['FASTLANE_USERNAME']
+    end
+    
+    pilot(pilot_options)
+  end
+end

@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "50100896020",
+    "project_id": "app-lello-sindico",
+    "storage_bucket": "app-lello-sindico.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50100896020:android:10f159c72a7400582c8201",
+        "android_client_info": {
+          "package_name": "app.hubert.sindico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50100896020-gchr72ki6vgojvce3dl6c66pad7sje81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmc6DVkefXZ46SMpeKJqs7R11B_KsY-VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50100896020-gchr72ki6vgojvce3dl6c66pad7sje81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "50100896020-bdl9rfqd88f7fhpf01a6cf2fiits8e0k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.circuitBreakerWeb"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50100896020:android:70118b3e85c139032c8201",
+        "android_client_info": {
+          "package_name": "app.lello.sindico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50100896020-58g0l5a6fkqv5rojksi50nsfa04itsnb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.lello.sindico",
+            "certificate_hash": "8df2bff4e67025293a9c46bdf43fd82cb9dc1a6d"
+          }
+        },
+        {
+          "client_id": "50100896020-gchr72ki6vgojvce3dl6c66pad7sje81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmc6DVkefXZ46SMpeKJqs7R11B_KsY-VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50100896020-gchr72ki6vgojvce3dl6c66pad7sje81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "50100896020-bdl9rfqd88f7fhpf01a6cf2fiits8e0k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.circuitBreakerWeb"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50100896020:android:8fc88345315aff602c8201",
+        "android_client_info": {
+          "package_name": "app.lello.sindico.viver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50100896020-gchr72ki6vgojvce3dl6c66pad7sje81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmc6DVkefXZ46SMpeKJqs7R11B_KsY-VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50100896020-gchr72ki6vgojvce3dl6c66pad7sje81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "50100896020-bdl9rfqd88f7fhpf01a6cf2fiits8e0k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.circuitBreakerWeb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,165 @@
+{
+  "conditions": [
+    {
+      "name": "new_home_android",
+      "expression": "device.os == 'android'",
+      "tagColor": "CYAN"
+    },
+    {
+      "name": "new_home_ios",
+      "expression": "app.id == '1:50100896020:ios:9230ff043b4b9a1e2c8201'",
+      "tagColor": "DEEP_ORANGE"
+    },
+    {
+      "name": "Liberar thai",
+      "expression": "app.id == '1:50100896020:android:70118b3e85c139032c8201' && app.version.>(['1.25.6'])",
+      "tagColor": "BLUE"
+    },
+    {
+      "name": "ProdAndroid",
+      "expression": "app.id == '1:50100896020:android:70118b3e85c139032c8201' && app.version.<=(['1.25.23'])",
+      "tagColor": "BROWN"
+    },
+    {
+      "name": "ProdiOS",
+      "expression": "app.id == '1:50100896020:ios:9230ff043b4b9a1e2c8201' && app.version.<=(['1.25.23'])",
+      "tagColor": "PURPLE"
+    }
+  ],
+  "parameters": {
+    "splash_ignore_biometric": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "interval_days_check_review_app": {
+      "defaultValue": {
+        "value": "86400000"
+      },
+      "description": "Defines the number in milliseconds of interval for application to show a review dialog if the user has not yet rated",
+      "valueType": "NUMBER"
+    },
+    "link_resolva_facil_whatsapp": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://api.whatsapp.com/send?phone=551127977585&text=Oi,%20pode%20me%20ajudar?\",\"webview\":false}"
+      },
+      "valueType": "STRING"
+    },
+    "links_uri": {
+      "defaultValue": {
+        "value": "[{\"scheme_https\":true,\"host\":\"lellocondominios.com.br\",\"path\":\"resolvafacil/preferencias/editar.xhtml\",\"query_parameters\":{\"key\":\"value\",\"fdfndif\":\"fdpfpdf\"}},{\"scheme_https\":true,\"host\":\"credenciado.vamosparcelar.com.br\",\"path\":\"lello-condominios\",\"query_parameters\":{}},{\"scheme_https\":true,\"host\":\"lellocondominios.com.br\",\"path\":\"lgpd-e-lello-condominios\"}]"
+      },
+      "valueType": "JSON"
+    },
+    "store_version": {
+      "defaultValue": {
+        "value": "{\"storeVersion\":\"1.25.43\"}"
+      },
+      "valueType": "STRING"
+    },
+    "rbac_custom_features": {
+      "defaultValue": {
+        "value": "{\n    \"resin\": true,\n    \"resin_reference\": \"ALL\",\n    \"aprove_payment\": true,\n    \"aprove_payment_reference\": \"ALL\",\n    \"report_book\": true,\n    \"report_book_reference\": \"ALL\",\n    \"moving\": true,\n    \"moving_reference\":  \"ALL\",\n    \"agreement\": true,\n    \"agreement_reference\":  \"ALL\"\n}"
+      },
+      "valueType": "STRING"
+    },
+    "comfort_your_condo": {
+      "defaultValue": {
+        "value": "{\n    \"comfort_your_condo\": [\n        {\n            \"type\": \"ADEGA\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_adega.svg\",\n            \"title\": \"Adega\",\n            \"body\": \"Loja com seleção de vinhos.\"\n        },\n        {\n            \"type\": \"ARMARIO_INTELIGENTE\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_armario.svg\",\n            \"title\": \"Armário Inteligente\",\n            \"body\": \"Armários com senha para entregas de delivery e correspondência.\"\n        },\n        {\n            \"type\": \"BEBIDAS\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_bebidas.svg\",\n            \"title\": \"Bebidas\",\n            \"body\": \"Geladeira de bebidas como água e cerveja para a área comum.\"\n        },\n        {\n            \"type\": \"CARREGADOR_ELETRICO\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_carregador.svg\",\n            \"title\": \"Carregador Elétrico\",\n            \"body\": \"Bases de carregador para carros elétricos.\"\n        },\n        {\n            \"type\": \"COLETA_SELETIVA\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_coleta.svg\",\n            \"title\": \"Coleta Seletiva\",\n            \"body\": \"Gestão de coleta seletiva e educação ambiental.\"\n        },\n        {\n            \"type\": \"CONTROLE_ACESSO\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_controle_acesso.svg\",\n            \"title\": \"Controle de Acesso de Veículos\",\n            \"body\": \"Controle de entrada e saída de veículos no condomínio.\"\n        },\n        {\n            \"type\": \"INOVACAO_SUSTENTAVEL\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_inovacao.svg\",\n            \"title\": \"Inovação Sustentável\",\n            \"body\": \"Agende a visita de um Agente de Inovação Condominial.\"\n        },\n        {\n            \"type\": \"MIDIA_DIGITAL_ELEVADORES\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_midia_digital.svg\",\n            \"title\": \"Mídia Digital para Elevadores\",\n            \"body\": \"Painel digital para gestão de comunicados e parcerias.\"\n        },\n        {\n            \"type\": \"MINI_MERCADO\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_mini_mercado.svg\",\n            \"title\": \"Minimercado\",\n            \"body\": \"Estande com produtos variados de alimentação, limpeza, etc.\"\n        },\n        {\n            \"type\": \"REFORMA\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_reforma.svg\",\n            \"title\": \"Reformas\",\n            \"body\": \"Serviços de reforma para a área comum.\"\n        },\n        {\n            \"type\": \"SEGUROS\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_seguros.svg\",\n            \"title\": \"Seguros\",\n            \"body\": \"Seguro predial para o condomínio.\"\n        },\n      \t{\n            \"type\": \"LAVANDERIA_COLETIVA\",\n            \"iconType\": \"asset\",\n            \"iconPath\": \"ic_comfort_lavanderia.svg\",\n            \"title\": \"Lavanderia Coletiva\",\n            \"body\": \"Solução de lavanderia coletiva para o seu condomínio.\"\n        }\n    ]\n}"
+      },
+      "conditionalValues": {
+        "Liberar thai": {
+          "value": "{\n   \"comfort_your_condo\":[\n      {\n         \"type\":\"ADEGA\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_adega.svg\",\n         \"title\":\"Adega\",\n         \"body\":\"Loja com seleção de vinhos.\"\n      },\n     {\n         \"type\":\"ALVARA\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_alvara.svg\",\n         \"title\":\"Alvarás e Certidões\",\n         \"body\":\"Gestão de documentos e certificações obrigatórios para o condomínio.\"\n      },\n      {\n         \"type\":\"ARMARIO_INTELIGENTE\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_armario.svg\",\n         \"title\":\"Armário Inteligente\",\n         \"body\":\"Armários com senha para entregas de delivery e correspondência.\"\n      },\n      {\n         \"type\":\"BEBIDAS\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_bebidas.svg\",\n         \"title\":\"Bebidas\",\n         \"body\":\"Geladeira de bebidas como água e cerveja para a área comum.\"\n      },\n      {\n         \"type\":\"CARREGADOR_ELETRICO\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_carregador.svg\",\n         \"title\":\"Carregador Elétrico\",\n         \"body\":\"Bases de carregador para carros elétricos.\"\n      },\n      {\n         \"type\":\"COLETA_SELETIVA\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_coleta.svg\",\n         \"title\":\"Coleta Seletiva\",\n         \"body\":\"Gestão de coleta seletiva e educação ambiental.\"\n      },\n      {\n         \"type\":\"CONTROLE_ACESSO\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_controle_acesso.svg\",\n         \"title\":\"Controle de Acesso de Veículos\",\n         \"body\":\"Controle de entrada e saída de veículos no condomínio.\"\n      },\n      {\n         \"type\":\"CONTROLE_ACESSO_PEDESTRES\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_controle_acesso_pedestre.svg\",\n         \"title\":\"Controle de Acesso de Pedestres\",\n         \"body\":\"Com a solução de biometria facial da Lello com a Intelbrás, a entrada dos condôminos, liberação de visitas e prestadores de serviço é totalmete automatizada, garantindo mais agilidade e segurança.\"\n      },\n      {\n         \"type\":\"INOVACAO_SUSTENTAVEL\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_inovacao.svg\",\n         \"title\":\"Inovação Sustentável\",\n         \"body\":\"Agende a visita de um Agente de Inovação Condominial.\"\n      },\n      {\n         \"type\":\"MIDIA_DIGITAL_ELEVADORES\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_midia_digital.svg\",\n         \"title\":\"Mídia Digital para Elevadores\",\n         \"body\":\"Painel digital para gestão de comunicados e parcerias.\"\n      },\n      {\n         \"type\":\"MINI_MERCADO\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_mini_mercado.svg\",\n         \"title\":\"Minimercado\",\n         \"body\":\"Estande com produtos variados de alimentação, limpeza, etc.\"\n      },\n      {\n         \"type\":\"REFORMA\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_reforma.svg\",\n         \"title\":\"Reformas\",\n         \"body\":\"Serviços de reforma para a área comum.\"\n      },\n      {\n         \"type\":\"SEGUROS\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_seguros.svg\",\n         \"title\":\"Seguros\",\n         \"body\":\"Seguro predial para o condomínio.\"\n      },\n      {\n         \"type\":\"LAVANDERIA_COLETIVA\",\n         \"iconType\":\"asset\",\n         \"iconPath\":\"ic_comfort_lavanderia.svg\",\n         \"title\":\"Lavanderia Coletiva\",\n         \"body\":\"Solução de lavanderia coletiva para o seu condomínio.\"\n      }\n   ]\n}"
+        }
+      },
+      "description": "Listagem das categorias do seu condominio",
+      "valueType": "STRING"
+    },
+    "home_personalization_active": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "circuit_breaker_json": {
+      "defaultValue": {
+        "value": "{   \"sindico.faleconosco\": [     {       \"situation\": \"disabled\",       \"applyVersion\": {         \"minimumVersion\": \"1.20.2\",         \"maximumVersion\": \"1.20.10\"       },       \"excludedReferenceContext\": [\"101\"],       \"disabledMessage\": \"\"     }   ],   \"sindico.ocorrencias\": [     {       \"situation\": \"hide\",       \"applyVersion\": {         \"minimumVersion\": \"1.20.2\",         \"maximumVersion\": \"1.20.10\"       },       \"excludedReferenceContext\": [\"101\", \"1744\"],       \"disabledMessage\": \"Inclusão de sub-usuários desativada para sua versão. Atualize o APP.\"     }   ]}"
+      },
+      "valueType": "JSON"
+    },
+    "link_resolva_facil": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://www.lellocondominios.com.br/resolvafacil/preferencias/editar.xhtml\",\"webview\":false}"
+      },
+      "valueType": "STRING"
+    },
+    "comfort_your_condo_new": {
+      "defaultValue": {
+        "value": "{\n  \"comfort_your_condo_new\": [\n    {\n      \"type\": \"smart_lockers\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_armario.svg\",\n      \"title\": \"Armários Inteligentes\",\n      \"body\": \"Armários com senha para entregas de delivery e correspondência.\"\n    },\n    {\n      \"type\": \"beverages\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_bebidas.svg\",\n      \"title\": \"Bebidas\",\n      \"body\": \"Geladeira de bebidas como água e  cerveja para a área comum.\"\n    },\n    {\n      \"type\": \"winery\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_adega.svg\",\n      \"title\": \"Adega\",\n      \"body\": \"Loja com seleção de vinhos.\"\n    },\n    {\n      \"type\": \"electric_charger\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_carregador.svg\",\n      \"title\": \"Carregador Elétrico\",\n      \"body\": \"Bases de carregador para carros elétricos.\"\n    },\n    {\n      \"type\": \"selective_collection\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_coleta.svg\",\n      \"title\": \"Coleta Seletiva\",\n      \"body\": \"Gestão de coleta seletiva e educação ambiental.\"\n    },\n    {\n      \"type\": \"vehicle_access_control\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_controle_acesso.svg\",\n      \"title\": \"Controle de Acesso de Veículos\",\n      \"body\": \"Controle de entrada e saída de veículos no condomínio.\"\n    },\n    {\n      \"type\": \"pedestrian_access_control\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_biometria_facial.svg\",\n      \"title\": \"Controle de Acesso de Pedestres\",\n      \"body\": \"Com a solução de biometria facial da Lello com a Intelbrás, a entrada dos condôminos, liberação de visitas e prestadores de serviço é totalmete automatizada, garantindo mais agilidade e segurança.\"\n    },\n    {\n      \"type\": \"community_garden\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_horta.svg\",\n      \"title\": \"Horta Coletiva\",\n      \"body\": \"Serviço de instalação de horta coletiva de orgânicos.\"\n    },\n    {\n      \"type\": \"sustainable_innovation\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_inovacao.svg\",\n      \"title\": \"Inovação Sustentável\",\n      \"body\": \"Soluções como painel solar, reuso de água, etc.\"\n    },\n    {\n      \"type\": \"community_laundry\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_lavanderia.svg\",\n      \"title\": \"Lavanderia Coletiva\",\n      \"body\": \"Solução de lavanderia coletiva para o seu condomínio.\"\n    },\n    {\n      \"type\": \"chocolate_shop\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_chocolates.svg\",\n      \"title\": \"Loja de Chocolates\",\n      \"body\": \"Estande de venda de chocolates para a área comum.\"\n    },\n    {\n      \"type\": \"mini_market\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_mini_mercado.svg\",\n      \"title\": \"Minimercado\",\n      \"body\": \"Estande com produtos variados de alimentação, limpeza, etc.\"\n    },\n    {\n      \"type\": \"digital_media_elevators\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_midia_digital.svg\",\n      \"title\": \"Mídia Digital para Elevadores\",\n      \"body\": \"Painel digital para gestão de comunicados e parcerias.\"\n    },\n    {\n      \"type\": \"architecture_project\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_arquitetura.svg\",\n      \"title\": \"Projeto de Arquitetura\",\n      \"body\": \"Serviço de projetos arquitetônicos para a área comum.\"\n    },\n    {\n      \"type\": \"renovation\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_reforma.svg\",\n      \"title\": \"Reformas\",\n      \"body\": \"Serviços de reforma para a área comum.\"\n    },\n    {\n      \"type\": \"insurance\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_seguros.svg\",\n      \"title\": \"Seguros\",\n      \"body\": \"Seguro predial para o condomínio.\"\n    },\n    {\n      \"type\": \"licenses_and_certificates\",\n      \"iconType\": \"asset\",\n      \"iconPath\": \"ic_comfort_alvara.svg\",\n      \"title\": \"Alvarás e Certidões\",\n      \"body\": \"Gestão de documentos e certificações obrigatórios para o condomínio.\"\n    }\n  ]\n}"
+      },
+      "conditionalValues": {
+        "ProdAndroid": {
+          "value": "{   \"comfort_your_condo_new\": [     {       \"type\": \"ADEGA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_adega.svg\",       \"title\": \"Adega\",       \"body\": \"Loja com seleção de vinhos.\"     },     {       \"type\": \"ALVARA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_alvara.svg\",       \"title\": \"Alvarás e Certidões\",       \"body\": \"Gestão de documentos e certificações obrigatórios para o condomínio.\"     },     {       \"type\": \"ARMARIO_INTELIGENTE\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_armario.svg\",       \"title\": \"Armário Inteligente\",       \"body\": \"Armários com senha para entregas de delivery e correspondência.\"     },     {       \"type\": \"BEBIDAS\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_bebidas.svg\",       \"title\": \"Bebidas\",       \"body\": \"Geladeira de bebidas como água e cerveja para a área comum.\"     },     {       \"type\": \"CARREGADOR_ELETRICO\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_carregador.svg\",       \"title\": \"Carregador Elétrico\",       \"body\": \"Bases de carregador para carros elétricos.\"     },     {       \"type\": \"COLETA_SELETIVA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_coleta.svg\",       \"title\": \"Coleta Seletiva\",       \"body\": \"Gestão de coleta seletiva e educação ambiental.\"     },     {       \"type\": \"CONTROLE_ACESSO\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_controle_acesso.svg\",       \"title\": \"Controle de Acesso de Veículos\",       \"body\": \"Controle de entrada e saída de veículos no condomínio.\"     },     {       \"type\": \"CONTROLE_ACESSO_PEDESTRES\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_controle_acesso_pedestre.svg\",       \"title\": \"Controle de Acesso de Pedestres\",       \"body\": \"Com a solução de biometria facial da Lello com a Intelbrás, a entrada dos condôminos, liberação de visitas e prestadores de serviço é totalmete automatizada, garantindo mais agilidade e segurança.\"     },     {       \"type\": \"INOVACAO_SUSTENTAVEL\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_inovacao.svg\",       \"title\": \"Inovação Sustentável\",       \"body\": \"Agende a visita de um Agente de Inovação Condominial.\"     },     {       \"type\": \"MIDIA_DIGITAL_ELEVADORES\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_midia_digital.svg\",       \"title\": \"Mídia Digital para Elevadores\",       \"body\": \"Painel digital para gestão de comunicados e parcerias.\"     },     {       \"type\": \"MINI_MERCADO\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_mini_mercado.svg\",       \"title\": \"Minimercado\",       \"body\": \"Estande com produtos variados de alimentação, limpeza, etc.\"     },     {       \"type\": \"REFORMA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_reforma.svg\",       \"title\": \"Reformas\",       \"body\": \"Serviços de reforma para a área comum.\"     },     {       \"type\": \"SEGUROS\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_seguros.svg\",       \"title\": \"Seguros\",       \"body\": \"Seguro predial para o condomínio.\"     },     {       \"type\": \"LAVANDERIA_COLETIVA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_lavanderia.svg\",       \"title\": \"Lavanderia Coletiva\",       \"body\": \"Solução de lavanderia coletiva para o seu condomínio.\"     }   ] }"
+        },
+        "ProdiOS": {
+          "value": "{   \"comfort_your_condo_new\": [     {       \"type\": \"ADEGA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_adega.svg\",       \"title\": \"Adega\",       \"body\": \"Loja com seleção de vinhos.\"     },     {       \"type\": \"ALVARA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_alvara.svg\",       \"title\": \"Alvarás e Certidões\",       \"body\": \"Gestão de documentos e certificações obrigatórios para o condomínio.\"     },     {       \"type\": \"ARMARIO_INTELIGENTE\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_armario.svg\",       \"title\": \"Armário Inteligente\",       \"body\": \"Armários com senha para entregas de delivery e correspondência.\"     },     {       \"type\": \"BEBIDAS\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_bebidas.svg\",       \"title\": \"Bebidas\",       \"body\": \"Geladeira de bebidas como água e cerveja para a área comum.\"     },     {       \"type\": \"CARREGADOR_ELETRICO\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_carregador.svg\",       \"title\": \"Carregador Elétrico\",       \"body\": \"Bases de carregador para carros elétricos.\"     },     {       \"type\": \"COLETA_SELETIVA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_coleta.svg\",       \"title\": \"Coleta Seletiva\",       \"body\": \"Gestão de coleta seletiva e educação ambiental.\"     },     {       \"type\": \"CONTROLE_ACESSO\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_controle_acesso.svg\",       \"title\": \"Controle de Acesso de Veículos\",       \"body\": \"Controle de entrada e saída de veículos no condomínio.\"     },     {       \"type\": \"CONTROLE_ACESSO_PEDESTRES\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_controle_acesso_pedestre.svg\",       \"title\": \"Controle de Acesso de Pedestres\",       \"body\": \"Com a solução de biometria facial da Lello com a Intelbrás, a entrada dos condôminos, liberação de visitas e prestadores de serviço é totalmete automatizada, garantindo mais agilidade e segurança.\"     },     {       \"type\": \"INOVACAO_SUSTENTAVEL\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_inovacao.svg\",       \"title\": \"Inovação Sustentável\",       \"body\": \"Agende a visita de um Agente de Inovação Condominial.\"     },     {       \"type\": \"MIDIA_DIGITAL_ELEVADORES\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_midia_digital.svg\",       \"title\": \"Mídia Digital para Elevadores\",       \"body\": \"Painel digital para gestão de comunicados e parcerias.\"     },     {       \"type\": \"MINI_MERCADO\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_mini_mercado.svg\",       \"title\": \"Minimercado\",       \"body\": \"Estande com produtos variados de alimentação, limpeza, etc.\"     },     {       \"type\": \"REFORMA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_reforma.svg\",       \"title\": \"Reformas\",       \"body\": \"Serviços de reforma para a área comum.\"     },     {       \"type\": \"SEGUROS\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_seguros.svg\",       \"title\": \"Seguros\",       \"body\": \"Seguro predial para o condomínio.\"     },     {       \"type\": \"LAVANDERIA_COLETIVA\",       \"iconType\": \"asset\",       \"iconPath\": \"ic_comfort_lavanderia.svg\",       \"title\": \"Lavanderia Coletiva\",       \"body\": \"Solução de lavanderia coletiva para o seu condomínio.\"     }   ] }"
+        }
+      },
+      "description": "Listagem das categorias do seu condominio",
+      "valueType": "STRING"
+    },
+    "show_access_profile_janitor_with_gdp": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Flag para mostrar o perfil de zelador completo com acesso gdp",
+      "valueType": "BOOLEAN"
+    },
+    "link_resolva_facil_alterar_dados": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://www.lellocondominios.com.br/resolvafacil/preferencias/editar.xhtml\",\"webview\":false}"
+      },
+      "valueType": "STRING"
+    },
+    "file_max_size_permitted": {
+      "defaultValue": {
+        "value": "10485760"
+      },
+      "description": " Sets the maximum size allowed for file upload -  Reference value in bytes",
+      "valueType": "STRING"
+    },
+    "most_accessed_cards": {
+      "defaultValue": {
+        "value": " {\"toYourCondo\":\"Seu condominio\",\"outcome\":\"despesas\",\"income\":\"receitas\",\"incomeMonthlyBillets\":\"boletos do mês\"}"
+      },
+      "description": "Lista de Cards mais acessados, mostrados na Home do aplicativo do Sindico",
+      "valueType": "JSON"
+    },
+    "new_home": {
+      "defaultValue": {
+        "value": "{\"home\": \"1\", \"notification\":\"1\", \"bottom\": \"1\", \"header\": \"1\"}"
+      },
+      "valueType": "JSON"
+    },
+    "rbac_custom_features_json": {
+      "defaultValue": {
+        "value": "{\"resin\":true,\"resin_reference\":\"ALL\",\"aprove_payment\":true,\"aprove_payment_reference\":\"ALL\",\"report_book\":true,\"report_book_reference\":\"ALL\",\"moving\":true,\"moving_reference\":\"ALL\",\"agreement\":true,\"agreement_reference\":\"0101|01243|1280|1301|1381|1438|1457|1472|1477|1481|1490|5047|5062|5088|5106|5173|5178|5562|5707|5738|6400\"}"
+      },
+      "valueType": "JSON"
+    },
+    "link_termos_de_uso_pdf": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://www.lellocondominios.com.br/novovox/arquivos/4d147747-7649-4ed6-831c-142862132d91/view/\",\"webview\":false,\"name\":\"Termos_de_Uso_E_Politica_de_Privacidade_da_Plataforma_Lello_Condominios.pdf\"}"
+      },
+      "valueType": "STRING"
+    },
+    "force_update": {
+      "defaultValue": {
+        "value": "{\"minVersion\":\"1.24.37\"}"
+      },
+      "description": "Force user to update app",
+      "valueType": "STRING"
+    }
+  }
+}

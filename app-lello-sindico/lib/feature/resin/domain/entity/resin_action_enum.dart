@@ -1,0 +1,4 @@
+enum ResinActionEnum {
+  create,
+  edit,
+}

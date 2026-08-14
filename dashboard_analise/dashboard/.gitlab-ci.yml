@@ -1,0 +1,35 @@
+# ============================================================================
+# Pipeline GitLab CI/CD — publica o dashboard no GitLab Pages a cada push
+# na branch main.
+#
+# URL final: https://lello-group1.gitlab.io/dashboard-analise/
+#
+# Observação sobre os dados: o assets/analysis.json é regenerado LOCALMENTE
+# (via `dart run tool/analyze_projects.dart` ou analyze.bat) porque a análise
+# precisa acessar a pasta dos projetos irmãos, que não estão neste repo. O
+# arquivo fica commitado no git e este pipeline apenas builda/publica.
+# ============================================================================
+
+image: ghcr.io/cirruslabs/flutter:3.38.9
+
+stages:
+  - build
+
+pages:
+  stage: build
+  script:
+    - flutter --version
+    - flutter config --enable-web
+    - flutter pub get
+    # GitLab Pages agora usa "unique domain" por padrão (serve na raiz).
+    # Se em Settings > Pages voce DESABILITAR o unique domain, troque abaixo
+    # para: --base-href /$CI_PROJECT_NAME/
+    - flutter build web --release --base-href /
+    - rm -rf public
+    - mv build/web public
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

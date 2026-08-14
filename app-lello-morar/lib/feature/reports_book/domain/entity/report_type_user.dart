@@ -1,0 +1,1 @@
+enum TypeUser { morador, sindico }

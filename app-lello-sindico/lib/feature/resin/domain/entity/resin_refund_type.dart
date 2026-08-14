@@ -1,0 +1,4 @@
+enum ResinRefundType {
+  refund,
+  advance,
+}

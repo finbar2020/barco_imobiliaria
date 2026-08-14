@@ -1,0 +1,107 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  def root_path
+    Dir.pwd.sub(/.*\Kfastlane/, '').sub(/.*\Kandroid/, '').sub(/.*\Kios/, '').sub(/.*\K\/\//, '')
+  end
+  
+  lane :sh_on_root do |options|
+    command = options[:command]
+    sh("#{command}")
+  end
+  
+  # Mapeia environment para o dart entry point
+  def setup_env(options)
+    environment = options[:environment] || "homolog"
+    
+    dart_file_map = {
+      "dev"    => "lib/main-dev.dart",
+      "dev1"   => "lib/main-dev1.dart",
+      "dev2"   => "lib/main-dev2.dart",
+      "dev3"   => "lib/main-dev3.dart",
+      "homolog" => "lib/main-staging.dart",
+      "homologme" => "lib/main-stagingme.dart",
+      "preprod" => "lib/main-preprod.dart",
+      "prod"   => "lib/main-prod.dart"
+    }
+    
+    dart_target = dart_file_map[environment] || "lib/main-staging.dart"
+    UI.message("🎯 Environment: #{environment} → #{dart_target}")
+    
+    { dart_target: dart_target, environment: environment }
+  end
+
+  private_lane :build_android do |options|
+    dart_target = options[:dart_target] || "lib/main-staging.dart"
+    build_type = options[:build_type] || "apk"
+    desc "Building Android #{build_type.upcase} with target: #{dart_target}"
+    case build_type
+    when "apk"
+      sh_on_root(command: "fvm flutter build apk -t #{dart_target} --release")
+    when "appbundle"
+      sh_on_root(command: "fvm flutter build appbundle -t #{dart_target} --release")
+    else
+      raise "Invalid build_type: #{build_type}"
+    end
+  end
+
+  desc "Submit app to Firebase"
+  lane :firebase do |options|
+    releaseNotes = options[:ci_commit]
+    config = setup_env(options)
+    build_android(dart_target: config[:dart_target], build_type: "apk") 
+    firebase_app_distribution(
+      app: "1:50100896020:android:70118b3e85c139032c8201",
+      groups: "Arbit, Lello",
+      release_notes: releaseNotes,
+      apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
+    )
+  end
+
+ 
+  desc "Submits the APK to Google Play internal testing track"
+  lane :upload_google_play_store_internal do |options|
+    config = setup_env(environment: "prod")
+
+    # 🔨 Gera o build
+    build_android(dart_target: config[:dart_target], build_type: "appbundle")
+
+    # 📦 Faz o upload para o track 'internal'
+    upload_to_play_store(
+      track: 'internal',
+      aab_paths: ['../build/app/outputs/bundle/release/app-release.aab'],
+      json_key: ENV['JSON_KEY_DATA']
+    )
+  end
+  
+  ## Not implemented ##
+  desc "Promote to Production"
+  lane :promote_alpha_to_production do |options|
+    flavor = options[:flavor]
+    build_android(flavor: flavor)
+    upload_to_play_store(
+      track: 'alpha',
+      track_promote_to: 'production',
+      aab_paths: ['../build/app/outputs/bundle/release/app-release.aab'],
+      json_key: ENV['JSON_KEY_DATA']
+    )
+  end
+
+  
+end

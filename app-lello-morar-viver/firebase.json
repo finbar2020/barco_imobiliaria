@@ -1,0 +1,33 @@
+{
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "app-lello-morar",
+          "appId": "1:1079065027763:android:74b06f947e7bdd502c7cc6",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "app-lello-morar",
+          "appId": "1:1079065027763:ios:25b8a7861622f4342c7cc6",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "app-lello-morar",
+          "configurations": {
+            "android": "1:1079065027763:android:74b06f947e7bdd502c7cc6",
+            "ios": "1:1079065027763:ios:d5b3ba3e4e24a6482c7cc6"
+          }
+        }
+      }
+    }
+  }
+}

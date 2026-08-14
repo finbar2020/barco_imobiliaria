@@ -1,0 +1,12 @@
+git_url("https://gitcondo.lello.com.br/digital/apps/app-lello-certificates.git")
+git_branch("main")
+
+app_identifier("app.lello.sindico")
+
+keychain_password("pass$lello")
+
+storage_mode("git")
+
+type("adhoc")
+
+readonly true

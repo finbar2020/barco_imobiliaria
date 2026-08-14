@@ -1,0 +1,4 @@
+enum DigitalPointTypeEnum {
+  rekognit,
+  offline,
+}

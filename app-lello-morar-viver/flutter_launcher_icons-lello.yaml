@@ -1,0 +1,7 @@
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/logo_carimbeira_morar.png" # Caminho da sua imagem 1024x1024
+  remove_alpha_ios: true
+  # IMPORTANTE: Isso diz ao pacote para colocar na pasta src/lello e criar AppIcon-lello
+  flavor: lello

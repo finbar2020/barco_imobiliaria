@@ -1,0 +1,4 @@
+enum TimesheetSignTypeEnum {
+  holerite,
+  espelho,
+}

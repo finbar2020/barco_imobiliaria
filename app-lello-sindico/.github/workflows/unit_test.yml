@@ -1,0 +1,25 @@
+name: unit_test
+
+on:
+  pull_request:
+
+env:
+  JVM_OPTS: -Xmx4096m
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    container:
+      image: docker://registry.gitlab.com/noknox/devops/docker/android-flutter-fastlane:1.0.0
+    env:
+      DEPLOYMENT_PRIVATE_KEY: ${{ secrets.DEPLOYMENT_PRIVATE_KEY }}
+      ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+      KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+      KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run tests
+        run: |
+          flutter test test

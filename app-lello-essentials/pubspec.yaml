@@ -1,0 +1,155 @@
+name: essentials
+description: A new Flutter package project.
+version: 0.0.1
+
+publish_to: none
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=1.17.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Banco de dados
+  drift: ^2.34.0
+  drift_sqflite: ^2.0.1
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.5.5
+
+  # Gerenciamento de Estados
+  flutter_bloc: ^9.1.1
+
+  # Injeção de Dependências
+  get_it: ^9.2.1
+
+  # Http client
+  chopper: ^8.7.0
+  dio: ^5.11.0
+  http: ^1.2.2
+  web_socket_channel: ^3.0.1
+
+  # Firebase
+  firebase_analytics: ^12.4.6
+  firebase_auth: ^6.5.7
+  firebase_core: ^4.13.0
+  firebase_crashlytics: ^5.2.7
+  firebase_in_app_messaging: ^0.9.2+7
+  firebase_messaging: ^16.5.0
+  firebase_remote_config: ^6.5.6
+  firebase_app_installations: ^0.4.2+7
+  firebase_performance: ^0.11.4+6
+  firebase_storage: ^13.4.6
+  cloud_firestore: ^6.8.0
+  google_mlkit_face_detection: ^0.14.0
+
+  # Monitoramento
+  datadog_flutter_plugin: ^3.4.1
+  datadog_tracking_http_client: ^3.2.0
+
+  # Camera e Imagem
+  camera: ^0.12.0+2
+  image_picker: ^1.2.3
+  image_cropper: ^12.2.1
+  flutter_image_compress: ^2.5.1
+
+  # Utils
+  logging: ^1.3.0
+  pretty_chopper_logger: ^1.3.3
+  accordion: ^2.5.1
+  dartz: ^0.10.0
+  adjust_sdk: ^5.7.1
+  flutter_contacts: ^2.3.1
+  equatable: ^2.1.0
+  file_picker: ^10.3.10
+  device_info_plus: ^12.4.0
+  in_app_review: ^2.0.12
+  open_file: ^4.0.0
+  path_provider: ^2.1.6
+  # 13.x exige compileSdk 37 (Android 17 / Cinnamon Bun, ainda preview no SDK local)
+  permission_handler: ^12.0.3
+  sms_autofill: ^2.5.0
+  share_plus: ^12.0.2
+  flutter_local_notifications: ^22.3.0
+  html_editor_enhanced: ^2.6.0
+  fl_chart: ^1.2.0
+  pin_input_text_field: ^4.2.0
+  flutter_svg: ^2.3.0
+  sprintf: ^7.0.0
+  url_launcher: ^6.1.2
+  package_info_plus: ^9.0.1
+  geolocator: ^14.0.2
+  intl: ^0.20.2
+  expandable: ^5.0.1
+  mime: ^2.0.0
+  flutter_exif_rotation: ^0.5.1
+  image: ^4.8.0
+  fluttertoast: ^10.0.0
+  airplane_mode_checker: ^3.3.0
+  workmanager: ^0.10.7
+  uuid: ^4.6.0
+  connectivity_plus: ^7.3.1
+  json_annotation: ^4.12.0
+  local_auth: ^3.0.2
+  infinite_scroll_pagination: ^5.1.1
+  pool: ^1.5.1
+  decimal: ^3.2.6
+  money2: ^6.3.0
+  retry: ^3.1.2
+  wakelock_plus: ^1.5.2
+
+  # UI
+  another_flushbar: ^2.2.4
+  auto_size_text: ^3.0.0
+  avatar_glow: ^3.0.1
+  badges: ^3.2.0
+  cached_network_image: ^3.1.0
+  carousel_slider: ^5.1.2
+  dotted_border: ^3.1.0
+  flutter_datetime_picker_plus: ^2.4.0
+  mask_text_input_formatter: ^2.0.0
+  community_charts_common: ^1.0.1
+  community_charts_flutter: ^1.0.1
+  pdfrx: ^2.4.7
+  flutter_pdfview: ^1.4.5
+  flutter_cache_manager: ^3.4.2
+  table_calendar: ^3.2.1
+  webview_flutter: ^4.14.1
+  flutter_markdown: ^0.7.6+2
+  flutter_snake_navigationbar: ^0.6.1
+  flutter_rating_bar: ^4.0.0
+  flutter_widget_from_html_core: ^0.17.2
+  dropdown_search: ^7.0.0
+  mocktail: ^1.0.5
+  search_cep: ^4.0.2
+  diacritic: ^0.1.4
+  shimmer: ^3.0.0
+  flutter_map: ^8.3.1
+  lottie: ^3.3.3
+  flutter_colorpicker: ^1.1.0
+  toastification: ^3.2.0
+  linked_scroll_controller: ^0.2.0
+  brasil_fields: ^1.19.0
+  flutter_masked_text2: ^0.9.1
+  intl_utils: ^2.8.14
+  photo_view: ^0.15.0
+
+  # Chat UI
+  flutter_chat_ui: ^2.11.1
+  flutter_chat_core: ^2.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.5.4
+  drift_dev: ^2.34.0
+  chopper_generator: ^8.7.0
+  dependency_validator: ^5.0.2
+  flutter_launcher_icons: ^0.14.3
+  json_serializable: ^6.0.0
+
+dependency_overrides:
+  intl: 0.20.2

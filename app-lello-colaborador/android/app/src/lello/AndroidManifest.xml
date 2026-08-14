@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Configurações específicas do flavor Lello -->
+    <application>
+        <activity android:name=".MainActivity">
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="app.lello.colaborador.notificacao" />
+        </activity>
+    </application>
+</manifest>

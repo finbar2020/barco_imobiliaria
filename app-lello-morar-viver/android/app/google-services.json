@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "1079065027763",
+    "project_id": "app-lello-morar",
+    "storage_bucket": "app-lello-morar.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079065027763:android:e74deb59fccd4f312c7cc6",
+        "android_client_info": {
+          "package_name": "app.hubert.morador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1079065027763-183bigsfta0jipv06vac0gdim3j4mjeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQsNi0sgBBTTE7RTvh4BHjMRse9cU1E34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1079065027763-183bigsfta0jipv06vac0gdim3j4mjeh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1079065027763-0a9p7pq71l6st3bq6gie057m2a0ior52.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.lello.condominos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079065027763:android:15839aa1354ec98f2c7cc6",
+        "android_client_info": {
+          "package_name": "app.lello.morar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1079065027763-183bigsfta0jipv06vac0gdim3j4mjeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQsNi0sgBBTTE7RTvh4BHjMRse9cU1E34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1079065027763-183bigsfta0jipv06vac0gdim3j4mjeh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1079065027763-0a9p7pq71l6st3bq6gie057m2a0ior52.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.lello.condominos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079065027763:android:74b06f947e7bdd502c7cc6",
+        "android_client_info": {
+          "package_name": "app.lello.morar.viver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1079065027763-183bigsfta0jipv06vac0gdim3j4mjeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQsNi0sgBBTTE7RTvh4BHjMRse9cU1E34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1079065027763-183bigsfta0jipv06vac0gdim3j4mjeh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1079065027763-0a9p7pq71l6st3bq6gie057m2a0ior52.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.lello.condominos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,146 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  def root_path
+    Dir.pwd.sub(/.*\Kfastlane/, '').sub(/.*\Kandroid/, '').sub(/.*\Kios/, '').sub(/.*\K\/\//, '')
+  end
+
+  # ------------------------------------------------------------------
+  # ⚙️ CONFIGURAÇÃO DINÂMICA (Lello vs Hubert + Environment)
+  # ------------------------------------------------------------------
+  def setup_env(options)
+    client_flavor = options[:flavor] # "lello" ou "hubert"
+    environment = options[:environment] # "homolog" ou "prod"
+    
+    # Configuração Padrão (Lello)
+    client_flavor = "lello" if client_flavor.nil? || client_flavor.empty?
+    environment = "homolog" if environment.nil? || environment.empty?
+
+    # Mapeia environment para o arquivo main dart correto
+    dart_file_map = {
+      "dev" => "lib/main-dev.dart",
+      "dev1" => "lib/main-dev1.dart",
+      "dev2" => "lib/main-dev2.dart",
+      "dev3" => "lib/main-dev3.dart",
+      "homologme" => "lib/main-stagingme.dart",
+      "homolog" => "lib/main-staging.dart",
+      "preprod" => "lib/main-preprod.dart",
+      "prod" => "lib/main-prod.dart"
+    }
+
+    env = {
+      client_flavor: client_flavor,
+      environment: environment,
+      dart_target: dart_file_map[environment],
+      package_name: "app.lello.colaborador",
+      firebase_app_id: "1:567768661045:android:d10eebfc85ad5d23fe457c"
+    }
+
+    # Configuração Hubert
+    if client_flavor == "hubert"
+      env[:package_name] = "app.hubert.colaborador"
+      env[:firebase_app_id] = "1:567768661045:android:396fbe0cdfb8b04dfe457c"
+    end
+
+    return env
+  end
+
+  lane :sh_on_root do |options|
+    command = options[:command]
+    sh("#{command}")
+  end
+
+  # Lane Privada de Build Genérico
+  private_lane :build_android do |options|
+    config = options[:config]
+    force_apk = options[:force_apk] || false
+    client_flavor = config[:client_flavor] # lello ou hubert
+    environment = config[:environment] # homolog ou prod
+    dart_target = config[:dart_target] # lib/main-staging.dart ou lib/main-prod.dart
+    
+    desc "Building #{client_flavor} Android (#{environment}): #{dart_target}"
+    
+    # Comando Flutter com Flavor + Target + Dart Define
+    # Ex: flutter build apk --flavor hubert -t lib/main-staging.dart --dart-define=appFlavor=hubert --release
+    base_cmd = "fvm flutter build apk --flavor #{client_flavor} -t #{dart_target} --dart-define=appFlavor=#{client_flavor}"
+    
+    if environment == "prod" && !force_apk
+       # Para produção usamos AppBundle
+       base_cmd = "fvm flutter build appbundle --flavor #{client_flavor} -t #{dart_target} --dart-define=appFlavor=#{client_flavor}"
+    end
+
+    sh_on_root(command: "#{base_cmd} --release")
+  end
+
+  desc "Submit app to Firebase"
+  lane :firebase do |options|
+    config = setup_env(options)
+    releaseNotes = options[:ci_commit]
+    
+    # Firebase App Distribution requer APK, então forçamos APK mesmo em prod
+    build_android(config: config, force_apk: true)
+
+    # O Flutter gera APKs com nomes diferentes quando usa flavors
+    # Ex: build/app/outputs/flutter-apk/app-lello-release.apk
+    apk_path = "../build/app/outputs/flutter-apk/app-#{config[:client_flavor]}-release.apk"
+
+    firebase_app_distribution(
+        app: config[:firebase_app_id],
+        groups: "Arbit, Lello",
+        release_notes: releaseNotes,
+        apk_path: apk_path
+    )
+  end
+
+  desc "Submits the AAB to Google Play internal testing track"
+  lane :upload_google_play_store_internal do |options|
+    config = setup_env(options)
+
+    # Builda usando o flavor e environment corretos (prod)
+    build_android(config: config)
+
+    # Caminho do AAB muda com flavor
+    # Ex: build/app/outputs/bundle/hubertRelease/app-hubert-release.aab
+    # Nota: O Gradle as vezes muda a pasta para 'hubertRelease' em vez de 'release'
+    aab_path = "../build/app/outputs/bundle/#{config[:client_flavor]}Release/app-#{config[:client_flavor]}-release.aab"
+
+    upload_to_play_store(
+      track: 'internal',
+      package_name: config[:package_name],
+      aab_paths: [aab_path],
+      json_key: ENV['JSON_KEY_DATA'] 
+    )
+  end
+  
+  ## Not implemented ##
+  desc "Promote to Production"
+  lane :promote_alpha_to_production do |options|
+    config = setup_env(options)
+    build_android(config: config)
+    
+    upload_to_play_store(
+      track: 'alpha',
+      track_promote_to: 'production',
+      package_name: config[:package_name],
+      aab_paths: ["../build/app/outputs/bundle/#{config[:client_flavor]}Release/app-#{config[:client_flavor]}-release.aab"],
+      json_key: ENV['JSON_KEY_DATA'] 
+    )
+
+  end
+end

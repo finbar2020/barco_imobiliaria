@@ -1,0 +1,30 @@
+name: lib_facedetection
+description: Biblioteca de Detecção de Rosto e Validação de Vida da Lello.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  essentials:
+    path: ../../../app-lello-essentials/
+
+  shared_features:
+    path: ../../../app-lello-shared/
+
+dev_dependencies:
+  # rules and activating additional ones.
+  flutter_lints: ^4.0.0
+
+dependency_overrides:
+  intl: 0.20.2
+
+flutter:
+  uses-material-design: true

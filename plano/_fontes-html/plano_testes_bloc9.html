@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Plano de Testes — Migração bloc 9 + Unificação abstract/impl</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 15mm 20mm 15mm;
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-size: 9pt;
+      color: #666;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    @bottom-left {
+      content: "Lello Morar / Colaborador — plano de testes v1";
+      font-size: 9pt;
+      color: #666;
+      font-family: 'Segoe UI', sans-serif;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #1f2937;
+    line-height: 1.45;
+    font-size: 10.5pt;
+    margin: 0;
+  }
+  h1 {
+    font-size: 22pt;
+    color: #0f172a;
+    border-bottom: 3px solid #ea580c;
+    padding-bottom: 8px;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.3px;
+  }
+  h2 {
+    font-size: 15pt;
+    color: #ea580c;
+    margin: 28px 0 6px;
+    padding-top: 6px;
+    border-top: 2px solid #fed7aa;
+  }
+  h3 {
+    font-size: 12.5pt;
+    color: #0f172a;
+    margin: 20px 0 6px;
+  }
+  h4 {
+    font-size: 11pt;
+    color: #334155;
+    margin: 14px 0 4px;
+  }
+  p { margin: 4px 0 8px; }
+  ul, ol { margin: 4px 0 8px; padding-left: 22px; }
+  li { margin: 2px 0; }
+  code {
+    font-family: 'Consolas', 'Cascadia Code', monospace;
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 9.5pt;
+    color: #0f172a;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 10px 12px;
+    border-radius: 5px;
+    font-size: 9pt;
+    font-family: 'Consolas', 'Cascadia Code', monospace;
+    overflow-x: auto;
+    line-height: 1.4;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 6px 0 12px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #d1d5db;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #fef3c7;
+    color: #78350f;
+    font-weight: 600;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  tr:nth-child(even) td { background: #fafafa; }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .meta {
+    color: #64748b;
+    font-size: 9.5pt;
+  }
+  .test-card {
+    border-left: 4px solid #ea580c;
+    background: #fff7ed;
+    padding: 8px 12px 8px 14px;
+    margin: 10px 0;
+    border-radius: 0 5px 5px 0;
+    page-break-inside: avoid;
+  }
+  .test-card.p0 { border-left-color: #dc2626; background: #fef2f2; }
+  .test-card.p1 { border-left-color: #ea580c; background: #fff7ed; }
+  .test-card.p2 { border-left-color: #64748b; background: #f8fafc; }
+  .test-card h4 {
+    margin: 0 0 4px 0;
+    color: #0f172a;
+    font-size: 10.5pt;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge.p0 { background: #dc2626; color: #fff; }
+  .badge.p1 { background: #ea580c; color: #fff; }
+  .badge.p2 { background: #64748b; color: #fff; }
+  .badge.morar { background: #7c3aed; color: #fff; }
+  .badge.colab { background: #0ea5e9; color: #fff; }
+  .badge.cross { background: #0891b2; color: #fff; }
+  .callout {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 9.5pt;
+    margin: 8px 0;
+  }
+  .callout.danger {
+    background: #fef2f2;
+    border-color: #f87171;
+  }
+  .callout.info {
+    background: #eff6ff;
+    border-color: #60a5fa;
+  }
+  .callout strong { color: #92400e; }
+  .callout.danger strong { color: #991b1b; }
+  .callout.info strong { color: #1e40af; }
+  .toc {
+    background: #f8fafc;
+    padding: 12px 18px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    font-size: 10pt;
+  }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 3px 0; }
+  .cover {
+    text-align: center;
+    padding: 60px 20px 40px 20px;
+    page-break-after: always;
+  }
+  .cover h1 {
+    font-size: 32pt;
+    border: none;
+    margin-bottom: 20px;
+    color: #0f172a;
+  }
+  .cover .subtitle {
+    font-size: 14pt;
+    color: #475569;
+    margin: 4px 0;
+  }
+  .cover .metabox {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 24px 40px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 11pt;
+    color: #334155;
+    min-width: 60%;
+  }
+  .cover .metabox b { color: #0f172a; }
+  .avoid-break { page-break-inside: avoid; }
+  .new-page { page-break-before: always; }
+  .checklist td:first-child { width: 75%; }
+  .checklist td:last-child { text-align: center; width: 60px; }
+  .check {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #94a3b8;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================== -->
+<!-- CAPA -->
+<!-- ============================================================== -->
+<section class="cover">
+  <h1>Plano de Testes</h1>
+  <div class="subtitle">Migração <code>flutter_bloc 7 → 9</code> e unificação <code>abstract/impl</code></div>
+  <div class="subtitle" style="margin-top: 6px;">Apps <b>Lello Morar</b> e <b>Lello Colaborador</b></div>
+  <div class="metabox">
+    <div><b>Versão:</b> 1.0</div>
+    <div><b>Data:</b> 12/07/2026</div>
+    <div><b>Branch:</b> <code>feature/bloc-9-migration</code></div>
+    <div><b>Escopo:</b> ~49 blocs migrados + pares abstract/impl unificados</div>
+    <div><b>Status:</b> pronto para execução manual + regressão</div>
+    <div><b>Responsável:</b> Equipe Mobile Lello</div>
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- SUMÁRIO -->
+<!-- ============================================================== -->
+<h2>Sumário</h2>
+<div class="toc">
+  <ol>
+    <li>Contexto e objetivos</li>
+    <li>Pontos de atenção do bloc 9</li>
+    <li>Pré-checks (build + analyzer + testes automatizados)</li>
+    <li>App Morar — cenários por prioridade
+      <ul>
+        <li>P0 — fluxos críticos (login, home, boletos)</li>
+        <li>P1 — fluxos importantes (reservas, IA, reports, docs, preferências, etc.)</li>
+        <li>P2 — fluxos secundários</li>
+      </ul>
+    </li>
+    <li>App Colaborador — cenários por prioridade
+      <ul>
+        <li>P0 — autenticação tablet, sessão, ponto digital, home</li>
+        <li>P1 — timesheet, ponto manual, documentos, atestado, perfil</li>
+        <li>P2 — preferências</li>
+      </ul>
+    </li>
+    <li>Testes cruzados (ambos os apps)</li>
+    <li>Testes automatizados recomendados</li>
+    <li>Checklist de release</li>
+    <li>Riscos residuais</li>
+  </ol>
+</div>
+
+<!-- ============================================================== -->
+<h2>1. Contexto e objetivos</h2>
+
+<p>Este documento cobre a validação das mudanças realizadas na branch <code>feature/bloc-9-migration</code> dos projetos <b>app-lello-morar</b> e <b>app-lello-colaborador</b>. As alterações estão em <i>working tree</i>, ainda sem commit, e envolvem:</p>
+
+<ul>
+  <li><b>Migração do <code>flutter_bloc</code>:</b> versão <code>^7.3.3</code> para <code>^9.1.1</code>.</li>
+  <li><b>Reescrita dos handlers de bloc:</b> <code>mapEventToState</code> → <code>on&lt;Event&gt;(_handler)</code>, <code>yield</code> → <code>emit()</code>, <code>async*</code> → <code>async</code>.</li>
+  <li><b>Unificação de pares abstract/impl:</b> vários blocs que tinham a estrutura <code>FooBloc</code> (abstract) + <code>FooBlocImpl</code> foram consolidados em uma única classe concreta <code>FooBloc</code>.</li>
+  <li><b>Ajustes de DI:</b> <code>application_container.dart</code> atualizado em ambos os projetos.</li>
+</ul>
+
+<p><b>Objetivo do teste:</b> garantir que nenhum fluxo do usuário quebrou com a migração, com foco em regressão funcional, ordem de emissão de estados e concorrência de eventos (que mudou entre bloc 7 e 9).</p>
+
+<h2>2. Pontos de atenção do bloc 9</h2>
+
+<div class="callout danger">
+  <strong>Mudança de semântica que motivou o plano:</strong>
+  <ul style="margin: 4px 0 0 20px;">
+    <li><b>Concorrência de handlers</b>: bloc 9 processa handlers em paralelo por padrão. Se um handler <code>async</code> dispara outro <code>add()</code> e espera resposta encadeada, o comportamento pode diferir do bloc 7.</li>
+    <li><b><code>emit()</code> fora do handler ativo dá erro em runtime</b>: se algum bloc emite estado em callback assíncrono após o handler concluir, quebra. O analyzer <b>não</b> pega isso.</li>
+    <li><b><code>super.close()</code> em blocs unificados</b>: garantir que não vazem streams.</li>
+    <li><b>Ordem dos <code>emit()</code></b>: sequência de estados intermediários (Loading → Loaded) precisa ser mantida idêntica ao comportamento anterior.</li>
+  </ul>
+</div>
+
+<h2>3. Pré-checks</h2>
+
+<table>
+  <thead>
+    <tr><th>Checkpoint</th><th>Comando</th><th>Critério</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Morar builda em debug</td>
+      <td><code>flutter build apk --flavor lelloMorar --debug</code></td>
+      <td>Sem erros</td>
+    </tr>
+    <tr>
+      <td>Colaborador builda em debug</td>
+      <td><code>flutter build apk --flavor lelloColaborador --debug</code></td>
+      <td>Sem erros</td>
+    </tr>
+    <tr>
+      <td>Analyzer verde</td>
+      <td><code>flutter analyze</code></td>
+      <td>0 erros nos dois projetos</td>
+    </tr>
+    <tr>
+      <td>Testes unitários</td>
+      <td><code>flutter test</code></td>
+      <td>Sem regressão vs baseline</td>
+    </tr>
+    <tr>
+      <td>Build bundle</td>
+      <td><code>flutter build bundle</code></td>
+      <td>Kernel gerado</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============================================================== -->
+<h2 class="new-page">4. App Morar — Cenários</h2>
+<p class="meta"><b>Escopo:</b> ~27 features tocadas · <b>Flavor:</b> <code>lelloMorar</code> · <b>Prefixo dos IDs:</b> T-MORAR-XXX</p>
+
+<h3>P0 — Fluxos críticos</h3>
+
+<div class="test-card p0">
+  <h4><span>T-MORAR-001 · Sessão / Login / Logout</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Bloc afetado: <code>session_bloc</code> (unificado a partir de <code>session_bloc_impl</code>)</div>
+  <ul>
+    <li>Login com condômino ativo → estado <code>SessionAuthenticatedState</code> → home carrega.</li>
+    <li>Login com credencial inválida → estado <code>SessionErrorState</code> → mensagem exibida.</li>
+    <li>Login com biometria (quando habilitado no aparelho).</li>
+    <li>Logout → estado <code>SessionUnauthenticatedState</code> → volta pra tela de login.</li>
+    <li>Login em conta com múltiplas unidades → seletor aparece.</li>
+    <li>Refresh de token expirado durante sessão ativa → renova sem deslogar.</li>
+    <li><b>Regressão:</b> fechar app após login e reabrir → sessão persiste.</li>
+  </ul>
+</div>
+
+<div class="test-card p0">
+  <h4><span>T-MORAR-002 · Home / Dashboard</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Blocs afetados: <code>home_bloc</code>, <code>home_dialogs_bloc</code> (ambos unificados)</div>
+  <ul>
+    <li>Abrir app logado → home aparece com cards da preferência do usuário.</li>
+    <li>Puxar pra atualizar → recarrega dados sem duplicar entradas.</li>
+    <li>Modal de comunicado (dialog) abre uma vez e não reabre até novo trigger.</li>
+    <li>Trocar de unidade → home recarrega com dados da nova unidade.</li>
+    <li><b>Regressão:</b> cards escondidos em Preferências realmente não aparecem.</li>
+  </ul>
+</div>
+
+<div class="test-card p0">
+  <h4><span>T-MORAR-003 · Boletos</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Bloc afetado: <code>billets_bloc</code></div>
+  <ul>
+    <li>Lista de boletos carrega com status corretos (pago, aberto, vencido).</li>
+    <li>Abrir detalhe do boleto → PDF ou linha digitável exibida.</li>
+    <li>Copiar linha digitável → área de transferência recebe o valor.</li>
+    <li>Pagar via app (se integrado) → estado transiciona corretamente.</li>
+    <li><b>Regressão:</b> filtro por período retorna resultados esperados.</li>
+  </ul>
+</div>
+
+<h3>P1 — Fluxos importantes</h3>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-004 · Reserva de espaços</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>reservation_bloc</code> (unificado)</div>
+  <ul>
+    <li>Listar espaços disponíveis.</li>
+    <li>Selecionar data/horário → estado atualiza sem duplicar seleção.</li>
+    <li>Confirmar reserva → estado <code>ReservationCreatedState</code> → aparece nas "minhas reservas".</li>
+    <li>Cancelar reserva → some da lista.</li>
+    <li>Reserva em espaço com fila de espera → estado de fila corretamente refletido.</li>
+    <li><b>Regressão bloc 9:</b> sequência rápida "confirmar → voltar → confirmar" não gera reserva duplicada.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-005 · IA Bella</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>ia_bella_bloc</code></div>
+  <ul>
+    <li>Abrir chat → estado inicial vazio.</li>
+    <li>Enviar mensagem → estado <code>IaBellaLoadingState</code> → resposta chega.</li>
+    <li>Enviar 3 mensagens rápidas → todas ordenadas na conversa.</li>
+    <li>Erro de rede → estado <code>IaBellaErrorState</code> com retry.</li>
+    <li><b>Regressão bloc 9:</b> mensagens não chegam fora de ordem.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-006 · Livro de Ocorrências</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>reports_bloc</code> (unificado) + 6 páginas mexidas</div>
+  <ul>
+    <li>Abrir "meus reports" → lista carrega.</li>
+    <li>Registrar novo report com texto e foto anexada → tela de sucesso.</li>
+    <li>Responder report existente → estado atualiza, tela reply-success aparece.</li>
+    <li>Review antes de enviar → dados batem com o formulário.</li>
+    <li><b>Regressão:</b> navegação completa entre as 6 telas (register → review → success → my_reports → reply → reply_success).</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-007 · Documentos digitais</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Blocs afetados: <code>digital_meeting_bloc</code>, <code>agreements_bloc</code>, <code>change_ownership_bloc</code></div>
+  <ul>
+    <li><b>Assembleia digital:</b> listar assembleias, entrar em uma ativa, votar.</li>
+    <li><b>Acordos:</b> listar acordos pendentes, aceitar/recusar.</li>
+    <li><b>Troca de titularidade:</b> iniciar fluxo, subir documento, confirmar.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-008 · Easy Fix — CND e Change Address</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Blocs afetados: <code>cnd_bloc</code>, <code>change_address_bloc</code> (refatorado — event/state novos)</div>
+  <ul>
+    <li><b>CND:</b> solicitar CND, download quando disponível.</li>
+    <li><b>Troca de endereço:</b> preencher form → validação → confirmação. Controller foi tocado, atenção a scroll/foco de campos.</li>
+    <li><b>Rodar:</b> <code>flutter test test/feature/easy_fix/</code> (o arquivo <code>change_address_controller_test.dart</code> foi modificado).</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-009 · Preferências (múltiplas telas)</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Blocs afetados: <code>preferences_home_cards_bloc</code>, <code>preferences_notification_bloc</code>, <code>preferences_zero_paper_bloc</code>, <code>receiving_documents_bloc</code>, <code>in_care_bloc</code></div>
+  <ul>
+    <li><b>Cards da home:</b> ligar/desligar cards → refletir na Home (T-MORAR-002).</li>
+    <li><b>Notificações:</b> ligar/desligar canais → notificação real chega/não chega.</li>
+    <li><b>Zero papel:</b> ligar → confirmar não recebe mais boleto físico.</li>
+    <li><b>Receber documentos:</b> alterar preferência (email/WhatsApp).</li>
+    <li><b>In Care:</b> ativar/desativar recurso, ver histórico.</li>
+    <li><b>Regressão importante:</b> cada toggle persiste após reabrir o app.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-010 · Prestação de contas</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>accountability_bloc</code></div>
+  <ul>
+    <li>Listar prestações mensais.</li>
+    <li>Abrir uma → PDF / detalhes carregam.</li>
+    <li>Filtro por ano funcionando.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-011 · Mailing / Correspondências</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>mailing_bloc</code></div>
+  <ul>
+    <li>Ver correspondências recebidas.</li>
+    <li>Marcar como retirada.</li>
+    <li>Filtros de status.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-MORAR-012 · Sub-usuários</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>sub_users_bloc</code> + <code>sub_user_store.dart</code> (MobX)</div>
+  <ul>
+    <li>Listar sub-usuários vinculados.</li>
+    <li>Página de pendências → aceitar / rejeitar pedido.</li>
+    <li><b>Atenção:</b> única feature do morar que mistura bloc + MobX store. Testar navegação entre a página de pendências e a lista principal.</li>
+  </ul>
+</div>
+
+<h3>P2 — Fluxos secundários</h3>
+
+<p>Testar apenas o <b>happy path</b> (listar + criar + editar + deletar quando aplicável):</p>
+
+<table>
+  <thead><tr><th>ID</th><th>Feature</th><th>Bloc</th></tr></thead>
+  <tbody>
+    <tr><td>T-MORAR-013</td><td>Access Control (controle de acesso)</td><td><code>access_control_bloc</code></td></tr>
+    <tr><td>T-MORAR-014</td><td>Insurance (seguros contratados)</td><td><code>insurance_bloc</code></td></tr>
+    <tr><td>T-MORAR-015</td><td>TDB (declarações de imposto)</td><td><code>tdb_bloc</code></td></tr>
+    <tr><td>T-MORAR-016</td><td>Vehicles (cadastro de veículos)</td><td><code>vehicle_bloc</code></td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================== -->
+<h2 class="new-page">5. App Colaborador — Cenários</h2>
+<p class="meta"><b>Escopo:</b> ~22 features tocadas · <b>Flavor:</b> <code>lelloColaborador</code> · <b>Prefixo dos IDs:</b> T-COLAB-XXX</p>
+
+<h3>P0 — Fluxos críticos</h3>
+
+<div class="test-card p0">
+  <h4><span>T-COLAB-001 · Autenticação em tablet compartilhado</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Bloc afetado: <code>authentication_tablet_bloc</code> (unificado) + widget <code>login_tablet_list_offile_points_widget.dart</code></div>
+  <ul>
+    <li>Login em tablet compartilhado com múltiplos pontos → seletor de ponto aparece.</li>
+    <li>Login <b>offline</b>: lista de pontos previamente sincronizados aparece.</li>
+    <li>Logout no tablet → volta para tela de seleção.</li>
+    <li><b>Crítico:</b> se quebrar, colaboradores não conseguem bater ponto no tablet do prédio.</li>
+  </ul>
+</div>
+
+<div class="test-card p0">
+  <h4><span>T-COLAB-002 · Sessão / Login mobile</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Bloc afetado: <code>session_bloc</code> (unificado)</div>
+  <ul>
+    <li>Login com colaborador ativo → home.</li>
+    <li>Login inválido → erro.</li>
+    <li>Logout → tela de login.</li>
+    <li><b>Regressão:</b> persistência de sessão após fechar/reabrir.</li>
+  </ul>
+</div>
+
+<div class="test-card p0">
+  <h4><span>T-COLAB-003 · Bater ponto digital</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Blocs afetados: <code>digital_point_bloc</code> (unificado), <code>register_point_bloc</code> (refatorado com novos event/state), <code>sync_digital_points_bloc</code> (unificado)</div>
+  <ul>
+    <li>Bater entrada → estado de sucesso → comprovante aparece.</li>
+    <li>Bater saída → mesma coisa.</li>
+    <li><b>Offline:</b> bater ponto → salva local.</li>
+    <li><b>Online:</b> pontos offline sincronizam automaticamente ao voltar internet.</li>
+    <li><b>Regressão bloc 9:</b> 2 pontos rápidos em sequência (por engano) — o segundo não deve sobrescrever o primeiro.</li>
+    <li><b>Regressão worker:</b> <code>background_worker.dart</code> foi tocado. Testar sync em background com app minimizado / fechado.</li>
+  </ul>
+</div>
+
+<div class="test-card p0">
+  <h4><span>T-COLAB-004 · Home</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Blocs afetados: <code>home_bloc</code>, <code>home_dialogs_bloc</code> (ambos unificados) + <code>home_navigation_page.dart</code></div>
+  <ul>
+    <li>Cards da home carregam.</li>
+    <li>Navegação por tabs funciona.</li>
+    <li>Diálogos abrem uma vez só.</li>
+    <li>Interação combinada: dialog não pode bloquear carregamento da home.</li>
+  </ul>
+</div>
+
+<div class="test-card p0">
+  <h4><span>T-COLAB-005 · Comprovante (Proof)</span> <span class="badge p0">P0</span></h4>
+  <div class="meta">Bloc afetado: <code>proof_bloc</code> (unificado)</div>
+  <ul>
+    <li>Bater ponto → comprovante gerado com timestamp correto.</li>
+    <li>Baixar / compartilhar comprovante.</li>
+    <li>Histórico de comprovantes.</li>
+  </ul>
+</div>
+
+<h3>P1 — Fluxos importantes</h3>
+
+<div class="test-card p1">
+  <h4><span>T-COLAB-006 · Timesheet (folha de ponto)</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">4 blocs unificados: <code>timesheet_bloc</code>, <code>timesheet_detail_bloc</code>, <code>timesheet_sign_bloc</code>, <code>timesheet_email_bloc</code></div>
+  <ul>
+    <li>Ver folha do mês atual e passados.</li>
+    <li>Assinar folha com pendência.</li>
+    <li>Enviar folha por email → confirmar recebimento.</li>
+    <li>Assinar folha e depois pedir email — sequência de blocs.</li>
+    <li><b>Regressão bloc 9:</b> assinar+email quase simultâneo não gera envio duplicado.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-COLAB-007 · Ponto manual</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>manual_timesheet_bloc</code> (unificado)</div>
+  <ul>
+    <li>Solicitar correção de ponto → estado <code>ManualTimesheetSubmittedState</code>.</li>
+    <li>Ver status da solicitação (aprovada / rejeitada).</li>
+    <li>Cancelar solicitação pendente.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-COLAB-008 · Documentos (5 blocs unificados)</span> <span class="badge p1">P1</span></h4>
+  <div class="meta"><code>benefits_bloc</code>, <code>document_file_bloc</code>, <code>income_report_bloc</code>, <code>pay_stub_bloc</code>, <code>vacation_bloc</code></div>
+  <ul>
+    <li><b>Benefits:</b> listar / baixar comprovantes de benefícios.</li>
+    <li><b>Document file:</b> documentos genéricos.</li>
+    <li><b>Income report:</b> informe de rendimentos (crítico em época de IR).</li>
+    <li><b>Pay stub:</b> holerite (mensal, crítico para colaborador).</li>
+    <li><b>Vacation:</b> recibo de férias.</li>
+    <li>Para cada: listar documentos, baixar PDF, compartilhar.</li>
+    <li><b>Regressão comum:</b> se um dos 5 blocs quebrou o padrão de emissão, os outros podem ter o mesmo bug (foram migrados juntos).</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-COLAB-009 · Atestado (Sick Note)</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>sick_note_bloc</code> (unificado)</div>
+  <ul>
+    <li>Enviar atestado (upload foto / PDF).</li>
+    <li>Ver histórico de atestados.</li>
+    <li>Status: aguardando aprovação, aprovado, rejeitado.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-COLAB-010 · Me / Perfil</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>me_bloc</code> (unificado)</div>
+  <ul>
+    <li>Ver perfil (nome, cargo, unidade).</li>
+    <li>Editar dados permitidos (telefone, foto).</li>
+    <li>Trocar senha.</li>
+  </ul>
+</div>
+
+<div class="test-card p1">
+  <h4><span>T-COLAB-011 · Indicação (Employee Referral)</span> <span class="badge p1">P1</span></h4>
+  <div class="meta">Bloc afetado: <code>employee_referral_bloc</code> (unificado)</div>
+  <ul>
+    <li>Indicar colega → formulário submetido.</li>
+    <li>Ver status das indicações feitas.</li>
+  </ul>
+</div>
+
+<h3>P2 — Fluxos secundários</h3>
+
+<table>
+  <thead><tr><th>ID</th><th>Feature</th><th>Bloc</th></tr></thead>
+  <tbody>
+    <tr><td>T-COLAB-012</td><td>Preferences (notificações)</td><td><code>preferences_notification_bloc</code></td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================== -->
+<h2 class="new-page">6. Testes cruzados (aplicam nos dois apps)</h2>
+
+<div class="test-card">
+  <h4><span>T-CROSS-001 · DI / <code>application_container.dart</code></span> <span class="badge cross">CROSS</span></h4>
+  <p>Nos dois projetos o container foi atualizado. Se algum registro de bloc estiver quebrado, o crash é imediato na abertura da tela que usa aquele bloc.</p>
+  <ul>
+    <li>Abrir <b>cada tela</b> do app pelo menos 1 vez → não pode dar <code>ServiceLocator not found</code> nem <code>BlocProvider: no Bloc&lt;X&gt; found</code>.</li>
+    <li>Sugestão: fazer um "smoke test tour" percorrendo todas as telas listadas em P0/P1.</li>
+  </ul>
+</div>
+
+<div class="test-card">
+  <h4><span>T-CROSS-002 · Cold e warm start</span> <span class="badge cross">CROSS</span></h4>
+  <ul>
+    <li><b>Cold start</b> (app fechado no gerenciador de tarefas → abre): tempo até home ≤ 3s.</li>
+    <li><b>Warm start</b> (app minimizado → abre): tempo ≤ 500ms.</li>
+    <li>Se algum bloc tem <code>on&lt;X&gt;(_h, transformer: sequential())</code> faltando, pode ter latência inesperada.</li>
+  </ul>
+</div>
+
+<div class="test-card">
+  <h4><span>T-CROSS-003 · Rotação de tela / background / foreground</span> <span class="badge cross">CROSS</span></h4>
+  <ul>
+    <li>Rotacionar durante loading de qualquer bloc → estado se mantém correto.</li>
+    <li>App em background por 5 min → foreground: estados críticos (session, home, timesheet) permanecem coerentes.</li>
+  </ul>
+</div>
+
+<div class="test-card">
+  <h4><span>T-CROSS-004 · Deep links</span> <span class="badge cross">CROSS</span></h4>
+  <ul>
+    <li>Testar cada deep link cadastrado (<code>morar://accountability/123</code>, <code>morar://billet/456</code>, <code>colaborador://timesheet/2026-07</code>, etc.).</li>
+    <li>Deep link deve levar direto à tela e o bloc daquela feature carregar o dado correto.</li>
+  </ul>
+</div>
+
+<div class="test-card">
+  <h4><span>T-CROSS-005 · Regressão de concorrência (bloc 9)</span> <span class="badge cross">CROSS</span></h4>
+  <p>Em telas com múltiplas ações rápidas (T-MORAR-004, T-COLAB-003, T-COLAB-006), executar taps múltiplos deliberadamente em botões de ação. Objetivo: pegar bugs onde bloc 9 processa handlers concorrentemente e o bloc 7 antigo processava em ordem.</p>
+</div>
+
+<!-- ============================================================== -->
+<h2>7. Testes automatizados recomendados</h2>
+
+<p>Sugestão de criar / atualizar teste unitário para os blocs P0 usando <code>bloc_test</code> (já está no pubspec). Template:</p>
+
+<pre>blocTest&lt;SessionBloc, SessionState&gt;(
+  'emite Authenticated ao receber LoginEvent válido',
+  build: () =&gt; SessionBloc(mockLoginUseCase),
+  act: (bloc) =&gt; bloc.add(LoginEvent(email: 'x@y.com', password: '123')),
+  expect: () =&gt; [
+    isA&lt;SessionLoadingState&gt;(),
+    isA&lt;SessionAuthenticatedState&gt;(),
+  ],
+);</pre>
+
+<h4>Prioridade de cobertura</h4>
+
+<ol>
+  <li><code>session_bloc</code> (ambos os apps)</li>
+  <li><code>home_bloc</code> (ambos os apps)</li>
+  <li><code>digital_point_bloc</code> (colaborador)</li>
+  <li><code>timesheet_bloc</code> (colaborador)</li>
+  <li><code>billets_bloc</code> e <code>reservation_bloc</code> (morar)</li>
+</ol>
+
+<!-- ============================================================== -->
+<h2 class="new-page">8. Checklist de release</h2>
+
+<table class="checklist">
+  <thead>
+    <tr><th>Item</th><th>OK</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>flutter analyze</code> verde nos 2 projetos</td><td><span class="check"></span></td></tr>
+    <tr><td><code>flutter test</code> verde nos 2 projetos</td><td><span class="check"></span></td></tr>
+    <tr><td>Build APK gerado em ambos os projetos (debug + release)</td><td><span class="check"></span></td></tr>
+    <tr><td>Todos os P0 testados manualmente</td><td><span class="check"></span></td></tr>
+    <tr><td>P1 testados manualmente (mínimo happy path)</td><td><span class="check"></span></td></tr>
+    <tr><td>Deep links validados</td><td><span class="check"></span></td></tr>
+    <tr><td>Smoke test em todas as telas (T-CROSS-001)</td><td><span class="check"></span></td></tr>
+    <tr><td>Cold / warm start dentro do target (T-CROSS-002)</td><td><span class="check"></span></td></tr>
+    <tr><td>Regressão de concorrência (T-CROSS-005)</td><td><span class="check"></span></td></tr>
+    <tr><td>Sync offline no colaborador (T-COLAB-003)</td><td><span class="check"></span></td></tr>
+    <tr><td>Tablet real testado (T-COLAB-001)</td><td><span class="check"></span></td></tr>
+    <tr><td>Screenshots dos fluxos críticos anexados ao PR</td><td><span class="check"></span></td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================== -->
+<h2>9. Riscos residuais (comunicar ao time)</h2>
+
+<div class="callout danger">
+  <strong>1. Concorrência do bloc 9</strong><br>
+  Se algum handler <code>on&lt;X&gt;</code> depender de ordem de eventos, pode falhar em condições de rede lenta. Mapeado nos cenários de sequência rápida (T-CROSS-005).
+</div>
+
+<div class="callout danger">
+  <strong>2. <code>background_worker.dart</code> do colaborador</strong><br>
+  Foi tocado (linhas alteradas). Teste manual do sync offline é obrigatório antes da release (T-COLAB-003).
+</div>
+
+<div class="callout">
+  <strong>3. <code>sub_user_store.dart</code> (MobX) no morar</strong><br>
+  Mistura de bloc + MobX. Pode ter efeito colateral não previsto na interação entre a página de pendências e a listagem principal (T-MORAR-012).
+</div>
+
+<div class="callout">
+  <strong>4. Widget <code>login_tablet_list_offile_points_widget.dart</code></strong><br>
+  Foi modificado junto ao bloc de tablet. Cenário offline puro precisa ser testado em um <b>tablet real</b>, não em emulador (T-COLAB-001).
+</div>
+
+<div class="callout info">
+  <strong>Nota final</strong><br>
+  Todas as mudanças estão em working tree, sem commit. Após aprovação nos testes, criar PR a partir da branch <code>feature/bloc-9-migration</code> em cada repositório. Não fazer squash — manter histórico da migração explícito.
+</div>
+
+</body>
+</html>

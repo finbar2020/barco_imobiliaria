@@ -1,0 +1,4 @@
+enum AccessControlInviteForwardType {
+  link,
+  sms,
+}

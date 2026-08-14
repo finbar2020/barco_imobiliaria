@@ -1,0 +1,103 @@
+import 'package:flutter/material.dart';
+import 'package:essentials/ui/app_theme.dart';
+
+class PreferencesScrollIndicator extends StatefulWidget {
+  @override
+  State<PreferencesScrollIndicator> createState() =>
+      _PreferencesScrollIndicatorState();
+}
+
+class _PreferencesScrollIndicatorState extends State<PreferencesScrollIndicator>
+    with TickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController controller;
+  Tween<double> _rotationTween = Tween(begin: 0, end: 2);
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+
+    animation = _rotationTween.animate(controller)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.repeat();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      });
+
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: Size(40, 40),
+      painter: ArrowPainter(
+        value: (controller.value * 100).toInt(),
+        context: context,
+      ),
+    );
+  }
+}
+
+class ArrowPainter extends CustomPainter {
+  final int value;
+  final BuildContext context;
+  ArrowPainter({required this.value, required this.context});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final theme = Theme.of(context);
+    final palette = LelloTheme.palleteOf(theme);
+
+    final paint = Paint()
+      ..color = palette.grey()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    var halfWidth = size.width / 2;
+    var halfHeight = size.height / 2;
+
+    var path = Path();
+    path.moveTo(halfWidth - 5, halfHeight - 12);
+    path.lineTo(halfWidth, halfHeight - 7);
+    path.lineTo(halfWidth + 5, halfHeight - 12);
+    canvas.drawPath(path,
+        paint..color = (value < 33 ? palette.primary() : palette.secondary()));
+
+    path = Path();
+    path.moveTo(halfWidth - 7, halfHeight - 7);
+    path.lineTo(halfWidth, halfHeight);
+    path.lineTo(halfWidth + 7, halfHeight - 7);
+    canvas.drawPath(
+        path,
+        paint
+          ..color = (value > 33 && value < 66
+              ? palette.primary()
+              : palette.secondary()));
+
+    path = Path();
+    path.moveTo(halfWidth - 9, halfHeight - 2);
+    path.lineTo(halfWidth, halfHeight + 7);
+    path.lineTo(halfWidth + 9, halfHeight - 2);
+    canvas.drawPath(path,
+        paint..color = (value > 66 ? palette.primary() : palette.secondary()));
+  }
+
+  @override
+  bool shouldRepaint(ArrowPainter oldDelegate) => oldDelegate.value != value;
+}

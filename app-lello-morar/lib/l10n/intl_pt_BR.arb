@@ -1,0 +1,26 @@
+{
+  "pending_requests": "Solicitações Pendentes",
+  "pendingRequestsCounter": "Solicitaçôes pendentes ({count})",
+  "clickTo": "Clique para",
+  "approve": "Aprovar",
+  "or": "ou",
+  "aRequest": "uma solicitação",
+  "registrationLello": "CADASTRO",
+  "conciergeRegistration": "CADASTRO PORTARIA",
+  "registrationWithoutContract": "CADASTRO SEM CONTRATO",
+  "remainingDays": "{howMany, plural, one{1 DIA RESTANTE} other{{howMany} DIAS RESTANTES}}",
+  "profileWithTwoDots": "Perfil:",
+  "approvingSuccessfulUpperCase": "Aprovação efetuada com sucesso!",
+  "updateRequestStatusSuccessMessage": "Agora você pode visualizá-lo e editar os dados e permissões.",
+  "changeOfOwnership": "TROCA DE TITULARIDADE",
+  "changeOfOwnershipMessage": "Ao aprovar, os moradores que ele cadastrou, permanecerão na sua lista de usuários desta unidade.",
+  "accessRequestApproveConfirmationMessage": "Ao aprovar, ele entrará na sua lista de usuários desta unidade, onde você poderá editar os dados e permissões.",
+  "changeAccessRequestStatusToBlockedMessage": "Ao ser bloqueado, todos os moradores cadastrados por ele também terão o acesso suspenso e permanecerão assim até que sejam desbloqueados manualmente.",
+  "blockingSuccessful": "Bloqueio efetuado som sucesso!",
+  "updateRequestStatusToBlockSuccessMessage": "Você pode desbloqueá-lo ou excluí-lo a qualquer momento na Minha Unidade, em Moradores.",
+  "expirationAccessDate": "Data de expiração de acesso",
+  "billetByEmailCounterMessage": "Atualmente, há {billetByEmailCounter} usuários cadastrados para receber cópias de boletos por e-mail. Você pode adicionar mais {billetByEmailRemaining} usuários, totalizando o limite de 3.",
+  "addResidentDisclaimer": "Ao adicionar um morador, o proprietário terá a permissão de bloqueá-lo quando quiser.",
+  "subUserAlreadyRegistered": "Morador já cadastrado. Pode não estar visível por ter sido incluído pelo proprietário."
+}
+

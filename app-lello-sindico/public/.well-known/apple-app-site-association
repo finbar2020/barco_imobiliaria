@@ -1,0 +1,18 @@
+{
+   "applinks": {
+      "apps": [],
+      "details": [
+         {
+            "appID": "RNEA6DL9E4.app.lello.sindico",
+            "paths": [
+               "*"
+            ]
+         }
+      ]
+   },
+   "webcredentials": {
+      "apps": [
+         "RNEA6DL9E4.app.lello.sindico"
+      ]
+   }
+}

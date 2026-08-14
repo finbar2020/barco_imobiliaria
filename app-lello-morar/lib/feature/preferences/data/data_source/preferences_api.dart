@@ -1,0 +1,28 @@
+import 'package:chopper/chopper.dart';
+import 'package:morar/feature/preferences/data/model/preferences_model.dart';
+import 'package:morar/feature/preferences/data/model/preferences_notification_model.dart';
+
+part 'preferences_api.chopper.dart';
+
+@ChopperApi()
+abstract class PreferencesApi extends ChopperService {
+  @Get(path: "/me/preferences/zero-paper")
+  Future<Response> getPreferencesZeroPaper();
+
+  @Put(path: "/me/preferences/zero-paper")
+  Future<Response> putPreferencesZeroPaper(
+    @Body() PreferencesModel body,
+  );
+
+  @Get(path: "/me/preferences/notification")
+  Future<Response> getPreferencesNotification();
+
+  @Put(path: "/me/preferences/notification")
+  Future<Response> putPreferencesNotification(
+    @Body() List<PreferencesNotificationModel> body,
+  );
+
+  static PreferencesApi create(ChopperClient client) {
+    return _$PreferencesApi(client);
+  }
+}

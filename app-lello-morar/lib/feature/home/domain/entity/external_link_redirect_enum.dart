@@ -1,0 +1,4 @@
+enum ExternalLinkRedirectEnum {
+  talkToLello,
+  rentOrSellYourProperty
+}

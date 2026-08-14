@@ -1,0 +1,1 @@
+enum MeStep { profile, edit }

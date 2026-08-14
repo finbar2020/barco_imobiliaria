@@ -1,0 +1,167 @@
+{
+  "conditions": [
+    {
+      "name": "Android",
+      "expression": "app.id == '1:1079065027763:android:15839aa1354ec98f2c7cc6'",
+      "tagColor": "ORANGE"
+    },
+    {
+      "name": "IOS",
+      "expression": "app.id == '1:1079065027763:ios:d5b3ba3e4e24a6482c7cc6'",
+      "tagColor": "PINK"
+    }
+  ],
+  "parameters": {
+    "splash_ignore_biometric": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "rent_sell_link": {
+      "defaultValue": {
+        "value": "{\n  \"link\":\"https://www.lelloimoveis.com.br/anunciar-imovel\",\n  \"webview\":true,\n  \"name\":\"App Lello para Moradores\"\n}"
+      },
+      "valueType": "STRING"
+    },
+    "agreements_dialog_show_interval": {
+      "defaultValue": {
+        "value": "604800000"
+      },
+      "description": "Defines the number of milliseconds of interval for application to show agreements dialog",
+      "valueType": "NUMBER"
+    },
+    "store_version": {
+      "defaultValue": {
+        "value": "{\"storeVersion\":\"1.26.37\"}"
+      },
+      "description": "Store Version for check need update",
+      "valueType": "STRING"
+    },
+    "link_resolva_facil": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://www.lellocondominios.com.br/resolvafacil/preferencias/editar.xhtml\",\"webview\":false}"
+      },
+      "valueType": "STRING"
+    },
+    "file_max_size_permitted": {
+      "defaultValue": {
+        "value": "10485760"
+      },
+      "description": " Sets the maximum size allowed for file upload -  Reference value in bytes",
+      "valueType": "NUMBER"
+    },
+    "interval_days_check_review_app": {
+      "defaultValue": {
+        "value": "86400000"
+      },
+      "description": "Defines the number  in milliseconds of interval for application to show a review dialog if the user has not yet rated",
+      "valueType": "NUMBER"
+    },
+    "horta": {
+      "defaultValue": {
+        "value": "{    \"horta\":[       {          \"dataAte\":\"31/08/2023\",          \"link\":\"https://lellolab.com.br/nossahorta\",          \"cupom\":\"LELLO-H9R78TX\"       },       {          \"dataAte\":\"30/11/2023\",          \"link\":\"https://lellolab.com.br/nossahorta\",          \"cupom\":\"LELLO-H9R78TX\"       }    ] }"
+      },
+      "description": "Parametro criado para dar diretrizes do card \"Faça sua horta\"",
+      "valueType": "STRING"
+    },
+    "link_resolva_facil_alterar_dados": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://www.lellocondominios.com.br/resolvafacil/preferencias/editar.xhtml\",\"webview\":false}"
+      },
+      "description": "Link de redirecionamento para alterar dados cadastrais no portal Lello",
+      "valueType": "STRING"
+    },
+    "link_termos_home_to_go": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://www.lellocondominios.com.br/novovox/arquivos/e3db749e-b8e7-4e52-ba44-70100efe9403/view/\",\"webview\":false,\"name\":\"Termos_de_Uso_E_Politica_de_Privacidade_da_Home_to_go.pdf\"}"
+      },
+      "valueType": "STRING"
+    },
+    "link_resolva_facil_whatsapp": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://wa.me/551127977585/&text=Oi,%20pode%20me%20ajudar?\",\"webview\":false}"
+      },
+      "description": "Link de redirecionamento para enviar mensagem por whatsap para o Resolva Facil",
+      "valueType": "STRING"
+    },
+    "home_personalization_active": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "link_app_store": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://applellomorar.page.link/downloadApp\",\"webview\":false,\"name\":\"App Lello para Moradores\"}"
+      },
+      "valueType": "STRING"
+    },
+    "mail_remove_account": {
+      "defaultValue": {
+        "value": "mailto:dev.apps@lello.com.br"
+      },
+      "description": "Link para envio de email de cancelamento de conta",
+      "valueType": "STRING"
+    },
+    "force_update": {
+      "defaultValue": {
+        "value": "{\"minVersion\":\"1.24.23\"}"
+      },
+      "description": "Force user to update app",
+      "valueType": "STRING"
+    },
+    "comfort_casa_protegida": {
+      "defaultValue": {
+        "value": "{    \"telefone\":\"0800-777-9807\",    \"assistencia\":\"0800-771-1345\",    \"premio\":[       {          \"custo\":25,          \"valores\":[             \"R$ 143.426,00\",             \"R$ 7.203,00\",             \"R$ 31.916,00\",             \"R$ 13.040,00\",             \"COMPLETO\",             \"R$ 10.000,00\"          ]       },       {          \"custo\":32.3,          \"valores\":[             \"R$ 143.426,00\",             \"R$ 7.203,00\",             \"R$ 31.916,00\",             \"R$ 13.040,00\",             \"COMPLETO\",             \"R$ 10.000,00\"          ]       },       {          \"custo\":47.2,          \"valores\":[             \"R$ 350.803,00\",             \"R$ 8.072,00\",             \"R$ 35.392,00\",             \"R$ 13.040,00\",             \"COMPLETO\",             \"R$ 10.000,00\"          ]       }    ] }"
+      },
+      "valueType": "STRING"
+    },
+    "rbac_custom_features": {
+      "defaultValue": {
+        "value": "{\n    \"resin\": true,\n    \"resin_reference\": \"ALL\",\n    \"aprove_payment\": true,\n    \"aprove_payment_reference\": \"ALL\",\n    \"report_book\": true,\n    \"report_book_reference\": \"ALL\",\n    \"moving\": true,\n    \"moving_reference\": \"ALL\",\n    \"agreement\": true,\n    \"agreement_reference\": \"ALL\"\n}"
+      },
+      "valueType": "STRING"
+    },
+    "comfort_partners_randomic": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "description": "How partner list will be displayed in COMFORT PAGE. Value: FALSE Category selection screen: YES Partner and Category Positioning: Not Random Value: TRUE Category selection screen: NO positioning of partners and categories: RANDOM",
+      "valueType": "BOOLEAN"
+    },
+    "link_termos_de_uso_pdf": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://portal.lellocondominios.com.br/novovox/arquivos/4d147747-7649-4ed6-831c-142862132d91/view/\",\"webview\":false,\"name\":\"Termos_de_Uso_E_Politica_de_Privacidade_da_Plataforma_Lello_Condominios.pdf\"}"
+      },
+      "valueType": "STRING"
+    },
+    "comfort_dialog_show_interval": {
+      "defaultValue": {
+        "value": "1296000000"
+      },
+      "description": "Defines the number in milliseconds of interval for application to show comfort dialog",
+      "valueType": "NUMBER"
+    },
+    "notifications_perms_days_delay": {
+      "defaultValue": {
+        "value": "60"
+      },
+      "description": "intervalo entre solicitações de permissão de notificações, em dias",
+      "valueType": "NUMBER"
+    },
+    "comfort_partner_category_filter": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Switch between two types of partners visualization, if \"true\" it is shown first one list of categories first if \"false\" its shown partners directly",
+      "valueType": "BOOLEAN"
+    },
+    "link_whatsapp": {
+      "defaultValue": {
+        "value": "{\"link\":\"https://wa.me/551127977585\",\"webview\":false, \"message_billet\":\"CPF do cliente: [cpf];Unidade: [unidade];Endereço: [endereco]\"}"
+      },
+      "valueType": "STRING"
+    }
+  }
+}

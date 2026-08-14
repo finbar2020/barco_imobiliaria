@@ -1,0 +1,22 @@
+ruby --version;
+cd ..
+cd app-lello-essentials;
+git pull --force;
+flutter pub get;
+cd ..;
+cd app-lello-shared;
+git pull --force;
+flutter pub get;
+    cd packages/lib_facedetection;
+    flutter pub get;
+    cd ..;
+    cd ..;
+cd ..;
+cd app-lello-colaborador;
+git pull --force;
+flutter pub get;
+cd ios;
+fastlane ios firebase;
+cd ..;
+cd android;
+fastlane android firebase;

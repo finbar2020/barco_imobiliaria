@@ -1,0 +1,12 @@
+# Configurações Comuns a todos os Flavors
+git_url("https://gitcondo.lello.com.br/digital/apps/app-lello-certificates.git")
+
+storage_mode("git")
+
+# Define AdHoc como padrão, mas pode ser sobrescrito
+type("adhoc")
+
+# Define chave do keychain
+keychain_password("pass$lello")
+
+readonly true

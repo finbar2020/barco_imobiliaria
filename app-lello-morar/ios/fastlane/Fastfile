@@ -1,0 +1,229 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  # Mapeia environment para o dart entry point e scheme
+  def setup_env(options)
+    environment = options[:environment] || "homolog"
+    
+    dart_file_map = {
+      "dev" => "lib/main-dev.dart",
+      "dev1" => "lib/main-dev1.dart",
+      "dev2" => "lib/main-dev2.dart",
+      "dev3" => "lib/main-dev3.dart",
+      "homolog" => "lib/main-staging.dart",
+      "homologme" => "lib/main-stagingme.dart",
+      "preprod" => "lib/main-preprod.dart",
+      "prod" => "lib/main-prod.dart"
+    }
+    
+    # dev usa o mesmo scheme que homolog (staging)
+    scheme_map = {
+      "dev" => "staging",
+      "dev1" => "staging",
+      "dev2" => "staging",
+      "dev3" => "staging",
+      "homolog" => "staging",
+      "homologme" => "staging",
+      "preprod" => "prod",
+      "prod" => "prod"
+    }
+    
+    dart_target = dart_file_map[environment] || "lib/main-staging.dart"
+    scheme = scheme_map[environment] || "staging"
+    UI.message("🎯 Environment: #{environment} → scheme: #{scheme}, target: #{dart_target}")
+    
+    { dart_target: dart_target, environment: environment, scheme: scheme }
+  end
+
+  desc "Update Profiles and Certificates for all apps"
+  lane :certs do
+    team_id = "Z3H6XQP5FK"
+    app_identifiers = [
+      "app.lello.lellomorar",
+      "app.lello.lellomorar.ImageNotification"
+    ]
+
+    UI.header("Registrando dispositivos no Time: #{team_id}")
+    register_devices(devices_file: "./fastlane/devices.txt", platform: "ios", team_id: team_id)
+
+    ["adhoc", "development", "appstore"].each do |type|
+      UI.header("Sincronizando #{type} para app.lello.lellomorar")
+      match(
+        type: type,
+        readonly: false,
+        team_id: team_id,
+        app_identifier: app_identifiers,
+        force_for_new_devices: (type != "appstore")
+      )
+    end
+  end
+
+  desc "Submit app to Firebase"
+  lane :firebase do |options|
+    releaseNotes = options[:ci_commit]
+    config = setup_env(options)
+      match(
+        type: "adhoc",
+        readonly: true,
+        app_identifier: [
+          "app.lello.lellomorar",
+          "app.lello.lellomorar.ImageNotification"
+        ]
+      )
+
+      cocoapods(
+        clean_install: true
+      )
+
+      gym_options = {
+        scheme: config[:scheme],
+        export_options: {
+          method: "ad-hoc",
+          signingStyle: "manual",
+          provisioningProfiles: {
+            "app.lello.lellomorar" => "match AdHoc app.lello.lellomorar",
+            "app.lello.lellomorar.ImageNotification" => "match AdHoc app.lello.lellomorar.ImageNotification",
+          }
+        },
+        configuration: 'Profile'
+      }
+
+      if config[:environment] == "dev"
+        gym_options[:xcargs] = "FLUTTER_TARGET=#{config[:dart_target]}"
+      end
+
+      gym(gym_options)
+
+      # build_ios_app is a built-in fastlane action.
+      firebase_app_distribution(
+        app: "1:1079065027763:ios:d5b3ba3e4e24a6482c7cc6",
+        groups: "Arbit, Lello",
+        release_notes: releaseNotes,
+    )
+  end
+  desc "Submit a new beta build to TestFlight"
+  lane :testflight_beta do |options|
+    releaseNotes = options[:ci_commit]
+    config = setup_env(environment: "prod")
+
+    # Configuração da API Key do App Store Connect baseada no flavor
+    api_key = nil
+    
+    # Verifica as variáveis de ambiente específicas do flavor
+    key_id_var = "IOS_APP_STORE_APIKEY_ID_LELLO"
+    issuer_id_var = "IOS_APP_STORE_APIKEY_ISSUER_LELLO"
+    key_file_var = "IOS_APP_STORE_APIKEY_FILE_LELLO"
+    
+    key_id = ENV[key_id_var]
+    issuer_id = ENV[issuer_id_var]
+    key_file = ENV[key_file_var]
+    
+    if key_id && issuer_id && key_file
+      UI.success("✅ Usando API Key do App Store Connect para LELLO")
+      
+      # CI/CD: Key file disponível como arquivo temporário
+      if File.exist?(key_file)
+        api_key = app_store_connect_api_key(
+          key_id: key_id,
+          issuer_id: issuer_id,
+          key_filepath: key_file,
+          in_house: false
+        )
+      else
+        UI.user_error!("❌ Arquivo da API Key não encontrado: #{key_file}")
+      end
+    else
+      # Fallback para autenticação manual
+      UI.important("ℹ️  API Key não configurada para LELLO. Usando autenticação manual com Apple ID.")
+      UI.important("Variables esperadas: #{key_id_var}, #{issuer_id_var}, #{key_file_var}")
+
+      unless ENV['FASTLANE_USERNAME'] && ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD']
+        UI.user_error!("❌ Credenciais não configuradas!\n\n" \
+          "Para executar localmente, configure as variáveis de ambiente:\n\n" \
+          "  export FASTLANE_USERNAME=\"email@lello.com.br\"\n" \
+          "  export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=\"your-app-specific-password\"\n\n" \
+          "Ou execute inline:\n\n" \
+          "  FASTLANE_USERNAME=\"email@lello.com.br\" FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=\"your-password\" bundle exec fastlane testflight_beta flavor:hubert environment:prod\n\n" \
+          "Para obter o App-Specific Password, acesse: https://appleid.apple.com/account/manage")
+      end
+      
+      UI.success("✅ Credenciais configuradas. Prosseguindo com autenticação manual.")
+    end
+
+    match(
+      type: "appstore",
+      readonly: true,
+      app_identifier: [
+        "app.lello.lellomorar",
+        "app.lello.lellomorar.ImageNotification"
+      ]
+    )
+
+    cocoapods(
+      clean_install: ENV['CI'] == 'true',
+      repo_update: false,
+    )
+
+    gym_options = {
+      scheme: config[:scheme],
+      export_method: 'app-store',
+      export_options: {
+        compileBitcode: false,
+        signingStyle: "automatic",
+        provisioningProfiles: {
+          "app.lello.lellomorar" => "match AppStore app.lello.lellomorar",
+          "app.lello.lellomorar.ImageNotification" => "match AppStore app.lello.lellomorar.ImageNotification",
+        }
+      },
+      output_directory: './build',
+      output_name: 'app-beta.ipa'
+    }
+
+    if config[:environment] == "dev"
+      gym_options[:xcargs] = "FLUTTER_TARGET=#{config[:dart_target]}"
+    end
+
+    gym(gym_options)
+
+    pilot_options = {
+      ipa: './build/app-beta.ipa',
+      app_identifier: 'app.lello.lellomorar',
+      apple_id: '6467679168',
+      team_id: 51486800,
+      skip_waiting_for_build_processing: true,
+      skip_submission: true
+    }
+    
+    # Adiciona api_key se disponível, senão usa username para autenticação local
+    if api_key
+      pilot_options[:api_key] = api_key
+    else
+      pilot_options[:username] = ENV['FASTLANE_USERNAME']
+    end
+    
+    pilot(pilot_options)
+
+  end
+
+end
+
+
+
+
+

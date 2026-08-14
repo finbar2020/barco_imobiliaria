@@ -1,0 +1,4 @@
+enum AccessControlTypeVisit {
+  pontual,
+  recorrente
+}

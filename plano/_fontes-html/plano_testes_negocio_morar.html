@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Roteiro de Testes — App Lello Morar</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 15mm 20mm 15mm;
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-size: 9pt;
+      color: #666;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    @bottom-left {
+      content: "Lello Morar — Roteiro de Testes · v1";
+      font-size: 9pt;
+      color: #666;
+      font-family: 'Segoe UI', sans-serif;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #1f2937;
+    line-height: 1.55;
+    font-size: 11pt;
+    margin: 0;
+  }
+  h1 {
+    font-size: 24pt;
+    color: #0f172a;
+    border-bottom: 3px solid #7c3aed;
+    padding-bottom: 8px;
+    margin: 0 0 16px 0;
+  }
+  h2 {
+    font-size: 16pt;
+    color: #7c3aed;
+    margin: 32px 0 8px;
+    padding-top: 8px;
+    border-top: 2px solid #ddd6fe;
+  }
+  h3 { font-size: 13pt; color: #0f172a; margin: 22px 0 6px; }
+  h4 { font-size: 12pt; color: #334155; margin: 14px 0 4px; }
+  p { margin: 6px 0 10px; }
+  ul, ol { margin: 6px 0 10px; padding-left: 22px; }
+  li { margin: 3px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8px 0 12px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #d1d5db;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #ede9fe;
+    color: #4c1d95;
+    font-weight: 600;
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  tr:nth-child(even) td { background: #fafafa; }
+  .test-card {
+    background: #fff;
+    padding: 12px 16px 14px 18px;
+    margin: 14px 0;
+    border-radius: 8px;
+    border-left: 5px solid #7c3aed;
+    border-top: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    page-break-inside: avoid;
+  }
+  .test-card.critico { border-left-color: #dc2626; background: #fffafa; }
+  .test-card.importante { border-left-color: #ea580c; background: #fffbf5; }
+  .test-card.desejavel { border-left-color: #64748b; background: #fafbfc; }
+  .test-card .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .test-card .title {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .test-card .code {
+    font-size: 9pt;
+    color: #64748b;
+    font-family: 'Consolas', monospace;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge.critico { background: #dc2626; color: #fff; }
+  .badge.importante { background: #ea580c; color: #fff; }
+  .badge.desejavel { background: #64748b; color: #fff; }
+  .field {
+    margin: 8px 0 4px;
+  }
+  .field-label {
+    font-weight: 700;
+    color: #7c3aed;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+  }
+  .field-label.expect { color: #059669; }
+  .field-label.impact { color: #dc2626; }
+  .field-body { margin: 0 0 0 4px; }
+  .callout {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 10pt;
+    margin: 10px 0;
+  }
+  .callout.info {
+    background: #eff6ff;
+    border-color: #3b82f6;
+  }
+  .callout.success {
+    background: #ecfdf5;
+    border-color: #10b981;
+  }
+  .callout strong { display: block; margin-bottom: 4px; }
+  .cover {
+    text-align: center;
+    padding: 80px 20px 40px 20px;
+    page-break-after: always;
+  }
+  .cover h1 {
+    font-size: 34pt;
+    border: none;
+    margin-bottom: 8px;
+    color: #0f172a;
+  }
+  .cover .app-tag {
+    display: inline-block;
+    padding: 8px 26px;
+    background: #7c3aed;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 15pt;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 24px;
+  }
+  .cover .subtitle {
+    font-size: 15pt;
+    color: #475569;
+    margin: 10px 0 4px;
+  }
+  .cover .metabox {
+    display: inline-block;
+    margin-top: 44px;
+    padding: 26px 44px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 11.5pt;
+    color: #334155;
+    min-width: 60%;
+  }
+  .cover .metabox b { color: #0f172a; }
+  .cover .metabox div { padding: 3px 0; }
+  .new-page { page-break-before: always; }
+  .toc {
+    background: #f8fafc;
+    padding: 14px 22px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 11pt;
+    line-height: 1.9;
+  }
+  .toc ol { padding-left: 22px; }
+  .toc li { margin: 4px 0; }
+  .checklist td:first-child { width: 70%; }
+  .checklist td:nth-child(2), .checklist td:nth-child(3), .checklist td:nth-child(4) {
+    text-align: center;
+    width: 10%;
+  }
+  .check {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #94a3b8;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+  .steps {
+    counter-reset: step;
+    padding-left: 0;
+    list-style: none;
+  }
+  .steps li {
+    counter-increment: step;
+    padding: 4px 0 4px 30px;
+    position: relative;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 22px;
+    height: 22px;
+    background: #7c3aed;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10pt;
+    line-height: 22px;
+  }
+  .legenda {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0 16px;
+    flex-wrap: wrap;
+    font-size: 10pt;
+  }
+  .legenda span {
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="app-tag">APP MORAR</div>
+  <h1>Roteiro de Testes</h1>
+  <div class="subtitle">Guia passo a passo para o time validar o app</div>
+  <div class="subtitle" style="font-size: 12pt; margin-top: 20px; color: #64748b;">
+    Como testar, o que deve acontecer, e o que fazer se algo der errado
+  </div>
+  <div class="metabox">
+    <div><b>Versão:</b> 1.0</div>
+    <div><b>Data:</b> 12/07/2026</div>
+    <div><b>App:</b> Lello Morar (versão de validação interna)</div>
+    <div><b>Perfil de usuário:</b> Morador de condomínio</div>
+    <div><b>Duração estimada:</b> 2 a 3 horas para completar tudo</div>
+    <div><b>O que testar:</b> 16 fluxos do dia a dia do morador</div>
+  </div>
+</section>
+
+<h2>Antes de começar</h2>
+
+<div class="callout info">
+  <strong>Por que estamos pedindo esse teste?</strong>
+  Fizemos uma atualização técnica importante no motor interno do app (a parte que ninguém vê, mas que faz tudo funcionar). Precisamos que o time confirme que <b>as funcionalidades continuam funcionando exatamente como antes</b>. Não estamos testando funcionalidade nova. Estamos verificando que nada quebrou.
+</div>
+
+<h4>O que você vai precisar</h4>
+<ul>
+  <li><b>Um celular</b> com Android ou iPhone.</li>
+  <li>O <b>app de teste instalado</b> (o link/APK foi enviado por outro canal — pedir para o time técnico se não tiver).</li>
+  <li>Uma <b>conta de morador válida</b> (podem usar suas contas pessoais).</li>
+  <li><b>Cerca de 2 a 3 horas</b>, com intervalos, para percorrer todos os cenários.</li>
+</ul>
+
+<h4>Como funciona este roteiro</h4>
+<p>Cada teste tem <b>4 partes</b>:</p>
+<ol>
+  <li><b>O que fazer</b> — passos claros para executar no app.</li>
+  <li><b>O que deve acontecer</b> — o resultado esperado. Se não acontecer, é um problema.</li>
+  <li><b>Se falhar, qual o impacto</b> — pra entender a gravidade e priorizar o reporte.</li>
+  <li><b>Anotar</b> — marcar como OK, Falhou, ou Não testei no checklist do final.</li>
+</ol>
+
+<h4>Legenda de prioridade</h4>
+<div class="legenda">
+  <span style="background: #dc2626;">CRÍTICO</span>
+  <span style="background: #ea580c;">IMPORTANTE</span>
+  <span style="background: #64748b;">DESEJÁVEL</span>
+</div>
+
+<p><b>Crítico:</b> se falhar, o app não pode ir para produção. Precisa parar tudo e reportar imediatamente.<br>
+<b>Importante:</b> muitos moradores usam. Se falhar, precisa corrigir antes de liberar, mas dá pra continuar testando o restante.<br>
+<b>Desejável:</b> uso pontual. Reporta e segue em frente.</p>
+
+<h4>Como reportar um problema</h4>
+<div class="callout">
+  <strong>Se algo não funcionar, mande no grupo:</strong>
+  <ol style="margin: 4px 0 0 20px;">
+    <li>O número do teste (ex: <b>T-MORAR-004</b>).</li>
+    <li>Em qual passo falhou (ex: "no passo 3, o botão ficou girando").</li>
+    <li><b>Print da tela ou vídeo curto</b>.</li>
+    <li>Modelo do celular e sistema (ex: iPhone 13, iOS 18).</li>
+  </ol>
+</div>
+
+<h2>Sumário dos testes</h2>
+<div class="toc">
+  <b>Fluxos críticos (obrigatórios)</b>
+  <ol>
+    <li>T-MORAR-001 · Entrar no app com meu login</li>
+    <li>T-MORAR-002 · Ver a tela inicial (home)</li>
+    <li>T-MORAR-003 · Consultar meus boletos</li>
+  </ol>
+  <b>Fluxos importantes</b>
+  <ol start="4">
+    <li>T-MORAR-004 · Reservar um espaço no condomínio</li>
+    <li>T-MORAR-005 · Conversar com a IA Bella</li>
+    <li>T-MORAR-006 · Livro de ocorrências (registrar / responder)</li>
+    <li>T-MORAR-007 · Assembleia digital, acordos e troca de titularidade</li>
+    <li>T-MORAR-008 · Solicitar CND e trocar endereço</li>
+    <li>T-MORAR-009 · Configurar minhas preferências</li>
+    <li>T-MORAR-010 · Ver prestação de contas</li>
+    <li>T-MORAR-011 · Ver correspondências recebidas</li>
+    <li>T-MORAR-012 · Gerenciar sub-usuários</li>
+  </ol>
+  <b>Fluxos desejáveis (opcional se tempo apertar)</b>
+  <ol start="13">
+    <li>T-MORAR-013 · Controle de acesso</li>
+    <li>T-MORAR-014 · Meus seguros</li>
+    <li>T-MORAR-015 · TDB (declarações)</li>
+    <li>T-MORAR-016 · Cadastro de veículos</li>
+  </ol>
+</div>
+
+<!-- =========================================================== -->
+<h2 class="new-page">Fluxos críticos</h2>
+
+<div class="test-card critico">
+  <div class="head">
+    <div>
+      <div class="title">Entrar no app com meu login</div>
+      <div class="code">T-MORAR-001</div>
+    </div>
+    <span class="badge critico">Crítico</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir o app.</li>
+      <li>Digitar seu CPF e senha na tela de login.</li>
+      <li>Tocar em "Entrar".</li>
+      <li>Depois, tentar sair (menu → "Sair").</li>
+      <li>Fechar o app pelo gerenciador de tarefas e abrir de novo (sem digitar nada).</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Após digitar credenciais corretas, a tela inicial (Home) abre em poucos segundos.</li>
+        <li>Se você mora em mais de um condomínio / unidade, aparece um seletor.</li>
+        <li>Se a senha estiver errada, aparece uma mensagem clara ("credenciais inválidas") e o botão volta a funcionar (não fica travado).</li>
+        <li>Ao sair, volta para a tela de login.</li>
+        <li>Ao reabrir o app fechado, ele lembra que você estava logado (não pede login de novo).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body"><b>Ninguém consegue usar o app.</b> Reporte imediatamente com prioridade máxima.</div>
+  </div>
+</div>
+
+<div class="test-card critico">
+  <div class="head">
+    <div>
+      <div class="title">Ver a tela inicial (Home)</div>
+      <div class="code">T-MORAR-002</div>
+    </div>
+    <span class="badge critico">Crítico</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Estar logado. Abrir a Home.</li>
+      <li>Puxar a tela para baixo para atualizar.</li>
+      <li>Se aparecer um pop-up de comunicado, fechar. Voltar para a Home outra vez.</li>
+      <li>Se você tem mais de uma unidade, tentar trocar de unidade (menu superior).</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Os cards habituais aparecem (boletos, agenda, reservas, etc.), conforme suas preferências.</li>
+        <li>Ao puxar pra atualizar, os dados recarregam <b>sem duplicar itens</b>.</li>
+        <li>O pop-up de comunicado (se houver) abre <b>uma vez só</b> — não fica reaparecendo.</li>
+        <li>Ao trocar de unidade, a Home mostra dados da nova unidade.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">É a tela mais usada do app. Se estiver quebrada, cria uma péssima experiência. <b>Bloqueia release.</b></div>
+  </div>
+</div>
+
+<div class="test-card critico">
+  <div class="head">
+    <div>
+      <div class="title">Consultar meus boletos</div>
+      <div class="code">T-MORAR-003</div>
+    </div>
+    <span class="badge critico">Crítico</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir a área de boletos pelo menu ou card da Home.</li>
+      <li>Verificar a lista.</li>
+      <li>Tocar em um boleto em aberto → abrir o detalhe.</li>
+      <li>Copiar a linha digitável.</li>
+      <li>Se disponível, testar o filtro por período (últimos 6 meses, ano, etc.).</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>A lista carrega mostrando boletos pagos, em aberto e vencidos, com status corretos.</li>
+        <li>O detalhe abre com valor, vencimento e PDF ou linha digitável.</li>
+        <li>Ao copiar, a linha digitável fica na área de transferência (colar num app de mensagens confirma).</li>
+        <li>O filtro por período retorna somente boletos daquele intervalo.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Motivo principal de uso do app é pagar boleto. Se quebrar, o cliente vai reclamar imediatamente. <b>Bloqueia release.</b></div>
+  </div>
+</div>
+
+<!-- =========================================================== -->
+<h2 class="new-page">Fluxos importantes</h2>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Reservar um espaço no condomínio</div>
+      <div class="code">T-MORAR-004</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir "Reservas" (ou "Espaços").</li>
+      <li>Escolher um espaço disponível (ex: salão de festas).</li>
+      <li>Selecionar uma data e horário livres.</li>
+      <li>Confirmar a reserva.</li>
+      <li>Verificar em "Minhas reservas" se aparece.</li>
+      <li>Cancelar a reserva feita.</li>
+      <li><b>Teste-chave:</b> tocar rapidamente 2 ou 3 vezes seguidas no botão de "Confirmar" (simulando cliente ansioso).</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>A lista de espaços carrega. Horários ocupados aparecem indisponíveis.</li>
+        <li>Ao confirmar, aparece uma mensagem de sucesso e a reserva aparece em "Minhas reservas".</li>
+        <li>Ao cancelar, a reserva some da lista.</li>
+        <li><b>Muito importante:</b> mesmo tocando várias vezes no botão de confirmar, deve criar <b>UMA única</b> reserva (não pode duplicar).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Feature de uso frequente. Reservas duplicadas geram conflito com a administração do condomínio.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Conversar com a IA Bella</div>
+      <div class="code">T-MORAR-005</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir a IA Bella.</li>
+      <li>Mandar uma pergunta simples: "quanto foi meu último boleto?".</li>
+      <li>Aguardar a resposta.</li>
+      <li>Mandar <b>3 mensagens seguidas rápidas</b> (ex: "oi", "tudo bem?", "obrigado").</li>
+      <li>Simular queda de sinal (colocar celular em modo avião) e mandar uma mensagem.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Aparece indicador de "digitando" ou similar enquanto a IA processa.</li>
+        <li>A resposta chega e faz sentido.</li>
+        <li><b>Ao mandar 3 rápidas:</b> as mensagens aparecem na ordem correta e cada uma recebe resposta na ordem.</li>
+        <li>Sem internet, aparece um erro claro e um botão de tentar novamente.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Feature nova, muito visível. Mensagens fora de ordem geram péssima impressão.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Livro de ocorrências (registrar e responder)</div>
+      <div class="code">T-MORAR-006</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir "Livro de ocorrências" (ou "Reports").</li>
+      <li>Ver a lista das minhas ocorrências.</li>
+      <li>Criar uma nova ocorrência: escrever um texto e anexar uma foto.</li>
+      <li>Passar pela tela de revisão (conferir os dados) e enviar.</li>
+      <li>Ver que aparece na lista com status correto.</li>
+      <li>Se houver uma ocorrência aguardando resposta, respondê-la.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Todas as telas do fluxo aparecem: nova → revisão → sucesso → lista atualizada.</li>
+        <li>Os dados na tela de revisão batem com o que foi preenchido.</li>
+        <li>A foto anexada aparece na ocorrência criada.</li>
+        <li>Respostas são registradas e aparecem no histórico da ocorrência.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Canal oficial de comunicação com administração. Precisa funcionar.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Assembleia digital, acordos e troca de titularidade</div>
+      <div class="code">T-MORAR-007</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li><b>Assembleia digital:</b> ver a lista, entrar numa assembleia ativa, votar em uma pauta.</li>
+      <li><b>Acordos:</b> abrir a seção de acordos. Se houver um pendente, ler e aceitar ou recusar.</li>
+      <li><b>Troca de titularidade:</b> iniciar o fluxo, subir um documento (pode ser um PDF de teste), confirmar.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Cada seção abre e carrega os dados.</li>
+        <li>Votos, aceites e envios registram mensagem de sucesso.</li>
+        <li>Após ação, o status muda (assembleia mostra que votei, acordo aparece como aceito, etc.).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Assembleias digitais são obrigação legal em algumas situações. Se não votar, cliente fica prejudicado.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Solicitar CND e trocar endereço</div>
+      <div class="code">T-MORAR-008</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Ir em "Easy Fix" ou seção equivalente.</li>
+      <li><b>CND:</b> solicitar uma nova CND. Aguardar. Se aparecer disponível, baixar o PDF.</li>
+      <li><b>Troca de endereço:</b> preencher o formulário completo (CEP, rua, número, complemento). Confirmar.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Ao solicitar CND, aparece confirmação. Quando pronta, dá pra baixar o PDF.</li>
+        <li>No formulário de endereço, digitar o CEP preenche os campos automaticamente (rua, bairro).</li>
+        <li>Rolar a tela e mudar de campo funciona sem "engolir" o campo atual.</li>
+        <li>Após confirmar, mensagem de sucesso e endereço atualizado.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Feature transacional. Cliente que quer trocar endereço precisa conseguir.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Configurar minhas preferências</div>
+      <div class="code">T-MORAR-009</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir "Preferências" no menu.</li>
+      <li><b>Cards da Home:</b> desligar 1 card, salvar, voltar para a Home e conferir que sumiu.</li>
+      <li><b>Notificações:</b> desligar um tipo de notificação.</li>
+      <li><b>Zero papel:</b> ligar / desligar (só marcar, não precisa confirmar recebimento físico).</li>
+      <li><b>Como quero receber documentos:</b> alternar entre email e WhatsApp.</li>
+      <li><b>In Care:</b> ativar / desativar o recurso.</li>
+      <li>Fechar o app e reabrir. Conferir que todas as escolhas persistiram.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Cada toggle salva imediatamente.</li>
+        <li>Cards desligados somem da Home.</li>
+        <li>Ao reabrir o app, tudo continua exatamente como você deixou.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Se preferências não salvam, cliente reclama do app "não me obedecer".</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Ver prestação de contas</div>
+      <div class="code">T-MORAR-010</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir "Prestação de contas".</li>
+      <li>Ver a lista de meses / anos disponíveis.</li>
+      <li>Abrir uma prestação específica.</li>
+      <li>Testar o filtro por ano.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Lista carrega em poucos segundos.</li>
+        <li>Detalhe da prestação abre com valores, PDF disponível ou detalhamento.</li>
+        <li>Filtro filtra corretamente por ano escolhido.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Prestação de contas é regulamentada. Precisa estar disponível.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Ver correspondências recebidas</div>
+      <div class="code">T-MORAR-011</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir "Correspondências" (Mailing).</li>
+      <li>Ver a lista.</li>
+      <li>Se possível, marcar uma como "retirada".</li>
+      <li>Aplicar filtros de status.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Correspondências aparecem com data e status (aguardando retirada, retirada, etc.).</li>
+        <li>Marcar como retirada atualiza o status imediatamente.</li>
+        <li>Filtros mostram apenas o que foi selecionado.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-label impact">Se falhar</div>
+    <div class="field-body">Feature de conveniência. Se quebrar, morador não sabe se tem correspondência esperando na portaria.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div>
+      <div class="title">Gerenciar sub-usuários</div>
+      <div class="code">T-MORAR-012</div>
+    </div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Abrir "Sub-usuários" (moradores adicionais da unidade).</li>
+      <li>Ver a lista de sub-usuários vinculados.</li>
+      <li>Se houver, entrar em "Pendências" e aprovar ou rejeitar uma solicitação.</li>
+      <li>Voltar para a lista principal e conferir se o novo sub-usuário aparece (se foi aprovado).</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Lista carrega corretamente.</li>
+        <li>Pendências: ao aprovar / rejeitar, mensagem de sucesso aparece.</li>
+        <li>Sub-usuário aprovado aparece na lista principal ao voltar.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Atenção especial nesta feature</strong>
+    A parte de sub-usuários usa uma tecnologia interna diferente do resto do app. Se você notar algo estranho aqui (tela em branco, contagem errada), é <b>especialmente importante reportar</b>.
+  </div>
+</div>
+
+<!-- =========================================================== -->
+<h2 class="new-page">Fluxos desejáveis</h2>
+<p>Se sobrar tempo, cobrir estes também. Testar apenas o essencial: abrir, ver, criar / editar quando aplicável.</p>
+
+<table>
+  <thead>
+    <tr><th style="width: 15%;">ID</th><th>Feature</th><th style="width: 45%;">O que testar</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>T-MORAR-013</td>
+      <td>Controle de acesso</td>
+      <td>Ver quem entrou / saiu da unidade. Autorizar um visitante se possível.</td>
+    </tr>
+    <tr>
+      <td>T-MORAR-014</td>
+      <td>Meus seguros</td>
+      <td>Ver seguros contratados. Abrir detalhe de um.</td>
+    </tr>
+    <tr>
+      <td>T-MORAR-015</td>
+      <td>TDB (declarações)</td>
+      <td>Ver as declarações disponíveis, baixar um PDF.</td>
+    </tr>
+    <tr>
+      <td>T-MORAR-016</td>
+      <td>Cadastro de veículos</td>
+      <td>Ver veículos cadastrados. Adicionar um veículo fictício. Remover.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- =========================================================== -->
+<h2 class="new-page">Testes gerais de uso (fazer no fim)</h2>
+<p>Estes não são de uma feature específica — são para verificar comportamento geral do app.</p>
+
+<div class="test-card importante">
+  <div class="head">
+    <div><div class="title">Passeio por todas as telas (smoke test)</div><div class="code">GERAL-01</div></div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <div class="field-body">Abrir <b>uma a uma</b> as principais telas do app pelo menu. Não precisa testar nada dentro, só abrir e voltar.</div>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">Nenhuma tela pode dar erro na abertura, travar ou ficar em branco eternamente.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div><div class="title">Velocidade de abertura do app</div><div class="code">GERAL-02</div></div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Fechar o app pelo gerenciador de tarefas.</li>
+      <li>Abrir e cronometrar (de olho) até a Home aparecer.</li>
+      <li>Depois, minimizar o app (sem fechar) e reabrir. Cronometrar de novo.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">
+      <ul>
+        <li>Primeira abertura (cold start): até 3 segundos.</li>
+        <li>Segunda abertura (só minimizado): quase instantâneo.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div><div class="title">Girar o celular durante uso</div><div class="code">GERAL-03</div></div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <div class="field-body">Enquanto uma tela está carregando ou você está preenchendo um formulário, girar o celular (paisagem / retrato). Fazer isso em 3 telas diferentes.</div>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">A tela se adapta e não perde os dados que você já digitou.</div>
+  </div>
+</div>
+
+<div class="test-card importante">
+  <div class="head">
+    <div><div class="title">Deixar app em segundo plano</div><div class="code">GERAL-04</div></div>
+    <span class="badge importante">Importante</span>
+  </div>
+  <div class="field">
+    <div class="field-label">O que fazer</div>
+    <ol class="steps">
+      <li>Estar logado. Minimizar o app.</li>
+      <li>Usar outros apps por 5 minutos.</li>
+      <li>Voltar para o app.</li>
+    </ol>
+  </div>
+  <div class="field">
+    <div class="field-label expect">O que deve acontecer</div>
+    <div class="field-body">Você continua logado. As telas continuam onde você deixou. Nenhum dado perdido.</div>
+  </div>
+</div>
+
+<!-- =========================================================== -->
+<h2 class="new-page">Checklist final</h2>
+<p>Marcar após executar cada teste. Enviar esta página preenchida ao final.</p>
+
+<table class="checklist">
+  <thead>
+    <tr>
+      <th>Teste</th>
+      <th style="background: #dcfce7; color: #14532d;">OK</th>
+      <th style="background: #fee2e2; color: #7f1d1d;">Falhou</th>
+      <th style="background: #f1f5f9; color: #334155;">Não testei</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>T-MORAR-001 · Entrar no app com meu login</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-002 · Ver a tela inicial (home)</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-003 · Consultar meus boletos</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-004 · Reservar espaço no condomínio</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-005 · Conversar com a IA Bella</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-006 · Livro de ocorrências</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-007 · Assembleia / Acordos / Titularidade</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-008 · CND e trocar endereço</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-009 · Preferências</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-010 · Prestação de contas</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-011 · Correspondências</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-012 · Sub-usuários</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-013 · Controle de acesso</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-014 · Meus seguros</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-015 · TDB (declarações)</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>T-MORAR-016 · Cadastro de veículos</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>GERAL-01 · Passeio por todas as telas</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>GERAL-02 · Velocidade de abertura</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>GERAL-03 · Girar o celular</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+    <tr><td>GERAL-04 · App em segundo plano</td><td><span class="check"></span></td><td><span class="check"></span></td><td><span class="check"></span></td></tr>
+  </tbody>
+</table>
+
+<div class="callout success">
+  <strong>Ao terminar</strong>
+  Enviar o checklist preenchido + a lista de problemas encontrados (com prints) para o time técnico. Isso libera ou não o app para produção.
+</div>
+
+<h4>Observações finais (espaço livre)</h4>
+<div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; min-height: 90px; background: #fafbfc;">
+  <div style="border-bottom: 1px dashed #cbd5e1; height: 24px;"></div>
+  <div style="border-bottom: 1px dashed #cbd5e1; height: 24px;"></div>
+  <div style="border-bottom: 1px dashed #cbd5e1; height: 24px;"></div>
+</div>
+
+</body>
+</html>

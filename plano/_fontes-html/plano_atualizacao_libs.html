@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Plano de Ação — Atualização de Dependências do Monorepo Lello</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 15mm 20mm 15mm;
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-size: 9pt; color: #666; font-family: 'Segoe UI', sans-serif;
+    }
+    @bottom-left {
+      content: "Monorepo Lello — Atualização de Dependências · v1";
+      font-size: 9pt; color: #666; font-family: 'Segoe UI', sans-serif;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #1f2937; line-height: 1.5; font-size: 10.5pt; margin: 0;
+  }
+  h1 {
+    font-size: 22pt; color: #0f172a;
+    border-bottom: 3px solid #059669; padding-bottom: 8px; margin: 0 0 14px 0;
+  }
+  h2 {
+    font-size: 15pt; color: #059669; margin: 28px 0 8px;
+    padding-top: 8px; border-top: 2px solid #a7f3d0;
+  }
+  h3 { font-size: 12.5pt; color: #0f172a; margin: 20px 0 6px; }
+  h4 { font-size: 11pt; color: #334155; margin: 14px 0 4px; }
+  p { margin: 5px 0 9px; }
+  ul, ol { margin: 5px 0 9px; padding-left: 22px; }
+  li { margin: 2px 0; }
+  code {
+    font-family: 'Consolas', 'Cascadia Code', monospace;
+    background: #f1f5f9; padding: 1px 5px; border-radius: 3px;
+    font-size: 9.5pt; color: #0f172a;
+  }
+  pre {
+    background: #0f172a; color: #e2e8f0; padding: 10px 12px;
+    border-radius: 5px; font-size: 9pt;
+    font-family: 'Consolas', monospace; line-height: 1.45;
+  }
+  table {
+    border-collapse: collapse; width: 100%; margin: 8px 0 12px 0;
+    font-size: 9.5pt; page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #d1d5db; padding: 6px 9px;
+    text-align: left; vertical-align: top;
+  }
+  th {
+    background: #d1fae5; color: #065f46; font-weight: 600;
+    font-size: 9pt; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  tr:nth-child(even) td { background: #fafafa; }
+  td.num, th.num { text-align: right; }
+  .meta { color: #64748b; font-size: 9.5pt; }
+  .callout {
+    background: #fef3c7; border-left: 4px solid #f59e0b;
+    padding: 10px 14px; border-radius: 4px; font-size: 10pt; margin: 10px 0;
+  }
+  .callout.danger { background: #fef2f2; border-color: #dc2626; }
+  .callout.info   { background: #eff6ff; border-color: #3b82f6; }
+  .callout.success{ background: #ecfdf5; border-color: #10b981; }
+  .callout strong { display: block; margin-bottom: 4px; }
+  .callout.danger strong { color: #991b1b; }
+  .callout.info strong { color: #1e40af; }
+  .callout strong { color: #92400e; }
+  .callout.success strong { color: #065f46; }
+  .block-card {
+    background: #fff; padding: 12px 16px 14px 18px; margin: 14px 0;
+    border-radius: 8px; border-left: 5px solid #059669;
+    border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0; page-break-inside: avoid;
+  }
+  .block-card.alto  { border-left-color: #dc2626; background: #fffafa; }
+  .block-card.medio { border-left-color: #ea580c; background: #fffbf5; }
+  .block-card.baixo { border-left-color: #059669; background: #f7fdfa; }
+  .block-card .head {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 6px;
+  }
+  .block-card .title { font-size: 12.5pt; font-weight: 700; color: #0f172a; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 8.5pt; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;
+  }
+  .badge.alto  { background: #dc2626; color: #fff; }
+  .badge.medio { background: #ea580c; color: #fff; }
+  .badge.baixo { background: #059669; color: #fff; }
+  .kpi-row { display: flex; gap: 10px; margin: 12px 0 16px; flex-wrap: wrap; }
+  .kpi {
+    flex: 1; min-width: 110px; background: #f8fafc;
+    border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;
+  }
+  .kpi .label {
+    font-size: 8.5pt; color: #64748b; text-transform: uppercase;
+    letter-spacing: 0.4px; font-weight: 600;
+  }
+  .kpi .value { font-size: 20pt; font-weight: 700; color: #0f172a; line-height: 1.1; margin-top: 4px; }
+  .kpi.danger .value { color: #dc2626; }
+  .kpi.warn .value { color: #ea580c; }
+  .kpi.ok .value { color: #059669; }
+  .cover { text-align: center; padding: 70px 20px 40px 20px; page-break-after: always; }
+  .cover h1 { font-size: 31pt; border: none; margin-bottom: 10px; color: #0f172a; }
+  .cover .tag {
+    display: inline-block; padding: 8px 26px; background: #059669; color: #fff;
+    border-radius: 30px; font-size: 14pt; font-weight: 700;
+    letter-spacing: 1.2px; margin-bottom: 22px;
+  }
+  .cover .subtitle { font-size: 14pt; color: #475569; margin: 8px 0 4px; }
+  .cover .metabox {
+    display: inline-block; margin-top: 40px; padding: 24px 42px;
+    background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px;
+    text-align: left; font-size: 11pt; color: #334155; min-width: 62%;
+  }
+  .cover .metabox b { color: #0f172a; }
+  .cover .metabox div { padding: 3px 0; }
+  .new-page { page-break-before: always; }
+  .toc {
+    background: #f8fafc; padding: 13px 22px; border-radius: 8px;
+    border: 1px solid #e2e8f0; font-size: 10.5pt; line-height: 1.8;
+  }
+  .toc ol { padding-left: 22px; }
+  .arch {
+    background: #0f172a; color: #e2e8f0; padding: 14px 18px;
+    border-radius: 6px; font-family: 'Consolas', monospace;
+    font-size: 9.5pt; line-height: 1.6; text-align: center;
+  }
+  .arch .hub { color: #6ee7b7; font-weight: 700; }
+  .arch .app { color: #93c5fd; }
+  .check {
+    display: inline-block; width: 15px; height: 15px;
+    border: 1.5px solid #94a3b8; border-radius: 4px; vertical-align: middle;
+  }
+  .checklist td:last-child { text-align: center; width: 55px; }
+  .wave-table td:first-child { text-align: center; font-weight: 700; width: 40px; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="tag">ATUALIZAÇÃO DE LIBS</div>
+  <h1>Plano de Ação</h1>
+  <div class="subtitle">Atualização de dependências do monorepo Lello</div>
+  <div class="subtitle" style="font-size: 11.5pt; margin-top: 18px; color: #64748b;">
+    Diagnóstico, blockers, agrupamento por risco e execução em ondas
+  </div>
+  <div class="metabox">
+    <div><b>Versão:</b> 1.0</div>
+    <div><b>Data:</b> 12/07/2026</div>
+    <div><b>Escopo:</b> 7 projetos do monorepo <code>app-lello-morar</code></div>
+    <div><b>Ambiente atual:</b> Flutter 3.38.9 · Dart 3.10.8</div>
+    <div><b>Pacotes analisados:</b> 246 no grafo de dependências</div>
+    <div><b>Esforço estimado:</b> 60 a 80 horas (7 ondas)</div>
+    <div><b>Status:</b> aguardando aprovação para iniciar Onda 0</div>
+  </div>
+</section>
+
+<h2>Sumário</h2>
+<div class="toc">
+  <ol>
+    <li>Diagnóstico — dados reais coletados</li>
+    <li>Por que a arquitetura importa aqui</li>
+    <li>Três blockers a resolver antes de qualquer bump</li>
+    <li>Os 38 breaking changes agrupados por bloco</li>
+    <li>Plano de execução em 7 ondas</li>
+    <li>Critérios de aceite por onda</li>
+    <li>Riscos principais</li>
+    <li>Recomendação e próximos passos</li>
+    <li>Anexo — comandos úteis</li>
+  </ol>
+</div>
+
+<h2>1. Diagnóstico — dados reais coletados</h2>
+
+<p>Executado <code>flutter pub outdated</code> no <code>app-lello-essentials</code> (o pacote hub do qual todos os apps herdam via <code>path:</code>) e cruzado com contagem de uso real no código-fonte de todos os repositórios.</p>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="label">Pacotes no grafo</div><div class="value">246</div></div>
+  <div class="kpi danger"><div class="label">Saltos major</div><div class="value">73</div></div>
+  <div class="kpi warn"><div class="label">Saltos minor</div><div class="value">85</div></div>
+  <div class="kpi ok"><div class="label">Saltos patch</div><div class="value">65</div></div>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="label">Deps diretas no essentials</div><div class="value">115</div></div>
+  <div class="kpi danger"><div class="label">Diretas com breaking change</div><div class="value">38</div></div>
+  <div class="kpi warn"><div class="label">Blockers estruturais</div><div class="value">3</div></div>
+  <div class="kpi"><div class="label">Ondas de execução</div><div class="value">7</div></div>
+</div>
+
+<div class="callout info">
+  <strong>Leitura dos números</strong>
+  Dos 246 pacotes no grafo, apenas <b>115 são declarados diretamente</b> — o resto é transitivo e sobe junto. O trabalho real está nos <b>38 pacotes diretos com salto breaking</b>, que exigem análise de changelog e ajuste de código.
+</div>
+
+<h2>2. Por que a arquitetura importa aqui</h2>
+
+<div class="arch">
+<span class="hub">app-lello-essentials</span>  (115 deps diretas — TODAS as libs moram aqui)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8593; path:<br>
+<span class="hub">app-lello-shared</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(só depende de essentials)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8593; path:<br>
+&nbsp;&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;<br>
+<span class="app">sindico</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="app">morar</span>&nbsp;&nbsp;&nbsp;<span class="app">colaborador</span>&nbsp;&nbsp;&nbsp;<span class="app">morar-viver</span>&nbsp;&nbsp;&nbsp;<span class="app">sindico-viver</span>
+</div>
+
+<h4>Consequência prática</h4>
+<ul>
+  <li><b>90% do trabalho é em um único arquivo:</b> <code>essentials/pubspec.yaml</code>.</li>
+  <li><b>O impacto de um bump errado é em 5 apps ao mesmo tempo.</b> Não existe rollout gradual por app — se o <code>essentials</code> sobe, todos sobem.</li>
+  <li><b><code>morar-viver</code> e <code>sindico-viver</code></b> são white-labels raramente testados, mas herdam tudo. Precisam entrar no smoke test.</li>
+</ul>
+
+<h2 class="new-page">3. Três blockers a resolver antes de qualquer bump</h2>
+
+<div class="block-card alto">
+  <div class="head">
+    <div class="title">Blocker 1 · Divergência de Java entre os projetos</div>
+    <span class="badge alto">Bloqueante</span>
+  </div>
+  <table>
+    <thead><tr><th>Projeto</th><th>Java</th><th>compileSdk</th></tr></thead>
+    <tbody>
+      <tr><td><b>sindico</b></td><td style="color:#dc2626;font-weight:700;">1.8 &#9888;</td><td>36 (hardcoded)</td></tr>
+      <tr><td>morar</td><td>17</td><td><code>flutter.compileSdkVersion</code></td></tr>
+      <tr><td>colaborador</td><td>17</td><td><code>flutter.compileSdkVersion</code></td></tr>
+    </tbody>
+  </table>
+  <p>O <code>sindico</code> está em <b>Java 1.8</b>. Firebase 4.x e a maioria dos plugins Android modernos exigem Java 11+ (na prática 17). <b>Sem subir o sindico para Java 17, o bloco Firebase não compila.</b></p>
+  <p class="meta">Ação: alinhar <code>sourceCompatibility</code> / <code>jvmTarget</code> para 17 e usar <code>flutter.compileSdkVersion</code> em vez do 36 fixo.</p>
+</div>
+
+<div class="block-card alto">
+  <div class="head">
+    <div class="title">Blocker 2 · Overrides obsoletos no <code>shared</code></div>
+    <span class="badge alto">Bloqueante</span>
+  </div>
+<pre># app-lello-shared/pubspec.yaml
+dependency_overrides:
+  analyzer: 6.4.1      # essentials já resolve 7.7.1
+  source_gen: 1.5.0    # essentials já resolve 2.0.0
+  dart_style: ^2.3.7</pre>
+  <p>Esses pins estão <b>travando o ecossistema de code generation</b> (<code>build_runner</code>, <code>drift_dev</code>, <code>chopper_generator</code>, <code>json_serializable</code>). Enquanto existirem, não dá para subir os geradores. Provavelmente são resquício de um conflito antigo já resolvido.</p>
+  <p class="meta">Ação: remover os pins, rodar build e verificar se o conflito original ainda se manifesta.</p>
+</div>
+
+<div class="block-card medio">
+  <div class="head">
+    <div class="title">Blocker 3 · Dois pacotes travados sem caminho de upgrade</div>
+    <span class="badge medio">Investigar</span>
+  </div>
+  <p><code>pub outdated</code> mostra <code>resolvable == current</code> para estes, ou seja alguma restrição os impede de subir:</p>
+  <table>
+    <thead><tr><th>Pacote</th><th>Atual</th><th>Resolvível</th><th>Última</th></tr></thead>
+    <tbody>
+      <tr><td><code>share_plus</code></td><td>12.0.2</td><td style="color:#dc2626;font-weight:700;">12.0.2 (travado)</td><td>13.3.0</td></tr>
+      <tr><td><code>open_file</code></td><td>3.5.11</td><td style="color:#dc2626;font-weight:700;">3.5.11 (travado)</td><td>4.0.0</td></tr>
+    </tbody>
+  </table>
+  <p class="meta">Ação: rodar <code>flutter pub deps</code> para identificar quem restringe a versão.</p>
+</div>
+
+<h2 class="new-page">4. Os 38 breaking changes agrupados por bloco</h2>
+<p class="meta">Ordenado por risco &times; uso real. A coluna "Arquivos" conta quantos <code>.dart</code> importam o pacote em todo o monorepo.</p>
+
+<div class="block-card alto">
+  <div class="head">
+    <div class="title">Bloco A · Firebase — 11 pacotes, sobem JUNTOS</div>
+    <span class="badge alto">Risco alto</span>
+  </div>
+  <table>
+    <thead><tr><th>Pacote</th><th>Atual &rarr; Alvo</th><th class="num">Arquivos</th></tr></thead>
+    <tbody>
+      <tr><td><code>firebase_core</code></td><td>3.15.2 &rarr; <b>4.13.0</b></td><td class="num">24</td></tr>
+      <tr><td><code>firebase_crashlytics</code></td><td>4.3.10 &rarr; 5.2.7</td><td class="num"><b>30</b></td></tr>
+      <tr><td><code>firebase_messaging</code></td><td>15.2.10 &rarr; 16.5.0</td><td class="num">8</td></tr>
+      <tr><td><code>firebase_remote_config</code></td><td>5.5.0 &rarr; 6.5.6</td><td class="num">5</td></tr>
+      <tr><td><code>firebase_analytics</code></td><td>11.6.0 &rarr; 12.4.6</td><td class="num">3</td></tr>
+      <tr><td><code>cloud_firestore</code></td><td>5.6.12 &rarr; 6.8.0</td><td class="num">2</td></tr>
+      <tr><td><code>firebase_storage</code></td><td>12.4.10 &rarr; 13.4.6</td><td class="num">2</td></tr>
+      <tr><td><code>firebase_auth</code></td><td>5.7.0 &rarr; 6.5.7</td><td class="num">1</td></tr>
+      <tr><td><code>firebase_performance</code></td><td>0.10.1 &rarr; 0.11.4</td><td class="num">&mdash;</td></tr>
+      <tr><td><code>firebase_in_app_messaging</code></td><td>0.8.1 &rarr; 0.9.2</td><td class="num">&mdash;</td></tr>
+      <tr><td><code>firebase_app_installations</code></td><td>0.3.3 &rarr; 0.4.2</td><td class="num">&mdash;</td></tr>
+    </tbody>
+  </table>
+  <div class="callout danger" style="margin-bottom:0;">
+    <strong>Maior bloco de risco do projeto</strong>
+    <code>firebase_core</code> 3&rarr;4 é migração coordenada: todos os pacotes Firebase têm que subir na mesma leva, senão o resolver quebra. Afeta crash reporting, push, analytics e remote config — coisas que <b>só aparecem em produção</b>.
+  </div>
+</div>
+
+<div class="block-card alto">
+  <div class="head">
+    <div class="title">Bloco B · Permissões e plataforma</div>
+    <span class="badge alto">Risco alto</span>
+  </div>
+  <table>
+    <thead><tr><th>Pacote</th><th>Atual &rarr; Alvo</th><th class="num">Arquivos</th></tr></thead>
+    <tbody>
+      <tr><td><code>permission_handler</code></td><td>11.4.0 &rarr; <b>13.0.0</b> (2 majors)</td><td class="num">4</td></tr>
+      <tr><td><code>flutter_local_notifications</code></td><td>18.0.1 &rarr; <b>22.2.0</b> (4 majors!)</td><td class="num">2</td></tr>
+      <tr><td><code>local_auth</code></td><td>2.3.0 &rarr; 3.0.2</td><td class="num">1</td></tr>
+      <tr><td><code>geolocator</code></td><td>13.0.4 &rarr; 14.0.2</td><td class="num">2</td></tr>
+      <tr><td><code>connectivity_plus</code></td><td>6.1.5 &rarr; 7.3.1</td><td class="num">2</td></tr>
+      <tr><td><code>workmanager</code></td><td>0.7.0 &rarr; 0.10.7</td><td class="num">1</td></tr>
+      <tr><td><code>camera</code></td><td>0.11.2 &rarr; 0.12.0</td><td class="num">3</td></tr>
+    </tbody>
+  </table>
+  <p><code>flutter_local_notifications</code> pulando 4 majors (18&rarr;22) e <code>permission_handler</code> 2 majors são os mais delicados. <b><code>workmanager</code> é o que roda o sync de ponto offline do colaborador</b> — já identificado como crítico no plano de testes (cenário GERAL-04).</p>
+</div>
+
+<div class="block-card medio">
+  <div class="head">
+    <div class="title">Bloco C · UI e widgets</div>
+    <span class="badge medio">Risco médio</span>
+  </div>
+  <table>
+    <thead><tr><th>Pacote</th><th>Atual &rarr; Alvo</th><th class="num">Arquivos</th></tr></thead>
+    <tbody>
+      <tr><td><code>another_flushbar</code></td><td>1.12.32 &rarr; 2.2.4</td><td class="num"><b>18</b></td></tr>
+      <tr><td><code>fl_chart</code></td><td>0.70.2 &rarr; <b>1.2.0</b></td><td class="num">5</td></tr>
+      <tr><td><code>image_cropper</code></td><td>9.1.0 &rarr; <b>12.2.1</b> (3 majors)</td><td class="num">6</td></tr>
+      <tr><td><code>pdfrx</code></td><td>1.3.5 &rarr; 2.2.24</td><td class="num">2</td></tr>
+      <tr><td><code>infinite_scroll_pagination</code></td><td>4.1.0 &rarr; 5.1.1</td><td class="num">2</td></tr>
+      <tr><td><code>fluttertoast</code></td><td>8.2.14 &rarr; 9.0.0</td><td class="num">2</td></tr>
+      <tr><td><code>dropdown_search</code></td><td>6.0.2 &rarr; 7.0.0</td><td class="num">1</td></tr>
+      <tr><td><code>dotted_border</code></td><td>2.1.0 &rarr; 3.1.0</td><td class="num">1</td></tr>
+      <tr><td><code>photo_view</code></td><td>0.14.0 &rarr; 0.15.0</td><td class="num">1</td></tr>
+      <tr><td><code>flutter_widget_from_html_core</code></td><td>0.16.1 &rarr; 0.17.2</td><td class="num">&mdash;</td></tr>
+    </tbody>
+  </table>
+  <p><code>another_flushbar</code> (18 arquivos) e <code>fl_chart</code> 0.70&rarr;1.0 (API de gráficos mudou bastante) são os que dão mais trabalho manual. Do lado positivo, são falhas <b>visíveis</b> — fáceis de detectar em teste.</p>
+</div>
+
+<div class="block-card baixo">
+  <div class="head">
+    <div class="title">Bloco D · Infra e utilitários</div>
+    <span class="badge baixo">Risco baixo-médio</span>
+  </div>
+  <table>
+    <thead><tr><th>Pacote</th><th>Atual &rarr; Alvo</th><th class="num">Arquivos</th></tr></thead>
+    <tbody>
+      <tr><td><code>get_it</code></td><td>8.3.0 &rarr; 9.2.1</td><td class="num">4</td></tr>
+      <tr><td><code>package_info_plus</code></td><td>8.3.1 &rarr; 9.0.1</td><td class="num">9</td></tr>
+      <tr><td><code>device_info_plus</code></td><td>11.5.0 &rarr; 12.4.0</td><td class="num">3</td></tr>
+      <tr><td><code>file_picker</code></td><td>8.3.7 &rarr; 10.3.10</td><td class="num">3</td></tr>
+      <tr><td><code>flutter_contacts</code></td><td>1.1.9 &rarr; 2.1.0</td><td class="num">1</td></tr>
+      <tr><td><code>datadog_flutter_plugin</code></td><td>2.16.1 &rarr; 3.4.1</td><td class="num">1</td></tr>
+      <tr><td><code>datadog_tracking_http_client</code></td><td>2.3.0 &rarr; 3.2.0</td><td class="num">&mdash;</td></tr>
+      <tr><td><code>google_mlkit_face_detection</code></td><td>0.13.1 &rarr; 0.14.0</td><td class="num">&mdash;</td></tr>
+    </tbody>
+  </table>
+  <p><code>get_it</code> 8&rarr;9 mexe na injeção de dependência — e o <code>application_container.dart</code> do sindico tem 3.500+ linhas. Vale atenção redobrada nesse.</p>
+</div>
+
+<div class="block-card baixo">
+  <div class="head">
+    <div class="title">Bloco E · Code generation</div>
+    <span class="badge baixo">Risco baixo</span>
+  </div>
+  <p><code>build_runner</code>, <code>drift_dev</code>, <code>chopper_generator</code>, <code>json_serializable</code>, <code>source_gen</code>, <code>analyzer</code>, <code>lints</code>.</p>
+  <p><b>Depende do Blocker 2</b> — só é possível depois de limpar os overrides do <code>shared</code>. Após subir, todo código gerado precisa ser regenerado e commitado.</p>
+</div>
+
+<h2 class="new-page">5. Plano de execução em 7 ondas</h2>
+
+<div class="callout info">
+  <strong>Estratégia</strong>
+  Uma <b>branch por onda</b>, cada uma testável e revertível de forma independente. <b>Nunca misturar blocos</b> — se algo quebra, precisamos saber exatamente qual bump causou.
+</div>
+
+<table class="wave-table">
+  <thead>
+    <tr><th class="num">#</th><th>Onda</th><th>Escopo</th><th class="num">Esforço</th><th>Risco</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td><td><b>Preparação</b></td>
+      <td>Java 17 no sindico, limpar overrides do <code>shared</code>, investigar <code>share_plus</code>/<code>open_file</code>, criar baseline</td>
+      <td class="num">6-8h</td><td>Baixo</td>
+    </tr>
+    <tr>
+      <td>1</td><td><b>Patch + minor seguros</b></td>
+      <td>~150 pacotes sem breaking change via <code>pub upgrade</code></td>
+      <td class="num">3-4h</td><td>Muito baixo</td>
+    </tr>
+    <tr>
+      <td>2</td><td><b>Code generation</b></td>
+      <td>Bloco E + regenerar todo código gerado</td>
+      <td class="num">4-6h</td><td>Baixo</td>
+    </tr>
+    <tr>
+      <td>3</td><td><b>Infra / utils</b></td>
+      <td>Bloco D (get_it, package_info, device_info, file_picker, datadog)</td>
+      <td class="num">8-10h</td><td>Médio</td>
+    </tr>
+    <tr>
+      <td>4</td><td><b>UI</b></td>
+      <td>Bloco C (flushbar, fl_chart, image_cropper, pdfrx…)</td>
+      <td class="num">12-16h</td><td>Médio</td>
+    </tr>
+    <tr style="background:#fef2f2;">
+      <td>5</td><td><b>Firebase</b></td>
+      <td>Bloco A (os 11 pacotes juntos)</td>
+      <td class="num">16-20h</td><td style="color:#dc2626;font-weight:700;">Alto</td>
+    </tr>
+    <tr style="background:#fef2f2;">
+      <td>6</td><td><b>Permissões / plataforma</b></td>
+      <td>Bloco B (permission_handler, notifications, workmanager…)</td>
+      <td class="num">12-16h</td><td style="color:#dc2626;font-weight:700;">Alto</td>
+    </tr>
+    <tr style="background:#f1f5f9;">
+      <td>&nbsp;</td><td colspan="2"><b>TOTAL</b></td>
+      <td class="num"><b>60-80h</b></td><td>&mdash;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Detalhamento das ondas de maior atenção</h3>
+
+<h4>Onda 0 — Preparação (fazer primeiro, sem exceção)</h4>
+<ol>
+  <li>Subir <code>sindico</code> para Java 17 e alinhar <code>compileSdk</code> com os outros dois apps.</li>
+  <li>Remover <code>analyzer: 6.4.1</code> e <code>source_gen: 1.5.0</code> do <code>shared</code>. Rodar build para ver se o conflito original ainda existe.</li>
+  <li>Investigar quem trava <code>share_plus</code> e <code>open_file</code> (<code>flutter pub deps</code>).</li>
+  <li><b>Criar baseline:</b> build APK release dos 5 apps + <code>flutter test</code> + screenshots das telas críticas. É a régua de comparação de todas as ondas seguintes.</li>
+  <li>Congelar <code>pubspec.lock</code> num commit dedicado antes de tudo.</li>
+</ol>
+
+<h4>Onda 1 — Ganho rápido</h4>
+<p><code>flutter pub upgrade</code> (<b>sem</b> <code>--major-versions</code>). Pega os 65 patches e os 85 minors não-breaking. Zero mudança de código esperada. Valida rápido se o pipeline continua verde e já derruba boa parte da dívida.</p>
+
+<h4>Onda 5 — Firebase (a mais crítica)</h4>
+<ul>
+  <li>Subir os 11 pacotes juntos, num <b>único commit</b>.</li>
+  <li>Reconferir <code>google-services.json</code> / <code>GoogleService-Info.plist</code> e as configs dos <b>10 flavors</b>.</li>
+  <li><b>Testar em device físico:</b> push notification chegando, crash forçado aparecendo no Crashlytics, remote config puxando valor novo.</li>
+  <li>Firebase é justamente o que <b>falha silencioso</b>: o app compila, roda, e só semanas depois se descobre que crash não está sendo reportado.</li>
+</ul>
+
+<h4>Onda 6 — Permissões</h4>
+<ul>
+  <li>Testar cada permissão em <b>Android 13, 14 e 15</b> (as regras mudaram em cada uma) e <b>iOS 16+</b>.</li>
+  <li><code>flutter_local_notifications</code> 18&rarr;22: revisar canais de notificação e permissão <code>POST_NOTIFICATIONS</code>.</li>
+  <li><code>workmanager</code>: revalidar o <b>sync de ponto offline do colaborador</b> (cenário GERAL-04 do roteiro de testes).</li>
+</ul>
+
+<h2 class="new-page">6. Critérios de aceite por onda</h2>
+
+<p>Cada onda só é considerada concluída quando <b>todos</b> os itens abaixo passam:</p>
+
+<table class="checklist">
+  <thead><tr><th>Critério</th><th>OK</th></tr></thead>
+  <tbody>
+    <tr><td><code>flutter analyze</code> = 0 erros nos 5 projetos</td><td><span class="check"></span></td></tr>
+    <tr><td><code>flutter test</code> sem regressão vs baseline da Onda 0</td><td><span class="check"></span></td></tr>
+    <tr><td><code>flutter build apk --release</code> OK nos 3 apps principais</td><td><span class="check"></span></td></tr>
+    <tr><td><code>flutter build ipa</code> OK (ou <code>pod install</code> + build no Xcode)</td><td><span class="check"></span></td></tr>
+    <tr><td>Smoke test manual nos fluxos que o bloco toca</td><td><span class="check"></span></td></tr>
+    <tr><td>White-labels (<code>morar-viver</code>, <code>sindico-viver</code>) compilando</td><td><span class="check"></span></td></tr>
+    <tr><td><code>pubspec.lock</code> commitado</td><td><span class="check"></span></td></tr>
+    <tr><td>Branch da onda revisada em PR antes de merge</td><td><span class="check"></span></td></tr>
+  </tbody>
+</table>
+
+<h2>7. Riscos principais</h2>
+
+<div class="callout danger">
+  <strong>1. Firebase 4.x pode exigir Flutter mais novo</strong>
+  Se der conflito de SDK, entra na conta um upgrade de Flutter — que é outro projeto, com outro plano. Só descobrimos isso ao executar a Onda 5.
+</div>
+
+<div class="callout">
+  <strong>2. Oito pacotes têm <code>latest</code> &gt; <code>resolvable</code></strong>
+  <code>device_info_plus</code>, <code>file_picker</code>, <code>fluttertoast</code>, <code>package_info_plus</code>, <code>pdfrx</code>, <code>flutter_contacts</code>, <code>share_plus</code>, <code>open_file</code>. Significa que o Flutter atual limita o teto. Vamos até o <code>resolvable</code> e o resto fica pendente de upgrade do Flutter.
+</div>
+
+<div class="callout danger">
+  <strong>3. Cinco apps de uma vez</strong>
+  Qualquer bump no <code>essentials</code> afeta todos simultaneamente. Regressão em um app pode passar batido se o time só testar os outros. O smoke test precisa cobrir os 5.
+</div>
+
+<div class="callout">
+  <strong>4. White-labels esquecidos</strong>
+  <code>morar-viver</code> e <code>sindico-viver</code> quase nunca são testados, mas herdam todas as libs. Incluir obrigatoriamente no critério de aceite.
+</div>
+
+<h2>8. Recomendação e próximos passos</h2>
+
+<div class="callout success">
+  <strong>Começar por Onda 0 + Onda 1 juntas</strong>
+  Em aproximadamente <b>10 horas</b> você tem: os blockers estruturais resolvidos, cerca de <b>150 pacotes atualizados</b>, e um baseline confiável para comparar as ondas seguintes. Isso derruba boa parte da dívida <b>sem risco de breaking change</b>, e revela cedo se o Flutter atual vai virar gargalo.
+</div>
+
+<p>Depois de fechar as duas primeiras ondas, avaliar com o time se vale seguir para as ondas 2 a 6 de forma contínua ou parcelar ao longo de sprints — considerando que as ondas 5 e 6 exigem janela de teste em devices físicos e múltiplas versões de Android/iOS.</p>
+
+<h4>Sequência sugerida de aprovação</h4>
+<ol>
+  <li>Aprovar este plano e a alocação de ~10h para Onda 0 + 1.</li>
+  <li>Executar, validar e fazer merge.</li>
+  <li>Reavaliar cronograma para as ondas 2-6 com dados reais de esforço das duas primeiras.</li>
+</ol>
+
+<h2 class="new-page">9. Anexo — comandos úteis</h2>
+
+<h4>Diagnóstico</h4>
+<pre># Ver o que está desatualizado (por projeto)
+flutter pub outdated
+
+# Exportar em JSON para análise
+flutter pub outdated --json &gt; outdated.json
+
+# Descobrir quem restringe a versão de um pacote
+flutter pub deps | Select-String "share_plus"</pre>
+
+<h4>Atualização</h4>
+<pre># Onda 1 — só patch e minor compatíveis (seguro)
+flutter pub upgrade
+
+# Major versions (usar só nas ondas 3 a 6, pacote por pacote)
+flutter pub upgrade --major-versions &lt;pacote&gt;
+
+# Após mexer no essentials, propagar nos apps
+flutter pub get</pre>
+
+<h4>Validação</h4>
+<pre># Analyzer
+flutter analyze
+
+# Testes
+flutter test
+
+# Builds
+flutter build apk --flavor lelloMorar --release
+flutter build apk --flavor lelloColaborador --release
+flutter build bundle
+
+# iOS (no macOS)
+cd ios &amp;&amp; pod install &amp;&amp; cd ..
+flutter build ipa</pre>
+
+<h4>Code generation (Onda 2)</h4>
+<pre>flutter pub run build_runner build --delete-conflicting-outputs</pre>
+
+<div class="callout info" style="margin-top: 20px;">
+  <strong>Documentos relacionados</strong>
+  <ul style="margin: 4px 0 0 20px;">
+    <li><code>01-testes-negocio/</code> — roteiros de teste para o time de negócio (Morar e Colaborador)</li>
+    <li><code>02-testes-tecnico/</code> — planos de teste técnicos da migração bloc 9</li>
+  </ul>
+  Os roteiros de teste existentes podem ser reaproveitados como base de validação das ondas 3 a 6.
+</div>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "567768661045",
+    "project_id": "app-lello-colaborador2",
+    "storage_bucket": "app-lello-colaborador2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567768661045:android:396fbe0cdfb8b04dfe457c",
+        "android_client_info": {
+          "package_name": "app.hubert.colaborador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567768661045-m9hdqr7tmbmope88e3ijvd4br0ueka0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4qqLHx05mNVeuMmEApxbSHv6nUEZMqsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567768661045-m9hdqr7tmbmope88e3ijvd4br0ueka0v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "567768661045-0pdusmsqdetkj8bdkljds8au5dh9ur4v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appLelloColaborador"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567768661045:android:d10eebfc85ad5d23fe457c",
+        "android_client_info": {
+          "package_name": "app.lello.colaborador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567768661045-m9hdqr7tmbmope88e3ijvd4br0ueka0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4qqLHx05mNVeuMmEApxbSHv6nUEZMqsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567768661045-m9hdqr7tmbmope88e3ijvd4br0ueka0v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "567768661045-0pdusmsqdetkj8bdkljds8au5dh9ur4v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appLelloColaborador"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,66 @@
+name: colaborador
+description: Flutter app for Lello condominiuns employees.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 2.10.16+236
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  essentials:
+    path: ../app-lello-essentials/
+  shared_features:
+    path: ../app-lello-shared/
+  lib_facedetection:
+    path: ../app-lello-shared/packages/lib_facedetection/
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+  build_runner: ^2.5.4
+  drift_dev: ^2.34.0
+  chopper_generator: ^8.7.0
+  dependency_validator: ^5.0.2
+  flutter_launcher_icons: ^0.14.3
+  json_serializable: ^6.7.1
+  mockito: ^5.4.2
+
+  flutter_lints: ^4.0.0
+
+dependency_overrides:
+  intl: 0.20.2
+
+flutter_app_name:
+  name: "App para Colaboradores"
+
+flutter_launcher_icons:
+  image_path: "assets/app_icon_512_laranja.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - lang/
+
+  fonts:
+    - family: PlayfairDisplay
+      fonts:
+        - asset: fonts/playfairdisplay.ttf
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Black.ttf
+        - asset: fonts/Roboto-Bold.ttf
+        - asset: fonts/Roboto-Regular.ttf

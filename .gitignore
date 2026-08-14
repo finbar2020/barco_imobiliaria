@@ -1,0 +1,22 @@
+# IDE
+.vscode/
+.idea/
+
+# Build / logs
+*.log
+_build_*.log
+_build_*.txt
+*.aab
+*.apk
+
+# Android signing keys — never commit
+*.jks
+*.keystore
+key.properties
+
+# Histórico git de cada app (não sobe; fica só na máquina)
+.git_nested_backup/
+
+# OS
+.DS_Store
+Thumbs.db

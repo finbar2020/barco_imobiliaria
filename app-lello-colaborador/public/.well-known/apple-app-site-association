@@ -1,0 +1,14 @@
+{
+  "applinks": {
+     "apps": [],
+     "details": [
+          {
+       "appID": "RNEA6DL9E4.app.lello.colaborador",
+       "paths": ["*"]
+          }
+      ]
+  },
+  "webcredentials": {
+     "apps": ["RNEA6DL9E4.app.app.lello.colaborador"]
+  }
+}

@@ -1,0 +1,20 @@
+import 'package:chopper/chopper.dart';
+import 'package:lello/feature/me/data/model/me_model.dart';
+import 'package:lello/feature/me/data/model/me_password_model.dart';
+part 'me_api.chopper.dart';
+
+@ChopperApi()
+abstract class MeApi extends ChopperService {
+  @GET(path: "/me")
+  Future<Response> get([@Query("idEmpresa") int? idEmpresa]);
+
+  @PATCH(path: "/me")
+  Future<Response> patch(@Body() MeModel me, @Query("code") String code);
+
+  @POST(path: "/me/change_password")
+  Future<Response> updatePassword(@Body() MePasswordModel me);
+
+  static MeApi create(ChopperClient client) {
+    return _$MeApi(client);
+  }
+}

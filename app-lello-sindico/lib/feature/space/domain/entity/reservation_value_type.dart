@@ -1,0 +1,4 @@
+enum ReservationValueType {
+	value,
+	percentage
+}

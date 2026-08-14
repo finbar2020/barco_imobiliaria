@@ -1,0 +1,80 @@
+name: android_release
+
+on:
+  push:
+    branches: 
+      - master
+      - release
+      - develop
+      - feat/fastlane
+
+env:
+  JVM_OPTS: -Xmx4096m
+
+jobs:
+  alfa_release:
+    if: endsWith(github.ref, '/develop') || endsWith(github.ref, '/feat/fastlane')
+    runs-on: ubuntu-18.04
+    container:
+      image: docker://registry.gitlab.com/noknox/devops/docker/android-flutter-fastlane:1.0.0
+    env:
+      ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+      GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+      KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Release app
+        run: |
+          mkdir $HOME/.fastlane
+          echo "$GOOGLE_SERVICE_ACCOUNT" | base64 --decode >> $HOME/.fastlane/lello_condominios_mobile_secret.json
+          echo "$ENCODED_KEYSTORE" | base64 --decode >> $HOME/sindico_lello.jks
+          export KEYSTORE=$HOME/sindico_lello.jks
+          cd android
+          fastlane alfa
+  beta_release:
+    if: endsWith(github.ref, '/release')
+    runs-on: ubuntu-18.04
+    container:
+      image: docker://registry.gitlab.com/noknox/devops/docker/android-flutter-fastlane:1.0.0
+    env:
+      ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+      GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+      KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Release app
+        run: |
+          mkdir $HOME/.fastlane
+          echo $GOOGLE_SERVICE_ACCOUNT | base64 --decode >> $HOME/.fastlane/lello_condominios_mobile_secret.json
+          echo "$ENCODED_KEYSTORE" | base64 --decode >> $HOME/sindico_lello.jks
+          export KEYSTORE=$HOME/sindico_lello.jks
+          cd android
+          fastlane beta
+  production_release:
+    if: endsWith(github.ref, '/master')
+    runs-on: ubuntu-18.04
+    container:
+      image: docker://registry.gitlab.com/noknox/devops/docker/android-flutter-fastlane:1.0.0
+    env:
+      ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+      GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+      KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Release app
+        run: |
+          mkdir $HOME/.fastlane
+          echo $GOOGLE_SERVICE_ACCOUNT | base64 --decode >> $HOME/.fastlane/lello_condominios_mobile_secret.json
+          echo "$ENCODED_KEYSTORE" | base64 --decode >> $HOME/sindico_lello.jks
+          export KEYSTORE=$HOME/sindico_lello.jks
+          cd android
+          fastlane release

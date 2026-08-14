@@ -1,0 +1,4 @@
+enum ReservationPaymentMethod {
+	quota,
+	billet,
+}
