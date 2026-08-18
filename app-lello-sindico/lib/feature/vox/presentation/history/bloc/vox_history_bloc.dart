@@ -22,9 +22,9 @@ class VoxHistoryBloc extends Bloc<VoxHistoryEvent, VoxHistoryState> {
     required this.listDocuments,
     required this.cache,
   }) : super(VoxHistoryState(type: type, status: VoxHistoryStatus.loading)) {
-    on<VoxHistoryStartedEvent>(_onStarted);
-    on<VoxHistoryRefreshedEvent>(_onRefreshed);
-    add(const VoxHistoryStartedEvent());
+    on<VoxHistoryStarted>(_onStarted);
+    on<VoxHistoryRefreshed>(_onRefreshed);
+    add(VoxHistoryStarted());
   }
 
   String get _condominiumId =>
@@ -32,7 +32,7 @@ class VoxHistoryBloc extends Bloc<VoxHistoryEvent, VoxHistoryState> {
 
   /// Carga inicial: serve do cache se ainda válido; senão busca e armazena.
   Future<void> _onStarted(
-      VoxHistoryStartedEvent event, Emitter<VoxHistoryState> emit) async {
+      VoxHistoryStarted event, Emitter<VoxHistoryState> emit) async {
     final condominiumId = _condominiumId;
     final cached = cache.get(type, condominiumId);
     if (cached != null) {
@@ -46,7 +46,7 @@ class VoxHistoryBloc extends Bloc<VoxHistoryEvent, VoxHistoryState> {
   /// Pull-to-refresh / retry: ignora o cache e rebusca (mantém a lista visível,
   /// sem loading full-screen, pois o RefreshIndicator já indica o progresso).
   Future<void> _onRefreshed(
-      VoxHistoryRefreshedEvent event, Emitter<VoxHistoryState> emit) async {
+      VoxHistoryRefreshed event, Emitter<VoxHistoryState> emit) async {
     final condominiumId = _condominiumId;
     cache.invalidate(type, condominiumId);
     await _fetch(emit, condominiumId);

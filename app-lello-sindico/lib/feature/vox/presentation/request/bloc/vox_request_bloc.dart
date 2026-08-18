@@ -53,15 +53,15 @@ class VoxRequestBloc extends Bloc<VoxRequestEvent, VoxRequestState> {
     required this.reasonsCache,
     required this.templatesCache,
   }) : super(VoxRequestState.initial(type)) {
-    on<VoxStartedEvent>(_onStarted);
-    on<VoxStepRequestedEvent>(_onStepRequested);
-    on<VoxFilesAttachedEvent>(_onFilesAttached);
-    on<VoxImageAttachedEvent>(_onImageAttached);
-    on<VoxAttachmentRemovedEvent>(_onAttachmentRemoved);
-    on<VoxFieldChangedEvent>(
+    on<VoxStarted>(_onStarted);
+    on<VoxStepRequested>(_onStepRequested);
+    on<VoxFilesAttached>(_onFilesAttached);
+    on<VoxImageAttached>(_onImageAttached);
+    on<VoxAttachmentRemoved>(_onAttachmentRemoved);
+    on<VoxFieldChanged>(
         (event, emit) => emit(state.copyWith(status: state.status)));
-    on<VoxSubmittedEvent>(_onSubmitted);
-    add(const VoxStartedEvent());
+    on<VoxSubmitted>(_onSubmitted);
+    add(VoxStarted());
   }
 
   String get _condominiumId =>
@@ -72,7 +72,7 @@ class VoxRequestBloc extends Bloc<VoxRequestEvent, VoxRequestState> {
       "";
 
   Future<void> _onStarted(
-      VoxStartedEvent event, Emitter<VoxRequestState> emit) async {
+      VoxStarted event, Emitter<VoxRequestState> emit) async {
     ManagerAnalyticsLogEvents.logEvent(
         event: VoxAnalytics.access(type, mode), referenceValue: _reference);
 
@@ -123,22 +123,22 @@ class VoxRequestBloc extends Bloc<VoxRequestEvent, VoxRequestState> {
   }
 
   void _onStepRequested(
-      VoxStepRequestedEvent event, Emitter<VoxRequestState> emit) {
+      VoxStepRequested event, Emitter<VoxRequestState> emit) {
     emit(state.copyWith(step: event.step));
   }
 
   void _onFilesAttached(
-      VoxFilesAttachedEvent event, Emitter<VoxRequestState> emit) {
+      VoxFilesAttached event, Emitter<VoxRequestState> emit) {
     emit(state.copyWith(files: [...state.files, ...event.files]));
   }
 
   void _onImageAttached(
-      VoxImageAttachedEvent event, Emitter<VoxRequestState> emit) {
+      VoxImageAttached event, Emitter<VoxRequestState> emit) {
     emit(state.copyWith(images: [...state.images, event.image]));
   }
 
   void _onAttachmentRemoved(
-      VoxAttachmentRemovedEvent event, Emitter<VoxRequestState> emit) {
+      VoxAttachmentRemoved event, Emitter<VoxRequestState> emit) {
     switch (event.kind) {
       case AttachmentKind.file:
         final files = [...state.files]..removeAt(event.index);
@@ -152,7 +152,7 @@ class VoxRequestBloc extends Bloc<VoxRequestEvent, VoxRequestState> {
   }
 
   Future<void> _onSubmitted(
-      VoxSubmittedEvent event, Emitter<VoxRequestState> emit) async {
+      VoxSubmitted event, Emitter<VoxRequestState> emit) async {
     emit(state.copyWith(status: VoxRequestStatus.submitting));
 
     final request = state.request;
@@ -221,7 +221,7 @@ class VoxRequestBloc extends Bloc<VoxRequestEvent, VoxRequestState> {
   void goNext() {
     final index = _order.indexOf(state.step);
     if (index < _order.length - 1) {
-      add(VoxStepRequestedEvent(_order[index + 1]));
+      add(VoxStepRequested(_order[index + 1]));
     }
   }
 
@@ -229,7 +229,7 @@ class VoxRequestBloc extends Bloc<VoxRequestEvent, VoxRequestState> {
   bool goBack() {
     final index = _order.indexOf(state.step);
     if (index > 0) {
-      add(VoxStepRequestedEvent(_order[index - 1]));
+      add(VoxStepRequested(_order[index - 1]));
       return false;
     }
     return true;

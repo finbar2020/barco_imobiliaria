@@ -4,7 +4,7 @@ import 'package:lello/feature/condominium/domain/entity/condominium.dart';
 import 'package:lello/feature/gdp/vacation/domain/entity/vacation.dart';
 import 'package:lello/feature/gdp/vacation/domain/use_case/get_vacation/get_vacation.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/details/vacation_bloc.dart';
-import 'package:lello/feature/gdp/vacation/presentation/bloc/details/vacation_bloc.dart';
+import 'package:lello/feature/gdp/vacation/presentation/bloc/details/vacation_bloc_impl.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/details/vacation_state.dart';
 import 'package:lello/feature/session/domain/entity/session.dart';
 import 'package:lello/feature/session/presentation/bloc/session_bloc.dart';
@@ -25,7 +25,7 @@ void main() {
   setUp(() {
     getVacation = GetVacationMock();
     sessionBloc = SessionBlocMock();
-    bloc = VacationBloc(sessionBloc: sessionBloc, getVacation: getVacation);
+    bloc = VacationBlocImpl(sessionBloc: sessionBloc, getVacation: getVacation);
   });
 
   group('beginLoad', () {

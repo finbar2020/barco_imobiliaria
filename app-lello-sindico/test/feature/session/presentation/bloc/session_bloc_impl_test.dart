@@ -8,6 +8,7 @@ import 'package:lello/feature/session/domain/entity/session.dart';
 import 'package:lello/feature/session/domain/use_case/load_session/load_session.dart';
 import 'package:lello/feature/session/domain/use_case/save_session/save_session.dart';
 import 'package:lello/feature/session/presentation/bloc/session_bloc.dart';
+import 'package:lello/feature/session/presentation/bloc/session_bloc_impl.dart';
 import 'package:lello/feature/session/presentation/bloc/session_event.dart';
 import 'package:lello/feature/session/presentation/bloc/session_state.dart';
 import 'package:mockito/mockito.dart';
@@ -28,7 +29,7 @@ void main() {
     loginBloc = AuthenticateBlocMock();
     loadSession = LoadSessionMock();
     saveSession = SaveSessionMock();
-    bloc = SessionBloc(
+    bloc = SessionBlocImpl(
         authenticationBloc: loginBloc,
         loadSession: loadSession,
         saveSesion: saveSession);
@@ -79,7 +80,7 @@ void main() {
           Stream.fromIterable(
               [AuthenticatedState(accessToken: AccessToken())]));
       when(loadSession.call(any)).thenAnswer((_) async => Success(_session));
-      bloc = SessionBloc(
+      bloc = SessionBlocImpl(
           authenticationBloc: loginBloc,
           loadSession: loadSession,
           saveSesion: saveSession);
@@ -95,7 +96,7 @@ void main() {
 
     test('Should not load me when user is not authenticated', () async {
       whenListen(loginBloc, Stream.fromIterable([UnauthenticatedState()]));
-      bloc = SessionBloc(
+      bloc = SessionBlocImpl(
           authenticationBloc: loginBloc,
           loadSession: loadSession,
           saveSesion: saveSession);

@@ -4,7 +4,7 @@ import 'package:lello/feature/condominium/domain/entity/condominium.dart';
 import 'package:lello/feature/gdp/domain/entity/employee.dart';
 import 'package:lello/feature/gdp/domain/use_case/list_employee/list_employee.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_bloc.dart';
-import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_bloc.dart';
+import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_bloc_impl.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_event.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_state.dart';
 import 'package:lello/feature/session/domain/entity/session.dart';
@@ -40,7 +40,7 @@ void main() {
   setUp(() {
     listEmployee = ListEmployeeMock();
     sessionBloc = SessionBlocMock();
-    bloc = VacationEmployeesBloc(
+    bloc = VacationEmployeesBlocImpl(
         sessionBloc: sessionBloc, listEmployee: listEmployee);
   });
 

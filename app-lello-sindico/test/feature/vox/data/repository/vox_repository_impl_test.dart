@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:essentials/essentials.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lello/feature/vox/data/data_source/remote/vox_remote_data_source.dart';
@@ -26,8 +28,15 @@ class _FakeRemote implements VoxRemoteDataSource {
   final List<String> reasonsCalls = [];
   final List<String> templatesCalls = [];
 
+  Object? error;
+
+  void _throwIfError() {
+    if (error != null) throw error!;
+  }
+
   @override
   Future<String> requestWarning(WarningRequestModel model) async {
+    _throwIfError();
     calledRequest = 'warning';
     warningModel = model;
     return '';
@@ -49,6 +58,7 @@ class _FakeRemote implements VoxRemoteDataSource {
 
   @override
   Future<List<DocumentReasonModel>> getWarningReasons(String condominiumId) async {
+    _throwIfError();
     reasonsCalls.add('warning');
     return [];
   }
@@ -61,6 +71,7 @@ class _FakeRemote implements VoxRemoteDataSource {
 
   @override
   Future<List<DocumentTemplateModel>> getWarningTemplates(String condominiumId) async {
+    _throwIfError();
     templatesCalls.add('warning');
     return [];
   }
@@ -85,6 +96,7 @@ class _FakeRemote implements VoxRemoteDataSource {
   @override
   Future<String> createWarning(
       String condominiumId, WarningCreateModel model) async {
+    _throwIfError();
     createCalls.add('warning');
     return '';
   }
@@ -98,6 +110,7 @@ class _FakeRemote implements VoxRemoteDataSource {
 
   @override
   Future<List<WarningModel>> listWarnings(String condominiumId) async {
+    _throwIfError();
     listCalls.add('warning');
     return [];
   }
@@ -116,6 +129,7 @@ class _FakeRemote implements VoxRemoteDataSource {
 
   @override
   Future<WarningModel> getWarningById(String id) async {
+    _throwIfError();
     detailCalls.add('warning');
     return WarningModel();
   }
@@ -133,7 +147,10 @@ class _FakeRemote implements VoxRemoteDataSource {
   }
 
   @override
-  Future<String> uploadImage(List<int> bytes, String fileName) async => 'url';
+  Future<String> uploadImage(List<int> bytes, String fileName) async {
+    _throwIfError();
+    return 'url';
+  }
 }
 
 void main() {
@@ -174,15 +191,17 @@ void main() {
   group('listReasons / listTemplates — dispatch por tipo', () {
     test('reasons: warning chama remote; comunicado não tem motivos', () async {
       await repository.listReasons(DocumentType.warning, 'c1');
+      await repository.listReasons(DocumentType.fine, 'c1');
       final ann = await repository.listReasons(DocumentType.announcement, 'c1');
-      expect(remote.reasonsCalls, ['warning']);
+      expect(remote.reasonsCalls, ['warning', 'fine']);
       expect((ann as Success).get(), isEmpty);
     });
 
     test('templates: fine e comunicado batem na rede', () async {
+      await repository.listTemplates(DocumentType.warning, 'c1');
       await repository.listTemplates(DocumentType.fine, 'c1');
       await repository.listTemplates(DocumentType.announcement, 'c1');
-      expect(remote.templatesCalls, ['fine', 'announcement']);
+      expect(remote.templatesCalls, ['warning', 'fine', 'announcement']);
     });
   });
 
@@ -215,5 +234,63 @@ void main() {
       expect(fine, isA<Rejection<String>>());
       expect((fine as Rejection).get(), isA<InvalidParamFailure>());
     });
+  });
+
+  test('falhas da remote viram Rejection', () async {
+    remote.error = Exception('rede');
+    expect(
+      await repository.requestDocument(
+        DocumentType.warning,
+        DocumentRequest(condominiumId: 'c1'),
+      ),
+      isA<Rejection<String>>(),
+    );
+  });
+
+  test('uploadImage comprime ou envia bytes originais', () async {
+    final result = await repository.uploadImage(
+      Uint8List.fromList(List<int>.filled(12, 1)),
+      'foto.png',
+    );
+    expect(result, isA<Success<String>>());
+    expect((result as Success<String>).get(), 'url');
+
+    final noExt = await repository.uploadImage(
+      Uint8List.fromList(List<int>.filled(12, 1)),
+      'foto',
+    );
+    expect(noExt, isA<Success<String>>());
+  });
+
+  test('falhas da remote em create, listagens, detalhe e upload', () async {
+    remote.error = Exception('rede');
+    final request = DocumentRequest(condominiumId: 'c1');
+    expect(
+      await repository.createDocument(DocumentType.warning, request),
+      isA<Rejection<String>>(),
+    );
+    expect(
+      (await repository.listReasons(DocumentType.warning, 'c1')) is Rejection,
+      isTrue,
+    );
+    expect(
+      (await repository.listTemplates(DocumentType.warning, 'c1')) is Rejection,
+      isTrue,
+    );
+    expect(
+      (await repository.listDocuments(DocumentType.warning, 'c1')) is Rejection,
+      isTrue,
+    );
+    expect(
+      (await repository.getDocument(DocumentType.warning, 'id1')) is Rejection,
+      isTrue,
+    );
+    expect(
+      await repository.uploadImage(
+        Uint8List.fromList(List<int>.filled(4, 1)),
+        'foto.png',
+      ),
+      isA<Rejection<String>>(),
+    );
   });
 }

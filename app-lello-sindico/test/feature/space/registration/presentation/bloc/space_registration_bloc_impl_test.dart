@@ -14,7 +14,7 @@ import 'package:lello/feature/space/registration/domain/use_case/register_space/
 import 'package:lello/feature/space/registration/domain/use_case/update_space/update_space.dart';
 import 'package:lello/feature/space/registration/domain/use_case/upload_space_file/upload_space_file.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_state.dart';
 import 'package:mockito/mockito.dart';
 
@@ -40,7 +40,7 @@ void main() {
     updateSpace = UpdateSpaceMock();
     uploadSpaceFile = UploadSpaceFileMock();
     sessionBloc = SessionBlocMock();
-    bloc = SpaceRegistrationBloc(
+    bloc = SpaceRegistrationBlocImpl(
         sessionBloc: sessionBloc,
         registerSpace: registerSpace,
         uploadSpaceFile: uploadSpaceFile,
@@ -58,13 +58,13 @@ void main() {
 //			whenListen(sessionBloc, Stream.fromIterable([SessionLoadedState(session)]));
 //			when(listAccounts.call(any)).thenAnswer((_) async => Success(accounts));
 //
-//			bloc = SpaceRegistrationBloc(sessionBloc: sessionBloc, registerSpace: registerSpace, uploadSpaceFile: uploadSpaceFile, listAccounts: listAccounts,
+//			bloc = SpaceRegistrationBlocImpl(sessionBloc: sessionBloc, registerSpace: registerSpace, uploadSpaceFile: uploadSpaceFile, listAccounts: listAccounts,
 //					listSpaceType: listSpaceType, listSpaces: listSpace, updateSpace: updateSpace);
 //
 //			expect(bloc, emitsInOrder([
-//				isA<SpaceRegistrationInitialState>(),//default state
+//				isA<SpaceRegistrationIdleState>(),//default state
 //				isA<SpaceRegistrationLoadingState>(),
-//				IsAnd<SpaceRegistrationInitialState>((it) => it.condominium?.id == "123" && it.accounts == accounts)
+//				IsAnd<SpaceRegistrationIdleState>((it) => it.condominium?.id == "123" && it.accounts == accounts)
 //			]));
 //		});
 
@@ -72,7 +72,7 @@ void main() {
       sessionBloc = SessionBlocMock();
       whenListen(sessionBloc, Stream.fromIterable([SessionLoadingState(null)]));
 
-      bloc = SpaceRegistrationBloc(
+      bloc = SpaceRegistrationBlocImpl(
           sessionBloc: sessionBloc,
           registerSpace: registerSpace,
           uploadSpaceFile: uploadSpaceFile,
@@ -84,7 +84,7 @@ void main() {
       expect(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationInitialState>(), //default state
+            isA<SpaceRegistrationIdleState>(), //default state
           ]));
     });
 
@@ -94,11 +94,11 @@ void main() {
 //			whenListen(sessionBloc, Stream.fromIterable([SessionLoadedState(session)]));
 //			when(listAccounts.call(any)).thenAnswer((_) async => Rejection(UnknownFailure(null)));
 //
-//			bloc = SpaceRegistrationBloc(sessionBloc: sessionBloc, registerSpace: registerSpace, uploadSpaceFile: uploadSpaceFile, listAccounts: listAccounts,
+//			bloc = SpaceRegistrationBlocImpl(sessionBloc: sessionBloc, registerSpace: registerSpace, uploadSpaceFile: uploadSpaceFile, listAccounts: listAccounts,
 //					listSpaceType: listSpaceType, listSpaces: listSpace, updateSpace: updateSpace);
 //
 //			expect(bloc, emitsInOrder([
-//				isA<SpaceRegistrationInitialState>(),//default state
+//				isA<SpaceRegistrationIdleState>(),//default state
 //				isA<SpaceRegistrationLoadingState>(),
 //				isA<SpaceRegistrationLoadFailedState>()
 //			]));
@@ -111,11 +111,11 @@ void main() {
       expect(
           bloc,
           emitsInOrder([
-            IsAnd<SpaceRegistrationInitialState>((it) =>
+            IsAnd<SpaceRegistrationIdleState>((it) =>
                 it.step ==
-                SpaceRegistrationBloc.stepOrder.first), //default state
-            IsAnd<SpaceRegistrationInitialState>(
-                (it) => it.step == SpaceRegistrationBloc.stepOrder[1])
+                SpaceRegistrationBlocImpl.stepOrder.first), //default state
+            IsAnd<SpaceRegistrationIdleState>(
+                (it) => it.step == SpaceRegistrationBlocImpl.stepOrder[1])
           ]));
     });
   });
@@ -127,10 +127,10 @@ void main() {
       expect(
           bloc,
           emitsInOrder([
-            IsAnd<SpaceRegistrationInitialState>((it) =>
+            IsAnd<SpaceRegistrationIdleState>((it) =>
                 it.step ==
-                SpaceRegistrationBloc.stepOrder.first), //default state
-            IsAnd<SpaceRegistrationInitialState>((it) => it.step == step)
+                SpaceRegistrationBlocImpl.stepOrder.first), //default state
+            IsAnd<SpaceRegistrationIdleState>((it) => it.step == step)
           ]));
     });
   });
@@ -144,7 +144,7 @@ void main() {
       expect(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationInitialState>() //default state
+            isA<SpaceRegistrationIdleState>() //default state
           ]));
     });
 
@@ -158,7 +158,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationInitialState>(), //default state
+            isA<SpaceRegistrationIdleState>(), //default state
             isA<SpaceRegistrationRegisteringState>(),
           ]));
     });
@@ -173,7 +173,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationInitialState>(), //default state
+            isA<SpaceRegistrationIdleState>(), //default state
             isA<SpaceRegistrationRegisteringState>(),
           ]));
 
@@ -190,7 +190,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationInitialState>(), //default state
+            isA<SpaceRegistrationIdleState>(), //default state
             isA<SpaceRegistrationRegisteringState>(),
             isA<SpaceRegistrationRegisteredState>(),
           ]));
@@ -207,7 +207,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationInitialState>(), //default state
+            isA<SpaceRegistrationIdleState>(), //default state
             isA<SpaceRegistrationRegisteringState>(),
             isA<SpaceRegistrationRegisterFailedState>(),
           ]));

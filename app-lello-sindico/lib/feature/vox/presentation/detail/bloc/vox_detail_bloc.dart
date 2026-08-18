@@ -15,12 +15,12 @@ class VoxDetailBloc extends Bloc<VoxDetailEvent, VoxDetailState> {
     required this.id,
     required this.getDocument,
   }) : super(VoxDetailState(type: type, status: VoxDetailStatus.loading)) {
-    on<VoxDetailStartedEvent>(_onLoad);
-    add(const VoxDetailStartedEvent());
+    on<VoxDetailStarted>(_onLoad);
+    add(VoxDetailStarted());
   }
 
   Future<void> _onLoad(
-      VoxDetailStartedEvent event, Emitter<VoxDetailState> emit) async {
+      VoxDetailStarted event, Emitter<VoxDetailState> emit) async {
     emit(state.copyWith(status: VoxDetailStatus.loading));
 
     final result = await getDocument(GetDocumentParam(type: type, id: id));

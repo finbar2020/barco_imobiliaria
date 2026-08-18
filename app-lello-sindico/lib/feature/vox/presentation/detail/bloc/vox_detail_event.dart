@@ -1,13 +1,4 @@
-import 'package:essentials/essentials.dart';
-
-abstract class VoxDetailEvent extends Equatable {
-  const VoxDetailEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class VoxDetailEvent {}
 
 /// Carrega o detalhe por id (Q7: o detalhe sempre re-busca).
-class VoxDetailStartedEvent extends VoxDetailEvent {
-  const VoxDetailStartedEvent();
-}
+class VoxDetailStarted extends VoxDetailEvent {}

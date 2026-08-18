@@ -14,8 +14,6 @@ import 'package:lello/feature/unit/presentation/bloc/detail/unit_detail_bloc.dar
 import 'package:lello/feature/unit/presentation/bloc/detail/unit_detail_event.dart';
 import 'package:lello/feature/unit/presentation/bloc/detail/unit_detail_state.dart';
 import 'package:lello/feature/unit/presentation/bloc/vehicles/vehicles_bloc.dart';
-import 'package:lello/feature/unit/presentation/bloc/vehicles/vehicles_event.dart';
-import 'package:lello/feature/unit/presentation/bloc/vehicles/vehicles_state.dart';
 import 'package:lello/feature/unit/presentation/controllers/unit_details_controller.dart';
 import 'package:lello/feature/unit/presentation/page/unit_detail_invite_failed_page.dart';
 import 'package:lello/feature/unit/presentation/page/unit_detail_invite_success_page.dart';

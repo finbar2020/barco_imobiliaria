@@ -8,7 +8,7 @@ import 'package:lello/feature/session/presentation/bloc/session_state.dart';
 import 'package:lello/feature/space/registration/domain/entity/space_registration_request.dart';
 import 'package:lello/feature/space/registration/domain/use_case/request_space_registration/request_space_registration.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/lello/space_registration_lello_bloc.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/lello/space_registration_lello_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/lello/space_registration_lello_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/lello/space_registration_lello_state.dart';
 import 'package:mockito/mockito.dart';
 
@@ -23,7 +23,7 @@ void main() {
   setUp(() {
     requestSpaceRegistration = RequestSpaceRegistrationMock();
     sessionBloc = SessionBlocMock();
-    bloc = SpaceRegistrationLelloBloc(
+    bloc = SpaceRegistrationLelloBlocImpl(
         sessionBloc: sessionBloc,
         requestSpaceRegistration: requestSpaceRegistration);
   });
@@ -37,7 +37,7 @@ void main() {
       expect(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationLelloInitialState>() //default state
+            isA<SpaceRegistrationLelloIdleState>() //default state
           ]));
     });
 
@@ -51,7 +51,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationLelloInitialState>(), //default state
+            isA<SpaceRegistrationLelloIdleState>(), //default state
             isA<SpaceRegistrationLelloRegisteringState>(),
           ]));
     });
@@ -67,7 +67,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationLelloInitialState>(), //default state
+            isA<SpaceRegistrationLelloIdleState>(), //default state
             isA<SpaceRegistrationLelloRegisteringState>(),
           ]));
 
@@ -85,7 +85,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationLelloInitialState>(), //default state
+            isA<SpaceRegistrationLelloIdleState>(), //default state
             isA<SpaceRegistrationLelloRegisteringState>(),
             isA<SpaceRegistrationLelloRegisteredState>(),
           ]));
@@ -102,7 +102,7 @@ void main() {
       await expectLater(
           bloc,
           emitsInOrder([
-            isA<SpaceRegistrationLelloInitialState>(), //default state
+            isA<SpaceRegistrationLelloIdleState>(), //default state
             isA<SpaceRegistrationLelloRegisteringState>(),
             isA<SpaceRegistrationLelloRegisterFailedState>(),
           ]));

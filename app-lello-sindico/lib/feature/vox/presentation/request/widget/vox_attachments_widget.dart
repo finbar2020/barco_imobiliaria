@@ -50,12 +50,12 @@ class VoxAttachmentsWidget extends StatelessWidget {
     for (var i = 0; i < state.images.length; i++) {
       final index = i;
       tiles.add(_attachmentTile(theme, basename(state.images[index].path),
-          () => bloc.add(VoxAttachmentRemovedEvent(AttachmentKind.image, index))));
+          () => bloc.add(VoxAttachmentRemoved(AttachmentKind.image, index))));
     }
     for (var i = 0; i < state.files.length; i++) {
       final index = i;
       tiles.add(_attachmentTile(theme, basename(state.files[index].path),
-          () => bloc.add(VoxAttachmentRemovedEvent(AttachmentKind.file, index))));
+          () => bloc.add(VoxAttachmentRemoved(AttachmentKind.file, index))));
     }
     if (tiles.isEmpty) return const SizedBox.shrink();
     return Padding(
@@ -103,13 +103,13 @@ class VoxAttachmentsWidget extends StatelessWidget {
   Future<void> _pickGallery(VoxRequestBloc bloc) async {
     final images = await ImagePicker().pickMultiImage();
     for (final image in images) {
-      if (image.path.isNotEmpty) bloc.add(VoxImageAttachedEvent(File(image.path)));
+      if (image.path.isNotEmpty) bloc.add(VoxImageAttached(File(image.path)));
     }
   }
 
   Future<void> _pickCamera(VoxRequestBloc bloc) async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image != null) bloc.add(VoxImageAttachedEvent(File(image.path)));
+    if (image != null) bloc.add(VoxImageAttached(File(image.path)));
   }
 
   Future<void> _pickFiles(VoxRequestBloc bloc) async {
@@ -123,6 +123,6 @@ class VoxAttachmentsWidget extends StatelessWidget {
         .where((f) => f.path != null)
         .map((f) => File(f.path!))
         .toList();
-    if (files.isNotEmpty) bloc.add(VoxFilesAttachedEvent(files));
+    if (files.isNotEmpty) bloc.add(VoxFilesAttached(files));
   }
 }

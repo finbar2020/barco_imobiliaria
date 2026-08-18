@@ -57,6 +57,14 @@ class ProjectDetailScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 _twoColumn(
                   maxWidth,
+                  _CoverageCard(project: project),
+                  _ToolchainCard(project: project),
+                ),
+                const SizedBox(height: 20),
+                _PackageUpdatesCard(project: project),
+                const SizedBox(height: 20),
+                _twoColumn(
+                  maxWidth,
                   _ArchitectureCard(project: project),
                   _StateManagementCard(project: project),
                 ),
@@ -172,6 +180,28 @@ class _Header extends StatelessWidget {
                             fontSize: 12,
                           ),
                         ),
+                      if (project.toolchain.hasFvm) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF06B6D4).withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: const Color(0xFF06B6D4).withValues(alpha: 0.4),
+                            ),
+                          ),
+                          child: Text(
+                            'Flutter ${project.toolchain.fvmFlutter}',
+                            style: const TextStyle(
+                              color: Color(0xFF06B6D4),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -189,6 +219,63 @@ class _Header extends StatelessWidget {
                     spacing: 6,
                     runSpacing: 6,
                     children: [
+                      if (project.git.hasCurrent &&
+                          !project.git.workBranches.any((b) => b.current))
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryLight.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: AppTheme.primaryLight.withValues(alpha: 0.45),
+                            ),
+                          ),
+                          child: Text(
+                            project.git.currentBranch,
+                            style: const TextStyle(
+                              color: AppTheme.primaryLight,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ),
+                      for (final b in project.git.workBranches)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: b.current
+                                ? AppTheme.accent.withValues(alpha: 0.15)
+                                : AppTheme.surfaceAlt,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: b.present
+                                  ? (b.current
+                                      ? AppTheme.accent.withValues(alpha: 0.5)
+                                      : AppTheme.divider)
+                                  : AppTheme.danger.withValues(alpha: 0.4),
+                            ),
+                          ),
+                          child: Text(
+                            b.present
+                                ? (b.current
+                                    ? '${b.name} · atual'
+                                    : b.name)
+                                : '${b.name} · ausente',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'monospace',
+                              color: b.present
+                                  ? (b.current
+                                      ? AppTheme.accent
+                                      : AppTheme.textPrimary)
+                                  : AppTheme.danger,
+                            ),
+                          ),
+                        ),
                       for (final p in project.platforms)
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -277,13 +364,32 @@ class _KpiGrid extends StatelessWidget {
         icon: Icons.science,
         color: s.testFiles == 0 ? AppTheme.danger : AppTheme.accent,
       ),
+      MetricTile(
+        label: 'Cobertura de testes',
+        value: project.coverage.available
+            ? '${project.coverage.percent.toStringAsFixed(1)}%'
+            : '—',
+        icon: Icons.verified,
+        color: project.coverage.available
+            ? _coverageColor(project.coverage.percent)
+            : AppTheme.textSecondary,
+        suffix: project.coverage.available ? 'linhas' : 'sem lcov',
+      ),
+      MetricTile(
+        label: 'Flutter (FVM)',
+        value: project.toolchain.hasFvm
+            ? project.toolchain.fvmFlutter
+            : '—',
+        icon: Icons.flutter_dash,
+        color: const Color(0xFF06B6D4),
+      ),
     ];
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
         final columns = w >= 1200
-            ? 6
+            ? 4
             : w >= 900
                 ? 3
                 : w >= 600
@@ -309,6 +415,273 @@ class _KpiGrid extends StatelessWidget {
     if (pct >= 80) return AppTheme.accent;
     if (pct >= 50) return AppTheme.warning;
     return AppTheme.danger;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Card: Cobertura de testes
+// ---------------------------------------------------------------------------
+
+class _CoverageCard extends StatelessWidget {
+  const _CoverageCard({required this.project});
+
+  final ProjectAnalysis project;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = project.coverage;
+    final numberFmt = NumberFormat.decimalPattern('pt_BR');
+    return SectionCard(
+      title: 'Cobertura de testes',
+      subtitle: c.available
+          ? 'Relatório lcov.info deste projeto'
+          : 'Nenhum coverage/lcov.info encontrado — rode os testes com --coverage',
+      icon: Icons.verified,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (c.available) ...[
+            LabeledProgress(
+              label: 'Linhas cobertas',
+              value: c.percent,
+              max: 100,
+              color: _color(c.percent),
+              valueLabel: '${c.percent.toStringAsFixed(1)}%',
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '${numberFmt.format(c.hit)} / ${numberFmt.format(c.found)} linhas',
+              style: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 12,
+              ),
+            ),
+          ] else
+            const Text(
+              'Sem relatório de cobertura gerado para este projeto.',
+              style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+            ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 16,
+            runSpacing: 8,
+            children: [
+              _kv('Arquivos de teste', '${c.testFiles}'),
+              _kv('Goldens (PNG/JPG)', '${c.goldenImages}'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _kv(String k, String v) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(k, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+        const SizedBox(height: 2),
+        Text(
+          v,
+          style: const TextStyle(
+            color: AppTheme.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Color _color(num pct) {
+    if (pct >= 80) return AppTheme.accent;
+    if (pct >= 50) return AppTheme.warning;
+    return AppTheme.danger;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Card: Flutter / Dart
+// ---------------------------------------------------------------------------
+
+class _ToolchainCard extends StatelessWidget {
+  const _ToolchainCard({required this.project});
+
+  final ProjectAnalysis project;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = project.toolchain;
+    return SectionCard(
+      title: 'Flutter e Dart',
+      subtitle: 'Versão que o time atualizou (FVM) e constraints do SDK',
+      icon: Icons.flutter_dash,
+      child: Column(
+        children: [
+          _row('Flutter (FVM / .fvmrc)', t.hasFvm ? t.fvmFlutter : 'não pinado'),
+          _row('Dart (pubspec environment)', t.dartSdkConstraint.isEmpty ? '—' : t.dartSdkConstraint),
+          _row('Flutter no pubspec.lock', t.lockFlutterSdk.isEmpty ? '—' : t.lockFlutterSdk),
+          _row('Dart no pubspec.lock', t.lockDartSdk.isEmpty ? '—' : t.lockDartSdk),
+          if (t.flutterSdkConstraint.isNotEmpty)
+            _row('Flutter (pubspec environment)', t.flutterSdkConstraint),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(String k, String v) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              k,
+              style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+            ),
+          ),
+          Text(
+            v,
+            style: const TextStyle(
+              color: AppTheme.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Card: Bibliotecas em uso (versões pinadas)
+// ---------------------------------------------------------------------------
+
+class _PackageUpdatesCard extends StatelessWidget {
+  const _PackageUpdatesCard({required this.project});
+
+  final ProjectAnalysis project;
+
+  @override
+  Widget build(BuildContext context) {
+    final deps = [
+      ...project.dependencies,
+      ...project.devDependencies,
+    ];
+    return SectionCard(
+      title: 'Bibliotecas em uso',
+      subtitle:
+          'Versões pinadas de propósito — atualizar pode quebrar o app',
+      icon: Icons.lock,
+      trailing: Text(
+        '${deps.length} pacotes',
+        style: const TextStyle(
+          color: AppTheme.textSecondary,
+          fontSize: 12,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              _pill('Diretas', '${project.dependencies.length}', AppTheme.primaryLight),
+              _pill(
+                'Path (monorepo)',
+                '${project.pathDependencies.length}',
+                AppTheme.accent,
+              ),
+              _pill('Dev', '${project.devDependencies.length}', AppTheme.textSecondary),
+            ],
+          ),
+          if (deps.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Expanded(flex: 3, child: Text('Pacote', style: _hdr)),
+                  SizedBox(width: 160, child: Text('Versão em uso', style: _hdr)),
+                ],
+              ),
+            ),
+            const Divider(height: 8),
+            for (final d in deps)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        children: [
+                          if (d.isPathDependency)
+                            const Padding(
+                              padding: EdgeInsets.only(right: 6),
+                              child: Icon(Icons.folder_special,
+                                  size: 14, color: AppTheme.primaryLight),
+                            ),
+                          Expanded(
+                            child: Text(
+                              d.name,
+                              style: const TextStyle(
+                                color: AppTheme.textPrimary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 160,
+                      child: Text(
+                        d.version.isEmpty ? '—' : d.version,
+                        style: const TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 12,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _pill(String label, String value, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(color: color, fontSize: 11)),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -1073,9 +1446,8 @@ class _BlocMetricsCard extends StatelessWidget {
     return SectionCard(
       title: 'Higiene e padronização de blocs/cubits',
       subtitle:
-          'Detectado pela varredura de presentation/**/bloc/ — o quanto cada '
-          'feature aderiu ao padrão (Equatable, events/states separados, '
-          'sem print, migração bloc 9 completa, sem abstract+impl)',
+          'Padrão do Síndico higienizado: abstract+impl, events/states em '
+          'arquivos próprios, sufixos State/Event, sem print',
       icon: Icons.rule_folder,
       trailing: Text(
         '${totals.totalUnits} unidades',
@@ -1111,8 +1483,8 @@ class _BlocMetricsCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           const Text(
-            'Higiene = fricção técnica · Padronização = aderência ao padrão '
-            'canônico (sufixos State/Event, InitialState, const; form single-class ok)',
+            'Higiene = estrutura (arquivos separados, sem print) · '
+            'Padronização = sufixos State/Event e Initial. Abstract+impl é o padrão.',
             style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 12),
@@ -1200,7 +1572,7 @@ class _StdKpis extends StatelessWidget {
         label: 'Estado único (form)',
         value: std.singleClassStates.toString(),
         icon: Icons.crop_square,
-        color: okOrWarn(std.singleClassStates),
+        color: AppTheme.textSecondary,
         suffix: 'ok em forms',
       ),
       MetricTile(
@@ -1214,8 +1586,8 @@ class _StdKpis extends StatelessWidget {
         label: 'Base sem const',
         value: std.nonConstBaseStates.toString(),
         icon: Icons.lock_open,
-        color: okOrWarn(std.nonConstBaseStates),
-        suffix: 'usar const',
+        color: AppTheme.textSecondary,
+        suffix: 'não exigido',
       ),
       MetricTile(
         label: 'ErrorState dedicado',
@@ -1287,7 +1659,8 @@ class _BlocKpis extends StatelessWidget {
         label: 'Pares abstract+impl',
         value: totals.absImplPairs.toString(),
         icon: Icons.file_copy,
-        color: totals.absImplPairs == 0 ? AppTheme.accent : AppTheme.warning,
+        color: totals.absImplPairs > 0 ? AppTheme.accent : AppTheme.textSecondary,
+        suffix: totals.absImplPairs > 0 ? 'padrão' : 'quando aplicável',
       ),
       MetricTile(
         label: 'Events inline',
@@ -1311,22 +1684,18 @@ class _BlocKpis extends StatelessWidget {
             totals.filesWithPrint == 0 ? AppTheme.accent : AppTheme.warning,
       ),
       MetricTile(
-        label: 'mapEventToState (bloc 7)',
+        label: 'mapEventToState',
         value: totals.filesWithMapEventToState.toString(),
         icon: Icons.update,
-        color: totals.filesWithMapEventToState == 0
-            ? AppTheme.accent
-            : AppTheme.danger,
-        suffix: totals.filesWithMapEventToState == 0
-            ? 'bloc 9 ok'
-            : 'pendente',
+        color: AppTheme.textSecondary,
+        suffix: 'não entra na nota',
       ),
       MetricTile(
         label: 'Sem Equatable',
         value: totals.filesNoEquatable.toString(),
         icon: Icons.compare_arrows,
         color: AppTheme.textSecondary,
-        suffix: 'heurística',
+        suffix: 'não exigido',
       ),
     ];
 
@@ -1434,9 +1803,7 @@ class _BlocFeaturesTable extends StatelessWidget {
                   width: 80,
                   child: _numCell(
                     f.absImplPairs,
-                    highlight: f.absImplPairs > 0
-                        ? AppTheme.warning
-                        : null,
+                    highlight: f.absImplPairs > 0 ? AppTheme.accent : null,
                   ),
                 ),
                 SizedBox(
@@ -1468,12 +1835,7 @@ class _BlocFeaturesTable extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 80,
-                  child: _numCell(
-                    f.filesWithMapEventToState,
-                    highlight: f.filesWithMapEventToState > 0
-                        ? AppTheme.danger
-                        : null,
-                  ),
+                  child: _numCell(f.filesWithMapEventToState),
                 ),
                 SizedBox(
                   width: 70,

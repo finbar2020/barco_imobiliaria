@@ -68,7 +68,7 @@ class VoxRequestPage extends StatelessWidget {
       case VoxRequestStatus.failure:
         return VoxErrorWidget(
           error: state.error,
-          onRetry: () => bloc.add(const VoxStartedEvent()),
+          onRetry: () => bloc.add(VoxStarted()),
           onBack: () => Navigator.of(context).pop(),
         );
       case VoxRequestStatus.ready:
@@ -115,7 +115,7 @@ class VoxRequestPage extends StatelessWidget {
                         ? null
                         : () {
                             if (state.step == DocumentStep.review) {
-                              bloc.add(const VoxSubmittedEvent());
+                              bloc.add(VoxSubmitted());
                             } else {
                               bloc.goNext();
                             }
@@ -140,7 +140,7 @@ class VoxRequestPage extends StatelessWidget {
 
   Widget _stepBody(
       BuildContext context, VoxRequestState state, VoxRequestBloc bloc) {
-    void onChanged() => bloc.add(const VoxFieldChangedEvent());
+    void onChanged() => bloc.add(VoxFieldChanged());
     switch (state.step) {
       case DocumentStep.data:
         return VoxDataStep(

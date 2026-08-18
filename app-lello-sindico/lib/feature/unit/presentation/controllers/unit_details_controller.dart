@@ -1,6 +1,5 @@
 import 'package:lello/feature/session/presentation/bloc/session_bloc.dart';
 import 'package:lello/feature/unit/presentation/bloc/vehicles/vehicles_bloc.dart';
-import 'package:lello/feature/unit/presentation/bloc/vehicles/vehicles_event.dart';
 import 'package:lello/feature/vehicles/domain/usecases/get_vehicles_usecase.dart';
 
 import '../../domain/entity/unit.dart';

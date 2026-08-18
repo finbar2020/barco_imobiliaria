@@ -7,11 +7,13 @@ class AnalysisReport {
   AnalysisReport({
     required this.generatedAt,
     required this.rootPath,
+    required this.workBranches,
     required this.projects,
   });
 
   final DateTime generatedAt;
   final String rootPath;
+  final List<WorkBranchSummary> workBranches;
   final List<ProjectAnalysis> projects;
 
   factory AnalysisReport.fromJson(Map<String, dynamic> json) {
@@ -19,11 +21,81 @@ class AnalysisReport {
       generatedAt: DateTime.tryParse(json['generatedAt'] as String? ?? '') ??
           DateTime.now(),
       rootPath: json['rootPath'] as String? ?? '',
+      workBranches: (json['workBranches'] as List<dynamic>? ?? [])
+          .map((e) => WorkBranchSummary.fromJson(e as Map<String, dynamic>))
+          .toList(),
       projects: (json['projects'] as List<dynamic>? ?? [])
           .map((e) => ProjectAnalysis.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }
+}
+
+class WorkBranchSummary {
+  WorkBranchSummary({
+    required this.name,
+    required this.purpose,
+    required this.presentIn,
+    required this.currentOn,
+  });
+
+  final String name;
+  final String purpose;
+  final List<String> presentIn;
+  final List<String> currentOn;
+
+  factory WorkBranchSummary.fromJson(Map<String, dynamic> json) =>
+      WorkBranchSummary(
+        name: json['name'] as String? ?? '',
+        purpose: json['purpose'] as String? ?? '',
+        presentIn: (json['presentIn'] as List<dynamic>? ?? [])
+            .map((e) => e.toString())
+            .toList(),
+        currentOn: (json['currentOn'] as List<dynamic>? ?? [])
+            .map((e) => e.toString())
+            .toList(),
+      );
+}
+
+class GitInfo {
+  GitInfo({
+    required this.currentBranch,
+    required this.workBranches,
+  });
+
+  final String currentBranch;
+  final List<WorkBranchPresence> workBranches;
+
+  bool get hasCurrent => currentBranch.isNotEmpty;
+
+  factory GitInfo.fromJson(Map<String, dynamic> json) => GitInfo(
+        currentBranch: json['currentBranch'] as String? ?? '',
+        workBranches: (json['workBranches'] as List<dynamic>? ?? [])
+            .map((e) => WorkBranchPresence.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+}
+
+class WorkBranchPresence {
+  WorkBranchPresence({
+    required this.name,
+    required this.purpose,
+    required this.present,
+    required this.current,
+  });
+
+  final String name;
+  final String purpose;
+  final bool present;
+  final bool current;
+
+  factory WorkBranchPresence.fromJson(Map<String, dynamic> json) =>
+      WorkBranchPresence(
+        name: json['name'] as String? ?? '',
+        purpose: json['purpose'] as String? ?? '',
+        present: json['present'] as bool? ?? false,
+        current: json['current'] as bool? ?? false,
+      );
 }
 
 class ProjectAnalysis {
@@ -35,6 +107,10 @@ class ProjectAnalysis {
     required this.type,
     required this.path,
     required this.platforms,
+    required this.git,
+    required this.toolchain,
+    required this.coverage,
+    required this.packageUpdates,
     required this.dependencies,
     required this.devDependencies,
     required this.dependencyOverrides,
@@ -53,6 +129,10 @@ class ProjectAnalysis {
   final String type; // app | package | library
   final String path;
   final List<String> platforms;
+  final GitInfo git;
+  final ToolchainInfo toolchain;
+  final CoverageInfo coverage;
+  final PackageUpdatesInfo packageUpdates;
   final List<Dependency> dependencies;
   final List<Dependency> devDependencies;
   final List<Dependency> dependencyOverrides;
@@ -71,6 +151,13 @@ class ProjectAnalysis {
       version: json['version'] as String? ?? '',
       type: json['type'] as String? ?? 'library',
       path: json['path'] as String? ?? '',
+      git: GitInfo.fromJson((json['git'] as Map<String, dynamic>?) ?? const {}),
+      toolchain: ToolchainInfo.fromJson(
+          (json['toolchain'] as Map<String, dynamic>?) ?? const {}),
+      coverage: CoverageInfo.fromJson(
+          (json['coverage'] as Map<String, dynamic>?) ?? const {}),
+      packageUpdates: PackageUpdatesInfo.fromJson(
+          (json['packageUpdates'] as Map<String, dynamic>?) ?? const {}),
       platforms: (json['platforms'] as List<dynamic>? ?? [])
           .map((e) => e.toString())
           .toList(),
@@ -134,6 +221,145 @@ class Dependency {
         isPathDependency: json['isPathDependency'] as bool? ?? false,
         isGit: json['isGit'] as bool? ?? false,
         path: json['path'] as String?,
+      );
+}
+
+class ToolchainInfo {
+  ToolchainInfo({
+    required this.fvmFlutter,
+    required this.dartSdkConstraint,
+    required this.flutterSdkConstraint,
+    required this.lockDartSdk,
+    required this.lockFlutterSdk,
+  });
+
+  /// Versão pinada no `.fvmrc` — a que o time atualizou/usa no projeto.
+  final String fvmFlutter;
+  final String dartSdkConstraint;
+  final String flutterSdkConstraint;
+  final String lockDartSdk;
+  final String lockFlutterSdk;
+
+  bool get hasFvm => fvmFlutter.isNotEmpty;
+
+  factory ToolchainInfo.fromJson(Map<String, dynamic> json) => ToolchainInfo(
+        fvmFlutter: json['fvmFlutter'] as String? ?? '',
+        dartSdkConstraint: json['dartSdkConstraint'] as String? ?? '',
+        flutterSdkConstraint: json['flutterSdkConstraint'] as String? ?? '',
+        lockDartSdk: json['lockDartSdk'] as String? ?? '',
+        lockFlutterSdk: json['lockFlutterSdk'] as String? ?? '',
+      );
+}
+
+class CoverageInfo {
+  CoverageInfo({
+    required this.available,
+    required this.hit,
+    required this.found,
+    required this.percent,
+    required this.testFiles,
+    required this.goldenImages,
+  });
+
+  final bool available;
+  final int hit;
+  final int found;
+  final double percent;
+  final int testFiles;
+  final int goldenImages;
+
+  factory CoverageInfo.fromJson(Map<String, dynamic> json) => CoverageInfo(
+        available: json['available'] as bool? ?? false,
+        hit: (json['hit'] as num? ?? 0).toInt(),
+        found: (json['found'] as num? ?? 0).toInt(),
+        percent: (json['percent'] as num? ?? 0).toDouble(),
+        testFiles: (json['testFiles'] as num? ?? 0).toInt(),
+        goldenImages: (json['goldenImages'] as num? ?? 0).toInt(),
+      );
+}
+
+class PackageUpdatesInfo {
+  PackageUpdatesInfo({
+    required this.scanned,
+    required this.skipped,
+    required this.error,
+    required this.direct,
+    required this.dev,
+    required this.upToDate,
+    required this.outdated,
+    required this.discontinued,
+    required this.majorAvailable,
+    required this.upgradable,
+    required this.percentUpToDate,
+    required this.packages,
+  });
+
+  final bool scanned;
+  final bool skipped;
+  final String error;
+  final int direct;
+  final int dev;
+  final int upToDate;
+  final int outdated;
+  final int discontinued;
+  final int majorAvailable;
+  final int upgradable;
+  final double percentUpToDate;
+  final List<OutdatedPackage> packages;
+
+  factory PackageUpdatesInfo.fromJson(Map<String, dynamic> json) =>
+      PackageUpdatesInfo(
+        scanned: json['scanned'] as bool? ?? false,
+        skipped: json['skipped'] as bool? ?? false,
+        error: json['error'] as String? ?? '',
+        direct: (json['direct'] as num? ?? 0).toInt(),
+        dev: (json['dev'] as num? ?? 0).toInt(),
+        upToDate: (json['upToDate'] as num? ?? 0).toInt(),
+        outdated: (json['outdated'] as num? ?? 0).toInt(),
+        discontinued: (json['discontinued'] as num? ?? 0).toInt(),
+        majorAvailable: (json['majorAvailable'] as num? ?? 0).toInt(),
+        upgradable: (json['upgradable'] as num? ?? 0).toInt(),
+        percentUpToDate: (json['percentUpToDate'] as num? ?? 0).toDouble(),
+        packages: (json['packages'] as List<dynamic>? ?? [])
+            .map((e) => OutdatedPackage.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+}
+
+class OutdatedPackage {
+  OutdatedPackage({
+    required this.name,
+    required this.kind,
+    required this.current,
+    required this.upgradable,
+    required this.resolvable,
+    required this.latest,
+    required this.isDiscontinued,
+    required this.isMajor,
+    required this.constraint,
+  });
+
+  final String name;
+  final String kind;
+  final String current;
+  final String upgradable;
+  final String resolvable;
+  final String latest;
+  final bool isDiscontinued;
+  final bool isMajor;
+  final String constraint;
+
+  factory OutdatedPackage.fromJson(Map<String, dynamic> json) =>
+      OutdatedPackage(
+        name: json['name'] as String? ?? '',
+        kind: json['kind'] as String? ?? '',
+        current: json['current'] as String? ?? '',
+        upgradable: json['upgradable'] as String? ?? '',
+        resolvable: json['resolvable'] as String? ?? '',
+        latest: json['latest'] as String? ?? '',
+        isDiscontinued: json['isDiscontinued'] as bool? ?? false,
+        isMajor: json['isMajor'] as bool? ?? false,
+        constraint: json['constraint'] as String? ?? '',
       );
 }
 
@@ -455,12 +681,7 @@ class StandardizationMetrics {
   final int grade;
 
   int get totalDeviations =>
-      stateNoSuffix +
-      eventNoSuffix +
-      idleInitialStates +
-      singleClassStates +
-      nonConstBaseStates +
-      outcomeEnumStates;
+      stateNoSuffix + eventNoSuffix + idleInitialStates + outcomeEnumStates;
 
   bool get isStandardized => totalDeviations == 0;
 
@@ -515,13 +736,9 @@ class FeatureBlocMetrics {
 
   int get totalUnits => blocs + cubits;
 
-  /// Retorna true se a feature está em bom estado geral.
+  /// Feature alinhada ao padrão do Síndico (abstract+impl é o padrão, não defeito).
   bool get isClean =>
-      inlineEvents == 0 &&
-      inlineStates == 0 &&
-      filesWithPrint == 0 &&
-      filesWithMapEventToState == 0 &&
-      absImplPairs == 0;
+      inlineEvents == 0 && inlineStates == 0 && filesWithPrint == 0;
 
   factory FeatureBlocMetrics.fromJson(Map<String, dynamic> json) =>
       FeatureBlocMetrics(

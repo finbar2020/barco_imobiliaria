@@ -52,7 +52,7 @@ class _VoxHistoryPageState extends State<VoxHistoryPage> {
         return VoxErrorWidget(
           error: state.error,
           onRetry: () =>
-              context.read<VoxHistoryBloc>().add(const VoxHistoryStartedEvent()),
+              context.read<VoxHistoryBloc>().add(VoxHistoryStarted()),
           onBack: () => Navigator.of(context).pop(),
         );
       case VoxHistoryStatus.empty:
@@ -71,7 +71,7 @@ class _VoxHistoryPageState extends State<VoxHistoryPage> {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async =>
-                context.read<VoxHistoryBloc>().add(const VoxHistoryRefreshedEvent()),
+                context.read<VoxHistoryBloc>().add(VoxHistoryRefreshed()),
             child: rows.isEmpty
                 ? _empty(context, "Nada encontrado para \"$_query\".")
                 : ListView.builder(

@@ -1,39 +1,27 @@
 import 'package:essentials/essentials.dart';
-import 'package:lello/feature/unit/domain/entity/unit.dart';
 
-abstract class UnitsEvent extends Equatable {
-  const UnitsEvent();
+import '../../../domain/entity/unit.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+abstract class UnitsEvent {}
 
-class UnitsLoadingEvent extends UnitsEvent {
-  const UnitsLoadingEvent();
-}
+class UnitsLoadingEvent extends UnitsEvent {}
 
-class UnitsNewLoadingEvent extends UnitsEvent {
-  const UnitsNewLoadingEvent();
-}
+class UnitsNewLoadingEvent extends UnitsEvent {}
 
 class UnitsFailureEvent extends UnitsEvent {
   final Failure? error;
 
-  const UnitsFailureEvent({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  UnitsFailureEvent({
+    required this.error,
+  });
 }
 
 class UnitsSuccessEvent extends UnitsEvent {
   final List<Unit> units;
 
-  const UnitsSuccessEvent({required this.units});
-
-  @override
-  List<Object?> get props => [units];
+  UnitsSuccessEvent({
+    required this.units,
+  });
 }
 
-class UnitsEmptyEvent extends UnitsEvent {
-  const UnitsEmptyEvent();
-}
+class UnitsEmptyEvent extends UnitsEvent {}

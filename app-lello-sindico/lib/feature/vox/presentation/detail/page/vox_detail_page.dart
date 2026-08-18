@@ -41,7 +41,7 @@ class VoxDetailPage extends StatelessWidget {
         return VoxErrorWidget(
           error: state.error,
           onRetry: () =>
-              context.read<VoxDetailBloc>().add(const VoxDetailStartedEvent()),
+              context.read<VoxDetailBloc>().add(VoxDetailStarted()),
           onBack: () => Navigator.of(context).pop(),
         );
       case VoxDetailStatus.loaded:

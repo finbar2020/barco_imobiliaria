@@ -28,6 +28,27 @@ class OverviewScreen extends StatelessWidget {
     final totalFeatures =
         projects.fold<int>(0, (a, p) => a + p.architecture.featureCount);
 
+    final flutterVersions = <String, int>{};
+    for (final p in projects) {
+      final v = p.toolchain.fvmFlutter.isEmpty
+          ? 'não pinado'
+          : p.toolchain.fvmFlutter;
+      flutterVersions[v] = (flutterVersions[v] ?? 0) + 1;
+    }
+    final primaryFlutter = flutterVersions.entries.isEmpty
+        ? '—'
+        : (flutterVersions.entries.toList()
+              ..sort((a, b) => b.value.compareTo(a.value)))
+            .first
+            .key;
+    final withCoverage = projects.where((p) => p.coverage.available).toList();
+    final avgCoverage = withCoverage.isEmpty
+        ? 0.0
+        : withCoverage.fold<double>(0, (a, p) => a + p.coverage.percent) /
+            withCoverage.length;
+    final totalDirectLibs =
+        projects.fold<int>(0, (a, p) => a + p.dependencies.length);
+
     // Distribuições
     final archDist = _countBy(projects, (p) => p.architecture.pattern);
     final stateDist = _countBy(projects, (p) => p.stateManagement.primary);
@@ -119,7 +140,111 @@ class OverviewScreen extends StatelessWidget {
                       icon: Icons.dashboard_customize,
                       color: const Color(0xFFF59E0B),
                     ),
+                    _KpiData(
+                      label: 'Flutter (FVM)',
+                      value: primaryFlutter,
+                      icon: Icons.flutter_dash,
+                      color: const Color(0xFF06B6D4),
+                    ),
+                    _KpiData(
+                      label: withCoverage.isEmpty
+                          ? 'Cobertura de testes'
+                          : 'Cobertura média (${withCoverage.length} apps)',
+                      value: withCoverage.isEmpty
+                          ? '—'
+                          : '${avgCoverage.toStringAsFixed(1)}%',
+                      icon: Icons.verified,
+                      color: withCoverage.isEmpty
+                          ? AppTheme.textSecondary
+                          : _coverageColor(avgCoverage),
+                    ),
+                    _KpiData(
+                      label: 'Pacotes diretos',
+                      value: totalDirectLibs.toString(),
+                      icon: Icons.inventory_2,
+                      color: AppTheme.primaryLight,
+                    ),
                   ],
+                ),
+                const SizedBox(height: 20),
+                SectionCard(
+                  title: 'Branches deste trabalho',
+                  subtitle:
+                      'As três branches que criamos nos apps Lello — testes, '
+                      'upgrade de libs (versões pinadas) e higiene de BLoC.',
+                  icon: Icons.call_split,
+                  child: _WorkBranchesOverview(report: report),
+                ),
+                const SizedBox(height: 20),
+                SectionCard(
+                  title: 'Cobertura de testes por projeto',
+                  subtitle:
+                      'Percentual de linhas cobertas (lcov.info). Projetos sem relatório aparecem como sem dados.',
+                  icon: Icons.verified,
+                  child: _CoverageOverview(projects: projects),
+                ),
+                const SizedBox(height: 20),
+                _twoColumn(
+                  maxWidth,
+                  SectionCard(
+                    title: 'Versão Flutter (FVM)',
+                    subtitle:
+                        'Versão pinada no .fvmrc — a que o time atualizou em cada app',
+                    icon: Icons.flutter_dash,
+                    child: flutterVersions.isEmpty
+                        ? const Text(
+                            'Nenhum .fvmrc encontrado.',
+                            style: TextStyle(color: AppTheme.textSecondary),
+                          )
+                        : Column(
+                            children: [
+                              DistributionPie(
+                                data: flutterVersions
+                                    .map((k, v) => MapEntry(k, v)),
+                              ),
+                              const SizedBox(height: 12),
+                              for (final p in projects)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          p.folderName,
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: AppTheme.textPrimary,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text(
+                                        p.toolchain.hasFvm
+                                            ? p.toolchain.fvmFlutter
+                                            : 'não pinado',
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppTheme.primaryLight,
+                                          fontFeatures: [
+                                            FontFeature.tabularFigures()
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                  ),
+                  SectionCard(
+                    title: 'Bibliotecas em uso',
+                    subtitle:
+                        'Versões pinadas de propósito — atualizar pode quebrar o app',
+                    icon: Icons.lock,
+                    child: _PinnedLibsOverview(projects: projects),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 // Linha: arquitetura + state management (2 colunas em telas largas)
@@ -164,9 +289,8 @@ class OverviewScreen extends StatelessWidget {
                 SectionCard(
                   title: 'Higiene de blocs/cubits por projeto',
                   subtitle:
-                      'Média ponderada da nota de higiene por feature. 100 = sem '
-                      'fricção técnica (Equatable, events/states separados, sem '
-                      'print, bloc 9, sem abstract+impl).',
+                      'Padrão do Síndico: abstract+impl, events/states em arquivos '
+                      'próprios, sem print. 100 = alinhado à higienização.',
                   icon: Icons.cleaning_services_outlined,
                   child: _BlocHygieneOverview(
                     projects: projects,
@@ -177,9 +301,8 @@ class OverviewScreen extends StatelessWidget {
                 SectionCard(
                   title: 'Padronização canônica por projeto',
                   subtitle:
-                      'Média ponderada da nota de padronização (sufixos State/Event, '
-                      'InitialState, const, sem Idle/Outcome). Espelha o padrão de '
-                      'PADROES_DE_DESENVOLVIMENTO.md.',
+                      'Sufixos State/Event e Initial (não Idle). Equatable/const '
+                      'não entram — não fazem parte do padrão higienizado.',
                   icon: Icons.rule_folder,
                   child: _BlocHygieneOverview(
                     projects: projects,
@@ -250,7 +373,7 @@ class OverviewScreen extends StatelessWidget {
                   itemCount: projects.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
-                    mainAxisExtent: 240,
+                    mainAxisExtent: 268,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                   ),
@@ -340,11 +463,13 @@ class _KpiRow extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final columns = width >= 1200
+        final columns = width >= 1400
             ? 4
-            : width >= 720
-                ? 2
-                : 1;
+            : width >= 1000
+                ? 3
+                : width >= 720
+                    ? 2
+                    : 1;
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -572,4 +697,254 @@ class _BlocHygieneEntry {
   _BlocHygieneEntry({required this.project, required this.average});
   final ProjectAnalysis project;
   final int average;
+}
+
+// ---------------------------------------------------------------------------
+// Branches deste trabalho
+// ---------------------------------------------------------------------------
+
+class _WorkBranchesOverview extends StatelessWidget {
+  const _WorkBranchesOverview({required this.report});
+
+  final AnalysisReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    if (report.workBranches.isEmpty) {
+      return const Text(
+        'Nenhuma branch de trabalho registrada no relatório.',
+        style: TextStyle(color: AppTheme.textSecondary),
+      );
+    }
+    return Column(
+      children: [
+        for (var i = 0; i < report.workBranches.length; i++) ...[
+          if (i > 0) const SizedBox(height: 16),
+          _WorkBranchCard(branch: report.workBranches[i], index: i),
+        ],
+      ],
+    );
+  }
+}
+
+class _WorkBranchCard extends StatelessWidget {
+  const _WorkBranchCard({required this.branch, required this.index});
+
+  final WorkBranchSummary branch;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = AppTheme.colorFor(index);
+    final currentLabel = branch.currentOn.isEmpty
+        ? 'nenhum app nesta branch agora'
+        : 'ativa em: ${branch.currentOn.join(', ')}';
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.call_split, size: 16, color: color),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  branch.name,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
+              Text(
+                '${branch.presentIn.length} apps',
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            branch.purpose,
+            style: const TextStyle(
+              color: AppTheme.textPrimary,
+              fontSize: 13,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            currentLabel,
+            style: const TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 12,
+            ),
+          ),
+          if (branch.presentIn.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final app in branch.presentIn)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceAlt,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: branch.currentOn.contains(app)
+                            ? color
+                            : AppTheme.divider,
+                      ),
+                    ),
+                    child: Text(
+                      app.replaceFirst('app-lello-', ''),
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: branch.currentOn.contains(app)
+                            ? FontWeight.w700
+                            : FontWeight.w400,
+                        color: branch.currentOn.contains(app)
+                            ? color
+                            : AppTheme.textPrimary,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Cobertura de testes por projeto
+// ---------------------------------------------------------------------------
+
+class _CoverageOverview extends StatelessWidget {
+  const _CoverageOverview({required this.projects});
+
+  final List<ProjectAnalysis> projects;
+
+  @override
+  Widget build(BuildContext context) {
+    final numberFmt = NumberFormat.decimalPattern('pt_BR');
+    final sorted = List<ProjectAnalysis>.from(projects)
+      ..sort((a, b) {
+        if (a.coverage.available != b.coverage.available) {
+          return a.coverage.available ? -1 : 1;
+        }
+        return b.coverage.percent.compareTo(a.coverage.percent);
+      });
+
+    return Column(
+      children: [
+        for (final p in sorted)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: p.coverage.available
+                ? LabeledProgress(
+                    label:
+                        '${p.folderName}  •  ${numberFmt.format(p.coverage.hit)}/${numberFmt.format(p.coverage.found)} linhas'
+                        '${p.coverage.goldenImages > 0 ? '  •  ${p.coverage.goldenImages} goldens' : ''}'
+                        '${p.coverage.testFiles > 0 ? '  •  ${p.coverage.testFiles} testes' : ''}',
+                    value: p.coverage.percent,
+                    max: 100,
+                    color: _color(p.coverage.percent),
+                    valueLabel: '${p.coverage.percent.toStringAsFixed(1)}%',
+                  )
+                : Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${p.folderName}  •  ${p.coverage.testFiles} arquivos de teste'
+                          '${p.coverage.goldenImages > 0 ? '  •  ${p.coverage.goldenImages} goldens' : ''}',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppTheme.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Text(
+                        'sem lcov',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+      ],
+    );
+  }
+
+  Color _color(num pct) {
+    if (pct >= 80) return AppTheme.accent;
+    if (pct >= 50) return AppTheme.warning;
+    return AppTheme.danger;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bibliotecas pinadas por projeto
+// ---------------------------------------------------------------------------
+
+class _PinnedLibsOverview extends StatelessWidget {
+  const _PinnedLibsOverview({required this.projects});
+
+  final List<ProjectAnalysis> projects;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (final p in projects)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    p.folderName,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppTheme.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Text(
+                  '${p.dependencies.length} diretas'
+                  '${p.pathDependencies.isNotEmpty ? '  •  ${p.pathDependencies.length} path' : ''}'
+                  '${p.devDependencies.isNotEmpty ? '  •  ${p.devDependencies.length} dev' : ''}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
 }

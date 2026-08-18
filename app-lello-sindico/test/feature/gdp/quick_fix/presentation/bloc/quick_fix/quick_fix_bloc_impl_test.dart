@@ -4,7 +4,7 @@ import 'package:lello/feature/condominium/domain/entity/condominium.dart';
 import 'package:lello/feature/gdp/domain/entity/employee.dart';
 import 'package:lello/feature/gdp/domain/use_case/list_employee/list_employee.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_bloc.dart';
-import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_bloc.dart';
+import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_bloc_impl.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_event.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_state.dart';
 import 'package:lello/feature/session/domain/entity/session.dart';
@@ -39,7 +39,7 @@ void main() {
     sessionBloc = SessionBlocMock();
     listEmployee = ListEmployeeMock();
     bloc =
-        QuickFixBloc(sessionBloc: sessionBloc, listEmployee: listEmployee);
+        QuickFixBlocImpl(sessionBloc: sessionBloc, listEmployee: listEmployee);
   });
 
   group('beginLoad', () {

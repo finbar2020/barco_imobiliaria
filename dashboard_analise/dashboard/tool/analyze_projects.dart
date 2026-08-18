@@ -23,9 +23,11 @@ Future<void> main(List<String> args) async {
   // Platform.script -> .../dashboard/tool/analyze_projects.dart
   final scriptFile = File.fromUri(Platform.script);
   final dashboardDir = scriptFile.parent.parent; // .../dashboard
-  // Raiz padrão: .../app-lello-morar (dois níveis acima de dashboard)
+  // Raiz padrão: pasta que contém os apps (dois níveis acima de dashboard)
   final defaultParent = dashboardDir.parent.parent.absolute.path;
-  final rootPath = args.isNotEmpty ? args.first : defaultParent;
+  final skipOutdated = args.contains('--skip-outdated');
+  final positional = args.where((a) => !a.startsWith('--')).toList();
+  final rootPath = positional.isNotEmpty ? positional.first : defaultParent;
   final rootDir = Directory(rootPath);
   if (!rootDir.existsSync()) {
     stderr.writeln('Pasta raiz não encontrada: $rootPath');
@@ -33,8 +35,14 @@ Future<void> main(List<String> args) async {
   }
 
   print('Analisando projetos em: ${rootDir.path}');
+  if (skipOutdated) {
+    print('  (pulando dart pub outdated — use sem --skip-outdated para libs)');
+  }
   final scanner = ProjectScanner(rootDir);
-  final report = await scanner.run(excludeFolderName: 'dashboard_analise');
+  final report = await scanner.run(
+    excludeFolderName: 'dashboard_analise',
+    skipOutdated: skipOutdated,
+  );
 
   final outFile = File(_join([dashboardDir.path, 'assets', 'analysis.json']));
   outFile.parent.createSync(recursive: true);
@@ -47,6 +55,25 @@ Future<void> main(List<String> args) async {
 
 String _join(List<String> parts) => parts.join(Platform.pathSeparator);
 
+/// Branches deste trabalho (testes, upgrade de libs, higiene de BLoC).
+const _workBranchCatalog = [
+  {
+    'name': 'feature/all_tests',
+    'purpose':
+        'Testes: unitário, integração, interação, golden e cobertura.',
+  },
+  {
+    'name': 'feature/libs-upgrade-wave0',
+    'purpose':
+        'Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.',
+  },
+  {
+    'name': 'feature/bloc-9-migration',
+    'purpose':
+        'Higienização e padronização dos BLoCs (abstract+impl, events/states separados).',
+  },
+];
+
 // ============================================================================
 // Scanner
 // ============================================================================
@@ -56,7 +83,10 @@ class ProjectScanner {
 
   final Directory rootDir;
 
-  Future<Map<String, dynamic>> run({String? excludeFolderName}) async {
+  Future<Map<String, dynamic>> run({
+    String? excludeFolderName,
+    bool skipOutdated = false,
+  }) async {
     final projects = <Map<String, dynamic>>[];
     for (final entity in rootDir.listSync()) {
       if (entity is! Directory) continue;
@@ -67,7 +97,10 @@ class ProjectScanner {
       if (!pubspec.existsSync()) continue;
       print('  -> $name');
       try {
-        final analysis = _analyzeProject(entity);
+        final analysis = await _analyzeProject(
+          entity,
+          skipOutdated: skipOutdated,
+        );
         projects.add(analysis);
       } catch (e, s) {
         stderr.writeln('Falha ao analisar $name: $e\n$s');
@@ -80,11 +113,49 @@ class ProjectScanner {
     return {
       'generatedAt': DateTime.now().toIso8601String(),
       'rootPath': rootDir.path,
+      'workBranches': _summarizeWorkBranches(projects),
       'projects': projects,
     };
   }
 
-  Map<String, dynamic> _analyzeProject(Directory dir) {
+  List<Map<String, dynamic>> _summarizeWorkBranches(
+    List<Map<String, dynamic>> projects,
+  ) {
+    return [
+      for (final catalog in _workBranchCatalog)
+        {
+          'name': catalog['name'],
+          'purpose': catalog['purpose'],
+          'presentIn': [
+            for (final p in projects)
+              if (_projectHasWorkBranch(p, catalog['name']!)) p['folderName'],
+          ],
+          'currentOn': [
+            for (final p in projects)
+              if ((p['git'] as Map?)?['currentBranch'] == catalog['name'])
+                p['folderName'],
+          ],
+        },
+    ];
+  }
+
+  bool _projectHasWorkBranch(Map<String, dynamic> project, String name) {
+    final git = project['git'];
+    if (git is! Map) return false;
+    final list = git['workBranches'];
+    if (list is! List) return false;
+    for (final item in list) {
+      if (item is Map && item['name'] == name && item['present'] == true) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<Map<String, dynamic>> _analyzeProject(
+    Directory dir, {
+    bool skipOutdated = false,
+  }) async {
     final folderName = _basename(dir.path);
     final pubspecFile = File(_join([dir.path, 'pubspec.yaml']));
     final pubspec = _parseYamlFile(pubspecFile);
@@ -131,6 +202,12 @@ class ProjectScanner {
             : 'library';
 
     final platforms = _detectPlatforms(dir);
+    final toolchain = _analyzeToolchain(dir, pubspec);
+    final coverage = _analyzeCoverage(dir, testFiles.length);
+    final git = _analyzeGit(dir);
+    final packageUpdates = skipOutdated
+        ? _emptyPackageUpdates(skipped: true)
+        : await _analyzePackageUpdates(dir, deps, devDeps);
 
     return {
       'name': projectName,
@@ -140,6 +217,10 @@ class ProjectScanner {
       'type': projectType,
       'path': dir.path,
       'platforms': platforms,
+      'git': git,
+      'toolchain': toolchain,
+      'coverage': coverage,
+      'packageUpdates': packageUpdates,
       'dependencies': deps.map((d) => d.toJson()).toList(),
       'devDependencies': devDeps.map((d) => d.toJson()).toList(),
       'dependencyOverrides': overrides.map((d) => d.toJson()).toList(),
@@ -237,6 +318,14 @@ class ProjectScanner {
     return list.fold<int>(0, (acc, m) => acc + (m[key] as int));
   }
 
+  /// Penalidade proporcional: `count/total` de no máximo [maxPenalty] pontos.
+  /// Evita que um app grande (muitos blocs) zere a nota por desvios pontuais.
+  int _ratioPenalty(int count, int total, int maxPenalty) {
+    if (total <= 0 || count <= 0 || maxPenalty <= 0) return 0;
+    final p = (count / total * maxPenalty).round();
+    return p > maxPenalty ? maxPenalty : p;
+  }
+
   /// Média ponderada da nota de higiene por unidades (blocs+cubits).
   int _weightedHygieneGrade(List<Map<String, dynamic>> list) {
     var weightedGrade = 0;
@@ -308,10 +397,10 @@ class ProjectScanner {
     final printRegex = RegExp(r'(^|\s)print\s*\(');
     final mapEventRegex = RegExp('mapEventToState');
 
-    // Padronização (padrão canônico usado como referência:
-    // maintenance_management): base abstrata `XxxState/Event extends Equatable`,
-    // subclasses com sufixo State/Event, InitialState (não Idle), ErrorState
-    // dedicado, construtor const e sem "estado único" estilo form-bloc.
+    // Padronização: o Síndico higienizado é a referência (abstract+impl,
+    // event/state em arquivos próprios, sufixos State/Event). Equatable,
+    // const e mapEventToState NÃO entram na nota — fazem parte do padrão
+    // atual do app e atualizar quebraria o restante.
     final subclassRegex = RegExp(r'class\s+(\w+)\s+extends\s+(\w+)');
     final abstractStateRegex = RegExp(r'abstract\s+class\s+(\w+State)\b');
     final abstractEventRegex = RegExp(r'abstract\s+class\s+(\w+Event)\b');
@@ -425,34 +514,26 @@ class ProjectScanner {
       }
     }
 
-    // Nota de padronização (0-100) baseada em problemas encontrados por bloc.
-    // Menos problemas = nota maior.
+    // Higiene (0-100): o padrão do Síndico é abstract+impl, events/states
+    // em arquivos próprios e sem print. Penalidades em *proporção* para um
+    // app grande (100+ blocs) não zerar a nota por poucos desvios.
+    // abstract+impl, Equatable e mapEventToState não entram na nota.
     final totalBlocs = blocs + cubits;
     var grade = 100;
     if (totalBlocs > 0) {
-      grade -= (filesWithMap * 25); // migração bloc 9 pendente
-      grade -= (inlineEv * 6 + inlineSt * 6);
-      grade -= (filesWithPrint * 4);
-      // absImplPairs contam como fricção estrutural
-      grade -= (absImplPairs * 3);
-      // filesNoEquatable é ruidoso (herança pode mascarar) mas ainda pesa
-      grade -= (filesNoEq * 1);
+      grade -= _ratioPenalty(inlineEv + inlineSt, totalBlocs, 40);
+      grade -= _ratioPenalty(filesWithPrint, relevant.length, 20);
     }
     if (grade < 0) grade = 0;
 
-    // Nota de PADRONIZAÇÃO (0-100), separada da higiene técnica acima.
-    // Mede a aderência ao padrão canônico (base abstrata + subclasses com
-    // sufixo State/Event, InitialState, ErrorState dedicado, const, sem
-    // estado único de form-bloc). Pesos escolhidos para serem legíveis:
-    // desvios mais estruturais penalizam mais.
+    // Padronização (0-100): sufixos State/Event e Initial (não Idle).
+    // const / Equatable / estado único de form não são exigidos no padrão.
     var stdGrade = 100;
     if (stateClasses + eventClasses > 0) {
-      stdGrade -= stateNoSuffix * 4;
-      stdGrade -= eventNoSuffix * 1;
-      stdGrade -= idleInitialStates * 4;
-      stdGrade -= singleClassStates * 5;
-      stdGrade -= nonConstBaseStates * 3;
-      stdGrade -= outcomeEnumStates * 5;
+      stdGrade -= _ratioPenalty(stateNoSuffix, stateClasses, 25);
+      stdGrade -= _ratioPenalty(eventNoSuffix, eventClasses, 20);
+      stdGrade -= _ratioPenalty(idleInitialStates, stateClasses, 15);
+      stdGrade -= _ratioPenalty(outcomeEnumStates, stateClasses, 10);
     }
     if (stdGrade < 0) stdGrade = 0;
 
@@ -986,6 +1067,335 @@ class ProjectScanner {
       v.sort();
     }
     return categories;
+  }
+
+  // -----------------------------------------------------------------
+  // Flutter / Dart toolchain (FVM + constraints do pubspec/lock)
+  // -----------------------------------------------------------------
+  Map<String, dynamic> _analyzeToolchain(Directory dir, dynamic pubspec) {
+    String? fvmFlutter;
+    final fvmrc = File(_join([dir.path, '.fvmrc']));
+    final fvmConfig = File(_join([dir.path, '.fvm', 'fvm_config.json']));
+    for (final file in [fvmrc, fvmConfig]) {
+      if (!file.existsSync()) continue;
+      try {
+        final json = jsonDecode(file.readAsStringSync());
+        if (json is Map && json['flutter'] != null) {
+          fvmFlutter = json['flutter'].toString();
+          break;
+        }
+      } catch (_) {}
+    }
+
+    String dartSdkConstraint = '';
+    String flutterSdkConstraint = '';
+    final env = pubspec is Map ? pubspec['environment'] : null;
+    if (env is Map) {
+      dartSdkConstraint = (env['sdk'] ?? '').toString();
+      flutterSdkConstraint = (env['flutter'] ?? '').toString();
+    }
+
+    String lockDartSdk = '';
+    String lockFlutterSdk = '';
+    final lockFile = File(_join([dir.path, 'pubspec.lock']));
+    if (lockFile.existsSync()) {
+      try {
+        final yaml = loadYaml(lockFile.readAsStringSync());
+        if (yaml is Map && yaml['sdks'] is Map) {
+          final sdks = yaml['sdks'] as Map;
+          lockDartSdk = (sdks['dart'] ?? '').toString();
+          lockFlutterSdk = (sdks['flutter'] ?? '').toString();
+        }
+      } catch (_) {}
+    }
+
+    return {
+      'fvmFlutter': fvmFlutter ?? '',
+      'dartSdkConstraint': dartSdkConstraint,
+      'flutterSdkConstraint': flutterSdkConstraint,
+      'lockDartSdk': lockDartSdk,
+      'lockFlutterSdk': lockFlutterSdk,
+    };
+  }
+
+  // -----------------------------------------------------------------
+  // Cobertura de testes (lcov) + goldens
+  // -----------------------------------------------------------------
+  Map<String, dynamic> _analyzeCoverage(Directory dir, int testFiles) {
+    var hit = 0;
+    var found = 0;
+    var available = false;
+    final lcov = File(_join([dir.path, 'coverage', 'lcov.info']));
+    if (lcov.existsSync()) {
+      try {
+        for (final line in lcov.readAsLinesSync()) {
+          if (line.startsWith('LH:')) {
+            hit += int.tryParse(line.substring(3).trim()) ?? 0;
+          } else if (line.startsWith('LF:')) {
+            found += int.tryParse(line.substring(3).trim()) ?? 0;
+          }
+        }
+        available = found > 0;
+      } catch (_) {}
+    }
+
+    var goldenImages = 0;
+    final testDir = Directory(_join([dir.path, 'test']));
+    if (testDir.existsSync()) {
+      try {
+        for (final entity in testDir.listSync(recursive: true, followLinks: false)) {
+          if (entity is! File) continue;
+          final norm = entity.path.replaceAll('\\', '/').toLowerCase();
+          if (norm.contains('/goldens/') &&
+              (norm.endsWith('.png') ||
+                  norm.endsWith('.jpg') ||
+                  norm.endsWith('.jpeg'))) {
+            goldenImages++;
+          }
+        }
+      } catch (_) {}
+    }
+
+    final percent = available ? ((hit * 1000) / found).round() / 10.0 : 0.0;
+    return {
+      'available': available,
+      'hit': hit,
+      'found': found,
+      'percent': percent,
+      'testFiles': testFiles,
+      'goldenImages': goldenImages,
+    };
+  }
+
+  // -----------------------------------------------------------------
+  // Atualização de bibliotecas (dart pub outdated --json)
+  // -----------------------------------------------------------------
+  Map<String, dynamic> _emptyPackageUpdates({
+    bool skipped = false,
+    String error = '',
+  }) =>
+      {
+        'scanned': false,
+        'skipped': skipped,
+        'error': error,
+        'direct': 0,
+        'dev': 0,
+        'upToDate': 0,
+        'outdated': 0,
+        'discontinued': 0,
+        'majorAvailable': 0,
+        'upgradable': 0,
+        'percentUpToDate': 0,
+        'packages': const [],
+      };
+
+  Future<Map<String, dynamic>> _analyzePackageUpdates(
+    Directory dir,
+    List<_Dep> deps,
+    List<_Dep> devDeps,
+  ) async {
+    final constraints = <String, String>{
+      for (final d in [...deps, ...devDeps]) d.name: d.version,
+    };
+    try {
+      print('     pub outdated...');
+      final result = await Process.run(
+        'dart',
+        ['pub', 'outdated', '--json'],
+        workingDirectory: dir.path,
+        runInShell: true,
+      ).timeout(const Duration(seconds: 120));
+      final stdout = (result.stdout ?? '').toString().trim();
+      if (stdout.isEmpty) {
+        return _emptyPackageUpdates(
+          error: (result.stderr ?? 'saída vazia').toString().trim(),
+        );
+      }
+      final jsonStart = stdout.indexOf('{');
+      final payload = jsonStart >= 0 ? stdout.substring(jsonStart) : stdout;
+      final decoded = jsonDecode(payload);
+      if (decoded is! Map) {
+        return _emptyPackageUpdates(error: 'JSON inesperado do pub outdated');
+      }
+      final raw = decoded['packages'];
+      if (raw is! List) {
+        return _emptyPackageUpdates(error: 'lista de pacotes ausente');
+      }
+
+      var direct = 0;
+      var dev = 0;
+      var upToDate = 0;
+      var outdated = 0;
+      var discontinued = 0;
+      var majorAvailable = 0;
+      var upgradable = 0;
+      final packages = <Map<String, dynamic>>[];
+
+      for (final item in raw) {
+        if (item is! Map) continue;
+        final name = (item['package'] ?? '').toString();
+        if (name.isEmpty) continue;
+        final kind = (item['kind'] ?? '').toString();
+        final isDiscontinued = item['isDiscontinued'] == true;
+        final current = _outdatedVersion(item['current']);
+        final upgradableVer = _outdatedVersion(item['upgradable']);
+        final resolvable = _outdatedVersion(item['resolvable']);
+        final latest = _outdatedVersion(item['latest']);
+        if (kind == 'direct') direct++;
+        if (kind == 'dev') dev++;
+        if (isDiscontinued) discontinued++;
+
+        final isOutdated = current.isNotEmpty &&
+            latest.isNotEmpty &&
+            current != latest;
+        if (kind == 'direct' || kind == 'dev') {
+          if (isOutdated) {
+            outdated++;
+          } else if (current.isNotEmpty) {
+            upToDate++;
+          }
+          if (current.isNotEmpty &&
+              upgradableVer.isNotEmpty &&
+              current != upgradableVer) {
+            upgradable++;
+          }
+          if (_isMajorBump(current, latest)) majorAvailable++;
+        }
+
+        if ((kind == 'direct' || kind == 'dev') &&
+            (isOutdated || isDiscontinued)) {
+          packages.add({
+            'name': name,
+            'kind': kind,
+            'current': current,
+            'upgradable': upgradableVer,
+            'resolvable': resolvable,
+            'latest': latest,
+            'isDiscontinued': isDiscontinued,
+            'isMajor': _isMajorBump(current, latest),
+            'constraint': constraints[name] ?? '',
+          });
+        }
+      }
+
+      packages.sort((a, b) {
+        final majorCmp =
+            ((b['isMajor'] as bool) ? 1 : 0) - ((a['isMajor'] as bool) ? 1 : 0);
+        if (majorCmp != 0) return majorCmp;
+        return (a['name'] as String).compareTo(b['name'] as String);
+      });
+
+      final tracked = upToDate + outdated;
+      final percentUpToDate =
+          tracked == 0 ? 100.0 : ((upToDate * 1000) / tracked).round() / 10.0;
+
+      return {
+        'scanned': true,
+        'skipped': false,
+        'error': '',
+        'direct': direct,
+        'dev': dev,
+        'upToDate': upToDate,
+        'outdated': outdated,
+        'discontinued': discontinued,
+        'majorAvailable': majorAvailable,
+        'upgradable': upgradable,
+        'percentUpToDate': percentUpToDate,
+        'packages': packages,
+      };
+    } catch (e) {
+      stderr.writeln('     falha pub outdated em ${_basename(dir.path)}: $e');
+      return _emptyPackageUpdates(error: e.toString());
+    }
+  }
+
+  String _outdatedVersion(dynamic node) {
+    if (node is Map) return (node['version'] ?? '').toString();
+    if (node == null) return '';
+    return node.toString();
+  }
+
+  bool _isMajorBump(String current, String latest) {
+    int? major(String v) {
+      final cleaned = v.replaceFirst(RegExp(r'^[^0-9]*'), '');
+      if (cleaned.isEmpty) return null;
+      return int.tryParse(cleaned.split('.').first);
+    }
+
+    final a = major(current);
+    final b = major(latest);
+    return a != null && b != null && b > a;
+  }
+
+  // -----------------------------------------------------------------
+  // Git (branch atual + branches deste trabalho)
+  // -----------------------------------------------------------------
+  Map<String, dynamic> _analyzeGit(Directory dir) {
+    final gitDir = Directory(_join([dir.path, '.git']));
+    final gitFile = File(_join([dir.path, '.git']));
+    if (!gitDir.existsSync() && !gitFile.existsSync()) {
+      return {
+        'currentBranch': '',
+        'workBranches': [
+          for (final b in _workBranchCatalog)
+            {
+              'name': b['name'],
+              'purpose': b['purpose'],
+              'present': false,
+              'current': false,
+            },
+        ],
+      };
+    }
+    final current = _gitOut(dir, ['branch', '--show-current']);
+    return {
+      'currentBranch': current,
+      'workBranches': [
+        for (final b in _workBranchCatalog)
+          {
+            'name': b['name'],
+            'purpose': b['purpose'],
+            'present': _gitOk(dir, [
+              'show-ref',
+              '--verify',
+              '--quiet',
+              'refs/heads/${b['name']}',
+            ]),
+            'current': current == b['name'],
+          },
+      ],
+    };
+  }
+
+  String _gitOut(Directory dir, List<String> args) {
+    try {
+      final r = Process.runSync(
+        'git',
+        args,
+        workingDirectory: dir.path,
+        stdoutEncoding: utf8,
+        stderrEncoding: utf8,
+      );
+      if (r.exitCode != 0) return '';
+      return (r.stdout as String).trim();
+    } catch (_) {
+      return '';
+    }
+  }
+
+  bool _gitOk(Directory dir, List<String> args) {
+    try {
+      final r = Process.runSync(
+        'git',
+        args,
+        workingDirectory: dir.path,
+        stdoutEncoding: utf8,
+        stderrEncoding: utf8,
+      );
+      return r.exitCode == 0;
+    } catch (_) {
+      return false;
+    }
   }
 
   // -----------------------------------------------------------------

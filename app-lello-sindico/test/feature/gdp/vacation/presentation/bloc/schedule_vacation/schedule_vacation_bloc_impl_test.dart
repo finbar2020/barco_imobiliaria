@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lello/feature/gdp/vacation/domain/entity/vacation.dart';
 import 'package:lello/feature/gdp/vacation/domain/use_case/schedule_vacation/schedule_vacation.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/schedule_vacation/schedule_vacation_bloc.dart';
-import 'package:lello/feature/gdp/vacation/presentation/bloc/schedule_vacation/schedule_vacation_bloc.dart';
+import 'package:lello/feature/gdp/vacation/presentation/bloc/schedule_vacation/schedule_vacation_bloc_impl.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/schedule_vacation/schedule_vacation_state.dart';
 import 'package:mockito/mockito.dart';
 import 'package:essentials/essentials.dart';
@@ -21,7 +21,7 @@ void main() {
 
   setUp(() {
     scheduleVacation = ScheduleVacationMock();
-    bloc = ScheduleVacationBloc(scheduleVacation: scheduleVacation);
+    bloc = ScheduleVacationBlocImpl(scheduleVacation: scheduleVacation);
   });
 
   group('scheduleVacation', () {

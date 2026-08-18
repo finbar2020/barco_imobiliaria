@@ -14,7 +14,11 @@ Duas partes:
 
 2. **App Flutter Web** (`lib/`)
    Consome `assets/analysis.json` e mostra:
-   - KPIs globais (projetos, LOC, arquivos, features)
+   - KPIs globais (projetos, LOC, arquivos, features, Flutter FVM, cobertura média)
+   - Cobertura de testes **separada por projeto** (lcov.info)
+   - Versão Flutter pinada no `.fvmrc` (a que o time atualizou)
+   - Bibliotecas em uso (versões pinadas — sem marcar como desatualizadas)
+   - Distribuição de padrões arquiteturais
    - Distribuição de padrões arquiteturais
    - Distribuição de gerenciamento de estado
    - LOC e features por projeto
@@ -73,16 +77,47 @@ que os apps não declaram `flutter_bloc` diretamente — ele vem via
 ### Higiene e padronização de BLoC
 
 O scanner gera duas notas por feature (0–100) e agrega no projeto
-(média ponderada por blocs+cubits):
+(média ponderada por blocs+cubits). A referência é o **Síndico
+higienizado** — não um checklist que penaliza o próprio padrão:
 
-- **Higiene** (`grade`) — fricção técnica: Equatable, events/states
-  separados, sem `print`, sem `mapEventToState`, sem pares abstract+impl.
-- **Padronização** (`standardization.grade`) — aderência ao padrão canônico
-  (`PADROES_DE_DESENVOLVIMENTO.md`): sufixos `State`/`Event`, `InitialState`
-  (não `Idle`), base `const`, sem `Outcome` enum; estado único de form é
-  aceitável.
+- **Higiene** (`grade`) — events/states em arquivos próprios e sem
+  `print`. O par abstract+impl **é o padrão** (não é fricção).
+  `mapEventToState`, Equatable e `const` não entram na nota: atualizar
+  isso quebra o app.
+- **Padronização** (`standardization.grade`) — sufixos `State`/`Event`
+  e `Initial` (não `Idle`). Estado único de form, base sem `const` e
+  ausência de Equatable são aceitos.
 
-O dashboard mostra ambas na overview, nos cards de projeto e no detalhe.
+As penalidades são **proporcionais** (desvio / total), para um app com
+dezenas de blocs não zerar a nota por poucos casos pontuais.
+
+### Cobertura de testes
+
+Lê `coverage/lcov.info` de cada app (quando existir) e mostra o % de linhas
+coberto, separado por projeto. Também conta arquivos de teste e imagens
+golden (`test/**/goldens/*.png`). Sem lcov, o card aparece como “sem dados”.
+
+### Flutter (versão atualizada)
+
+Lê `.fvmrc` / `.fvm/fvm_config.json` — essa é a versão que o time pinou
+(FVM). Complementa com constraints de Dart/Flutter do `pubspec.yaml` e
+`pubspec.lock`.
+
+### Bibliotecas em uso
+
+Mostra as versões **pinadas** no `pubspec.yaml` de cada projeto. Não marca
+como desatualizadas: o time não sobe essas libs porque a atualização
+quebra o app.
+
+### Branches deste trabalho
+
+Lê o Git de cada app e destaca as três branches que criamos:
+
+- `feature/all_tests` — testes (unitário, integração, interação, golden)
+- `feature/libs-upgrade-wave0` — upgrade de libs (versões pinadas)
+- `feature/bloc-9-migration` — higienização e padronização dos BLoCs
+
+Mostra em quais apps cada uma existe e qual está checkout no momento.
 
 ### Outros dados
 

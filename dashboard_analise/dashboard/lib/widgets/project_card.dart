@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/analysis_data.dart';
 import '../theme/app_theme.dart';
@@ -20,7 +19,6 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = AppTheme.colorFor(index);
-    final numberFmt = NumberFormat.decimalPattern('pt_BR');
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -106,6 +104,8 @@ class ProjectCard extends StatelessWidget {
                       project.blocMetrics.totals.standardization.grade,
                     ),
                   ],
+                  if (project.git.hasCurrent)
+                    _tag(project.git.currentBranch, Icons.call_split),
                 ],
               ),
               const Spacer(),
@@ -118,13 +118,20 @@ class ProjectCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   _stat(
-                    'Arquivos',
-                    numberFmt.format(project.stats.dartFiles),
+                    'Cobertura',
+                    project.coverage.available
+                        ? '${project.coverage.percent.toStringAsFixed(1)}%'
+                        : '—',
+                    color: project.coverage.available
+                        ? _coverageColor(project.coverage.percent)
+                        : null,
                   ),
                   const SizedBox(width: 12),
                   _stat(
-                    'LOC',
-                    numberFmt.format(project.stats.codeLines),
+                    'Flutter',
+                    project.toolchain.hasFvm
+                        ? project.toolchain.fvmFlutter
+                        : '—',
                   ),
                 ],
               ),
@@ -215,7 +222,7 @@ class ProjectCard extends StatelessWidget {
     );
   }
 
-  Widget _stat(String label, String value) {
+  Widget _stat(String label, String value, {Color? color}) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,16 +238,22 @@ class ProjectCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             value,
-            style: const TextStyle(
-              color: AppTheme.textPrimary,
+            style: TextStyle(
+              color: color ?? AppTheme.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              fontFeatures: [FontFeature.tabularFigures()],
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Color _coverageColor(num pct) {
+    if (pct >= 80) return AppTheme.accent;
+    if (pct >= 50) return AppTheme.warning;
+    return AppTheme.danger;
   }
 
   String _initials(String folder) {

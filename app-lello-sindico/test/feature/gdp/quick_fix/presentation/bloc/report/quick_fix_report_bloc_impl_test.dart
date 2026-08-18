@@ -8,7 +8,7 @@ import 'package:lello/feature/gdp/quick_fix/domain/entity/employee_report_filter
 import 'package:lello/feature/gdp/quick_fix/domain/entity/employee_report_type.dart';
 import 'package:lello/feature/gdp/quick_fix/domain/use_case/get_report/get_employee_report.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_bloc.dart';
-import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_bloc.dart';
+import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_bloc_impl.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_event.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_state.dart';
 import 'package:lello/feature/session/domain/entity/session.dart';
@@ -48,7 +48,7 @@ void main() {
   setUp(() {
     getEmployeeReport = GetEmployeeReportMock();
     sessionBloc = SessionBlocMock();
-    bloc = QuickFixReportBloc(
+    bloc = QuickFixReportBlocImpl(
         sessionBloc: sessionBloc, getEmployeeReport: getEmployeeReport);
   });
 
