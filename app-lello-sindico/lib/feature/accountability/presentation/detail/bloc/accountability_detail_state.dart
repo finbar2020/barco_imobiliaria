@@ -1,69 +1,51 @@
-import 'package:essentials/essentials.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:lello/feature/accountability/domain/entity/accountability_periods.dart';
+
+import 'package:essentials/essentials.dart';
 
 import '../../../domain/entity/accountability.dart';
 
-abstract class AccountabilityDetailState extends Equatable {
+abstract class AccountabilityDetailState {
   final String? condominiumId;
 
-  const AccountabilityDetailState({this.condominiumId});
-
-  @override
-  List<Object?> get props => [condominiumId];
+  AccountabilityDetailState({this.condominiumId});
 }
 
-class AccountabilityDetailLoadingState extends AccountabilityDetailState {
-  const AccountabilityDetailLoadingState();
-}
+class AccountabilityDetailLoadingState extends AccountabilityDetailState {}
 
 class AccountabilityDetailFailedState extends AccountabilityDetailState {
-  final Failure error;
-  final AccountabilityPeriods? period;
-
-  const AccountabilityDetailFailedState({
+  Failure error;
+  String? condominiumId;
+  AccountabilityPeriods? period;
+  AccountabilityDetailFailedState({
     required this.error,
-    super.condominiumId,
+    this.condominiumId,
     this.period,
-  });
-
-  @override
-  List<Object?> get props => [error, condominiumId, period];
+  }) : super(condominiumId: condominiumId);
 }
 
 class AccountabilityDetailLoadedState extends AccountabilityDetailState {
-  final Accountability accountability;
-  final AccountabilityPeriods? period;
-
-  const AccountabilityDetailLoadedState({
+  Accountability accountability;
+  String? condominiumId;
+  AccountabilityPeriods? period;
+  AccountabilityDetailLoadedState({
     required this.accountability,
-    super.condominiumId,
+    this.condominiumId,
     this.period,
-  });
-
-  @override
-  List<Object?> get props => [accountability, condominiumId, period];
+  }) : super(condominiumId: condominiumId);
 }
 
-class AccountabilityDetailEmptyState extends AccountabilityDetailState {
-  const AccountabilityDetailEmptyState();
-}
+class AccountabilityDetailEmptyState extends AccountabilityDetailState {}
 
 class AccountabilitySendRecommendationLoadingState
-    extends AccountabilityDetailState {
-  const AccountabilitySendRecommendationLoadingState();
-}
+    extends AccountabilityDetailState {}
 
 class AccountabilitySendRecommendationSuccessState
-    extends AccountabilityDetailState {
-  const AccountabilitySendRecommendationSuccessState();
-}
+    extends AccountabilityDetailState {}
 
 class AccountabilitySendRecommendationFailureState
     extends AccountabilityDetailState {
   final String message;
 
-  const AccountabilitySendRecommendationFailureState({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+  AccountabilitySendRecommendationFailureState({required this.message});
 }

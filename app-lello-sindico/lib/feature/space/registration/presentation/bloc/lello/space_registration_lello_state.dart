@@ -1,24 +1,21 @@
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/space/registration/domain/entity/space_registration_request.dart';
 
-abstract class SpaceRegistrationLelloState extends Equatable {
+abstract class SpaceRegistrationLelloState {
   final SpaceRegistrationRequest data;
   final String? condominiumId;
 
-  const SpaceRegistrationLelloState(this.data, this.condominiumId);
-
-  @override
-  List<Object?> get props => [data, condominiumId];
+  SpaceRegistrationLelloState(this.data, this.condominiumId);
 }
 
-class SpaceRegistrationLelloInitialState extends SpaceRegistrationLelloState {
-  const SpaceRegistrationLelloInitialState(SpaceRegistrationRequest data)
+class SpaceRegistrationLelloIdleState extends SpaceRegistrationLelloState {
+  SpaceRegistrationLelloIdleState(SpaceRegistrationRequest data)
       : super(data, null);
 }
 
 class SpaceRegistrationLelloRegisteringState
     extends SpaceRegistrationLelloState {
-  const SpaceRegistrationLelloRegisteringState(
+  SpaceRegistrationLelloRegisteringState(
       SpaceRegistrationRequest data, String condominiumId)
       : super(data, condominiumId);
 }
@@ -26,18 +23,14 @@ class SpaceRegistrationLelloRegisteringState
 class SpaceRegistrationLelloRegisterFailedState
     extends SpaceRegistrationLelloState {
   final Failure error;
-
-  const SpaceRegistrationLelloRegisterFailedState(
+  SpaceRegistrationLelloRegisterFailedState(
       SpaceRegistrationRequest data, String condominiumId, this.error)
       : super(data, condominiumId);
-
-  @override
-  List<Object?> get props => [data, condominiumId, error];
 }
 
 class SpaceRegistrationLelloRegisteredState
     extends SpaceRegistrationLelloState {
-  const SpaceRegistrationLelloRegisteredState(
+  SpaceRegistrationLelloRegisteredState(
       SpaceRegistrationRequest data, String condominiumId)
       : super(data, condominiumId);
 }

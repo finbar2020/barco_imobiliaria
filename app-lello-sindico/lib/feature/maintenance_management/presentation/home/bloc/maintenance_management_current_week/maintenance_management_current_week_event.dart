@@ -1,13 +1,6 @@
-import 'package:equatable/equatable.dart';
-
 import '../../../enums/efficiency_scope_enum.dart';
 
-abstract class MaintenanceManagementCurrentWeekEvent extends Equatable {
-  const MaintenanceManagementCurrentWeekEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class MaintenanceManagementCurrentWeekEvent {}
 
 class FetchMaintenanceTaskEventsEvent
     extends MaintenanceManagementCurrentWeekEvent {
@@ -23,7 +16,7 @@ class FetchMaintenanceTaskEventsEvent
   final List<String>? responsibleIds;
   final String? pageName;
 
-  const FetchMaintenanceTaskEventsEvent({
+  FetchMaintenanceTaskEventsEvent({
     required this.dtStart,
     required this.untilDate,
     required this.typeTask,
@@ -36,28 +29,10 @@ class FetchMaintenanceTaskEventsEvent
     this.responsibleIds,
     this.pageName,
   });
-
-  @override
-  List<Object?> get props => [
-        dtStart,
-        untilDate,
-        typeTask,
-        status,
-        dayCurrent,
-        procedureGroupLabels,
-        displayBy,
-        assetIds,
-        localIds,
-        responsibleIds,
-        pageName,
-      ];
 }
 
 class ChangeEfficiencyScopeEvent extends MaintenanceManagementCurrentWeekEvent {
   final EfficiencyScope scope;
 
-  const ChangeEfficiencyScopeEvent(this.scope);
-
-  @override
-  List<Object?> get props => [scope];
+  ChangeEfficiencyScopeEvent(this.scope);
 }

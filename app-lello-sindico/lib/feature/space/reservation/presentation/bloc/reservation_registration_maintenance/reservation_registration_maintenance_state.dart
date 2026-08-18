@@ -2,27 +2,24 @@ import 'package:essentials/essentials.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_registration.dart';
 
-abstract class ReservationRegistrationMaintenanceState extends Equatable {
+abstract class ReservationRegistrationMaintenanceState {
   final ReservationRegistration? registration;
   final String? condominiumId;
 
-  const ReservationRegistrationMaintenanceState(
+  ReservationRegistrationMaintenanceState(
       this.registration, this.condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId];
 }
 
-class ReservationRegistrationMaintenanceInitialState
+class ReservationRegistrationMaintenanceIdleState
     extends ReservationRegistrationMaintenanceState {
-  const ReservationRegistrationMaintenanceInitialState(
+  ReservationRegistrationMaintenanceIdleState(
       ReservationRegistration? registration, String? condominiumId)
       : super(registration, condominiumId);
 }
 
 class ReservationRegistrationMaintenanceRegisteringState
     extends ReservationRegistrationMaintenanceState {
-  const ReservationRegistrationMaintenanceRegisteringState(
+  ReservationRegistrationMaintenanceRegisteringState(
       ReservationRegistration registration, String condominiumId)
       : super(registration, condominiumId);
 }
@@ -30,23 +27,15 @@ class ReservationRegistrationMaintenanceRegisteringState
 class ReservationRegistrationMaintenanceRegisterFailedState
     extends ReservationRegistrationMaintenanceState {
   final Failure error;
-
-  const ReservationRegistrationMaintenanceRegisterFailedState(
+  ReservationRegistrationMaintenanceRegisterFailedState(
       ReservationRegistration registration, String condominiumId, this.error)
       : super(registration, condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId, error];
 }
 
 class ReservationRegistrationMaintenanceRegisteredState
     extends ReservationRegistrationMaintenanceState {
   final Reservation reservation;
-
-  const ReservationRegistrationMaintenanceRegisteredState(this.reservation,
+  ReservationRegistrationMaintenanceRegisteredState(this.reservation,
       ReservationRegistration registration, String condominiumId)
       : super(registration, condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId, reservation];
 }

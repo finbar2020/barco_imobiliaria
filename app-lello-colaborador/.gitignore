@@ -61,3 +61,6 @@ ios/fastlane/report.xml
 
 # FVM Version Cache
 .fvm/
+
+# Coverage / Sonar local
+/coverage/

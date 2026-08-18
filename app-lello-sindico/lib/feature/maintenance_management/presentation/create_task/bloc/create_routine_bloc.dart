@@ -1,22 +1,157 @@
-﻿import 'package:essentials/essentials.dart';
-
-import '../../../domain/entity/assets_lookup_entity.dart';
-import '../../../domain/entity/create_task_from_schedule_entity.dart';
-import '../../../domain/entity/locals_lookup_entity.dart';
+import 'package:essentials/essentials.dart';
 import '../../../domain/entity/procedure_options_entity.dart';
-import '../../../domain/use_cases/create_task_from_schedule_use_case.dart';
-import '../../../domain/use_cases/create_task_use_case.dart';
-import '../../../domain/use_cases/get_assets_lookup_use_case.dart';
-import '../../../domain/use_cases/get_locals_lookup_use_case.dart';
-import '../../../domain/use_cases/get_maintenance_tasks_filter_options_use_case.dart';
+import '../../../domain/entity/filter_options_entity.dart';
+import '../../../domain/entity/locals_lookup_entity.dart';
+import '../../../domain/entity/assets_lookup_entity.dart';
+import '../../../domain/entity/create_task_entity.dart';
 import '../../../domain/use_cases/get_procedure_options_use_case.dart';
-import 'create_routine_event.dart';
-import 'create_routine_state.dart';
+import '../../../domain/use_cases/get_maintenance_tasks_filter_options_use_case.dart';
+import '../../../domain/use_cases/get_locals_lookup_use_case.dart';
+import '../../../domain/use_cases/get_assets_lookup_use_case.dart';
+import '../../../domain/use_cases/create_task_use_case.dart';
+import '../../../domain/use_cases/create_task_from_schedule_use_case.dart';
+import '../../../domain/entity/create_task_from_schedule_entity.dart';
 
-// Re-exportar para manter compatibilidade com quem importa apenas o bloc
-export 'create_routine_event.dart';
-export 'create_routine_state.dart';
+// Events
+abstract class CreateRoutineEvent {}
 
+class LoadProcedureOptionsEvent extends CreateRoutineEvent {
+  final String typeTask;
+
+  LoadProcedureOptionsEvent(this.typeTask);
+}
+
+class SelectProcedureOptionEvent extends CreateRoutineEvent {
+  final ProcedureOptionEntity selectedOption;
+
+  SelectProcedureOptionEvent(this.selectedOption);
+}
+
+class ClearSelectionEvent extends CreateRoutineEvent {}
+
+class ResetBlocEvent extends CreateRoutineEvent {}
+
+class LoadFilterOptionsEvent extends CreateRoutineEvent {}
+
+class LoadLocalsLookupEvent extends CreateRoutineEvent {
+  final String procedureIds;
+
+  LoadLocalsLookupEvent(this.procedureIds);
+}
+
+class LoadAssetsLookupEvent extends CreateRoutineEvent {
+  final String procedureIds;
+
+  LoadAssetsLookupEvent(this.procedureIds);
+}
+
+class CreateTaskEvent extends CreateRoutineEvent {
+  final CreateTaskRequestEntity request;
+
+  CreateTaskEvent(this.request);
+}
+
+class CreateTaskFromScheduleEvent extends CreateRoutineEvent {
+  final String scheduleId;
+  final String scheduleEventId;
+
+  CreateTaskFromScheduleEvent({
+    required this.scheduleId,
+    required this.scheduleEventId,
+  });
+}
+
+// States
+abstract class CreateRoutineState {}
+
+class CreateRoutineInitialState extends CreateRoutineState {}
+
+class CreateRoutineLoadingState extends CreateRoutineState {}
+
+class CreateRoutineLoadedState extends CreateRoutineState {
+  final ProcedureOptionsEntity procedureOptions;
+  final ProcedureOptionEntity? selectedOption;
+  final FilterOptionsEntity? filterOptions;
+  final LocalsLookupEntity? localsLookup;
+  final AssetsLookupEntity? assetsLookup;
+
+  CreateRoutineLoadedState({
+    required this.procedureOptions,
+    this.selectedOption,
+    this.filterOptions,
+    this.localsLookup,
+    this.assetsLookup,
+  });
+
+  // Uso de parâmetros opcionais para controlar explicitamente quais valores devem ser substituídos
+  CreateRoutineLoadedState copyWith({
+    ProcedureOptionsEntity? procedureOptions,
+    Object? selectedOption = const Object(),
+    Object? filterOptions = const Object(),
+    Object? localsLookup = const Object(),
+    Object? assetsLookup = const Object(),
+  }) {
+    return CreateRoutineLoadedState(
+      procedureOptions: procedureOptions ?? this.procedureOptions,
+      selectedOption: selectedOption != const Object()
+          ? selectedOption as ProcedureOptionEntity?
+          : this.selectedOption,
+      filterOptions: filterOptions != const Object()
+          ? filterOptions as FilterOptionsEntity?
+          : this.filterOptions,
+      localsLookup: localsLookup != const Object()
+          ? localsLookup as LocalsLookupEntity?
+          : this.localsLookup,
+      assetsLookup: assetsLookup != const Object()
+          ? assetsLookup as AssetsLookupEntity?
+          : this.assetsLookup,
+    );
+  }
+}
+
+class CreateRoutineErrorState extends CreateRoutineState {
+  final String message;
+
+  CreateRoutineErrorState(this.message);
+}
+
+class CreateRoutineCreatingTaskState extends CreateRoutineState {}
+
+class CreateRoutineTaskCreatedState extends CreateRoutineState {
+  final CreateTaskResponseEntity response;
+
+  CreateRoutineTaskCreatedState(this.response);
+}
+
+class CreateRoutineTaskCreationErrorState extends CreateRoutineState {
+  final String message;
+
+  CreateRoutineTaskCreationErrorState(this.message);
+}
+
+class CreateRoutineCreatingTaskFromScheduleState extends CreateRoutineState {}
+
+class CreateRoutineTaskFromScheduleCreatedState extends CreateRoutineState {
+  final String taskId;
+  final String eventId;
+  final String taskName;
+  final String? currentResponsibleName;
+
+  CreateRoutineTaskFromScheduleCreatedState({
+    required this.taskId,
+    required this.eventId,
+    required this.taskName,
+    this.currentResponsibleName,
+  });
+}
+
+class CreateRoutineTaskFromScheduleErrorState extends CreateRoutineState {
+  final String message;
+
+  CreateRoutineTaskFromScheduleErrorState(this.message);
+}
+
+// BLoC
 class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
   final GetProcedureOptionsUseCase getProcedureOptionsUseCase;
   final GetMaintenanceTasksFilterOptionsUseCase getFilterOptionsUseCase;
@@ -24,7 +159,6 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
   final GetAssetsLookupUseCase getAssetsLookupUseCase;
   final CreateTaskUseCase createTaskUseCase;
   final CreateTaskFromScheduleUseCase createTaskFromScheduleUseCase;
-
   CreateRoutineLoadedState? _lastLoadedState;
 
   CreateRoutineBloc({
@@ -34,7 +168,7 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
     required this.getAssetsLookupUseCase,
     required this.createTaskUseCase,
     required this.createTaskFromScheduleUseCase,
-  }) : super(const CreateRoutineInitialState()) {
+  }) : super(CreateRoutineInitialState()) {
     on<LoadProcedureOptionsEvent>(_onLoadProcedureOptions);
     on<SelectProcedureOptionEvent>(_onSelectProcedureOption);
     on<ClearSelectionEvent>(_onClearSelection);
@@ -58,14 +192,14 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
     LoadProcedureOptionsEvent event,
     Emitter<CreateRoutineState> emit,
   ) async {
-    emit(const CreateRoutineLoadingState());
+    emit(CreateRoutineLoadingState());
 
     final result = await getProcedureOptionsUseCase(event.typeTask);
 
     result.fold(
       (failure) => emit(CreateRoutineErrorState(failure is KnownFailure
-          ? failure.message ?? 'Erro desconhecido'
-          : 'Erro desconhecido')),
+          ? failure.message ?? "Erro desconhecido"
+          : "Erro desconhecido")),
       (procedureOptions) {
         _emitLoadedState(
           CreateRoutineLoadedState(procedureOptions: procedureOptions),
@@ -94,7 +228,8 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
   ) {
     final currentState = state;
     if (currentState is CreateRoutineLoadedState) {
-      // Limpa seleÃ§Ã£o, locais e ativos usando null explÃ­cito.
+      // Limpar a seleção e os locais carregados para evitar problemas ao voltar
+      // Usando o novo padrão de copyWith que suporta valores null explícitos
       _emitLoadedState(
         currentState.copyWith(
           selectedOption: null,
@@ -103,6 +238,8 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
         ),
         emit,
       );
+
+      // Estado limpo: selectedOption e localsLookup definidos como null
     }
   }
 
@@ -115,8 +252,8 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
       final result = await getFilterOptionsUseCase();
       result.fold(
         (failure) => emit(CreateRoutineErrorState(failure is KnownFailure
-            ? failure.message ?? 'Erro ao carregar filtros'
-            : 'Erro ao carregar filtros')),
+            ? failure.message ?? "Erro ao carregar filtros"
+            : "Erro ao carregar filtros")),
         (filterOptions) {
           _emitLoadedState(
             currentState.copyWith(filterOptions: filterOptions),
@@ -151,8 +288,8 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
         }
 
         emit(CreateRoutineErrorState(failure is KnownFailure
-            ? failure.message ?? 'Erro ao carregar locais'
-            : 'Erro ao carregar locais'));
+            ? failure.message ?? "Erro ao carregar locais"
+            : "Erro ao carregar locais"));
       },
       (localsLookup) {
         if (currentState is CreateRoutineLoadedState) {
@@ -161,12 +298,12 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
             emit,
           );
         } else {
-          // Se ainda nÃ£o temos um estado loaded, criar um novo com os locais
+          // Se ainda não temos um estado loaded, criar um novo com os locais
           _emitLoadedState(
             CreateRoutineLoadedState(
-              procedureOptions:
-                  ProcedureOptionsEntity(procedureOptions: []),
+              procedureOptions: ProcedureOptionsEntity(procedureOptions: []),
               localsLookup: localsLookup,
+              assetsLookup: null,
             ),
             emit,
           );
@@ -199,8 +336,8 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
         }
 
         emit(CreateRoutineErrorState(failure is KnownFailure
-            ? failure.message ?? 'Erro ao carregar ativos'
-            : 'Erro ao carregar ativos'));
+            ? failure.message ?? "Erro ao carregar ativos"
+            : "Erro ao carregar ativos"));
       },
       (assetsLookup) {
         if (currentState is CreateRoutineLoadedState) {
@@ -211,8 +348,7 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
         } else {
           _emitLoadedState(
             CreateRoutineLoadedState(
-              procedureOptions:
-                  ProcedureOptionsEntity(procedureOptions: []),
+              procedureOptions: ProcedureOptionsEntity(procedureOptions: []),
               assetsLookup: assetsLookup,
             ),
             emit,
@@ -226,26 +362,28 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
     ResetBlocEvent event,
     Emitter<CreateRoutineState> emit,
   ) {
-    emit(const CreateRoutineInitialState());
+    emit(CreateRoutineInitialState());
   }
 
   Future<void> _onCreateTask(
     CreateTaskEvent event,
     Emitter<CreateRoutineState> emit,
   ) async {
-    emit(const CreateRoutineCreatingTaskState());
+    emit(CreateRoutineCreatingTaskState());
 
     final result = await createTaskUseCase(event.request);
     result.fold(
       (failure) {
         emit(CreateRoutineTaskCreationErrorState(failure is KnownFailure
-            ? failure.message ?? 'Erro ao criar tarefa'
-            : 'Erro ao criar tarefa'));
+            ? failure.message ?? "Erro ao criar tarefa"
+            : "Erro ao criar tarefa"));
         if (_lastLoadedState != null) {
           _emitLoadedState(_lastLoadedState!, emit);
         }
       },
       (response) {
+        // Response agora sempre retorna idSchedule e idScheduleEvents
+        // Se tiver dados, considera sucesso
         emit(CreateRoutineTaskCreatedState(response));
       },
     );
@@ -255,7 +393,7 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
     CreateTaskFromScheduleEvent event,
     Emitter<CreateRoutineState> emit,
   ) async {
-    emit(const CreateRoutineCreatingTaskFromScheduleState());
+    emit(CreateRoutineCreatingTaskFromScheduleState());
 
     final request = CreateTaskFromScheduleRequestEntity(
       scheduleId: event.scheduleId,
@@ -280,4 +418,3 @@ class CreateRoutineBloc extends Bloc<CreateRoutineEvent, CreateRoutineState> {
     );
   }
 }
-

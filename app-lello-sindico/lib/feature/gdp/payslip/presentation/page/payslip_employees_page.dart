@@ -23,7 +23,6 @@ class PayslipEmployeesPageState extends State<PayslipEmployeesPage> {
   final refreshKey = GlobalKey<RefreshIndicatorState>();
   late Completer<void> _refreshCompleter;
   late ScrollController controller;
-  bool _monthSet = false;
 
   @override
   void initState() {
@@ -33,18 +32,10 @@ class PayslipEmployeesPageState extends State<PayslipEmployeesPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_monthSet) {
-      final month = ModalRoute.of(context)!.settings.arguments as DateTime;
-      bloc.setSelectedMonth(month);
-      _monthSet = true;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    bloc.state.selectedMonth =
+        ModalRoute.of(context)!.settings.arguments as DateTime;
     return Theme(
       data: theme,
       child: Scaffold(

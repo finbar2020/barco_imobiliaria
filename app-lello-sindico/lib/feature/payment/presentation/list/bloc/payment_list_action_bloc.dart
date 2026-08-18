@@ -7,26 +7,25 @@ import 'package:lello/feature/payment/presentation/pendency/controller/payment_p
 class PaymentListActionBloc
     extends Bloc<PaymentListActionEvent, PaymentListActionState> {
   final PaymentPendencyController controller;
-  PaymentListActionBloc(this.controller)
-      : super(const PaymentListActionInitialState()) {
-    on<PaymentListActionPressedEvent>(_onPressed);
-    on<PaymentListActionResetEvent>(
-        (event, emit) => emit(const PaymentListActionInitialState()));
+  PaymentListActionBloc(this.controller) : super(PaymentListActionInitial()) {
+    on<PaymentListActionPressed>(_onPressed);
+    on<PaymentListActionReset>(
+        (event, emit) => emit(PaymentListActionInitial()));
   }
 
-  Future<void> _onPressed(PaymentListActionPressedEvent event,
+  Future<void> _onPressed(PaymentListActionPressed event,
       Emitter<PaymentListActionState> emit) async {
-    emit(const PaymentListActionLoadingState());
+    emit(PaymentListActionLoading());
     try {
       PaymentInstallmentInApprovalEntity? installment =
           await _getInstallmentById(event.installmentId);
       if (installment != null) {
-        emit(PaymentListActionLoadedState(installment));
+        emit(PaymentListActionLoaded(installment));
       } else {
-        emit(const PaymentListActionErrorState('Lançamento não encontrado.'));
+        emit(const PaymentListActionError('Lançamento não encontrado.'));
       }
     } catch (e) {
-      emit(PaymentListActionErrorState(e.toString()));
+      emit(PaymentListActionError(e.toString()));
     }
   }
 

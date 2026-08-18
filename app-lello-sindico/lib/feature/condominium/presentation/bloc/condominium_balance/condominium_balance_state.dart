@@ -1,41 +1,23 @@
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/condominium/domain/entity/condominium_balance.dart';
 
-abstract class CondominiumBalanceState extends Equatable {
-  const CondominiumBalanceState();
+abstract class CondominiumBalanceState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class CondominiumBalanceIdleState extends CondominiumBalanceState {}
 
-class CondominiumBalanceInitialState extends CondominiumBalanceState {
-  const CondominiumBalanceInitialState();
-}
-
-class CondominiumBalanceLoadingState extends CondominiumBalanceState {
-  const CondominiumBalanceLoadingState();
-}
+class CondominiumBalanceLoadingState extends CondominiumBalanceState {}
 
 class CondominiumBalanceLoadedState extends CondominiumBalanceState {
   final CondominiumBalance balance;
-  final bool isUpdating;
-  final bool remoteFail;
-
-  const CondominiumBalanceLoadedState({
-    required this.balance,
-    this.isUpdating = false,
-    this.remoteFail = false,
-  });
-
-  @override
-  List<Object?> get props => [balance, isUpdating, remoteFail];
+  bool isUpdating;
+  bool remoteFail;
+  CondominiumBalanceLoadedState(
+      {required this.balance,
+      this.isUpdating = false,
+      this.remoteFail = false});
 }
 
 class CondominiumBalanceFailedState extends CondominiumBalanceState {
   final Failure? failure;
-
-  const CondominiumBalanceFailedState({this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  CondominiumBalanceFailedState({this.failure});
 }

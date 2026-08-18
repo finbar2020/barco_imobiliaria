@@ -5,7 +5,7 @@ import '../../../../domain/entity/task_details_entity.dart';
 
 enum TaskInitStepDialogType { none, discard, reset }
 
-enum TaskInitStepStatus { success, discarded, error, reset }
+enum TaskInitStepOutcome { success, discarded, error, reset }
 
 class TaskInitStepState extends Equatable {
   final String eventId;
@@ -17,7 +17,7 @@ class TaskInitStepState extends Equatable {
   final bool isLoading;
   final bool isSubmitting;
   final TaskInitStepDialogType dialog;
-  final TaskInitStepStatus? outcome;
+  final TaskInitStepOutcome? outcome;
   final String? errorMessage;
 
   const TaskInitStepState({
@@ -64,7 +64,7 @@ class TaskInitStepState extends Equatable {
     bool? isLoading,
     bool? isSubmitting,
     TaskInitStepDialogType? dialog,
-    TaskInitStepStatus? outcome,
+    TaskInitStepOutcome? outcome,
     String? errorMessage,
   }) {
     return TaskInitStepState(

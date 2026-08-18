@@ -34,36 +34,39 @@ class CheckboxQuestionWidget extends BaseQuestionWidget {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: options.map((option) {
-        final isSelected = selectedIds.contains(option.id);
-        
-        return CheckboxListTile(
-          value: isSelected,
-          onChanged: (bool? value) {
-            final updatedList = List<String>.from(selectedIds);
-            if (value == true) {
-              updatedList.add(option.id);
-            } else {
-              updatedList.remove(option.id);
-            }
-            onAnswerChanged(updatedList);
-          },
-          title: Text(
-            option.name,
-            style: TextStyle(
-              fontFamily: 'Anek Latin',
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: palette.text(), // Design System
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: options.map((option) {
+          final isSelected = selectedIds.contains(option.id);
+
+          return CheckboxListTile(
+            value: isSelected,
+            onChanged: (bool? value) {
+              final updatedList = List<String>.from(selectedIds);
+              if (value == true) {
+                updatedList.add(option.id);
+              } else {
+                updatedList.remove(option.id);
+              }
+              onAnswerChanged(updatedList);
+            },
+            title: Text(
+              option.name,
+              style: TextStyle(
+                fontFamily: 'Anek Latin',
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: palette.text(),
+              ),
             ),
-          ),
-          controlAffinity: ListTileControlAffinity.leading,
-          contentPadding: EdgeInsets.zero,
-          activeColor: palette.primary(),
-        );
-      }).toList(),
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            activeColor: palette.primary(),
+          );
+        }).toList(),
+      ),
     );
   }
 }

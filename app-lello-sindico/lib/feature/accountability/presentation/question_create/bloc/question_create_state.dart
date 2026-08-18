@@ -1,60 +1,41 @@
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/accountability/domain/entity/accountability_question_type_solicitation.dart';
 
-abstract class QuestionCreateState extends Equatable {
-  const QuestionCreateState();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class QuestionCreateState {}
 
 class QuestionCreateEmptyState extends QuestionCreateState {
-  const QuestionCreateEmptyState();
+  QuestionCreateEmptyState();
 }
 
 class QuestionCreateLoadingState extends QuestionCreateState {
-  const QuestionCreateLoadingState();
+  QuestionCreateLoadingState();
 }
 
 class QuestionCreateLoadedState extends QuestionCreateState {
-  final List<AccountabilityQuestionType> data;
-
-  const QuestionCreateLoadedState({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  List<AccountabilityQuestionType> data;
+  QuestionCreateLoadedState({required this.data});
 }
 
 class QuestionCreateFailedState extends QuestionCreateState {
   final Failure error;
-  final String? errorMessageKey;
-
-  const QuestionCreateFailedState({
+  String? errorMessageKey;
+  QuestionCreateFailedState({
     required this.error,
     this.errorMessageKey,
   });
-
-  @override
-  List<Object?> get props => [error, errorMessageKey];
 }
 
 class QuestionCreateSendingState extends QuestionCreateState {
-  const QuestionCreateSendingState();
+  QuestionCreateSendingState();
 }
 
-class QuestionCreateSendedState extends QuestionCreateState {
-  const QuestionCreateSendedState();
-}
+class QuestionCreateSendedState extends QuestionCreateState {}
 
 class QuestionCreateSendFailedState extends QuestionCreateState {
   final Failure error;
-  final String? errorMessageKey;
-
-  const QuestionCreateSendFailedState({
+  String? errorMessageKey;
+  QuestionCreateSendFailedState({
     required this.error,
     this.errorMessageKey,
   });
-
-  @override
-  List<Object?> get props => [error, errorMessageKey];
 }

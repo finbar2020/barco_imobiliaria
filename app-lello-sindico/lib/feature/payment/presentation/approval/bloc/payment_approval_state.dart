@@ -3,131 +3,87 @@ import 'package:lello/feature/account/domain/entity/account.dart';
 import 'package:lello/feature/payment/domain/entity/payment_approval.dart';
 import 'package:shared_features/shared_features.dart';
 
-abstract class PaymentApprovalState extends Equatable {
-  final PaymentApproval? entity;
-  final List<Account> accounts;
-
-  const PaymentApprovalState({
+abstract class PaymentApprovalState {
+  PaymentApproval? entity;
+  List<Account> accounts;
+  PaymentApprovalState(
     this.entity,
-    this.accounts = const [],
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts];
+    this.accounts,
+  );
 }
 
 class PaymentApprovalFormState extends PaymentApprovalState {
-  const PaymentApprovalFormState({
-    required super.entity,
-    required super.accounts,
-  });
+  PaymentApprovalFormState(
+      {required PaymentApproval? entity, required List<Account> accounts})
+      : super(entity, accounts);
 }
 
 class PaymentApprovalLoadingState extends PaymentApprovalFormState {
-  const PaymentApprovalLoadingState({
-    required super.entity,
-    super.accounts = const [],
-  });
-
+  PaymentApprovalLoadingState(
+      {required PaymentApproval? entity, List<Account>? accounts})
+      : super(entity: entity, accounts: accounts ?? []);
   factory PaymentApprovalLoadingState.empty() =>
-      const PaymentApprovalLoadingState(entity: null);
+      PaymentApprovalLoadingState(entity: null, accounts: null);
 }
 
 class PaymentApprovalLoadingFailedState extends PaymentApprovalFormState {
   final Failure? error;
-
-  const PaymentApprovalLoadingFailedState({
-    required super.entity,
-    super.accounts = const [],
-    this.error,
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts, error];
+  PaymentApprovalLoadingFailedState(
+      {required PaymentApproval? entity, List<Account>? accounts, this.error})
+      : super(entity: entity, accounts: accounts ?? []);
 }
 
 class PaymentApprovalRequestingCodeState extends PaymentApprovalState {
   final CodeValidationSource source;
-
-  const PaymentApprovalRequestingCodeState({
-    required super.entity,
-    required super.accounts,
-    required this.source,
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts, source];
+  PaymentApprovalRequestingCodeState(
+      {required PaymentApproval? entity,
+      required List<Account> accounts,
+      required this.source})
+      : super(entity, accounts);
 }
 
 class PaymentApprovalCodeFailedState extends PaymentApprovalState {
   final Failure? error;
-
-  const PaymentApprovalCodeFailedState({
-    required super.entity,
-    super.accounts = const [],
-    this.error,
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts, error];
+  PaymentApprovalCodeFailedState(
+      {required PaymentApproval? entity, List<Account>? accounts, this.error})
+      : super(entity, accounts ?? []);
 }
 
 class PaymentApprovalValidatingCodeState extends PaymentApprovalState {
   final CodeRequest? request;
-
-  const PaymentApprovalValidatingCodeState({
-    required super.entity,
-    super.accounts = const [],
-    this.request,
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts, request];
+  PaymentApprovalValidatingCodeState(
+      {required PaymentApproval? entity, List<Account>? accounts, this.request})
+      : super(entity, accounts ?? []);
 }
 
 class PaymentApprovalProgressState extends PaymentApprovalState {
-  const PaymentApprovalProgressState({
-    required super.entity,
-    super.accounts = const [],
-  });
+  PaymentApprovalProgressState(
+      {required PaymentApproval? entity, List<Account>? accounts})
+      : super(entity, accounts ?? []);
 }
 
 class PaymentApprovalSucceededState extends PaymentApprovalState {
-  const PaymentApprovalSucceededState({
-    required super.entity,
-    super.accounts = const [],
-  });
+  PaymentApprovalSucceededState(
+      {required PaymentApproval? entity, List<Account>? accounts})
+      : super(entity, accounts ?? []);
 }
 
 class PaymentApprovalFailedState extends PaymentApprovalState {
   final Failure? error;
-
-  const PaymentApprovalFailedState({
-    required super.entity,
-    super.accounts = const [],
-    this.error,
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts, error];
+  PaymentApprovalFailedState(
+      {required PaymentApproval? entity, List<Account>? accounts, this.error})
+      : super(entity, accounts ?? []);
 }
 
 class PaymentApprovalRejectedState extends PaymentApprovalState {
   final Failure? error;
-
-  const PaymentApprovalRejectedState({
-    required super.entity,
-    super.accounts = const [],
-    this.error,
-  });
-
-  @override
-  List<Object?> get props => [entity, accounts, error];
+  PaymentApprovalRejectedState(
+      {required PaymentApproval? entity, List<Account>? accounts, this.error})
+      : super(entity, accounts ?? []);
 }
 
 class PaymentApprovalBiometricsFailureState extends PaymentApprovalState {
-  const PaymentApprovalBiometricsFailureState({
-    required super.entity,
-    super.accounts = const [],
-  });
+  PaymentApprovalBiometricsFailureState(
+      {required PaymentApproval? entity, List<Account>? accounts})
+      : super(entity, accounts ?? []);
 }

@@ -29,22 +29,14 @@ class PaymentApprovalPage extends StatefulWidget {
 class _PaymentApprovalPageState extends State<PaymentApprovalPage> {
   final PaymentApprovalBloc bloc = ApplicationContainer.instance().resolve();
   late PaymentApprovalPageArguments args;
-  bool _approvalSet = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_approvalSet) {
-      args = ModalRoute.of(context)!.settings.arguments
-          as PaymentApprovalPageArguments;
-      bloc.setApproval(args.approval);
-      _approvalSet = true;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    args = ModalRoute.of(context)!.settings.arguments
+        as PaymentApprovalPageArguments;
+    bloc.setApproval(args.approval);
 
     return Theme(
       data: theme,
@@ -107,7 +99,7 @@ class _PaymentApprovalPageState extends State<PaymentApprovalPage> {
           onRestart: () {},
           appContainer: ApplicationContainer.instance(),
           onSuccess: (validation) async {
-            if (state.entity != null) bloc.beginSend();
+            if (state.entity != null) await bloc.beginSend();
           }),
     );
   }

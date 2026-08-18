@@ -118,6 +118,8 @@ class LelloDatabase extends _$LelloDatabase {
       : super(SqfliteQueryExecutor.inDatabaseFolder(
             path: 'db.sqlite', logStatements: true));
 
+  LelloDatabase.forExecutor(QueryExecutor e) : super(e);
+
   @override
   int get schemaVersion => 13;
 

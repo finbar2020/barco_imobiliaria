@@ -1,33 +1,27 @@
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/vacation/domain/entity/vacation.dart';
 
-abstract class ScheduleVacationState extends Equatable {
+abstract class ScheduleVacationState {
   final Vacation? data;
   final String? condominiumId;
 
-  const ScheduleVacationState(this.data, this.condominiumId);
-
-  @override
-  List<Object?> get props => [data, condominiumId];
+  ScheduleVacationState(this.data, this.condominiumId);
 }
 
 class ScheduleVacationLoadingState extends ScheduleVacationState {
-  const ScheduleVacationLoadingState(Vacation? data, String condominiumId)
+  ScheduleVacationLoadingState(Vacation? data, String condominiumId)
       : super(data, condominiumId);
 }
 
 class ScheduleVacationLoadFailedState extends ScheduleVacationState {
   final Failure error;
 
-  const ScheduleVacationLoadFailedState(
+  ScheduleVacationLoadFailedState(
       Vacation? data, String condominiumId, this.error)
       : super(data, condominiumId);
-
-  @override
-  List<Object?> get props => [...super.props, error];
 }
 
 class ScheduleVacationLoadedState extends ScheduleVacationState {
-  const ScheduleVacationLoadedState(Vacation? data, String? condominiumId)
+  ScheduleVacationLoadedState(Vacation? data, String? condominiumId)
       : super(data, condominiumId);
 }

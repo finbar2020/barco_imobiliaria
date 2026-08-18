@@ -1,130 +1,84 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/condominium/domain/entity/condominium_balance.dart';
 import 'package:lello/feature/payment/domain/entity/payment.dart';
 import 'package:lello/feature/payment/domain/entity/payment_approval.dart';
 import 'package:lello/feature/payment/domain/entity/supplier_ledger_accounts.dart';
 
-abstract class PendencyEvent extends Equatable {
-  const PendencyEvent();
+abstract class PendencyEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class PendencyEmptyEvent extends PendencyEvent {}
 
-class PendencyEmptyEvent extends PendencyEvent {
-  const PendencyEmptyEvent();
-}
-
-class PendencyLoadingEvent extends PendencyEvent {
-  const PendencyLoadingEvent();
-}
+class PendencyLoadingEvent extends PendencyEvent {}
 
 class PendencySuccessEvent extends PendencyEvent {
   final Payment payment;
-
-  const PendencySuccessEvent({required this.payment});
-
-  @override
-  List<Object?> get props => [payment];
+  PendencySuccessEvent({
+    required this.payment,
+  });
 }
 
 class PendencyLoadingFailedEvent extends PendencyEvent {
   final Failure? error;
-
-  const PendencyLoadingFailedEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PendencyLoadingFailedEvent({this.error});
 }
 
-class PendencyBalanceLoadingEvent extends PendencyEvent {
-  const PendencyBalanceLoadingEvent();
-}
+class PendencyBalanceLoadingEvent extends PendencyEvent {}
 
 class PendencyBalanceSuccessEvent extends PendencyEvent {
   final CondominiumBalance balance;
-
-  const PendencyBalanceSuccessEvent({required this.balance});
-
-  @override
-  List<Object?> get props => [balance];
+  PendencyBalanceSuccessEvent({
+    required this.balance,
+  });
 }
 
 class PendencyBalanceFailedEvent extends PendencyEvent {
   final Failure? error;
-
-  const PendencyBalanceFailedEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PendencyBalanceFailedEvent({this.error});
 }
 
-class PendencySupplierResetEvent extends PendencyEvent {
-  const PendencySupplierResetEvent();
-}
+class PendencySupplierResetEvent extends PendencyEvent {}
 
-class PendencySupplierLoadingEvent extends PendencyEvent {
-  const PendencySupplierLoadingEvent();
-}
+class PendencySupplierLoadingEvent extends PendencyEvent {}
 
 class PendencySupplierSuccessEvent extends PendencyEvent {
   final SupplierLedgerAccountsEntity supplierLedgerAccounts;
-
-  const PendencySupplierSuccessEvent({required this.supplierLedgerAccounts});
-
-  @override
-  List<Object?> get props => [supplierLedgerAccounts];
+  PendencySupplierSuccessEvent({
+    required this.supplierLedgerAccounts,
+  });
 }
 
 class PendencySupplierFailedEvent extends PendencyEvent {
   final Failure? error;
-
-  const PendencySupplierFailedEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PendencySupplierFailedEvent({this.error});
 }
 
-class ApprovementPaymentPendencyEvent extends PendencyEvent {
-  const ApprovementPaymentPendencyEvent();
-}
+class ApprovementPaymentPendencyEvent extends PendencyEvent {}
 
 class ApprovementPaymentPendencySuccedEvent extends PendencyEvent {
   final PaymentApproval approval;
-
-  const ApprovementPaymentPendencySuccedEvent({required this.approval});
-
-  @override
-  List<Object?> get props => [approval];
+  ApprovementPaymentPendencySuccedEvent({
+    required this.approval,
+  });
 }
 
 class ApprovementPaymentPendencyFailedEvent extends PendencyEvent {
   final Failure? error;
-
-  const ApprovementPaymentPendencyFailedEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  ApprovementPaymentPendencyFailedEvent({
+    this.error,
+  });
 }
 
-class UpdateLedgerAccountLoadingEvent extends PendencyEvent {
-  const UpdateLedgerAccountLoadingEvent();
-}
+class UpdateLedgerAccountLoadingEvent extends PendencyEvent {}
 
 class UpdateLedgerAccountFailureEvent extends PendencyEvent {
   final Failure? error;
-
-  const UpdateLedgerAccountFailureEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  UpdateLedgerAccountFailureEvent({this.error});
 }
 
 class UpdateLedgerAccountSuccessEvent extends PendencyEvent {
   final bool success;
-
-  const UpdateLedgerAccountSuccessEvent({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  UpdateLedgerAccountSuccessEvent({
+    required this.success,
+  });
 }

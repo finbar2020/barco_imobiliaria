@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/use_cases/chat/get_chat_channels_use_case.dart';
 import '../../../domain/use_cases/chat/subscribe_to_channel_use_case.dart';
@@ -199,8 +198,8 @@ class ChatConversationsBloc
         userId: userId,
       );
       
-      debugPrint('✅ WebSocket conectado para lista de conversas');
-
+      print('✅ WebSocket conectado para lista de conversas');
+      
       // Depois, fazer subscribe em cada canal
       for (final channelId in event.channelIds) {
         if (!_subscribedChannels.contains(channelId)) {
@@ -211,11 +210,11 @@ class ChatConversationsBloc
             ),
           );
           _subscribedChannels.add(channelId);
-          debugPrint('✅ Subscribe no canal: $channelId');
+          print('✅ Subscribe no canal: $channelId');
         }
       }
     } catch (e) {
-      debugPrint('❌ Erro ao fazer subscribe nos canais: $e');
+      print('❌ Erro ao fazer subscribe nos canais: $e');
     }
   }
 
@@ -237,19 +236,18 @@ class ChatConversationsBloc
     NewMessageReceivedEvent event,
     Emitter<ChatConversationsState> emit,
   ) {
-    debugPrint(
-        '📬 Lista de conversas recebeu nova mensagem: ${event.message.id} para canal: ${event.message.channelId}');
-
+    print('📬 Lista de conversas recebeu nova mensagem: ${event.message.id} para canal: ${event.message.channelId}');
+    
     final currentState = state;
     if (currentState is! ChatConversationsLoadedState) {
-      debugPrint('⚠️ Estado não é ChatConversationsLoadedState');
+      print('⚠️ Estado não é ChatConversationsLoadedState');
       return;
     }
-
+    
     // Atualizar a conversa com a nova mensagem
     final updatedConversations = currentState.conversations.map((conversation) {
       if (conversation.id == event.message.channelId) {
-        debugPrint('✅ Atualizando card da conversa: ${conversation.id}');
+        print('✅ Atualizando card da conversa: ${conversation.id}');
         // Converter ChatMessageEntity para ChannelLastMessageEntity
         final author = MessageAuthorEntity(
           id: event.message.author.id,

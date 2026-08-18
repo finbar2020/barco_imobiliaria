@@ -3,7 +3,7 @@ import 'package:lello/feature/space/reservation/domain/entity/reservation_filter
 import 'package:lello/feature/space/reservation/domain/entity/reservation_type.dart';
 import 'package:lello/feature/space/reservation/domain/entity/space_available_hours.dart';
 
-abstract class ReservationListState extends Equatable {
+abstract class ReservationListState {
   final List<SpaceAvailableHours> data;
   final String? condominiumId;
   final ReservationType? type;
@@ -11,16 +11,12 @@ abstract class ReservationListState extends Equatable {
   final String? spaceId;
   final ReservationFilter? filter;
 
-  const ReservationListState(this.data, this.condominiumId, this.type,
-      this.date, this.spaceId, this.filter);
-
-  @override
-  List<Object?> get props =>
-      [data, condominiumId, type, date, spaceId, filter];
+  ReservationListState(this.data, this.condominiumId, this.type, this.date,
+      this.spaceId, this.filter);
 }
 
 class ReservationListLoadingState extends ReservationListState {
-  const ReservationListLoadingState(
+  ReservationListLoadingState(
       List<SpaceAvailableHours> data,
       String? spaceId,
       String? condominiumId,
@@ -32,8 +28,7 @@ class ReservationListLoadingState extends ReservationListState {
 
 class ReservationListLoadFailedState extends ReservationListState {
   final Failure error;
-
-  const ReservationListLoadFailedState(
+  ReservationListLoadFailedState(
       List<SpaceAvailableHours> data,
       String spaceId,
       String condominiumId,
@@ -42,14 +37,10 @@ class ReservationListLoadFailedState extends ReservationListState {
       ReservationFilter filter,
       this.error)
       : super(data, condominiumId, type, date, spaceId, filter);
-
-  @override
-  List<Object?> get props =>
-      [data, condominiumId, type, date, spaceId, filter, error];
 }
 
 class ReservationListPagingState extends ReservationListState {
-  const ReservationListPagingState(
+  ReservationListPagingState(
       List<SpaceAvailableHours> data,
       String spaceId,
       String condominiumId,
@@ -61,8 +52,7 @@ class ReservationListPagingState extends ReservationListState {
 
 class ReservationListPageFailedState extends ReservationListState {
   final Failure error;
-
-  const ReservationListPageFailedState(
+  ReservationListPageFailedState(
       List<SpaceAvailableHours> data,
       String spaceId,
       String condominiumId,
@@ -71,16 +61,11 @@ class ReservationListPageFailedState extends ReservationListState {
       ReservationFilter filter,
       this.error)
       : super(data, condominiumId, type, date, spaceId, filter);
-
-  @override
-  List<Object?> get props =>
-      [data, condominiumId, type, date, spaceId, filter, error];
 }
 
 class ReservationListLoadedState extends ReservationListState {
   final bool donePaging;
-
-  const ReservationListLoadedState(
+  ReservationListLoadedState(
       List<SpaceAvailableHours> data,
       String spaceId,
       String condominiumId,
@@ -89,8 +74,4 @@ class ReservationListLoadedState extends ReservationListState {
       ReservationFilter filter,
       this.donePaging)
       : super(data, condominiumId, type, date, spaceId, filter);
-
-  @override
-  List<Object?> get props =>
-      [data, condominiumId, type, date, spaceId, filter, donePaging];
 }

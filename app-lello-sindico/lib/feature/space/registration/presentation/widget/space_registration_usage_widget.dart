@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lello/core/dependency/application_container.dart';
 import 'package:lello/core/widget/step_indicator.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_state.dart';
 import 'package:shared_features/feature/authentication/presentation/store/authentication_store.dart';
 
@@ -45,7 +45,7 @@ class _SpaceRegistrationUsageWidgetState
   }
 
   Widget _buildHeader(ThemeData theme, SpaceRegistrationState state) {
-    final steps = SpaceRegistrationBloc.stepOrder;
+    final steps = SpaceRegistrationBlocImpl.stepOrder;
     final currentStep = steps.indexOf(state.step!);
     return ListTile(
       contentPadding: EdgeInsets.zero,
@@ -121,11 +121,9 @@ class _SpaceRegistrationUsageWidgetState
       );
     }
     return DottedBorder(
-      options: RectDottedBorderOptions(
-        strokeWidth: 1,
-        dashPattern: const [3.0, 3.0],
-        color: LelloTheme.palleteOf(theme).secondary(),
-      ),
+      strokeWidth: 1,
+      dashPattern: const [3.0, 3.0],
+      color: LelloTheme.palleteOf(theme).secondary(),
       child: Material(
         child: InkWell(
           onTap: () async {

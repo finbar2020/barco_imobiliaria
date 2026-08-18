@@ -181,7 +181,9 @@ class _RegisterLedgerAccountState extends State<RegisterLedgerAccount> {
         });
       },
       hint: Text(getString(context, "payments_ledger_account_type_hint")),
-      onSaved: (_) {},
+      onSaved: (newValue) {
+        print(newValue);
+      },
     );
   }
 

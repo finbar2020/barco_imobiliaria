@@ -34,7 +34,7 @@ class _ChatSectionWidgetState extends State<ChatSectionWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = theme.extension<ColorPallete>()!;
+    final palette = LelloTheme.palleteOf(theme);
 
     return BlocBuilder<ChatConversationsBloc, ChatConversationsState>(
       bloc: _bloc,

@@ -1,23 +1,20 @@
 import 'package:cross_file/cross_file.dart';
-import 'package:equatable/equatable.dart';
 
 import '../enums/legal_obligation_tab.dart';
 import '../../../domain/entity/legal_obligation_entity.dart';
 
-abstract class LegalObligationState extends Equatable {
+abstract class LegalObligationState {
   const LegalObligationState();
+}
 
-  @override
-  List<Object?> get props => [];
+class LegalObligationIdleState extends LegalObligationState {
+  const LegalObligationIdleState();
 }
 
 class LegalObligationLoadingState extends LegalObligationState {
   final LegalObligationTab tab;
 
   const LegalObligationLoadingState(this.tab);
-
-  @override
-  List<Object?> get props => [tab];
 }
 
 class LegalObligationLoadedState extends LegalObligationState {
@@ -25,18 +22,12 @@ class LegalObligationLoadedState extends LegalObligationState {
   final LegalObligationEntity data;
 
   const LegalObligationLoadedState(this.tab, this.data);
-
-  @override
-  List<Object?> get props => [tab, data];
 }
 
 class LegalObligationErrorState extends LegalObligationState {
   final String message;
 
   const LegalObligationErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class LegalObligationDownloadingFileState extends LegalObligationState {
@@ -47,18 +38,12 @@ class LegalObligationDownloadSuccessState extends LegalObligationState {
   final XFile file;
 
   const LegalObligationDownloadSuccessState(this.file);
-
-  @override
-  List<Object?> get props => [file];
 }
 
 class LegalObligationDownloadErrorState extends LegalObligationState {
   final String message;
 
   const LegalObligationDownloadErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class LegalObligationUploadingFileState extends LegalObligationState {
@@ -73,9 +58,6 @@ class LegalObligationUploadErrorState extends LegalObligationState {
   final String message;
 
   const LegalObligationUploadErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class LegalObligationSendingEmailState extends LegalObligationState {
@@ -90,9 +72,6 @@ class LegalObligationEmailErrorState extends LegalObligationState {
   final String message;
 
   const LegalObligationEmailErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class LegalObligationRequestingPartnerRenewalState
@@ -108,9 +87,6 @@ class LegalObligationPartnerRenewalErrorState extends LegalObligationState {
   final String message;
 
   const LegalObligationPartnerRenewalErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class LegalObligationNotifyPartnerEmptyDataSendingState
@@ -118,9 +94,6 @@ class LegalObligationNotifyPartnerEmptyDataSendingState
   final String type;
 
   const LegalObligationNotifyPartnerEmptyDataSendingState(this.type);
-
-  @override
-  List<Object?> get props => [type];
 }
 
 class LegalObligationNotifyPartnerEmptyDataSuccessState
@@ -132,9 +105,6 @@ class LegalObligationNotifyPartnerEmptyDataSuccessState
     required this.type,
     required this.shouldLockButton,
   });
-
-  @override
-  List<Object?> get props => [type, shouldLockButton];
 }
 
 class LegalObligationNotifyPartnerEmptyDataErrorState
@@ -148,7 +118,4 @@ class LegalObligationNotifyPartnerEmptyDataErrorState
     required this.message,
     this.shouldLockButton = false,
   });
-
-  @override
-  List<Object?> get props => [type, message, shouldLockButton];
 }

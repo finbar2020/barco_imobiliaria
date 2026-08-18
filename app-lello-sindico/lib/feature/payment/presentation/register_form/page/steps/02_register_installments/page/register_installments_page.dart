@@ -412,6 +412,9 @@ class _RegisterInstallmentsState extends State<RegisterInstallments> {
     Decimal sobra =
         valorTotal.toDecimal() - (valorBase * Decimal.fromInt(parcelas));
 
+    print("Valor base: $valorBase");
+    print("Sobra: $sobra");
+
     final updatedParcelas = List.generate(parcelas, (index) {
       Decimal value = valorBase;
       DateTime dueDate = index == 0

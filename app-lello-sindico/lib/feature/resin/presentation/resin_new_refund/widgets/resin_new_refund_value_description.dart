@@ -44,7 +44,6 @@ class _ResinNewRefundValueDescriptionState
     return BlocConsumer<ResinNewRefundBloc, ResinNewRefundState>(
       bloc: resinNewRefundBloc,
       listener: (context, state) {
-        _showSnackBar(state.flushbarMessageKey);
         if (state is ResinCheckValuesSuccessState) {
           if (state.checkMaxValueParam.canRequest) {
             widget.updateStep(ResinRefundsStepsEnum.receipts);
@@ -61,6 +60,10 @@ class _ResinNewRefundValueDescriptionState
         }
       },
       builder: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showSnackBar(resinNewRefundBloc.state.flushbarMessageKey);
+          resinNewRefundBloc.state.flushbarMessageKey = null;
+        });
         if (state is ResinNewRefundLoadingState)
           return Column(
             children: [

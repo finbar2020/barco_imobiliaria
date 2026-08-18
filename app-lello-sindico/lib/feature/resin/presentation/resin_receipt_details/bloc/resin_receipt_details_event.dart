@@ -1,35 +1,20 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_refund.dart';
 
-abstract class ResinReceiptDetailsEvent extends Equatable {
-  const ResinReceiptDetailsEvent();
-
-  @override
-  List<Object?> get props => [];
+abstract class ResinReceiptDetailsEvent {
+  ResinReceiptDetailsEvent();
 }
 
-class ResinReceiptDetailsLoadingEvent extends ResinReceiptDetailsEvent {
-  const ResinReceiptDetailsLoadingEvent();
-}
+class ResinReceiptDetailsLoadingEvent extends ResinReceiptDetailsEvent {}
 
 class ResinReceiptDetailsLoadedEvent extends ResinReceiptDetailsEvent {
   final ResinRefund refund;
   final String? flushbarMessageKey;
 
-  const ResinReceiptDetailsLoadedEvent({
-    required this.refund,
-    this.flushbarMessageKey,
-  });
-
-  @override
-  List<Object?> get props => [refund, flushbarMessageKey];
+  ResinReceiptDetailsLoadedEvent(
+      {required this.refund, this.flushbarMessageKey});
 }
 
 class ResinReceiptDetailsErrorEvent extends ResinReceiptDetailsEvent {
-  final String errorMessageKey;
-
-  const ResinReceiptDetailsErrorEvent({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinReceiptDetailsErrorEvent({required this.errorMessageKey});
 }

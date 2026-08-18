@@ -1,34 +1,17 @@
 import 'package:essentials/essentials.dart';
 
-abstract class RegisterInstallmentsState extends Equatable {
-  const RegisterInstallmentsState();
+abstract class RegisterInstallmentsState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class RegisterInstallmentsEmptyState extends RegisterInstallmentsState {}
 
-class RegisterInstallmentsEmptyState extends RegisterInstallmentsState {
-  const RegisterInstallmentsEmptyState();
-}
-
-class RegisterInstallmentsLoadingState extends RegisterInstallmentsState {
-  const RegisterInstallmentsLoadingState();
-}
+class RegisterInstallmentsLoadingState extends RegisterInstallmentsState {}
 
 class RegisterInstallmentsSuccessState extends RegisterInstallmentsState {
-  final dynamic value;
-
-  const RegisterInstallmentsSuccessState({required this.value});
-
-  @override
-  List<Object?> get props => [value];
+  var value;
+  RegisterInstallmentsSuccessState({required this.value});
 }
 
 class RegisterInstallmentsFailureState extends RegisterInstallmentsState {
   final Failure? error;
-
-  const RegisterInstallmentsFailureState({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  RegisterInstallmentsFailureState({this.error});
 }

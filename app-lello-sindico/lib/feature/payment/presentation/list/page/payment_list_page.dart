@@ -177,7 +177,7 @@ class PaymentListPageState extends State<PaymentListPage> {
                         return BlocConsumer<PaymentListActionBloc,
                             PaymentListActionState>(
                           listener: (context, actionState) async {
-                            if (actionState is PaymentListActionLoadedState) {
+                            if (actionState is PaymentListActionLoaded) {
                               Navigator.pushNamed(
                                 context,
                                 ApplicationRoute.paymentDetail,
@@ -185,7 +185,7 @@ class PaymentListPageState extends State<PaymentListPage> {
                               );
                               context
                                   .read<PaymentListActionBloc>()
-                                  .add(const PaymentListActionResetEvent());
+                                  .add(PaymentListActionReset());
                             }
                           },
                           builder: (context, actionState) {
@@ -199,7 +199,7 @@ class PaymentListPageState extends State<PaymentListPage> {
                                       onPressed: (selected) {
                                         context
                                             .read<PaymentListActionBloc>()
-                                            .add(PaymentListActionPressedEvent(
+                                            .add(PaymentListActionPressed(
                                                 selected));
                                       },
                                     );
@@ -213,7 +213,7 @@ class PaymentListPageState extends State<PaymentListPage> {
                                         .backgroundDark(),
                                   ),
                                 ),
-                                if (actionState is PaymentListActionLoadingState)
+                                if (actionState is PaymentListActionLoading)
                                   Positioned.fill(
                                     child: Container(
                                       color: Colors.black.withOpacity(0.3),

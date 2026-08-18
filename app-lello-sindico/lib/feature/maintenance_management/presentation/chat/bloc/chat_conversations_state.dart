@@ -1,12 +1,8 @@
-import 'package:equatable/equatable.dart';
 import '../../../domain/entity/chat/chat_channel_entity.dart';
 
 /// Estados do BLoC de conversas de chat
-abstract class ChatConversationsState extends Equatable {
+abstract class ChatConversationsState {
   const ChatConversationsState();
-
-  @override
-  List<Object?> get props => [];
 }
 
 /// Estado inicial
@@ -30,9 +26,6 @@ class ChatConversationsLoadedState extends ChatConversationsState {
     this.pageInfo,
     this.ttJwtToken,
   });
-
-  @override
-  List<Object?> get props => [conversations, pageInfo, ttJwtToken];
 }
 
 /// Estado de erro
@@ -40,9 +33,6 @@ class ChatConversationsErrorState extends ChatConversationsState {
   final String message;
 
   const ChatConversationsErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 /// Estado vazio

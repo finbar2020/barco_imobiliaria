@@ -1,17 +1,6 @@
-import 'package:essentials/essentials.dart';
-
-abstract class ReservationFilterEvent extends Equatable {
-  const ReservationFilterEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class ReservationFilterEvent {}
 
 class ReservationFilterLoadEvent extends ReservationFilterEvent {
   final String condominiumId;
-
-  const ReservationFilterLoadEvent({required this.condominiumId});
-
-  @override
-  List<Object?> get props => [condominiumId];
+  ReservationFilterLoadEvent({required this.condominiumId});
 }

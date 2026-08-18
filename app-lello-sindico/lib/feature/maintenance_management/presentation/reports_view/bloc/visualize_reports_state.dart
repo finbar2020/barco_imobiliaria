@@ -1,27 +1,15 @@
-import 'package:equatable/equatable.dart';
-
-import '../../../domain/entity/efficiency_entity.dart';
 import '../../../domain/entity/formulary_by_month_response_entity.dart';
 import '../../../domain/entity/task_by_month_response_entity.dart';
+import '../../../domain/entity/efficiency_entity.dart';
 import '../../../domain/entity/task_by_sector_entity.dart';
 import '../../enums/efficiency_scope_enum.dart';
-import '../../home/bloc/maintenance_management_last_week/maintenance_management_last_week_state.dart'
-    as last_week_state;
+import '../../home/bloc/maintenance_management_last_week/maintenance_management_last_week_state.dart' as last_week_state;
 
-abstract class VisualizeReportsState extends Equatable {
-  const VisualizeReportsState();
+abstract class VisualizeReportsState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class VisualizeReportsInitialState extends VisualizeReportsState {}
 
-class VisualizeReportsInitialState extends VisualizeReportsState {
-  const VisualizeReportsInitialState();
-}
-
-class VisualizeReportsLoadingState extends VisualizeReportsState {
-  const VisualizeReportsLoadingState();
-}
+class VisualizeReportsLoadingState extends VisualizeReportsState {}
 
 class VisualizeReportsLoadedState extends VisualizeReportsState {
   final FormularyByMonthResponseEntity formularyData;
@@ -37,7 +25,7 @@ class VisualizeReportsLoadedState extends VisualizeReportsState {
   final bool isTaskByMonthLoading;
   final String? taskByMonthError;
 
-  const VisualizeReportsLoadedState({
+  VisualizeReportsLoadedState({
     required this.formularyData,
     this.taskByMonthData,
     this.responsibles = const [],
@@ -75,36 +63,18 @@ class VisualizeReportsLoadedState extends VisualizeReportsState {
       searchQuery: searchQuery ?? this.searchQuery,
       taskSummary: taskSummary ?? this.taskSummary,
       taskBySectorData: taskBySectorData ?? this.taskBySectorData,
-      isTaskBySectorLoading:
-          isTaskBySectorLoading ?? this.isTaskBySectorLoading,
+      isTaskBySectorLoading: isTaskBySectorLoading ?? this.isTaskBySectorLoading,
       taskBySectorError: taskBySectorError ?? this.taskBySectorError,
       isTaskByMonthLoading: isTaskByMonthLoading ?? this.isTaskByMonthLoading,
       taskByMonthError: taskByMonthError ?? this.taskByMonthError,
     );
   }
-
-  @override
-  List<Object?> get props => [
-        formularyData,
-        taskByMonthData,
-        responsibles,
-        groups,
-        currentScope,
-        searchQuery,
-        taskSummary,
-        taskBySectorData,
-        isTaskBySectorLoading,
-        taskBySectorError,
-        isTaskByMonthLoading,
-        taskByMonthError,
-      ];
 }
 
 class VisualizeReportsErrorState extends VisualizeReportsState {
   final String message;
 
-  const VisualizeReportsErrorState({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+  VisualizeReportsErrorState({
+    required this.message,
+  });
 }

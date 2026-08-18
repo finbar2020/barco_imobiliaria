@@ -1,25 +1,10 @@
-import 'package:essentials/essentials.dart';
+abstract class HomeEvent {}
 
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
+class ShowCondominiumSelectorHomeEvent extends HomeEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
-
-class ShowCondominiumSelectorHomeEvent extends HomeEvent {
-  const ShowCondominiumSelectorHomeEvent();
-}
-
-class CollapseCondominiumSelectorHomeEvent extends HomeEvent {
-  const CollapseCondominiumSelectorHomeEvent();
-}
+class CollapseCondominiumSelectorHomeEvent extends HomeEvent {}
 
 class RegisterFcmTokenEvent extends HomeEvent {
-  final String? condominiumId;
-
-  const RegisterFcmTokenEvent(this.condominiumId);
-
-  @override
-  List<Object?> get props => [condominiumId];
+  final condominiumId;
+  RegisterFcmTokenEvent(this.condominiumId);
 }

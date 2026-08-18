@@ -4,37 +4,31 @@ import 'package:lello/feature/gdp/quick_fix/domain/entity/employee_report_filter
 
 import '../../../../../condominium/domain/entity/condominium.dart';
 
-abstract class QuickFixReportState extends Equatable {
+abstract class QuickFixReportState {
   final EmployeeReport? data;
   final EmployeeReportFilter? filter;
   final Condominium? condominium;
 
-  const QuickFixReportState(this.data, this.condominium, {this.filter});
-
-  @override
-  List<Object?> get props => [data, condominium, filter];
+  QuickFixReportState(this.data, this.condominium, {this.filter});
 }
 
 class QuickFixReportLoadingState extends QuickFixReportState {
-  const QuickFixReportLoadingState(EmployeeReport? data, Condominium? condominium,
+  QuickFixReportLoadingState(EmployeeReport? data, Condominium? condominium,
       {EmployeeReportFilter? filter})
-      : super(data, condominium, filter: filter);
+      : super(data, condominium);
 }
 
 class QuickFixReportLoadFailedState extends QuickFixReportState {
   final Failure error;
 
-  const QuickFixReportLoadFailedState(
+  QuickFixReportLoadFailedState(
       EmployeeReport? data, Condominium condominium, this.error,
       {EmployeeReportFilter? filter})
       : super(data, condominium, filter: filter);
-
-  @override
-  List<Object?> get props => [...super.props, error];
 }
 
 class QuickFixReportLoadedState extends QuickFixReportState {
-  const QuickFixReportLoadedState(EmployeeReport data, Condominium condominium,
+  QuickFixReportLoadedState(EmployeeReport data, Condominium condominium,
       {EmployeeReportFilter? filter})
       : super(data, condominium, filter: filter);
 }

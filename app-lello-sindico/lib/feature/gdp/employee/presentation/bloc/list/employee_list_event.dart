@@ -1,26 +1,11 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/domain/entity/employee_list_filter.dart';
 
-abstract class EmployeeListEvent extends Equatable {
-  const EmployeeListEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class EmployeeListEvent {}
 
 class EmployeeListLoadEvent extends EmployeeListEvent {
   final String condominiumId;
   final EmployeeListFilter filter;
-
-  const EmployeeListLoadEvent({
-    required this.condominiumId,
-    required this.filter,
-  });
-
-  @override
-  List<Object?> get props => [condominiumId, filter];
+  EmployeeListLoadEvent({required this.condominiumId, required this.filter});
 }
 
-class EmployeeListNextPageEvent extends EmployeeListEvent {
-  const EmployeeListNextPageEvent();
-}
+class EmployeeListNextPageEvent extends EmployeeListEvent {}

@@ -4,7 +4,7 @@ import 'package:lello/feature/unit/presentation/bloc/units/units_event.dart';
 import 'package:lello/feature/unit/presentation/bloc/units/units_state.dart';
 
 class UnitsBloc extends Bloc<UnitsEvent, UnitsState> {
-  UnitsBloc() : super(const UnitsEmptyState()) {
+  UnitsBloc() : super(UnitsEmptyState()) {
     on<UnitsLoadingEvent>(handleUnitsLoadingEvent);
     on<UnitsEmptyEvent>(handleUnitsEmptyEvent);
     on<UnitsSuccessEvent>(handleUnitsSuccessEvent);
@@ -13,15 +13,15 @@ class UnitsBloc extends Bloc<UnitsEvent, UnitsState> {
   }
 
   void handleUnitsLoadingEvent(UnitsLoadingEvent event, Emitter emit) {
-    emit(const UnitsLoadingState());
+    emit(UnitsLoadingState());
   }
 
   void handleUnitsNewLoadingEvent(UnitsNewLoadingEvent event, Emitter emit) {
-    emit(const UnitsNewLoadingState());
+    emit(UnitsNewLoadingState());
   }
 
   void handleUnitsEmptyEvent(UnitsEmptyEvent event, Emitter emit) {
-    emit(const UnitsEmptyState());
+    emit(UnitsEmptyState());
   }
 
   void handleUnitsSuccessEvent(UnitsSuccessEvent event, Emitter emit) {

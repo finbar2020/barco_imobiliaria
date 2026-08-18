@@ -2,42 +2,35 @@ import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/payslip/domain/entity/payslip.dart';
 import 'package:lello/feature/gdp/payslip/domain/entity/payslipFile.dart';
 
-abstract class PayslipSelectionState extends Equatable {
+abstract class PayslipSelectionState {
   final List<Payslip> data;
   final String? numeroCadastro;
-  final PayslipFile payslipFile;
+  PayslipFile payslipFile;
 
-  const PayslipSelectionState(this.data, this.numeroCadastro, this.payslipFile);
-
-  @override
-  List<Object?> get props => [data, numeroCadastro, payslipFile];
+  PayslipSelectionState(this.data, this.numeroCadastro, this.payslipFile);
 }
 
 class PayslipLoadingState extends PayslipSelectionState {
-  const PayslipLoadingState(
+  PayslipLoadingState(
       List<Payslip>? data, String? numeroCadastro, PayslipFile payslipFile)
-      : super(data ?? const <Payslip>[], numeroCadastro, payslipFile);
+      : super(data ?? [], numeroCadastro, payslipFile);
 }
 
 class PayslipLoadFailedState extends PayslipSelectionState {
   final Failure error;
-
-  const PayslipLoadFailedState(List<Payslip> data, String numeroCadastro,
+  PayslipLoadFailedState(List<Payslip> data, String numeroCadastro,
       PayslipFile payslipFile, this.error)
       : super(data, numeroCadastro, payslipFile);
-
-  @override
-  List<Object?> get props => [...super.props, error];
 }
 
 class PayslipLoadedState extends PayslipSelectionState {
-  const PayslipLoadedState(
+  PayslipLoadedState(
       List<Payslip> data, String numeroCadastro, PayslipFile payslipFile)
       : super(data, numeroCadastro, payslipFile);
 }
 
 class PayslipFileDownloadedState extends PayslipSelectionState {
-  const PayslipFileDownloadedState(
+  PayslipFileDownloadedState(
       List<Payslip> data, String numeroCadastro, PayslipFile payslipFile)
       : super(data, numeroCadastro, payslipFile);
 }

@@ -1,100 +1,61 @@
-import 'package:essentials/essentials.dart';
+import 'package:essentials/functional/failure.dart';
 
-abstract class CheckTokenEvent extends Equatable {
-  const CheckTokenEvent();
+abstract class CheckTokenEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class CheckTokenInitialEvent extends CheckTokenEvent {}
 
-class CheckTokenInitialEvent extends CheckTokenEvent {
-  const CheckTokenInitialEvent();
-}
-
-class CheckTokenLoadingEvent extends CheckTokenEvent {
-  const CheckTokenLoadingEvent();
-}
+class CheckTokenLoadingEvent extends CheckTokenEvent {}
 
 class CheckTokenSuccessEvent extends CheckTokenEvent {
   final bool success;
 
-  const CheckTokenSuccessEvent({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  CheckTokenSuccessEvent({required this.success});
 }
 
 class CheckTokenFailureEvent extends CheckTokenEvent {
   final Failure? failure;
 
-  const CheckTokenFailureEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  CheckTokenFailureEvent({required this.failure});
 }
 
-class ResendTokenLoadingEvent extends CheckTokenEvent {
-  const ResendTokenLoadingEvent();
-}
+class ResendTokenLoadingEvent extends CheckTokenEvent {}
 
 class ResendTokenSuccessEvent extends CheckTokenEvent {
   final int id;
 
-  const ResendTokenSuccessEvent({required this.id});
-
-  @override
-  List<Object?> get props => [id];
+  ResendTokenSuccessEvent({required this.id});
 }
 
 class ResendTokenFailureEvent extends CheckTokenEvent {
   final String? failure;
 
-  const ResendTokenFailureEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  ResendTokenFailureEvent({required this.failure});
 }
 
-class SendActionReasonLoadingEvent extends CheckTokenEvent {
-  const SendActionReasonLoadingEvent();
-}
+class SendActionReasonLoadingEvent extends CheckTokenEvent {}
 
 class SendActionReasonSuccessEvent extends CheckTokenEvent {
   final bool success;
 
-  const SendActionReasonSuccessEvent({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  SendActionReasonSuccessEvent({required this.success});
 }
 
 class SendActionReasonFailureEvent extends CheckTokenEvent {
   final Failure? failure;
 
-  const SendActionReasonFailureEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  SendActionReasonFailureEvent({required this.failure});
 }
 
-class UpdateInstallmentsLoadingEvent extends CheckTokenEvent {
-  const UpdateInstallmentsLoadingEvent();
-}
+class UpdateInstallmentsLoadingEvent extends CheckTokenEvent {}
 
 class UpdateInstallmentsSuccessEvent extends CheckTokenEvent {
   final bool success;
 
-  const UpdateInstallmentsSuccessEvent({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  UpdateInstallmentsSuccessEvent({required this.success});
 }
 
 class UpdateInstallmentsFailureEvent extends CheckTokenEvent {
   final Failure? failure;
 
-  const UpdateInstallmentsFailureEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  UpdateInstallmentsFailureEvent({required this.failure});
 }

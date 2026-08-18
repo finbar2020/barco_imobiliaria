@@ -150,7 +150,9 @@ import 'package:lello/feature/condominium/domain/use_case/load_condominium_balan
 import 'package:lello/feature/condominium/domain/use_case/load_condominium_balance_detail/load_condominium_balance_detail.dart';
 import 'package:lello/feature/condominium/domain/use_case/load_condominium_balance_detail/load_condominium_balance_detail_impl.dart';
 import 'package:lello/feature/condominium/presentation/bloc/condominium_balance/condominium_balance_bloc.dart';
+import 'package:lello/feature/condominium/presentation/bloc/condominium_balance/condominium_balance_bloc_impl.dart';
 import 'package:lello/feature/condominium/presentation/detail/bloc/condominium_balance_detail_bloc.dart';
+import 'package:lello/feature/condominium/presentation/detail/bloc/condominium_balance_detail_bloc_impl.dart';
 import 'package:lello/feature/consultant_lello/controller/consultant_lello_controller.dart';
 import 'package:lello/feature/consultant_lello/data/data_source/remote/consultant_lello_api.dart';
 import 'package:lello/feature/consultant_lello/data/data_source/remote/consultant_lello_remote_data_source.dart';
@@ -209,7 +211,9 @@ import 'package:lello/feature/gdp/domain/use_case/get_employee/get_employee_impl
 import 'package:lello/feature/gdp/domain/use_case/list_employee/list_employee.dart';
 import 'package:lello/feature/gdp/domain/use_case/list_employee/list_employee_impl.dart';
 import 'package:lello/feature/gdp/employee/presentation/bloc/employee/employee_bloc.dart';
+import 'package:lello/feature/gdp/employee/presentation/bloc/employee/employee_bloc_impl.dart';
 import 'package:lello/feature/gdp/employee/presentation/bloc/list/employee_list_bloc.dart';
+import 'package:lello/feature/gdp/employee/presentation/bloc/list/employee_list_bloc_impl.dart';
 import 'package:lello/feature/gdp/payslip/data/data_source/payslip_api.dart';
 import 'package:lello/feature/gdp/payslip/data/data_source/payslip_remote_data_source.dart';
 import 'package:lello/feature/gdp/payslip/data/data_source/payslip_remote_data_source_impl.dart';
@@ -220,7 +224,9 @@ import 'package:lello/feature/gdp/payslip/domain/use_case/get_payslips/get_paysl
 import 'package:lello/feature/gdp/payslip/domain/use_case/get_payslips_file/get_payslip_file.dart';
 import 'package:lello/feature/gdp/payslip/domain/use_case/get_payslips_file/get_payslip_file_impl.dart';
 import 'package:lello/feature/gdp/payslip/presentation/bloc/employees/payslip_employees_bloc.dart';
+import 'package:lello/feature/gdp/payslip/presentation/bloc/employees/payslip_employees_bloc_impl.dart';
 import 'package:lello/feature/gdp/payslip/presentation/bloc/selection/payslip_selection_bloc.dart';
+import 'package:lello/feature/gdp/payslip/presentation/bloc/selection/payslip_selection_bloc_impl.dart';
 import 'package:lello/feature/gdp/quick_fix/data/data_source/remote/employee_report_api.dart';
 import 'package:lello/feature/gdp/quick_fix/data/data_source/remote/employee_report_remote_data_source.dart';
 import 'package:lello/feature/gdp/quick_fix/data/data_source/remote/employee_report_remote_data_source_impl.dart';
@@ -229,7 +235,9 @@ import 'package:lello/feature/gdp/quick_fix/domain/repository/employee_report_re
 import 'package:lello/feature/gdp/quick_fix/domain/use_case/get_report/get_employee_report.dart';
 import 'package:lello/feature/gdp/quick_fix/domain/use_case/get_report/get_employee_report_impl.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_bloc.dart';
+import 'package:lello/feature/gdp/quick_fix/presentation/bloc/quick_fix/quick_fix_bloc_impl.dart';
 import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_bloc.dart';
+import 'package:lello/feature/gdp/quick_fix/presentation/bloc/report/quick_fix_report_bloc_impl.dart';
 import 'package:lello/feature/gdp/timesheet/data/data_source/timesheet_api.dart';
 import 'package:lello/feature/gdp/timesheet/data/data_source/timesheet_remote_data_source.dart';
 import 'package:lello/feature/gdp/timesheet/data/data_source/timesheet_remote_data_source_impl.dart';
@@ -275,6 +283,7 @@ import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_day_appo
 import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_details_list/timesheet_details_list_bloc.dart';
 import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_list_pending_appointments/timesheet_list_pending_appointments_bloc.dart';
 import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_month_resume/timesheet_menu_bloc.dart';
+import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_month_resume/timesheet_menu_bloc_impl.dart';
 import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_occurrence/timesheet_occurrence_bloc.dart';
 import 'package:lello/feature/gdp/timesheet/presentation/bloc/timesheet_point_mirror/timesheet_point_mirror_bloc.dart';
 import 'package:lello/feature/gdp/timesheet/presentation/controllers/day_appointments_controller.dart';
@@ -300,12 +309,17 @@ import 'package:lello/feature/gdp/vacation/domain/use_case/get_vacation_period/g
 import 'package:lello/feature/gdp/vacation/domain/use_case/schedule_vacation/schedule_vacation.dart';
 import 'package:lello/feature/gdp/vacation/domain/use_case/schedule_vacation/schedule_vacation_impl.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/details/vacation_bloc.dart';
+import 'package:lello/feature/gdp/vacation/presentation/bloc/details/vacation_bloc_impl.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_bloc.dart';
+import 'package:lello/feature/gdp/vacation/presentation/bloc/employees/vacation_employees_bloc_impl.dart';
 import 'package:lello/feature/gdp/vacation/presentation/bloc/schedule_vacation/schedule_vacation_bloc.dart';
+import 'package:lello/feature/gdp/vacation/presentation/bloc/schedule_vacation/schedule_vacation_bloc_impl.dart';
 import 'package:lello/feature/home/presentation/bloc/home_bloc.dart';
+import 'package:lello/feature/home/presentation/bloc/home_bloc_impl.dart';
 import 'package:lello/feature/home/presentation/controllers/home_analytics_timer_controller.dart';
 import 'package:lello/feature/home/presentation/widget/home_dialogs/bloc/home_dialogs_bloc.dart';
 import 'package:lello/feature/home/presentation/widget/sliver/bloc/home_sliver_app_bar_bloc.dart';
+import 'package:lello/feature/home/presentation/widget/sliver/bloc/home_sliver_app_bar_bloc_impl.dart';
 import 'package:lello/feature/home_cards_preferences/bloc/preferences_home_cards_bloc.dart';
 import 'package:lello/feature/home_cards_preferences/controller/preferences_home_cards_controller.dart';
 import 'package:lello/feature/income/data/data_source/local/income_local_data_source.dart';
@@ -336,10 +350,12 @@ import 'package:lello/feature/income/presentation/billets/detail/controller/bill
 import 'package:lello/feature/income/presentation/dasboard/bloc/income_dashboard_bloc.dart';
 import 'package:lello/feature/income/presentation/dasboard/controller/income_dashboard_controller.dart';
 import 'package:lello/feature/maintenance_management/domain/use_cases/reset_schedule_event_use_case.dart';
+import 'package:lello/feature/maintenance_management/presentation/home/bloc/maintenance_management_last_week/maintenance_management_last_week_bloc_impl.dart';
 import 'package:lello/feature/maintenance_management/presentation/agenda/bloc/agenda_tasks_bloc.dart';
 import 'package:lello/feature/maintenance_management/presentation/agenda/bloc/calendar_indicators_bloc.dart';
 import 'package:lello/feature/maintenance_management/domain/use_cases/get_calendar_days_use_case.dart';
 import 'package:lello/feature/maintenance_management/presentation/legal_obligation/bloc/legal_obligation_bloc.dart';
+import 'package:lello/feature/maintenance_management/presentation/legal_obligation/bloc/legal_obligation_bloc_impl.dart';
 import 'package:lello/feature/maintenance_management/presentation/task/bloc/task_edit/task_edit_bloc.dart';
 import 'package:lello/feature/maintenance_management/presentation/task/bloc/init_step/task_init_step_bloc.dart';
 import 'package:lello/feature/maintenance_management/presentation/task/bloc/task_report/task_report_bloc.dart';
@@ -442,6 +458,7 @@ import 'package:lello/feature/payment/domain/use_case/upload_documents_aws/uploa
 import 'package:lello/feature/payment/domain/use_case/upload_payment_file/upload_payment_file.dart';
 import 'package:lello/feature/payment/domain/use_case/upload_payment_file/upload_payment_file_impl.dart';
 import 'package:lello/feature/payment/presentation/approval/bloc/payment_approval_bloc.dart';
+import 'package:lello/feature/payment/presentation/approval/bloc/payment_approval_bloc_impl.dart';
 import 'package:lello/feature/payment/presentation/history_list/bloc/payment_history_list_bloc.dart';
 import 'package:lello/feature/payment/presentation/history_list/controller/payment_history_list_controller.dart';
 import 'package:lello/feature/payment/presentation/pendency/bloc/check_token_bloc/check_token_bloc.dart';
@@ -570,6 +587,7 @@ import 'package:lello/feature/session/domain/use_case/load_session/load_session_
 import 'package:lello/feature/session/domain/use_case/save_session/save_session.dart';
 import 'package:lello/feature/session/domain/use_case/save_session/save_session_impl.dart';
 import 'package:lello/feature/session/presentation/bloc/session_bloc.dart';
+import 'package:lello/feature/session/presentation/bloc/session_bloc_impl.dart';
 import 'package:lello/feature/space/data/data_source/local/space_local_data_source.dart';
 import 'package:lello/feature/space/data/data_source/local/space_local_data_source_impl.dart';
 import 'package:lello/feature/space/data/data_source/remote/space_api.dart';
@@ -601,7 +619,9 @@ import 'package:lello/feature/space/registration/domain/use_case/update_space/up
 import 'package:lello/feature/space/registration/domain/use_case/upload_space_file/upload_space_file.dart';
 import 'package:lello/feature/space/registration/domain/use_case/upload_space_file/upload_space_file_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/lello/space_registration_lello_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/lello/space_registration_lello_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/data/data_source/local/reservation_summary/reservation_summary_local_data_source.dart';
 import 'package:lello/feature/space/reservation/data/data_source/local/reservation_summary/reservation_summary_local_data_source_impl.dart';
 import 'package:lello/feature/space/reservation/data/data_source/remote/reservation/reservation_api.dart';
@@ -653,18 +673,31 @@ import 'package:lello/feature/space/reservation/domain/use_case/register_raffle/
 import 'package:lello/feature/space/reservation/domain/use_case/register_reservation/register_reservation.dart';
 import 'package:lello/feature/space/reservation/domain/use_case/register_reservation/register_reservation_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_calendar/reservation_calendar_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_calendar/reservation_calendar_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_cancellation/reservation_cancellation_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_cancellation/reservation_canellation_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_change_calendar/reservation_change_calendar_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_change_calendar/reservation_change_calendar_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_change_rules/reservation_change_rules_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_change_rules/reservation_change_rules_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_filter/reservation_filter_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_filter/reservation_filter_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_list/reservation_list_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_list/reservation_list_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_raffle_draw_bloc/reservation_raffle_draw_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_raffle_draw_bloc/reservation_raffle_draw_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration/reservation_registration_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration/reservation_registration_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_maintenance/reservation_registration_maintenance_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_maintenance/reservation_registration_maintenance_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_raffle/reservation_registration_raffle_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_raffle/reservation_registration_reservation_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_reservation/reservation_registration_reservation_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_reservation/reservation_registration_reservation_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_time/reservation_registration_time_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/reservation_registration_time/reservation_registration_time_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/presentation/bloc/space_list/space_bloc.dart';
+import 'package:lello/feature/space/reservation/presentation/bloc/space_list/space_bloc_impl.dart';
 import 'package:lello/feature/splash/data/data_source/boot_data_source.dart';
 import 'package:lello/feature/splash/data/data_source/boot_data_source_impl.dart';
 import 'package:lello/feature/splash/data/repository/boot_data_repository_impl.dart';
@@ -699,6 +732,7 @@ import 'package:lello/feature/unit/domain/use_case/list_unit_resident/list_unit_
 import 'package:lello/feature/unit/domain/use_case/list_unit_resident/list_unit_resident_impl.dart';
 import 'package:lello/feature/unit/domain/use_case/list_units/list_units_usecase.dart';
 import 'package:lello/feature/unit/presentation/bloc/detail/unit_detail_bloc.dart';
+import 'package:lello/feature/unit/presentation/bloc/detail/unit_detail_bloc_impl.dart';
 import 'package:lello/feature/unit/presentation/bloc/units/units_bloc.dart';
 import 'package:lello/feature/unit/presentation/controllers/unit_controller.dart';
 import 'package:lello/feature/vehicles/data/datasource/vehicle_api.dart';
@@ -777,7 +811,7 @@ import 'package:shared_features/feature/registration/presentation/store/registra
 import 'package:shared_features/feature/reset_password/data/data_source/password_reset_api.dart';
 import 'package:shared_features/shared_features.dart';
 
-import 'package:lello/feature/home/presentation/widget/home_dialogs/bloc/home_dialogs_bloc.dart';
+import '../../feature/home/presentation/widget/home_dialogs/bloc/home_dialogs_bloc_impl.dart';
 import '../../feature/maintenance_management/api/maintenance_management_api.dart';
 import '../../feature/maintenance_management/data/data_source/maintenance_management_remote_data_source.dart';
 import '../../feature/maintenance_management/data/data_source/maintenance_management_remote_data_source_impl.dart';
@@ -832,12 +866,17 @@ import '../../feature/maintenance_management/presentation/chat/bloc/chat_message
 import '../../feature/maintenance_management/presentation/home/widgets/task_summary/bloc/task_summary_bloc.dart';
 import '../../feature/maintenance_management/presentation/create_task/bloc/create_routine_bloc.dart';
 import '../../feature/maintenance_management/presentation/home/bloc/maintenance_management_bloc.dart';
+import '../../feature/maintenance_management/presentation/home/bloc/maintenance_management_bloc_impl.dart';
 import '../../feature/maintenance_management/presentation/home/bloc/maintenance_management_current_week/maintenance_management_current_week_bloc.dart';
+import '../../feature/maintenance_management/presentation/home/bloc/maintenance_management_current_week/maintenance_management_current_week_bloc_impl.dart';
 import '../../feature/maintenance_management/presentation/home/bloc/maintenance_management_last_week/maintenance_management_last_week_bloc.dart';
 import '../../feature/maintenance_management/presentation/legal_obligation/bloc/legal_obligation_bloc.dart';
+import '../../feature/maintenance_management/presentation/legal_obligation/bloc/legal_obligation_bloc_impl.dart';
 import '../../feature/maintenance_management/presentation/agenda/bloc/schedule_events_bloc.dart';
 import '../../feature/maintenance_management/presentation/reports_view/bloc/visualize_reports_bloc.dart';
+import '../../feature/maintenance_management/presentation/reports_view/bloc/visualize_reports_bloc_impl.dart';
 import '../../feature/maintenance_management/presentation/task/bloc/task_details_bloc.dart';
+import '../../feature/maintenance_management/presentation/task/bloc/task_details_bloc_impl.dart';
 import '../../feature/maintenance_management/presentation/task/bloc/task_history_bloc.dart';
 import '../../feature/payment/presentation/list/bloc/payment_list_bloc.dart';
 import '../../feature/payment/presentation/register/controllers/payment_registration_controller.dart';
@@ -1176,7 +1215,7 @@ class ApplicationContainer extends SharedApplicationContainer {
     locator.registerFactory<SaveSession>(() => SaveSessionImpl(
           repository: resolve(),
         ));
-    locator.registerLazySingleton<SessionBloc>(() => SessionBloc(
+    locator.registerLazySingleton<SessionBloc>(() => SessionBlocImpl(
           authenticationStore: resolve(),
           loadSession: resolve(),
           saveSesion: resolve(),
@@ -1370,7 +1409,8 @@ class ApplicationContainer extends SharedApplicationContainer {
         () => GetSubcategoriesUseCaseImpl(repository: resolve()));
 
     //sliverNotificationsPreferencesRemoteDataSource
-    locator.registerFactory<HomeSliverAppBarBloc>(() => HomeSliverAppBarBloc());
+    locator.registerFactory<HomeSliverAppBarBloc>(
+        () => HomeSliverAppBarBlocImpl());
 
     //home
 
@@ -1382,12 +1422,12 @@ class ApplicationContainer extends SharedApplicationContainer {
     locator.registerFactory<RegisterFcm>(() => RegisterFcmImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<HomeBloc>(() => HomeBloc(
+    locator.registerFactory<HomeBloc>(() => HomeBlocImpl(
           registerFcm: resolve(),
           sessionBloc: resolve(),
           deviceIdentifierService: resolve(),
         ));
-    locator.registerFactory<HomeDialogBloc>(() => HomeDialogBloc(
+    locator.registerFactory<HomeDialogBloc>(() => HomeDialogBlocImpl(
           sessionBloc: resolve(),
         ));
 
@@ -1465,7 +1505,7 @@ class ApplicationContainer extends SharedApplicationContainer {
         () => RegisterPaymentApprovalImpl(
               repository: resolve(),
             ));
-    locator.registerFactory<PaymentApprovalBloc>(() => PaymentApprovalBloc(
+    locator.registerFactory<PaymentApprovalBloc>(() => PaymentApprovalBlocImpl(
           requestValidationCode: resolve(),
           sessionBloc: resolve(),
           listAccounts: resolve(),
@@ -1541,7 +1581,7 @@ class ApplicationContainer extends SharedApplicationContainer {
               remoteDataSource: resolve(),
               localDataSource: resolve(),
             ));
-    locator.registerFactory<BalanceDetailBloc>(() => BalanceDetailBloc(
+    locator.registerFactory<BalanceDetailBloc>(() => BalanceDetailBlocImpl(
           sessionBloc: resolve(),
           loadCondominiumBalanceDetail: resolve(),
         ));
@@ -1554,26 +1594,26 @@ class ApplicationContainer extends SharedApplicationContainer {
               repository: resolve(),
             ));
     locator.registerFactory<CondominiumBalanceBloc>(
-        () => CondominiumBalanceBloc(
+        () => CondominiumBalanceBlocImpl(
               loadCondominiumBalance: resolve(),
               sessionBloc: resolve(),
             ));
 
     locator.registerLazySingleton<MaintenanceManagementBloc>(
-      () => MaintenanceManagementBloc(
+      () => MaintenanceManagementBlocImpl(
         resolve(),
         resolve(),
         resolve(),
       ),
     );
     locator.registerLazySingleton<MaintenanceManagementCurrentWeekBloc>(
-      () => MaintenanceManagementCurrentWeekBloc(
+      () => MaintenanceManagementCurrentWeekBlocImpl(
         resolve(),
       ),
     );
 
     locator.registerFactory<MaintenanceManagementLastWeekBloc>(
-      () => MaintenanceManagementLastWeekBloc(
+      () => MaintenanceManagementLastWeekBlocImpl(
         resolve(),
       ),
     );
@@ -1879,7 +1919,7 @@ class ApplicationContainer extends SharedApplicationContainer {
         vehiclesBloc: resolve(),
       ),
     );
-    locator.registerFactory<UnitDetailBloc>(() => UnitDetailBloc(
+    locator.registerFactory<UnitDetailBloc>(() => UnitDetailBlocImpl(
           listUnitResident: resolve(),
           sendInvite: resolve(),
         ));
@@ -2162,14 +2202,14 @@ class ApplicationContainer extends SharedApplicationContainer {
           localDataSource: resolve(),
           remoteDataSource: resolve(),
         ));
-    locator.registerFactory<EmployeeListBloc>(() => EmployeeListBloc(
+    locator.registerFactory<EmployeeListBloc>(() => EmployeeListBlocImpl(
           sessionBloc: resolve(),
           listEmployee: resolve(),
         ));
     locator.registerFactory<GetEmployee>(() => GetEmployeeImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<EmployeeBloc>(() => EmployeeBloc(
+    locator.registerFactory<EmployeeBloc>(() => EmployeeBlocImpl(
           sessionBloc: resolve(),
           getEmployee: resolve(),
           sendInviteCase: resolve(),
@@ -2191,11 +2231,11 @@ class ApplicationContainer extends SharedApplicationContainer {
     locator.registerFactory<GetEmployeeReport>(() => GetEmployeeReportImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<QuickFixBloc>(() => QuickFixBloc(
+    locator.registerFactory<QuickFixBloc>(() => QuickFixBlocImpl(
           sessionBloc: resolve(),
           listEmployee: resolve(),
         ));
-    locator.registerFactory<QuickFixReportBloc>(() => QuickFixReportBloc(
+    locator.registerFactory<QuickFixReportBloc>(() => QuickFixReportBlocImpl(
           sessionBloc: resolve(),
           getEmployeeReport: resolve(),
         ));
@@ -2214,7 +2254,7 @@ class ApplicationContainer extends SharedApplicationContainer {
     locator.registerFactory<GetMonthResume>(() => GetMonthResumeImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<TimesheetMenuBloc>(() => TimesheetMenuBloc(
+    locator.registerFactory<TimesheetMenuBloc>(() => TimesheetMenuBlocImpl(
           sessionBloc: resolve(),
           monthResume: resolve(),
           getTimesheetPeriods: resolve(),
@@ -2362,7 +2402,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           remoteDataSource: resolve(),
         ));
     locator
-        .registerFactory<ScheduleVacationBloc>(() => ScheduleVacationBloc(
+        .registerFactory<ScheduleVacationBloc>(() => ScheduleVacationBlocImpl(
               scheduleVacation: resolve(),
               sessionBloc: resolve(),
             ));
@@ -2370,14 +2410,14 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator
-        .registerFactory<VacationEmployeesBloc>(() => VacationEmployeesBloc(
+        .registerFactory<VacationEmployeesBloc>(() => VacationEmployeesBlocImpl(
               sessionBloc: resolve(),
               listEmployee: resolve(),
             ));
     locator.registerFactory<GetVacation>(() => GetVacationImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<VacationBloc>(() => VacationBloc(
+    locator.registerFactory<VacationBloc>(() => VacationBlocImpl(
           sessionBloc: resolve(),
           getVacation: resolve(),
           getVacationPeriod: resolve(),
@@ -2402,7 +2442,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           remoteDataSource: resolve(),
         ));
     locator
-        .registerFactory<PayslipEmployeesBloc>(() => PayslipEmployeesBloc(
+        .registerFactory<PayslipEmployeesBloc>(() => PayslipEmployeesBlocImpl(
               sessionBloc: resolve(),
               listEmployee: resolve(),
             ));
@@ -2413,7 +2453,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator
-        .registerFactory<PayslipSelectionBloc>(() => PayslipSelectionBloc(
+        .registerFactory<PayslipSelectionBloc>(() => PayslipSelectionBlocImpl(
               sessionBloc: resolve(),
               getPayslip: resolve(),
               getPayslipFile: resolve(),
@@ -2563,7 +2603,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator.registerLazySingleton<ReservationCalendarBloc>(
-        () => ReservationCalendarBloc(
+        () => ReservationCalendarBlocImpl(
               sessionBloc: resolve(),
               listAllReservation: resolve(),
               registerReservation: resolve(),
@@ -2590,7 +2630,7 @@ class ApplicationContainer extends SharedApplicationContainer {
     locator.registerFactory<ListAllReservation>(() => ListAllReservationsImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<ReservationListBloc>(() => ReservationListBloc(
+    locator.registerFactory<ReservationListBloc>(() => ReservationListBlocImpl(
           sessionBloc: resolve(),
           listReservation: resolve(),
         ));
@@ -2599,7 +2639,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator.registerFactory<ReservationCancellationBloc>(
-        () => ReservationCancellationBloc(
+        () => ReservationCancellationBlocImpl(
               sessionBloc: resolve(),
               cancelReservation: resolve(),
             ));
@@ -2623,13 +2663,13 @@ class ApplicationContainer extends SharedApplicationContainer {
     locator.registerFactory<ListSpace>(() => ListSpaceImpl(
           repository: resolve(),
         ));
-    locator.registerFactory<SpaceBloc>(() => SpaceBloc(
+    locator.registerFactory<SpaceBloc>(() => SpaceBlocImpl(
           sessionBloc: resolve(),
           listSpace: resolve(),
           listUnits: resolve(),
         ));
     locator
-        .registerFactory<ReservationFilterBloc>(() => ReservationFilterBloc(
+        .registerFactory<ReservationFilterBloc>(() => ReservationFilterBlocImpl(
               sessionBloc: resolve(),
               listSpace: resolve(),
               listUnits: resolve(),
@@ -2638,12 +2678,12 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator.registerFactory<ReservationRegistrationTimeBloc>(
-        () => ReservationRegistrationTimeBloc(
+        () => ReservationRegistrationTimeBlocImpl(
               sessionBloc: resolve(),
               listReservationTime: resolve(),
             ));
     locator.registerFactory<ReservationRegistrationBloc>(
-        () => ReservationRegistrationBloc(
+        () => ReservationRegistrationBlocImpl(
               sessionBloc: resolve(),
             ));
     locator.registerFactory<RegisterMaintenance>(() => RegisterMaintenanceImpl(
@@ -2661,12 +2701,12 @@ class ApplicationContainer extends SharedApplicationContainer {
               dataSource: resolve(),
             ));
     locator.registerFactory<ReservationRegistrationMaintenanceBloc>(
-        () => ReservationRegistrationMaintenanceBloc(
+        () => ReservationRegistrationMaintenanceBlocImpl(
               sessionBloc: resolve(),
               registerMaintenance: resolve(),
             ));
     locator.registerFactory<ReservationRegistrationReservationBloc>(
-        () => ReservationRegistrationReservationBloc(
+        () => ReservationRegistrationReservationBlocImpl(
               sessionBloc: resolve(),
               registerReservation: resolve(),
               getReservationRule: resolve(),
@@ -2693,7 +2733,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator.registerFactory<ReservationRegistrationRaffleBloc>(
-        () => ReservationRegistrationRaffleBloc(
+        () => ReservationRegistrationRaffleBlocImpl(
               sessionBloc: resolve(),
               listUnits: resolve(),
               listResidents: resolve(),
@@ -2706,7 +2746,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator.registerFactory<ReservationRaffleDrawBloc>(
-        () => ReservationRaffleDrawBloc(
+        () => ReservationRaffleDrawBlocImpl(
               sessionBloc: resolve(),
               drawRaffle: resolve(),
               getRaffle: resolve(),
@@ -2730,7 +2770,7 @@ class ApplicationContainer extends SharedApplicationContainer {
               repository: resolve(),
             ));
     locator.registerFactory<SpaceRegistrationLelloBloc>(
-        () => SpaceRegistrationLelloBloc(
+        () => SpaceRegistrationLelloBlocImpl(
               sessionBloc: resolve(),
               requestSpaceRegistration: resolve(),
             ));
@@ -2747,7 +2787,7 @@ class ApplicationContainer extends SharedApplicationContainer {
           repository: resolve(),
         ));
     locator
-        .registerFactory<SpaceRegistrationBloc>(() => SpaceRegistrationBloc(
+        .registerFactory<SpaceRegistrationBloc>(() => SpaceRegistrationBlocImpl(
               sessionBloc: resolve(),
               uploadSpaceFile: resolve(),
               registerSpace: resolve(),
@@ -2766,14 +2806,14 @@ class ApplicationContainer extends SharedApplicationContainer {
               repository: resolve(),
             ));
     locator.registerFactory<ReservationChangeRulesBloc>(
-        () => ReservationChangeRulesBloc(
+        () => ReservationChangesRulesBlocImpl(
               post: resolve(),
               getChangeRules: resolve(),
               sessionBloc: resolve(),
             ));
 
     locator.registerFactory<ReservationChangeCalendarBloc>(
-        () => ReservationChangeCalendarBloc(
+        () => ReservationChangeCalendarBlocImpl(
               listUnits: resolve(),
               sessionBloc: resolve(),
             ));
@@ -3146,7 +3186,7 @@ class ApplicationContainer extends SharedApplicationContainer {
       () => ClearDataImpl(),
     );
     locator.registerFactory<ExpiredSessionBloc>(
-      () => ExpiredSessionBloc(
+      () => ExpiredSessionBlocImpl(
         emptySessionState: resolve<SessionBloc>().emptyState,
         clearDataUseCase: resolve(),
         logOutUseCase: resolve(),
@@ -3222,7 +3262,7 @@ class ApplicationContainer extends SharedApplicationContainer {
       ),
     );
     locator.registerFactory<LegalObligationBloc>(
-      () => LegalObligationBloc(
+      () => LegalObligationBlocImpl(
         resolve(),
         resolve(),
         resolve(),
@@ -3264,7 +3304,7 @@ class ApplicationContainer extends SharedApplicationContainer {
       ),
     );
     locator.registerFactory<VisualizeReportsBloc>(
-      () => VisualizeReportsBloc(
+      () => VisualizeReportsBlocImpl(
         resolve(),
         resolve(),
         resolve(),
@@ -3377,7 +3417,7 @@ class ApplicationContainer extends SharedApplicationContainer {
       ),
     );
     locator.registerFactory<TaskDetailsBloc>(
-      () => TaskDetailsBloc(
+      () => TaskDetailsBlocImpl(
         resolve(),
         resolve(),
         resolve(),

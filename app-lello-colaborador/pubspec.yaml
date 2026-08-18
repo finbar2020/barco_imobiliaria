@@ -35,6 +35,8 @@ dev_dependencies:
   mockito: ^5.4.2
 
   flutter_lints: ^4.0.0
+  sqflite_common_ffi: ^2.3.6
+  fake_cloud_firestore: ^4.2.0
 
 dependency_overrides:
   intl: 0.20.2

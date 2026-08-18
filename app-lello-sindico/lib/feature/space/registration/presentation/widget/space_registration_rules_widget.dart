@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lello/core/dependency/application_container.dart';
 import 'package:lello/core/widget/step_indicator.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_state.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_rule.dart';
 import 'package:sprintf/sprintf.dart';
@@ -35,7 +35,7 @@ class _SpaceRegistrationRulesWidgetState
   }
 
   Widget _buildHeader(ThemeData theme, SpaceRegistrationState state) {
-    final steps = SpaceRegistrationBloc.stepOrder;
+    final steps = SpaceRegistrationBlocImpl.stepOrder;
     final currentStep = steps.indexOf(state.step!);
     return ListTile(
       contentPadding: EdgeInsets.zero,

@@ -1,34 +1,17 @@
-import 'package:essentials/essentials.dart';
+import 'package:essentials/functional/failure.dart';
 
-abstract class ValidationMethodEvent extends Equatable {
-  const ValidationMethodEvent();
+abstract class ValidationMethodEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class ValidationMethodEmptyEvent extends ValidationMethodEvent {}
 
-class ValidationMethodEmptyEvent extends ValidationMethodEvent {
-  const ValidationMethodEmptyEvent();
-}
-
-class ValidationMethodLoadingEvent extends ValidationMethodEvent {
-  const ValidationMethodLoadingEvent();
-}
+class ValidationMethodLoadingEvent extends ValidationMethodEvent {}
 
 class ValidationMethodSuccessEvent extends ValidationMethodEvent {
   final int? id;
-
-  const ValidationMethodSuccessEvent({this.id});
-
-  @override
-  List<Object?> get props => [id];
+  ValidationMethodSuccessEvent({this.id});
 }
 
 class ValidationMethodFailureEvent extends ValidationMethodEvent {
   final Failure? error;
-
-  const ValidationMethodFailureEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  ValidationMethodFailureEvent({this.error});
 }

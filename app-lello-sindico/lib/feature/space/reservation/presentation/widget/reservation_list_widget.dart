@@ -80,6 +80,7 @@ class _ReservationListWidgetState extends State<ReservationListWidget> {
             }
           },
           builder: (context, state) {
+            print("a");
             if (state.data.isEmpty) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

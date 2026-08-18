@@ -37,7 +37,7 @@ class _TaskReportPageState extends State<TaskReportPage> {
     _bloc = ApplicationContainer.instance().resolve<TaskReportBloc>();
 
     if (widget.eventId != null) {
-      _bloc.add(LoadTaskReportEvent(eventId: widget.eventId!));
+      _bloc.add(LoadTaskReport(eventId: widget.eventId!));
     }
   }
 
@@ -58,11 +58,11 @@ class _TaskReportPageState extends State<TaskReportPage> {
       body: BlocBuilder<TaskReportBloc, TaskReportState>(
         bloc: _bloc,
         builder: (context, state) {
-          if (state is TaskReportLoadingState) {
+          if (state is TaskReportLoading) {
             return _buildLoadingState(theme, palette);
-          } else if (state is TaskReportLoadedState) {
+          } else if (state is TaskReportLoaded) {
             return _buildLoadedState(state.report, theme, palette);
-          } else if (state is TaskReportErrorState) {
+          } else if (state is TaskReportError) {
             return _buildErrorState(state.message, theme, palette);
           } else {
             return _buildNoDataState(theme, palette);
@@ -198,7 +198,7 @@ class _TaskReportPageState extends State<TaskReportPage> {
                   ElevatedButton(
                     onPressed: () {
                       if (widget.eventId != null) {
-                        _bloc.add(RefreshTaskReportEvent(eventId: widget.eventId!));
+                        _bloc.add(RefreshTaskReport(eventId: widget.eventId!));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -924,8 +924,8 @@ class _TaskReportPageState extends State<TaskReportPage> {
   void _navigateToOriginAnswerTask(String? questionId) {
     // Busca o childTask que tem este questionId como originAnswer.questionId
     final currentState = _bloc.state;
-    if (currentState is! TaskReportLoadedState) {
-      print('🔴 DEBUG: Estado atual não é TaskReportLoadedState');
+    if (currentState is! TaskReportLoaded) {
+      print('🔴 DEBUG: Estado atual não é TaskReportLoaded');
       return;
     }
 

@@ -1,12 +1,3 @@
-import 'package:essentials/essentials.dart';
+abstract class ReservationChangeCalendarEvent {}
 
-abstract class ReservationChangeCalendarEvent extends Equatable {
-  const ReservationChangeCalendarEvent();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class GetListUnitsEvent extends ReservationChangeCalendarEvent {
-  const GetListUnitsEvent();
-}
+class GetListUnitsEvent extends ReservationChangeCalendarEvent {}

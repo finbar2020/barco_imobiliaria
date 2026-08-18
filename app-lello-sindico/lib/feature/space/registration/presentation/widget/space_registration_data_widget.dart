@@ -6,7 +6,7 @@ import 'package:lello/core/dependency/application_container.dart';
 import 'package:lello/core/widget/step_indicator.dart';
 import 'package:lello/feature/space/domain/entity/space_type.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_state.dart';
 
 class SpaceRegistrationDataWidget extends StatefulWidget {
@@ -35,7 +35,7 @@ class _SpaceRegistrationDataWidgetState
   }
 
   Widget _buildHeader(ThemeData theme, SpaceRegistrationState state) {
-    final steps = SpaceRegistrationBloc.stepOrder;
+    final steps = SpaceRegistrationBlocImpl.stepOrder;
     final currentStep = steps.indexOf(state.step!);
     return ListTile(
       contentPadding: EdgeInsets.zero,

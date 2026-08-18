@@ -26,7 +26,6 @@ class TimesheetWidget extends StatefulWidget {
 
 class _TimesheetWidgetState extends State<TimesheetWidget> {
   bool selectAll = false;
-  bool _pdfOpened = false;
 
   String? selectedValue;
 
@@ -41,10 +40,7 @@ class _TimesheetWidgetState extends State<TimesheetWidget> {
             message: getString(context, "gdp_timesheet_detail_error"),
             duration: const Duration(seconds: 5),
           ).show(context);
-        } else if (state is TimesheetDetailLoadedState &&
-            state.pdf != null &&
-            !_pdfOpened) {
-          _pdfOpened = true;
+        } else if (state is TimesheetDetailLoadedState && state.pdf != null) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -56,7 +52,7 @@ class _TimesheetWidgetState extends State<TimesheetWidget> {
                     "${getString(context, "gdp_timesheet_type_all_timesheet")} ${widget.controller.selectedDate.year}-${widget.controller.selectedDate.month} ${widget.controller.timesheetEmployee?.name}.pdf",
               ),
             ),
-          ).then((_) => _pdfOpened = false);
+          ).then((value) => state.pdf = null);
         } else if (state is TimesheetDetailLoadedState && state.putFailed) {
           Navigator.push(
             context,

@@ -38,7 +38,6 @@ class _ResinHistoryAdvanceWidgetState extends State<ResinHistoryAdvanceWidget> {
     return BlocConsumer<ResinHistoryAdvanceBloc, ResinHistoryAdvanceState>(
       bloc: widget.controller.bloc,
       listener: (context, state) {
-        _showSnackBar(context, state.flushbarMessageKey);
         if (state is ResinAdvanceDetailsLoadedState) {
           Navigator.pushNamed(
             context,
@@ -51,6 +50,11 @@ class _ResinHistoryAdvanceWidgetState extends State<ResinHistoryAdvanceWidget> {
         }
       },
       builder: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showSnackBar(
+              context, widget.controller.bloc.state.flushbarMessageKey);
+          widget.controller.bloc.state.flushbarMessageKey = null;
+        });
         if (state is ResinDeleteHistoryAdvanceLoadingState) {
           return _buildCancelAdvanceLoading(context);
         }

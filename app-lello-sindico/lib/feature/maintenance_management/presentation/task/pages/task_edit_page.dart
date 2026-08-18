@@ -82,7 +82,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           }
 
           if (state.outcome != null && mounted) {
-            if (state.outcome == TaskEditStatus.error) {
+            if (state.outcome == TaskEditOutcome.error) {
               // Mostrar snackbar de erro com mensagem específica
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -94,8 +94,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
                   duration: const Duration(seconds: 4),
                 ),
               );
-              _bloc.add(const TaskEditStatusClearedEvent());
-            } else if (state.outcome == TaskEditStatus.savedSingle) {
+              _bloc.add(const TaskEditOutcomeCleared());
+            } else if (state.outcome == TaskEditOutcome.savedSingle) {
               // Mostrar tela de sucesso para edição de evento único
               final isServiceOrder = widget.task.typeTask == 'ORDEM_SERVICO';
               final shouldReload = await Navigator.of(context).push<bool>(
@@ -111,16 +111,16 @@ class _TaskEditPageState extends State<TaskEditPage> {
                   ),
                 ),
               );
-              _bloc.add(const TaskEditStatusClearedEvent());
+              _bloc.add(const TaskEditOutcomeCleared());
               // Se retornou null (usuário foi para home), fecha a tela de edição também
               if (shouldReload == null && mounted) {
                 Navigator.of(context).pop();
               }
               // Fecha a tela de edição e retorna o outcome apenas se usuário clicou em "Abrir tarefa"
               else if (shouldReload == true && mounted) {
-                Navigator.of(context).pop(TaskEditStatus.savedSingle);
+                Navigator.of(context).pop(TaskEditOutcome.savedSingle);
               }
-            } else if (state.outcome == TaskEditStatus.savedFuture) {
+            } else if (state.outcome == TaskEditOutcome.savedFuture) {
               // Mostrar tela de sucesso para edição de eventos futuros
               final shouldReload = await Navigator.of(context).push<bool>(
                 MaterialPageRoute(
@@ -134,14 +134,14 @@ class _TaskEditPageState extends State<TaskEditPage> {
                   ),
                 ),
               );
-              _bloc.add(const TaskEditStatusClearedEvent());
+              _bloc.add(const TaskEditOutcomeCleared());
               // Se retornou null (usuário foi para home), fecha a tela de edição também
               if (shouldReload == null && mounted) {
                 Navigator.of(context).pop();
               }
               // Fecha a tela de edição e retorna o outcome apenas se usuário clicou em "Abrir tarefa"
               else if (shouldReload == true && mounted) {
-                Navigator.of(context).pop(TaskEditStatus.savedFuture);
+                Navigator.of(context).pop(TaskEditOutcome.savedFuture);
               }
             } else {
               Navigator.of(context).pop(state.outcome);
@@ -215,7 +215,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
 
   void _handleBackPressed(TaskEditState state) {
     if (_hasUnsavedChanges(state)) {
-      _bloc.add(const TaskEditDiscardPressedEvent());
+      _bloc.add(const TaskEditDiscardPressed());
     } else {
       Navigator.of(context).pop();
     }
@@ -518,7 +518,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
             if (picked != null) {
               final formattedDate = _formatDate(picked);
               if (isStartDate) {
-                _bloc.add(TaskEditStartDateChangedEvent(formattedDate));
+                _bloc.add(TaskEditStartDateChanged(formattedDate));
               }
             }
           },
@@ -628,7 +628,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
     ColorPallete palette,
   ) {
     return InkWell(
-      onTap: () => _bloc.add(TaskEditScopeSelectedEvent(scope)),
+      onTap: () => _bloc.add(TaskEditScopeSelected(scope)),
       child: Container(
         height: 35,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -694,7 +694,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
         ),
         Switch(
           value: state.isAllDay,
-          onChanged: (value) => _bloc.add(TaskEditToggleAllDayEvent(value)),
+          onChanged: (value) => _bloc.add(TaskEditToggleAllDay(value)),
           activeColor: palette.primary(),
         ),
       ],
@@ -764,7 +764,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
                       ),
                     ))
                 .toList(),
-            onChanged: (value) => _bloc.add(TaskEditCheckInChangedEvent(value)),
+            onChanged: (value) => _bloc.add(TaskEditCheckInChanged(value)),
           ),
         ),
       ],
@@ -829,7 +829,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
                 .toList(),
             onChanged: (TaskScheduleMode? newMode) {
               if (newMode != null) {
-                _bloc.add(TaskEditModeChangedEvent(newMode));
+                _bloc.add(TaskEditModeChanged(newMode));
               }
             },
           ),
@@ -952,7 +952,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
       selectedDays: selectedDayIndices,
       onDayToggled: (dayIndex) {
         final day = _weekDayOrder[dayIndex];
-        _bloc.add(TaskEditWeekDayToggledEvent(day));
+        _bloc.add(TaskEditWeekDayToggled(day));
       },
       theme: theme,
       palette: palette,
@@ -983,7 +983,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           Expanded(
             child: InvertedPrimaryButton(
               text: 'Descartar edição',
-              onPressed: () => _bloc.add(const TaskEditDiscardPressedEvent()),
+              onPressed: () => _bloc.add(const TaskEditDiscardPressed()),
             ),
           ),
           const SizedBox(width: 12),
@@ -1066,14 +1066,14 @@ class _TaskEditPageState extends State<TaskEditPage> {
               Expanded(
                 child: PrimaryButton(
                   text: 'Sim, confirmar edição',
-                  onPressed: () => _bloc.add(const TaskEditConfirmScopeEvent()),
+                  onPressed: () => _bloc.add(const TaskEditConfirmScope()),
                 ),
               ),
               const SizedBox(height: 10),
               Expanded(
                 child: InvertedPrimaryButton(
                   text: 'Não, voltar para edição de rotinas',
-                  onPressed: () => _bloc.add(const TaskEditDialogDismissedEvent()),
+                  onPressed: () => _bloc.add(const TaskEditDialogDismissed()),
                 ),
               ),
             ],
@@ -1189,12 +1189,12 @@ class _TaskEditPageState extends State<TaskEditPage> {
             children: [
               PrimaryButton(
                 text: 'Sim, confirmar edição',
-                onPressed: () => _bloc.add(const TaskEditConfirmScopeEvent()),
+                onPressed: () => _bloc.add(const TaskEditConfirmScope()),
               ),
               const SizedBox(height: 10),
               InvertedPrimaryButton(
                 text: 'Não, voltar para edição',
-                onPressed: () => _bloc.add(const TaskEditDialogDismissedEvent()),
+                onPressed: () => _bloc.add(const TaskEditDialogDismissed()),
               ),
             ],
           ),
@@ -1321,12 +1321,12 @@ class _TaskEditPageState extends State<TaskEditPage> {
         const SizedBox(height: 24),
         PrimaryButton(
           text: 'Sim, descartar edições',
-          onPressed: () => _bloc.add(const TaskEditConfirmDiscardEvent()),
+          onPressed: () => _bloc.add(const TaskEditConfirmDiscard()),
         ),
         const SizedBox(height: 12),
         InvertedPrimaryButton(
           text: 'Não, voltar para edição de rotinas',
-          onPressed: () => _bloc.add(const TaskEditDialogDismissedEvent()),
+          onPressed: () => _bloc.add(const TaskEditDialogDismissed()),
         ),
       ],
     );
@@ -1334,7 +1334,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
 
   void _handleSave(TaskEditState state) {
     // Dispara evento de salvar
-    _bloc.add(const TaskEditSavePressedEvent());
+    _bloc.add(const TaskEditSavePressed());
   }
 
   bool _canSave(TaskEditState state) {

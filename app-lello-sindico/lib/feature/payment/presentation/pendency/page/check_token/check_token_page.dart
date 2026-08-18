@@ -112,7 +112,7 @@ class _CheckTokenPageState extends State<CheckTokenPage> {
                   bloc: controller.checkTokenBloc,
                   listener: (context, state) {},
                   builder: (context, state) {
-                    if (state is UpdateInstallmentsLoadingState) {
+                    if (state is UpdateInstallmentsLoading) {
                       return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +186,7 @@ class _CheckTokenPageState extends State<CheckTokenPage> {
                     // Fluxo de token via email/SMS/WhatsApp (só executa se não for biometria)
                     if ((args!.isAuthenticated == null &&
                             args!.updateInstallmentsSuccess == null) &&
-                        state is UpdateInstallmentsSuccessState) {
+                        state is UpdateInstallmentsSuccess) {
                       if (state.success == true) {
                         _analyticsLogSuccess(args!.action);
                         return TokenSuccessWidget(
@@ -221,7 +221,7 @@ class _CheckTokenPageState extends State<CheckTokenPage> {
                     }
                     if ((args!.isAuthenticated == null &&
                             args!.updateInstallmentsSuccess == null) &&
-                        state is UpdateInstallmentsFailureState) {
+                        state is UpdateInstallmentsFailure) {
                       _analyticsLogError();
                       return TokenErrorWidget(
                         action: args!.action,
@@ -329,7 +329,7 @@ class _CheckTokenPageState extends State<CheckTokenPage> {
                                   TextButton(
                                     onPressed:
                                         _resendCodeEnabled ? _resendCode : null,
-                                    child: state is ResendTokenLoadingState
+                                    child: state is ResendTokenLoading
                                         ? const CircularProgressIndicator()
                                         : Text(
                                             _resendCodeEnabled
@@ -379,8 +379,8 @@ class _CheckTokenPageState extends State<CheckTokenPage> {
                                     }
                                   : null,
                               text: "Verificar",
-                              child: state is UpdateInstallmentsLoadingState ||
-                                      state is CheckTokenLoadingState
+                              child: state is UpdateInstallmentsLoading ||
+                                      state is CheckTokenLoading
                                   ? const CircularProgressIndicator(
                                       color: Colors.white,
                                     )
@@ -397,8 +397,8 @@ class _CheckTokenPageState extends State<CheckTokenPage> {
   }
 
   bool _isCodeNotValid(Object? state) {
-    return state is CheckTokenFailureState ||
-        (state is CheckTokenSuccessState && state.success == false);
+    return state is CheckTokenFailure ||
+        (state is CheckTokenSuccess && state.success == false);
   }
 
   _parseActionToUpdateInstallmentStatus(

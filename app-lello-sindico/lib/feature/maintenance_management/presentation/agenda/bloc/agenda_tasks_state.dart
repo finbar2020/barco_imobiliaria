@@ -1,20 +1,10 @@
-import 'package:equatable/equatable.dart';
 import '../../../domain/entity/maintenance_task_event_entity.dart';
 
-abstract class AgendaTasksState extends Equatable {
-  const AgendaTasksState();
+abstract class AgendaTasksState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class AgendaTasksInitialState extends AgendaTasksState {}
 
-class AgendaTasksInitialState extends AgendaTasksState {
-  const AgendaTasksInitialState();
-}
-
-class AgendaTasksLoadingState extends AgendaTasksState {
-  const AgendaTasksLoadingState();
-}
+class AgendaTasksLoadingState extends AgendaTasksState {}
 
 class AgendaTasksLoadedState extends AgendaTasksState {
   final List<MaintenanceTaskEventEntity> tasks;
@@ -22,7 +12,7 @@ class AgendaTasksLoadedState extends AgendaTasksState {
   final String orderBy;
   final int totalTasks;
 
-  const AgendaTasksLoadedState({
+  AgendaTasksLoadedState({
     required this.tasks,
     required this.selectedDate,
     required this.orderBy,
@@ -42,33 +32,24 @@ class AgendaTasksLoadedState extends AgendaTasksState {
       totalTasks: totalTasks ?? this.totalTasks,
     );
   }
-
-  @override
-  List<Object?> get props => [tasks, selectedDate, orderBy, totalTasks];
 }
 
 class AgendaTasksEmptyState extends AgendaTasksState {
   final DateTime selectedDate;
   final String message;
 
-  const AgendaTasksEmptyState({
+  AgendaTasksEmptyState({
     required this.selectedDate,
     required this.message,
   });
-
-  @override
-  List<Object?> get props => [selectedDate, message];
 }
 
 class AgendaTasksErrorState extends AgendaTasksState {
   final String message;
   final DateTime? selectedDate;
 
-  const AgendaTasksErrorState({
+  AgendaTasksErrorState({
     required this.message,
     this.selectedDate,
   });
-
-  @override
-  List<Object?> get props => [message, selectedDate];
 }

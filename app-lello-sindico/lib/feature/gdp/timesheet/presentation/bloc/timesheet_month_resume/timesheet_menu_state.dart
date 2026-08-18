@@ -1,42 +1,34 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/timesheet/domain/entity/timesheet_month_resume_entity.dart';
 
-abstract class TimesheetMenuState extends Equatable {
-  const TimesheetMenuState();
-
-  @override
-  List<Object?> get props => [];
+abstract class TimesheetMenuState {
+  TimesheetMenuState();
 }
 
 class TimesheetLoadingState extends TimesheetMenuState {
-  const TimesheetLoadingState();
+  TimesheetLoadingState();
 }
 
 class TimesheetFailedState extends TimesheetMenuState {
-  const TimesheetFailedState();
+  TimesheetFailedState();
 }
 
 class TimesheetLoadedState extends TimesheetMenuState {
-  const TimesheetLoadedState();
+  TimesheetLoadedState();
 }
 
 class TimesheetMonthResumeLoadingState extends TimesheetLoadedState {
-  const TimesheetMonthResumeLoadingState();
+  TimesheetMonthResumeLoadingState();
 }
 
 class TimesheetMonthResumeLoadedState extends TimesheetLoadedState {
   final TimesheetMonthResumeEntity entity;
   final DateTime date;
-
-  const TimesheetMonthResumeLoadedState({
+  TimesheetMonthResumeLoadedState({
     required this.entity,
     required this.date,
   });
-
-  @override
-  List<Object?> get props => [entity, date];
 }
 
 class TimesheetMonthResumeFailedState extends TimesheetMenuState {
-  const TimesheetMonthResumeFailedState();
+  TimesheetMonthResumeFailedState() : super();
 }

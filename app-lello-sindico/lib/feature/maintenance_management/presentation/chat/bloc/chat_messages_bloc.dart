@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/use_cases/chat/get_chat_messages_use_case.dart';
 import '../../../domain/use_cases/chat/send_chat_message_use_case.dart';
@@ -82,7 +81,7 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
 
     // Criar mensagem temporária para feedback imediato
     final tempId = 'temp_${DateTime.now().millisecondsSinceEpoch}';
-    debugPrint('📤 Criando mensagem temporária: $tempId');
+    print('📤 Criando mensagem temporária: $tempId');
     
     final tempMessage = ChatMessageEntity(
       id: tempId,
@@ -118,7 +117,7 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
 
     result.fold(
       (failure) {
-        debugPrint('❌ Erro ao enviar mensagem: $failure');
+        print('❌ Erro ao enviar mensagem: $failure');
         // Marcar mensagem como falha
         final currentMessages = (state as ChatMessagesLoadedState).messages;
         final updatedMessages = currentMessages.map((m) {
@@ -134,7 +133,7 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
         ));
       },
       (sentMessage) {
-        debugPrint('✅ Mensagem enviada via API: ${sentMessage.id}');
+        print('✅ Mensagem enviada via API: ${sentMessage.id}');
         // WebSocket vai receber e substituir automaticamente
       },
     );
@@ -144,11 +143,11 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
     NewMessageReceivedInChannelEvent event,
     Emitter<ChatMessagesState> emit,
   ) {
-    debugPrint('📬 BLoC recebeu mensagem do stream: ${event.message.id}');
-
+    print('📬 BLoC recebeu mensagem do stream: ${event.message.id}');
+    
     // Só processar se for do canal atual
     if (event.message.channelId != _currentChannelId) {
-      debugPrint('⚠️ Mensagem ignorada - canal diferente');
+      print('⚠️ Mensagem ignorada - canal diferente');
       return;
     }
 
@@ -160,17 +159,17 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
         m.id == event.message.id && !m.id.startsWith('temp_')
       );
       if (exists) {
-        debugPrint('⚠️ Mensagem duplicada ignorada: ${event.message.id}');
+        print('⚠️ Mensagem duplicada ignorada: ${event.message.id}');
         return;
       }
-
-      debugPrint('✅ Adicionando nova mensagem: ${event.message.id}');
-
+      
+      print('✅ Adicionando nova mensagem: ${event.message.id}');
+      
       // Remover mensagens temporárias com o mesmo conteúdo
       // (a mensagem real do WebSocket substitui a temporária)
       final messagesWithoutTemp = currentState.messages.where((m) {
         if (m.id.startsWith('temp_') && m.content == event.message.content) {
-          debugPrint('🗑️ Removendo mensagem temporária: ${m.id}');
+          print('🗑️ Removendo mensagem temporária: ${m.id}');
           return false;
         }
         return true;
@@ -266,7 +265,7 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
   void _listenToMessages() {
     _messagesSubscription = _chatRepository.messagesStream.listen(
       (message) {
-        debugPrint('📬 BLoC recebeu mensagem do stream: ${message.id}');
+        print('📬 BLoC recebeu mensagem do stream: ${message.id}');
         add(NewMessageReceivedInChannelEvent(message));
       },
     );

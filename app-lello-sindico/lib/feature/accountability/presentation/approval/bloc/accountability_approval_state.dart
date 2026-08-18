@@ -1,39 +1,25 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/accountability/domain/entity/accountability_aproval.dart';
 
-abstract class AccountabilityApprovalState extends Equatable {
-  const AccountabilityApprovalState();
+import 'package:essentials/essentials.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+abstract class AccountabilityApprovalState {}
 
-class AccountabilityApprovalInitialState extends AccountabilityApprovalState {
-  const AccountabilityApprovalInitialState();
-}
+class AccountabilityApprovalIdleState extends AccountabilityApprovalState {}
 
-class AccountabilityApprovalSetupState extends AccountabilityApprovalState {
-  const AccountabilityApprovalSetupState();
-}
+class AccountabilityApprovalSetupState extends AccountabilityApprovalState {}
 
-class AccountabilityApprovalLoadingState extends AccountabilityApprovalState {
-  const AccountabilityApprovalLoadingState();
-}
+class AccountabilityApprovalLoadingState extends AccountabilityApprovalState {}
 
 class AccountabilityApprovalFailedState extends AccountabilityApprovalState {
   final Failure error;
-
-  const AccountabilityApprovalFailedState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  AccountabilityApprovalFailedState({
+    required this.error,
+  });
 }
 
 class AccountabilityApprovalApprovedState extends AccountabilityApprovalState {
   final AccountabilityApproval approval;
-
-  const AccountabilityApprovalApprovedState({required this.approval});
-
-  @override
-  List<Object?> get props => [approval];
+  AccountabilityApprovalApprovedState({
+    required this.approval,
+  });
 }

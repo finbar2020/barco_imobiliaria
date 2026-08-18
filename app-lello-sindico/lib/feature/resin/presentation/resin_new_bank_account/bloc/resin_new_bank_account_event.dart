@@ -1,28 +1,22 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_bank.dart';
 import 'package:lello/feature/resin/domain/entity/resin_bank_account.dart';
 import 'package:lello/feature/resin/domain/entity/resin_person.dart';
 
-abstract class ResinNewBankAccountEvent extends Equatable {
-  const ResinNewBankAccountEvent();
-
-  @override
-  List<Object?> get props => [];
+abstract class ResinNewBankAccountEvent {
+  ResinNewBankAccountEvent();
 }
 
-class ResinNewBankAccountLoadingEvent extends ResinNewBankAccountEvent {
-  const ResinNewBankAccountLoadingEvent();
-}
+class ResinNewBankAccountLoadingEvent extends ResinNewBankAccountEvent {}
 
 class ResinNewBankAccountLoadedEvent extends ResinNewBankAccountEvent {
-  final List<ResinBank> resinBanks;
-  final List<ResinPerson> resinPeople;
-  final bool isUpdating;
-  final ResinBankAccount? resinAccount;
-  final String? dialogMessageKey;
-  final bool? isSuccess;
+  List<ResinBank> resinBanks;
+  List<ResinPerson> resinPeople;
+  bool isUpdating;
+  ResinBankAccount? resinAccount;
+  String? dialogMessageKey;
+  bool? isSuccess;
 
-  const ResinNewBankAccountLoadedEvent({
+  ResinNewBankAccountLoadedEvent({
     required this.resinBanks,
     required this.resinPeople,
     this.isUpdating = false,
@@ -30,23 +24,9 @@ class ResinNewBankAccountLoadedEvent extends ResinNewBankAccountEvent {
     this.dialogMessageKey,
     this.isSuccess,
   });
-
-  @override
-  List<Object?> get props => [
-        resinBanks,
-        resinPeople,
-        isUpdating,
-        resinAccount,
-        dialogMessageKey,
-        isSuccess,
-      ];
 }
 
 class ResinNewBankAccountErrorEvent extends ResinNewBankAccountEvent {
-  final String errorMessageKey;
-
-  const ResinNewBankAccountErrorEvent({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinNewBankAccountErrorEvent({required this.errorMessageKey});
 }

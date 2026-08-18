@@ -1,34 +1,17 @@
 import 'package:essentials/essentials.dart';
 
-abstract class RegisterInstallmentsEvent extends Equatable {
-  const RegisterInstallmentsEvent();
+abstract class RegisterInstallmentsEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class RegisterInstallmentsEmptyEvent extends RegisterInstallmentsEvent {}
 
-class RegisterInstallmentsEmptyEvent extends RegisterInstallmentsEvent {
-  const RegisterInstallmentsEmptyEvent();
-}
-
-class RegisterInstallmentsLoadingEvent extends RegisterInstallmentsEvent {
-  const RegisterInstallmentsLoadingEvent();
-}
+class RegisterInstallmentsLoadingEvent extends RegisterInstallmentsEvent {}
 
 class RegisterInstallmentsSuccessEvent extends RegisterInstallmentsEvent {
-  final dynamic value;
-
-  const RegisterInstallmentsSuccessEvent({required this.value});
-
-  @override
-  List<Object?> get props => [value];
+  var value;
+  RegisterInstallmentsSuccessEvent({required this.value});
 }
 
 class RegisterInstallmentsFailureEvent extends RegisterInstallmentsEvent {
   final Failure? error;
-
-  const RegisterInstallmentsFailureEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  RegisterInstallmentsFailureEvent({this.error});
 }

@@ -4,20 +4,16 @@ import 'package:lello/feature/space/reservation/domain/entity/reservation.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_registration.dart';
 import 'package:lello/feature/unit/domain/entity/unit.dart';
 
-abstract class ReservationRegistrationRaffleState extends Equatable {
+abstract class ReservationRegistrationRaffleState {
   final ReservationRegistration? registration;
   final String? condominiumId;
 
-  const ReservationRegistrationRaffleState(
-      this.registration, this.condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId];
+  ReservationRegistrationRaffleState(this.registration, this.condominiumId);
 }
 
 class ReservationRegistrationRaffleLoadingState
     extends ReservationRegistrationRaffleState {
-  const ReservationRegistrationRaffleLoadingState(
+  ReservationRegistrationRaffleLoadingState(
       ReservationRegistration? registration, String? condominiumId)
       : super(registration, condominiumId);
 }
@@ -26,33 +22,22 @@ class ReservationRegistrationRaffleLoadedState
     extends ReservationRegistrationRaffleState {
   final List<Unit> units;
   final List<Resident> residents;
-
-  const ReservationRegistrationRaffleLoadedState(
-      ReservationRegistration registration,
-      String condominiumId,
-      this.residents,
-      this.units)
+  ReservationRegistrationRaffleLoadedState(ReservationRegistration registration,
+      String condominiumId, this.residents, this.units)
       : super(registration, condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId, residents, units];
 }
 
 class ReservationRegistrationRaffleLoadFailedState
     extends ReservationRegistrationRaffleState {
   final Failure err;
-
-  const ReservationRegistrationRaffleLoadFailedState(
+  ReservationRegistrationRaffleLoadFailedState(
       ReservationRegistration registration, String condominiumId, this.err)
       : super(registration, condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId, err];
 }
 
 class ReservationRegistrationRaffleRegisteringState
     extends ReservationRegistrationRaffleLoadedState {
-  const ReservationRegistrationRaffleRegisteringState(
+  ReservationRegistrationRaffleRegisteringState(
       ReservationRegistration registration,
       String condominiumId,
       List<Resident> residents,
@@ -63,33 +48,23 @@ class ReservationRegistrationRaffleRegisteringState
 class ReservationRegistrationRaffleRegisterFailedState
     extends ReservationRegistrationRaffleLoadedState {
   final Failure error;
-
-  const ReservationRegistrationRaffleRegisterFailedState(
+  ReservationRegistrationRaffleRegisterFailedState(
       ReservationRegistration registration,
       String condominiumId,
       List<Resident> residents,
       List<Unit> units,
       this.error)
       : super(registration, condominiumId, residents, units);
-
-  @override
-  List<Object?> get props =>
-      [registration, condominiumId, residents, units, error];
 }
 
 class ReservationRegistrationRaffleRegisteredState
     extends ReservationRegistrationRaffleLoadedState {
   final Reservation reservation;
-
-  const ReservationRegistrationRaffleRegisteredState(
+  ReservationRegistrationRaffleRegisteredState(
       this.reservation,
       ReservationRegistration registration,
       List<Resident> residents,
       List<Unit> units,
       String condominiumId)
       : super(registration, condominiumId, residents, units);
-
-  @override
-  List<Object?> get props =>
-      [registration, condominiumId, residents, units, reservation];
 }

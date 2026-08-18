@@ -1,6 +1,5 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:essentials/essentials.dart';
 import 'package:flutter/material.dart';
@@ -36,16 +35,23 @@ class DashboardBlocImpl extends DashboardBloc {
       required this.sessionBloc,
       required this.updatePendency})
       : super(DashboardState.empty()) {
-    on<DashboardReadPendencyEvent>(_mapReadNotification);
-    on<DashboardLoadEvent>(_mapLoad);
-    on<DashboardNextPageEvent>(_mapNextPage);
-    on<DashboardSessionFailedEvent>(_mapSessionFailed);
-    on<DashboardLockScrollEvent>(_mapScrollLock);
-    on<DashboardGetMostAccessedEvent>(_mapGetMostAcessed);
     if (sessionBloc.state is SessionLoadedState) {
       onSessionChanged(sessionBloc.state);
     } else {
       sessionSubscription = sessionBloc.stream.listen(onSessionChanged);
+    }
+  }
+
+  @override
+  Stream<DashboardState> mapEventToState(DashboardEvent event) async* {
+    if (event is DashboardReadPendencyEvent) yield* _mapReadNotification(event);
+    if (event is DashboardLoadEvent) yield* _mapLoad(event);
+    if (event is DashboardNextPageEvent) yield* _mapNextPage(event);
+    if (event is DashboardSessionFailedEvent) yield* _mapSessionFailed(event);
+    if (event is DashboardLockScrollEvent) yield* _mapScrollLock(event);
+    if (event is DashboardLockScrollEvent) yield* _mapScrollLock(event);
+    if (event is DashboardGetMostAccessedEvent) {
+      yield* _mapGetMostAcessed(event);
     }
   }
 
@@ -57,35 +63,28 @@ class DashboardBlocImpl extends DashboardBloc {
     add(DashboardReadPendencyEvent(pendency));
   }
 
-  Future<void> _mapReadNotification(
-    DashboardReadPendencyEvent event,
-    Emitter<DashboardState> emit,
-  ) async {
+  Stream<DashboardState> _mapReadNotification(
+      DashboardReadPendencyEvent event) async* {
     final params = UpdatePendencyParam(_condominium!.id, event.pendency.id!);
 
     updatePendency(params);
     final data = state.data;
 
-    emit(DashboardLoadingSucceededState(data,
-        data.isEmpty ? null : data.last.id, data.isEmpty, state.lockScroll));
+    yield DashboardLoadingSucceededState(data,
+        data.isEmpty ? null : data.last.id, data.isEmpty, state.lockScroll);
   }
 
-  Future<void> _mapSessionFailed(
-    DashboardSessionFailedEvent event,
-    Emitter<DashboardState> emit,
-  ) async {
+  Stream<DashboardState> _mapSessionFailed(
+      DashboardSessionFailedEvent event) async* {
     var data = state.data;
     final cachedData = await _fetchCache();
     if (cachedData != null) {
       data = cachedData;
     }
-    emit(DashboardFailedState(event.error, data: data));
+    yield DashboardFailedState(event.error, data: data);
   }
 
-  Future<void> _mapLoad(
-    DashboardLoadEvent event,
-    Emitter<DashboardState> emit,
-  ) async {
+  Stream<DashboardState> _mapLoad(DashboardLoadEvent event) async* {
     if (_condominium == null) return;
 
     var data = state.data;
@@ -99,59 +98,51 @@ class DashboardBlocImpl extends DashboardBloc {
       }
     }
 
-    emit(loadedCache || event.refresh!
+    yield loadedCache || event.refresh!
         ? DashboardRefreshingState(data)
-        : DashboardLoadingState(data));
+        : DashboardLoadingState(data);
 
     final result =
         await listPendency.call(ListPendencyParam(_condominium!.reference));
 
-    emit(result.fold(
+    yield result.fold(
       (err) => DashboardFailedState(err),
       (data) => DashboardLoadingSucceededState(data,
           data.isEmpty ? null : data.last.id, data.isEmpty, state.lockScroll),
-    ));
+    );
   }
 
-  Future<void> _mapNextPage(
-    DashboardNextPageEvent event,
-    Emitter<DashboardState> emit,
-  ) async {
+  Stream<DashboardState> _mapNextPage(DashboardNextPageEvent event) async* {
     if (_condominium == null) return;
 
     final data = state.data;
-    emit(DashboardPagingState(data, state.lastPendencyId!));
+    yield DashboardPagingState(data, state.lastPendencyId!);
     final result = await listPendency.call(ListPendencyParam(
         _condominium!.reference,
         lastPendencyId: state.lastPendencyId!,
         currentSize: state.data.length));
 
-    emit(result.fold(
+    yield result.fold(
         (err) => DashboardPageFailedState(data, state.lastPendencyId!, err),
         (res) => DashboardLoadingSucceededState(
             state.data + res,
             res.lastOrNull()?.id ?? state.lastPendencyId,
             res.isEmpty,
-            state.lockScroll)));
+            state.lockScroll));
   }
 
-  Future<void> _mapScrollLock(
-    DashboardLockScrollEvent event,
-    Emitter<DashboardState> emit,
-  ) async {
-    emit(DashboardScrollLockState(state.data, event.isLocked!));
+  Stream<DashboardState> _mapScrollLock(DashboardLockScrollEvent event) async* {
+    yield DashboardScrollLockState(state.data, event.isLocked!);
   }
 
-  Future<void> _mapGetMostAcessed(
-    DashboardGetMostAccessedEvent event,
-    Emitter<DashboardState> emit,
-  ) async {
-    emit(DashboardLoadingState([]));
+  Stream<DashboardState> _mapGetMostAcessed(
+      DashboardGetMostAccessedEvent event) async* {
+    yield DashboardLoadingState([]);
 
     var itens =
         await getMostAccessedList(sessionBloc.state as SessionLoadedState);
 
-    emit(DashboardLoadedState(itens));
+    yield DashboardLoadedState(itens);
   }
 
   @override
@@ -247,7 +238,7 @@ class DashboardBlocImpl extends DashboardBloc {
   }
 
   List<HomeItemEnum> checkFavoritesCard(String? getfavorites) {
-    //desabilita a personalizaÃ§Ã£o de cards
+    //desabilita a personalização de cards
     if (sessionBloc.iSPreferencesPersonalizationActive == false) {
       return [];
     }

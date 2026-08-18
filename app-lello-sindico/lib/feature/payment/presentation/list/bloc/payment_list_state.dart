@@ -1,72 +1,42 @@
-import 'package:essentials/essentials.dart';
+import 'package:essentials/functional/failure.dart';
 import 'package:lello/feature/payment/domain/entity/contas_pagar.dart';
 
 import '../../../domain/entity/payment.dart';
 
-abstract class PaymentListState extends Equatable {
-  const PaymentListState();
+abstract class PaymentListState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class PaymentListEmptyState extends PaymentListState {}
 
-class PaymentListEmptyState extends PaymentListState {
-  const PaymentListEmptyState();
-}
-
-class PaymentListLoadingState extends PaymentListState {
-  const PaymentListLoadingState();
-}
+class PaymentListLoadingState extends PaymentListState {}
 
 class PaymentListPagingState extends PaymentListState {
   final List<Payment> data;
 
-  const PaymentListPagingState({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  PaymentListPagingState({required this.data});
 }
 
 class PaymentListSuccessState extends PaymentListState {
   final List<Payment> data;
 
-  const PaymentListSuccessState({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  PaymentListSuccessState({required this.data});
 }
 
 class PaymentListFailureState extends PaymentListState {
   final Failure? error;
 
-  const PaymentListFailureState({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentListFailureState({this.error});
 }
 
-class PaymentContaPagarLoadingState extends PaymentListState {
-  const PaymentContaPagarLoadingState();
-}
+class PaymentContaPagarLoadingState extends PaymentListState {}
 
 class PaymentContaPagarSuccessState extends PaymentListState {
   final List<ContasPagarEntity> data;
-
-  const PaymentContaPagarSuccessState({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  PaymentContaPagarSuccessState({required this.data});
 }
 
 class PaymentContaPagarFailureState extends PaymentListState {
   final Failure? error;
-
-  const PaymentContaPagarFailureState({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentContaPagarFailureState({this.error});
 }
 
-class PaymentContaPagarEmptyState extends PaymentListState {
-  const PaymentContaPagarEmptyState();
-}
+class PaymentContaPagarEmptyState extends PaymentListState {}

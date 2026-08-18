@@ -8,7 +8,7 @@ import 'package:lello/feature/space/domain/entity/space.dart';
 import 'package:lello/feature/space/domain/entity/space_type.dart';
 import 'package:lello/feature/space/registration/domain/entity/space_registration_step.dart';
 
-abstract class SpaceRegistrationState extends Equatable {
+abstract class SpaceRegistrationState {
   final Space data;
   final Condominium? condominium;
   final List<Account> accounts;
@@ -16,16 +16,12 @@ abstract class SpaceRegistrationState extends Equatable {
   final List<SpaceType> spaceTypes;
   final SpaceRegistrationStep? step;
 
-  const SpaceRegistrationState(this.data, this.condominium, this.step,
-      this.accounts, this.spaces, this.spaceTypes);
-
-  @override
-  List<Object?> get props =>
-      [data, condominium, step, accounts, spaces, spaceTypes];
+  SpaceRegistrationState(this.data, this.condominium, this.step, this.accounts,
+      this.spaces, this.spaceTypes);
 }
 
-class SpaceRegistrationInitialState extends SpaceRegistrationState {
-  const SpaceRegistrationInitialState(
+class SpaceRegistrationIdleState extends SpaceRegistrationState {
+  SpaceRegistrationIdleState(
       Space data,
       Condominium? condominium,
       List<Account> accounts,
@@ -36,7 +32,7 @@ class SpaceRegistrationInitialState extends SpaceRegistrationState {
 }
 
 class SpaceRegistrationLoadingState extends SpaceRegistrationState {
-  const SpaceRegistrationLoadingState(
+  SpaceRegistrationLoadingState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -47,7 +43,7 @@ class SpaceRegistrationLoadingState extends SpaceRegistrationState {
 }
 
 class SpaceRegistrationLoadedState extends SpaceRegistrationState {
-  const SpaceRegistrationLoadedState(
+  SpaceRegistrationLoadedState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -59,8 +55,7 @@ class SpaceRegistrationLoadedState extends SpaceRegistrationState {
 
 class SpaceRegistrationLoadFailedState extends SpaceRegistrationState {
   final Failure? error;
-
-  const SpaceRegistrationLoadFailedState(
+  SpaceRegistrationLoadFailedState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -69,17 +64,12 @@ class SpaceRegistrationLoadFailedState extends SpaceRegistrationState {
       List<SpaceType> spaceTypes,
       this.error)
       : super(data, condominium, step, accounts, spaces, spaceTypes);
-
-  @override
-  List<Object?> get props =>
-      [data, condominium, step, accounts, spaces, spaceTypes, error];
 }
 
 class SpaceRegistrationUploadingState extends SpaceRegistrationState {
-  final Stream<double> progress;
-  final File file;
-
-  const SpaceRegistrationUploadingState(
+  Stream<double> progress;
+  File file;
+  SpaceRegistrationUploadingState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -89,16 +79,11 @@ class SpaceRegistrationUploadingState extends SpaceRegistrationState {
       this.progress,
       this.file)
       : super(data, condominium, step, accounts, spaces, spaceTypes);
-
-  @override
-  List<Object?> get props =>
-      [data, condominium, step, accounts, spaces, spaceTypes, progress, file];
 }
 
 class SpaceRegistrationUploadedState extends SpaceRegistrationState {
   final String path;
-
-  const SpaceRegistrationUploadedState(
+  SpaceRegistrationUploadedState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -107,16 +92,11 @@ class SpaceRegistrationUploadedState extends SpaceRegistrationState {
       List<SpaceType> spaceTypes,
       this.path)
       : super(data, condominium, step, accounts, spaces, spaceTypes);
-
-  @override
-  List<Object?> get props =>
-      [data, condominium, step, accounts, spaces, spaceTypes, path];
 }
 
 class SpaceRegistrationUploadFailedState extends SpaceRegistrationState {
   final Failure error;
-
-  const SpaceRegistrationUploadFailedState(
+  SpaceRegistrationUploadFailedState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -125,14 +105,10 @@ class SpaceRegistrationUploadFailedState extends SpaceRegistrationState {
       List<SpaceType> spaceTypes,
       this.error)
       : super(data, condominium, step, accounts, spaces, spaceTypes);
-
-  @override
-  List<Object?> get props =>
-      [data, condominium, step, accounts, spaces, spaceTypes, error];
 }
 
 class SpaceRegistrationRegisteringState extends SpaceRegistrationState {
-  const SpaceRegistrationRegisteringState(
+  SpaceRegistrationRegisteringState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -144,8 +120,7 @@ class SpaceRegistrationRegisteringState extends SpaceRegistrationState {
 
 class SpaceRegistrationRegisterFailedState extends SpaceRegistrationState {
   final Failure error;
-
-  const SpaceRegistrationRegisterFailedState(
+  SpaceRegistrationRegisterFailedState(
       Space data,
       Condominium condominium,
       List<Account> accounts,
@@ -154,14 +129,10 @@ class SpaceRegistrationRegisterFailedState extends SpaceRegistrationState {
       List<SpaceType> spaceTypes,
       this.error)
       : super(data, condominium, step, accounts, spaces, spaceTypes);
-
-  @override
-  List<Object?> get props =>
-      [data, condominium, step, accounts, spaces, spaceTypes, error];
 }
 
 class SpaceRegistrationRegisteredState extends SpaceRegistrationState {
-  const SpaceRegistrationRegisteredState(
+  SpaceRegistrationRegisteredState(
       Space data,
       Condominium condominium,
       List<Account> accounts,

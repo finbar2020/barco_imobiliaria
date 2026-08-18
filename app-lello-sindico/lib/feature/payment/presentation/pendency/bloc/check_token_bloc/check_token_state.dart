@@ -1,100 +1,61 @@
-import 'package:essentials/essentials.dart';
+import 'package:essentials/functional/failure.dart';
 
-abstract class CheckTokenState extends Equatable {
-  const CheckTokenState();
+abstract class CheckTokenState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class CheckTokenInitial extends CheckTokenState {}
 
-class CheckTokenInitialState extends CheckTokenState {
-  const CheckTokenInitialState();
-}
+class CheckTokenLoading extends CheckTokenState {}
 
-class CheckTokenLoadingState extends CheckTokenState {
-  const CheckTokenLoadingState();
-}
-
-class CheckTokenSuccessState extends CheckTokenState {
+class CheckTokenSuccess extends CheckTokenState {
   final bool success;
 
-  const CheckTokenSuccessState({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  CheckTokenSuccess({required this.success});
 }
 
-class CheckTokenFailureState extends CheckTokenState {
+class CheckTokenFailure extends CheckTokenState {
   final Failure? failure;
 
-  const CheckTokenFailureState({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  CheckTokenFailure({required this.failure});
 }
 
-class ResendTokenLoadingState extends CheckTokenState {
-  const ResendTokenLoadingState();
-}
+class ResendTokenLoading extends CheckTokenState {}
 
-class ResendTokenSuccessState extends CheckTokenState {
+class ResendTokenSuccess extends CheckTokenState {
   final int id;
 
-  const ResendTokenSuccessState({required this.id});
-
-  @override
-  List<Object?> get props => [id];
+  ResendTokenSuccess({required this.id});
 }
 
-class ResendTokenFailureState extends CheckTokenState {
+class ResendTokenFailure extends CheckTokenState {
   final String? failure;
 
-  const ResendTokenFailureState({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  ResendTokenFailure({required this.failure});
 }
 
-class SendActionReasonLoadingState extends CheckTokenState {
-  const SendActionReasonLoadingState();
-}
+class SendActionReasonLoading extends CheckTokenState {}
 
-class SendActionReasonSuccessState extends CheckTokenState {
+class SendActionReasonSuccess extends CheckTokenState {
   final bool success;
 
-  const SendActionReasonSuccessState({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  SendActionReasonSuccess({required this.success});
 }
 
-class SendActionReasonFailureState extends CheckTokenState {
+class SendActionReasonFailure extends CheckTokenState {
   final Failure? failure;
 
-  const SendActionReasonFailureState({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  SendActionReasonFailure({required this.failure});
 }
 
-class UpdateInstallmentsLoadingState extends CheckTokenState {
-  const UpdateInstallmentsLoadingState();
-}
+class UpdateInstallmentsLoading extends CheckTokenState {}
 
-class UpdateInstallmentsSuccessState extends CheckTokenState {
+class UpdateInstallmentsSuccess extends CheckTokenState {
   final bool success;
 
-  const UpdateInstallmentsSuccessState({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  UpdateInstallmentsSuccess({required this.success});
 }
 
-class UpdateInstallmentsFailureState extends CheckTokenState {
+class UpdateInstallmentsFailure extends CheckTokenState {
   final Failure? failure;
 
-  const UpdateInstallmentsFailureState({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  UpdateInstallmentsFailure({required this.failure});
 }

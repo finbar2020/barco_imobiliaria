@@ -67,7 +67,7 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
         scheduleEventId.isNotEmpty &&
         _bloc.state.outcome == null) {
       // Chama reset sem mostrar modal (silencioso)
-      _bloc.add(const TaskInitStepConfirmResetEvent());
+      _bloc.add(const TaskInitStepConfirmReset());
     }
   }
 
@@ -76,7 +76,7 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
     final scheduleEventId = _bloc.state.task?.id;
     if (scheduleEventId != null && scheduleEventId.isNotEmpty) {
       // Chama reset sem mostrar modal (silencioso)
-      _bloc.add(const TaskInitStepConfirmResetEvent());
+      _bloc.add(const TaskInitStepConfirmReset());
     }
   }
 
@@ -90,20 +90,20 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
       child: BlocConsumer<TaskInitStepBloc, TaskInitStepState>(
         listener: (context, state) {
           // Handle outcomes
-          if (state.outcome == TaskInitStepStatus.success) {
-            _bloc.add(const TaskInitStepStatusClearedEvent());
+          if (state.outcome == TaskInitStepOutcome.success) {
+            _bloc.add(const TaskInitStepOutcomeCleared());
             Navigator.of(context).pop(true); // Retorna true indicando sucesso
-          } else if (state.outcome == TaskInitStepStatus.discarded) {
-            _bloc.add(const TaskInitStepStatusClearedEvent());
+          } else if (state.outcome == TaskInitStepOutcome.discarded) {
+            _bloc.add(const TaskInitStepOutcomeCleared());
             Navigator.of(context)
                 .pop(false); // Retorna false indicando descarte
-          } else if (state.outcome == TaskInitStepStatus.reset) {
-            _bloc.add(const TaskInitStepStatusClearedEvent());
+          } else if (state.outcome == TaskInitStepOutcome.reset) {
+            _bloc.add(const TaskInitStepOutcomeCleared());
             // Reset bem-sucedido: volta para detalhes passando sinal de refresh
             Navigator.of(context)
                 .pop({'reset_success': true, 'task_id': widget.taskId});
-          } else if (state.outcome == TaskInitStepStatus.error) {
-            _bloc.add(const TaskInitStepStatusClearedEvent());
+          } else if (state.outcome == TaskInitStepOutcome.error) {
+            _bloc.add(const TaskInitStepOutcomeCleared());
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage ?? 'Erro ao iniciar etapa'),
@@ -125,7 +125,7 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
             onPopInvokedWithResult: (didPop, result) {
               if (!didPop) {
                 // Dispara evento de voltar no BLoC
-                _bloc.add(const TaskInitStepBackPressedEvent());
+                _bloc.add(const TaskInitStepBackPressed());
               }
             },
             child: Scaffold(
@@ -139,7 +139,7 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     // Dispara evento de voltar no BLoC
-                    _bloc.add(const TaskInitStepBackPressedEvent());
+                    _bloc.add(const TaskInitStepBackPressed());
                   },
                 ),
               ),
@@ -187,7 +187,7 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
                 question: question,
                 currentAnswer: currentAnswer,
                 onAnswerChanged: (answer) {
-                  _bloc.add(TaskInitStepAnswerChangedEvent(
+                  _bloc.add(TaskInitStepAnswerChanged(
                     questionId: question.id,
                     answer: answer,
                   ));
@@ -299,7 +299,7 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
         width: double.infinity,
         child: ElevatedButton(
           onPressed: isEnabled
-              ? () => _bloc.add(const TaskInitStepSubmitPressedEvent())
+              ? () => _bloc.add(const TaskInitStepSubmitPressed())
               : null,
           style: ElevatedButton.styleFrom(
             backgroundColor:
@@ -338,11 +338,11 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
       builder: (dialogContext) => InitStepDiscardDialog(
         onConfirm: () {
           Navigator.of(dialogContext).pop();
-          _bloc.add(const TaskInitStepConfirmDiscardEvent());
+          _bloc.add(const TaskInitStepConfirmDiscard());
         },
         onCancel: () {
           Navigator.of(dialogContext).pop();
-          _bloc.add(const TaskInitStepDialogDismissedEvent());
+          _bloc.add(const TaskInitStepDialogDismissed());
         },
       ),
     );
@@ -355,11 +355,11 @@ class _TaskInitStepPageState extends State<TaskInitStepPage>
       builder: (dialogContext) => TaskInitStepResetConfirmationModal(
         onConfirm: () {
           Navigator.of(dialogContext).pop();
-          _bloc.add(const TaskInitStepConfirmResetEvent());
+          _bloc.add(const TaskInitStepConfirmReset());
         },
         onCancel: () {
           Navigator.of(dialogContext).pop();
-          _bloc.add(const TaskInitStepDialogDismissedEvent());
+          _bloc.add(const TaskInitStepDialogDismissed());
         },
       ),
     );

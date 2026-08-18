@@ -1,17 +1,41 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/use_cases/get_schedule_event_history_use_case.dart';
-import 'task_history_event.dart';
-import 'task_history_state.dart';
+import '../../../domain/entity/schedule_event_history_entity.dart';
 
-// Re-exportar para manter compatibilidade com quem importa apenas o bloc
-export 'task_history_event.dart';
-export 'task_history_state.dart';
+// Events
+abstract class TaskHistoryEvent {}
 
+class LoadTaskHistoryEvent extends TaskHistoryEvent {
+  final String taskId;
+
+  LoadTaskHistoryEvent(this.taskId);
+}
+
+// States
+abstract class TaskHistoryState {}
+
+class TaskHistoryInitialState extends TaskHistoryState {}
+
+class TaskHistoryLoadingState extends TaskHistoryState {}
+
+class TaskHistoryLoadedState extends TaskHistoryState {
+  final ScheduleEventHistoryEntity history;
+
+  TaskHistoryLoadedState(this.history);
+}
+
+class TaskHistoryErrorState extends TaskHistoryState {
+  final String message;
+
+  TaskHistoryErrorState(this.message);
+}
+
+// BLoC
 class TaskHistoryBloc extends Bloc<TaskHistoryEvent, TaskHistoryState> {
   final GetScheduleEventHistoryUseCase _getScheduleEventHistoryUseCase;
 
   TaskHistoryBloc(this._getScheduleEventHistoryUseCase)
-      : super(const TaskHistoryInitialState()) {
+      : super(TaskHistoryInitialState()) {
     on<LoadTaskHistoryEvent>(_onLoadTaskHistory);
   }
 
@@ -19,11 +43,11 @@ class TaskHistoryBloc extends Bloc<TaskHistoryEvent, TaskHistoryState> {
     LoadTaskHistoryEvent event,
     Emitter<TaskHistoryState> emit,
   ) async {
-    emit(const TaskHistoryLoadingState());
+    emit(TaskHistoryLoadingState());
 
     try {
       if (event.taskId.isEmpty) {
-        emit(const TaskHistoryErrorState('ID da tarefa inválido'));
+        emit(TaskHistoryErrorState('ID da tarefa inválido'));
         return;
       }
 

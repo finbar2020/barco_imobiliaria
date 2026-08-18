@@ -44,7 +44,7 @@ class _SpaceRegistrationPageState extends State<SpaceRegistrationPage> {
               child: BlocConsumer(
                 bloc: bloc,
                 listener: (context, state) {
-                  if (state is SpaceRegistrationInitialState) {
+                  if (state is SpaceRegistrationIdleState) {
                     _scrollController.jumpTo(0);
                   }
                   if (state is SpaceRegistrationRegisteredState) {

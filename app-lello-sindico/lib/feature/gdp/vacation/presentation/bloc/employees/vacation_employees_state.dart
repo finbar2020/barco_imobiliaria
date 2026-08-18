@@ -1,63 +1,47 @@
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/domain/entity/employee.dart';
 
-abstract class VacationEmployeesState extends Equatable {
+abstract class VacationEmployeesState {
   final List<Employee> data;
   final String condominiumId;
   final String query;
 
-  const VacationEmployeesState(this.data, this.query, this.condominiumId);
-
-  @override
-  List<Object?> get props => [data, query, condominiumId];
+  VacationEmployeesState(this.data, this.query, this.condominiumId);
 }
 
 class VacationEmployeesSearchingState extends VacationEmployeesState {
-  const VacationEmployeesSearchingState(
+  VacationEmployeesSearchingState(
       List<Employee> data, String query, String condominiumId)
       : super(data, query, condominiumId);
 }
 
 class VacationEmployeesLoadingState extends VacationEmployeesState {
-  const VacationEmployeesLoadingState(List<Employee> _)
-      : super(const <Employee>[], '', '');
+  VacationEmployeesLoadingState(param0) : super([], '', '');
 }
 
 class VacationEmployeesLoadFailedState extends VacationEmployeesState {
   final Failure error;
-
-  const VacationEmployeesLoadFailedState(
+  VacationEmployeesLoadFailedState(
       List<Employee> data, String query, String condominiumId, this.error)
       : super(data, query, condominiumId);
-
-  @override
-  List<Object?> get props => [...super.props, error];
 }
 
 class VacationEmployeesPagingState extends VacationEmployeesState {
-  const VacationEmployeesPagingState(
+  VacationEmployeesPagingState(
       List<Employee> data, String query, String condominiumId)
       : super(data, query, condominiumId);
 }
 
 class VacationEmployeesPageFailedState extends VacationEmployeesState {
   final Failure error;
-
-  const VacationEmployeesPageFailedState(
+  VacationEmployeesPageFailedState(
       List<Employee> data, String query, String condominiumId, this.error)
       : super(data, query, condominiumId);
-
-  @override
-  List<Object?> get props => [...super.props, error];
 }
 
 class VacationEmployeesLoadedState extends VacationEmployeesState {
   final bool donePaging;
-
-  const VacationEmployeesLoadedState(
+  VacationEmployeesLoadedState(
       List<Employee> data, String query, String condominiumId, this.donePaging)
       : super(data, query, condominiumId);
-
-  @override
-  List<Object?> get props => [...super.props, donePaging];
 }

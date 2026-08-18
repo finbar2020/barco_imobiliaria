@@ -13,7 +13,7 @@ class AgendaTasksBloc extends Bloc<AgendaTasksEvent, AgendaTasksState> {
 
   AgendaTasksBloc({
     required this.getMaintenanceTaskEventsUseCase,
-  }) : super(const AgendaTasksInitialState()) {
+  }) : super(AgendaTasksInitialState()) {
     on<LoadAgendaTasksEvent>(_onLoadAgendaTasks);
     on<RefreshAgendaTasksEvent>(_onRefreshAgendaTasks);
     on<ClearAgendaTasksCacheEvent>(_onClearCache);
@@ -73,7 +73,7 @@ class AgendaTasksBloc extends Bloc<AgendaTasksEvent, AgendaTasksState> {
       return;
     }
 
-    emit(const AgendaTasksLoadingState());
+    emit(AgendaTasksLoadingState());
 
     try {
       final startOfDay = DateTime(

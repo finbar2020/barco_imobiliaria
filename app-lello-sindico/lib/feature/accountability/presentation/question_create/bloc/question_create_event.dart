@@ -2,50 +2,33 @@ import 'package:essentials/essentials.dart';
 
 import '../../../domain/entity/accountability_question_type_solicitation.dart';
 
-abstract class QuestionCreateEvent extends Equatable {
-  const QuestionCreateEvent();
+abstract class QuestionCreateEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class QuestionCreateLoadingEvent extends QuestionCreateEvent {}
 
-class QuestionCreateLoadingEvent extends QuestionCreateEvent {
-  const QuestionCreateLoadingEvent();
-}
-
-class QuestionCreateSendingEvent extends QuestionCreateEvent {
-  const QuestionCreateSendingEvent();
-}
+class QuestionCreateSendingEvent extends QuestionCreateEvent {}
 
 class QuestionCreateLoadedEvent extends QuestionCreateEvent {
-  final List<AccountabilityQuestionType> data;
-
-  const QuestionCreateLoadedEvent({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  List<AccountabilityQuestionType> data;
+  QuestionCreateLoadedEvent({
+    required this.data,
+  });
 }
 
 class QuestionCreateFailedEvent extends QuestionCreateEvent {
   final Failure failure;
-
-  const QuestionCreateFailedEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  QuestionCreateFailedEvent({
+    required this.failure,
+  });
 }
 
 class QuestionCreateSendFailedEvent extends QuestionCreateEvent {
   final Failure failure;
-
-  const QuestionCreateSendFailedEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  QuestionCreateSendFailedEvent({
+    required this.failure,
+  });
 }
 
-class QuestionCreateSendedEvent extends QuestionCreateEvent {
-  const QuestionCreateSendedEvent();
-}
+class QuestionCreateSendedEvent extends QuestionCreateEvent {}
 
 enum FilesType { files, images }

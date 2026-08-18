@@ -194,7 +194,7 @@ class _PaymentSearchSupplierWidgetState
                     maxLines: 1,
                   );
                 },
-                onSelected: _onDropdownChanged,
+                onChanged: _onDropdownChanged,
                 selectedItem: controller.selectedSupplier,
               ),
             ),

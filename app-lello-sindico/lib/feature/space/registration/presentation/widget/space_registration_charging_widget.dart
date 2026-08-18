@@ -9,7 +9,7 @@ import 'package:lello/feature/account/domain/entity/account.dart';
 import 'package:lello/feature/space/domain/entity/reservation_payment_method.dart';
 import 'package:lello/feature/space/domain/entity/reservation_value_type.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_state.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -44,7 +44,7 @@ class _SpaceRegistrationChargingWidgetState
   }
 
   Widget _buildHeader(ThemeData theme, SpaceRegistrationState state) {
-    final steps = SpaceRegistrationBloc.stepOrder;
+    final steps = SpaceRegistrationBlocImpl.stepOrder;
     final currentStep = steps.indexOf(state.step!);
     return ListTile(
       contentPadding: EdgeInsets.zero,

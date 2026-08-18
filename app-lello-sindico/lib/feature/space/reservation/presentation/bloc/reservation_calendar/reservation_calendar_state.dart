@@ -3,41 +3,24 @@ import 'package:lello/feature/space/domain/entity/space_calendar_response.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_response.dart';
 import 'package:lello/feature/space/reservation/domain/entity/space_available_hours.dart';
 
-abstract class ReservationCalendarState extends Equatable {
+abstract class ReservationCalendarState {
   final SpaceCalendarResponse? data;
   final DateTime? periodStart;
   final DateTime? periodEnd;
   final List<SpaceAvailableHours>? availableHours;
-  final DateTime? selectedDay;
-  final SpaceAvailableHours? selectedHours;
+
+  DateTime? selectedDay;
+  SpaceAvailableHours? selectedHours;
   final String? condominiumId;
-  final List<ReservationResponse>? reservationResponse;
+  List<ReservationResponse>? reservationResponse;
 
-  const ReservationCalendarState(
-      this.data,
-      this.availableHours,
-      this.periodStart,
-      this.periodEnd,
-      this.selectedDay,
-      this.selectedHours,
-      this.condominiumId,
+  ReservationCalendarState(this.data, this.availableHours, this.periodStart,
+      this.periodEnd, this.selectedDay, this.selectedHours, this.condominiumId,
       {this.reservationResponse});
-
-  @override
-  List<Object?> get props => [
-        data,
-        availableHours,
-        periodStart,
-        periodEnd,
-        selectedDay,
-        selectedHours,
-        condominiumId,
-        reservationResponse,
-      ];
 }
 
 class DeleteSucessState extends ReservationCalendarState {
-  const DeleteSucessState(
+  DeleteSucessState(
       SpaceCalendarResponse data,
       List<SpaceAvailableHours> availableHours,
       DateTime periodStart,
@@ -50,7 +33,7 @@ class DeleteSucessState extends ReservationCalendarState {
 }
 
 class ReservationCalendarLoadingState extends ReservationCalendarState {
-  const ReservationCalendarLoadingState(
+  ReservationCalendarLoadingState(
       SpaceCalendarResponse? data,
       List<SpaceAvailableHours>? availableHours,
       DateTime? periodStart,
@@ -63,7 +46,7 @@ class ReservationCalendarLoadingState extends ReservationCalendarState {
 }
 
 class ReservationCalendarLoadState extends ReservationCalendarState {
-  const ReservationCalendarLoadState(
+  ReservationCalendarLoadState(
       SpaceCalendarResponse? data,
       List<SpaceAvailableHours>? availableHours,
       DateTime? periodStart,
@@ -76,7 +59,7 @@ class ReservationCalendarLoadState extends ReservationCalendarState {
 }
 
 class ReservationCalendarHoursLoadingState extends ReservationCalendarState {
-  const ReservationCalendarHoursLoadingState(
+  ReservationCalendarHoursLoadingState(
       SpaceCalendarResponse? data,
       List<SpaceAvailableHours> availableHours,
       DateTime? periodStart,
@@ -90,8 +73,7 @@ class ReservationCalendarHoursLoadingState extends ReservationCalendarState {
 
 class ReservationCalendarLoadFailedState extends ReservationCalendarState {
   final Failure error;
-
-  const ReservationCalendarLoadFailedState(
+  ReservationCalendarLoadFailedState(
       SpaceCalendarResponse? data,
       List<SpaceAvailableHours> availableHours,
       DateTime? periodStart,
@@ -102,25 +84,11 @@ class ReservationCalendarLoadFailedState extends ReservationCalendarState {
       this.error)
       : super(data, availableHours, periodStart, periodEnd, selectedDay,
             selectedHours, condominiumId);
-
-  @override
-  List<Object?> get props => [
-        data,
-        availableHours,
-        periodStart,
-        periodEnd,
-        selectedDay,
-        selectedHours,
-        condominiumId,
-        reservationResponse,
-        error,
-      ];
 }
 
 class ReservationUnitExceededFailedState extends ReservationCalendarState {
   final Failure error;
-
-  const ReservationUnitExceededFailedState(
+  ReservationUnitExceededFailedState(
       SpaceCalendarResponse data,
       List<SpaceAvailableHours> availableHours,
       DateTime? periodStart,
@@ -131,23 +99,10 @@ class ReservationUnitExceededFailedState extends ReservationCalendarState {
       this.error)
       : super(data, availableHours, periodStart, periodEnd, selectedDay,
             selectedHours, condominiumId);
-
-  @override
-  List<Object?> get props => [
-        data,
-        availableHours,
-        periodStart,
-        periodEnd,
-        selectedDay,
-        selectedHours,
-        condominiumId,
-        reservationResponse,
-        error,
-      ];
 }
 
 class ReservationCalendarLoadedState extends ReservationCalendarState {
-  const ReservationCalendarLoadedState(
+  ReservationCalendarLoadedState(
     SpaceCalendarResponse? data,
     List<SpaceAvailableHours> availableHours,
     DateTime? periodStart,
@@ -161,7 +116,7 @@ class ReservationCalendarLoadedState extends ReservationCalendarState {
 
 class ReservationCalendarSuccefullCreatedState
     extends ReservationCalendarState {
-  const ReservationCalendarSuccefullCreatedState(
+  ReservationCalendarSuccefullCreatedState(
     SpaceCalendarResponse? data,
     List<SpaceAvailableHours>? availableHours,
     DateTime? periodStart,
@@ -174,7 +129,7 @@ class ReservationCalendarSuccefullCreatedState
 }
 
 class ReservationCalendarHistoryLoadedState extends ReservationCalendarState {
-  const ReservationCalendarHistoryLoadedState(
+  ReservationCalendarHistoryLoadedState(
       SpaceCalendarResponse data,
       List<SpaceAvailableHours> availableHours,
       DateTime periodStart,

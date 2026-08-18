@@ -1,35 +1,19 @@
-import 'package:equatable/equatable.dart';
 import '../../../../domain/entity/task_report_entity.dart';
 
-abstract class TaskReportState extends Equatable {
-  const TaskReportState();
+abstract class TaskReportState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class TaskReportInitial extends TaskReportState {}
 
-class TaskReportInitialState extends TaskReportState {
-  const TaskReportInitialState();
-}
+class TaskReportLoading extends TaskReportState {}
 
-class TaskReportLoadingState extends TaskReportState {
-  const TaskReportLoadingState();
-}
-
-class TaskReportLoadedState extends TaskReportState {
+class TaskReportLoaded extends TaskReportState {
   final TaskReportEntity report;
 
-  const TaskReportLoadedState({required this.report});
-
-  @override
-  List<Object?> get props => [report];
+  TaskReportLoaded({required this.report});
 }
 
-class TaskReportErrorState extends TaskReportState {
+class TaskReportError extends TaskReportState {
   final String message;
 
-  const TaskReportErrorState({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+  TaskReportError({required this.message});
 }

@@ -9,86 +9,86 @@ abstract class TaskInitStepEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class TaskInitStepStartedEvent extends TaskInitStepEvent {
+class TaskInitStepStarted extends TaskInitStepEvent {
   final String eventId;
   final TaskDetailsEntity task;
   final String taskId;
 
-  const TaskInitStepStartedEvent(this.eventId, this.task, this.taskId);
+  const TaskInitStepStarted(this.eventId, this.task, this.taskId);
 
   @override
   List<Object?> get props => [eventId, task, taskId];
 }
 
-class TaskInitStepSectorChangedEvent extends TaskInitStepEvent {
+class TaskInitStepSectorChanged extends TaskInitStepEvent {
   final String? sector;
 
-  const TaskInitStepSectorChangedEvent(this.sector);
+  const TaskInitStepSectorChanged(this.sector);
 
   @override
   List<Object?> get props => [sector];
 }
 
-class TaskInitStepDescriptionChangedEvent extends TaskInitStepEvent {
+class TaskInitStepDescriptionChanged extends TaskInitStepEvent {
   final String description;
 
-  const TaskInitStepDescriptionChangedEvent(this.description);
+  const TaskInitStepDescriptionChanged(this.description);
 
   @override
   List<Object?> get props => [description];
 }
 
-class TaskInitStepPhotoAddedEvent extends TaskInitStepEvent {
+class TaskInitStepPhotoAdded extends TaskInitStepEvent {
   final String photoPath;
 
-  const TaskInitStepPhotoAddedEvent(this.photoPath);
+  const TaskInitStepPhotoAdded(this.photoPath);
 
   @override
   List<Object?> get props => [photoPath];
 }
 
-class TaskInitStepPhotoRemovedEvent extends TaskInitStepEvent {
+class TaskInitStepPhotoRemoved extends TaskInitStepEvent {
   final String photoPath;
 
-  const TaskInitStepPhotoRemovedEvent(this.photoPath);
+  const TaskInitStepPhotoRemoved(this.photoPath);
 
   @override
   List<Object?> get props => [photoPath];
 }
 
-class TaskInitStepSubmitPressedEvent extends TaskInitStepEvent {
-  const TaskInitStepSubmitPressedEvent();
+class TaskInitStepSubmitPressed extends TaskInitStepEvent {
+  const TaskInitStepSubmitPressed();
 }
 
-class TaskInitStepBackPressedEvent extends TaskInitStepEvent {
-  const TaskInitStepBackPressedEvent();
+class TaskInitStepBackPressed extends TaskInitStepEvent {
+  const TaskInitStepBackPressed();
 }
 
-class TaskInitStepConfirmDiscardEvent extends TaskInitStepEvent {
-  const TaskInitStepConfirmDiscardEvent();
+class TaskInitStepConfirmDiscard extends TaskInitStepEvent {
+  const TaskInitStepConfirmDiscard();
 }
 
-class TaskInitStepRequestResetEvent extends TaskInitStepEvent {
-  const TaskInitStepRequestResetEvent();
+class TaskInitStepRequestReset extends TaskInitStepEvent {
+  const TaskInitStepRequestReset();
 }
 
-class TaskInitStepConfirmResetEvent extends TaskInitStepEvent {
-  const TaskInitStepConfirmResetEvent();
+class TaskInitStepConfirmReset extends TaskInitStepEvent {
+  const TaskInitStepConfirmReset();
 }
 
-class TaskInitStepDialogDismissedEvent extends TaskInitStepEvent {
-  const TaskInitStepDialogDismissedEvent();
+class TaskInitStepDialogDismissed extends TaskInitStepEvent {
+  const TaskInitStepDialogDismissed();
 }
 
-class TaskInitStepStatusClearedEvent extends TaskInitStepEvent {
-  const TaskInitStepStatusClearedEvent();
+class TaskInitStepOutcomeCleared extends TaskInitStepEvent {
+  const TaskInitStepOutcomeCleared();
 }
 
-class TaskInitStepAnswerChangedEvent extends TaskInitStepEvent {
+class TaskInitStepAnswerChanged extends TaskInitStepEvent {
   final String questionId;
   final dynamic answer;
 
-  const TaskInitStepAnswerChangedEvent({
+  const TaskInitStepAnswerChanged({
     required this.questionId,
     required this.answer,
   });

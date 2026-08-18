@@ -24,32 +24,9 @@ class TimesheetPointMirrorDropdown extends StatefulWidget {
 
 class _TimesheetPointMirrorDropdownState
     extends State<TimesheetPointMirrorDropdown> {
-  late final ValueNotifier<String?> _valueListenable;
-
-  @override
-  void initState() {
-    super.initState();
-    _valueListenable = ValueNotifier(widget.selectedValue);
-  }
-
-  @override
-  void didUpdateWidget(covariant TimesheetPointMirrorDropdown oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedValue != _valueListenable.value) {
-      _valueListenable.value = widget.selectedValue;
-    }
-  }
-
-  @override
-  void dispose() {
-    _valueListenable.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final actionLabel = widget.isNotify ? "Notificar" : "Assinar";
     return SizedBox(
       height: 20.0,
       child: DropdownButtonHideUnderline(
@@ -62,35 +39,33 @@ class _TimesheetPointMirrorDropdownState
                 LelloTextStyles.subBody(theme)!.copyWith(color: Colors.black),
           ),
           items: [
-            DropdownItem<String>(
+            DropdownMenuItem<String>(
               value: null,
-              height: 40,
               child: Text(
                 widget.hintText,
                 style: LelloTextStyles.subBody(theme)!
                     .copyWith(color: Colors.black),
               ),
             ),
-            DropdownItem<String>(
-              value: actionLabel,
-              height: 40,
+            DropdownMenuItem<String>(
+              value: widget.isNotify ? "Notificar" : "Assinar",
               child: Text(
-                actionLabel,
+                widget.isNotify ? "Notificar" : "Assinar",
                 style: LelloTextStyles.subBody(theme)!
                     .copyWith(color: Colors.black),
               ),
             )
           ],
-          valueListenable: _valueListenable,
-          onChanged: (value) {
-            _valueListenable.value = value;
-            widget.onChanged?.call(value);
-          },
+          value: widget.selectedValue,
+          onChanged: widget.onChanged,
           buttonStyleData: ButtonStyleData(
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             padding: const EdgeInsets.only(left: 40.0),
             height: 40,
             width: 170,
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
           ),
         ),
       ),

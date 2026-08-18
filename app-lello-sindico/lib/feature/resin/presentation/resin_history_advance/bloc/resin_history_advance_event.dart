@@ -1,53 +1,32 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_refund.dart';
 
-abstract class ResinHistoryAdvanceEvent extends Equatable {
-  const ResinHistoryAdvanceEvent();
-
-  @override
-  List<Object?> get props => [];
+abstract class ResinHistoryAdvanceEvent {
+  ResinHistoryAdvanceEvent();
 }
 
-class ResinHistoryAdvanceLoadingEvent extends ResinHistoryAdvanceEvent {
-  const ResinHistoryAdvanceLoadingEvent();
-}
+class ResinHistoryAdvanceLoadingEvent extends ResinHistoryAdvanceEvent {}
 
 class ResinHistoryAdvanceLoadedEvent extends ResinHistoryAdvanceEvent {
-  final List<ResinRefund> refunds;
-  final bool loadingRemote;
-  final bool updateRefunds;
-  final String? flushbarMessageKey;
-
-  const ResinHistoryAdvanceLoadedEvent({
+  List<ResinRefund> refunds;
+  bool loadingRemote;
+  bool updateRefunds;
+  String? flushbarMessageKey;
+  ResinHistoryAdvanceLoadedEvent({
     required this.refunds,
     this.loadingRemote = false,
     this.updateRefunds = false,
     this.flushbarMessageKey,
   });
-
-  @override
-  List<Object?> get props =>
-      [refunds, loadingRemote, updateRefunds, flushbarMessageKey];
 }
 
 class ResinHistoryAdvanceErrorEvent extends ResinHistoryAdvanceEvent {
-  final String errorMessageKey;
-
-  const ResinHistoryAdvanceErrorEvent({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinHistoryAdvanceErrorEvent({required this.errorMessageKey});
 }
 
-class ResinHistoryAdvanceDeleteLoadingEvent extends ResinHistoryAdvanceEvent {
-  const ResinHistoryAdvanceDeleteLoadingEvent();
-}
+class ResinHistoryAdvanceDeleteLoadingEvent extends ResinHistoryAdvanceEvent {}
 
 class ResinAdvanceDetailsLoadedEvent extends ResinHistoryAdvanceEvent {
-  final ResinRefund refund;
-
-  const ResinAdvanceDetailsLoadedEvent(this.refund);
-
-  @override
-  List<Object?> get props => [refund];
+  ResinRefund refund;
+  ResinAdvanceDetailsLoadedEvent(this.refund);
 }

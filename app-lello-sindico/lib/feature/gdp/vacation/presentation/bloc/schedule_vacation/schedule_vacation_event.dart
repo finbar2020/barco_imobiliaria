@@ -1,22 +1,12 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/vacation/domain/entity/vacation_created.dart';
 
-abstract class ScheduleVacationEvent extends Equatable {
-  const ScheduleVacationEvent();
-
-  @override
-  List<Object?> get props => [];
-}
-
+abstract class ScheduleVacationEvent {}
 class CreateScheduledVacationEvent extends ScheduleVacationEvent {
   final String employeeId;
   final VacationCreated vacationCreated;
 
-  const CreateScheduledVacationEvent({
+  CreateScheduledVacationEvent({
     required this.employeeId,
     required this.vacationCreated,
   });
-
-  @override
-  List<Object?> get props => [employeeId, vacationCreated];
 }

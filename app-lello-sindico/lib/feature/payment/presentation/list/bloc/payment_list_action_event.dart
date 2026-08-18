@@ -1,4 +1,4 @@
-import 'package:essentials/essentials.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class PaymentListActionEvent extends Equatable {
   const PaymentListActionEvent();
@@ -7,15 +7,12 @@ abstract class PaymentListActionEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class PaymentListActionPressedEvent extends PaymentListActionEvent {
+class PaymentListActionPressed extends PaymentListActionEvent {
   final String installmentId;
-
-  const PaymentListActionPressedEvent(this.installmentId);
+  const PaymentListActionPressed(this.installmentId);
 
   @override
   List<Object?> get props => [installmentId];
 }
 
-class PaymentListActionResetEvent extends PaymentListActionEvent {
-  const PaymentListActionResetEvent();
-}
+class PaymentListActionReset extends PaymentListActionEvent {}

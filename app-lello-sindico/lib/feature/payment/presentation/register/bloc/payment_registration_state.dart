@@ -2,124 +2,74 @@ import 'dart:io';
 
 import 'package:essentials/essentials.dart';
 
-abstract class PaymentSendDocumentState extends Equatable {
-  const PaymentSendDocumentState();
+abstract class PaymentSendDocumentState {}
 
-  @override
-  List<Object?> get props => [];
-}
+// Send documents
 
-class PaymentSendDocumentEmptyState extends PaymentSendDocumentState {
-  const PaymentSendDocumentEmptyState();
-}
+class PaymentSendDocumentEmptyState extends PaymentSendDocumentState {}
 
-class PaymentSendDocumentLoadingState extends PaymentSendDocumentState {
-  const PaymentSendDocumentLoadingState();
-}
+class PaymentSendDocumentLoadingState extends PaymentSendDocumentState {}
 
 class PaymentSendDocumentFailureState extends PaymentSendDocumentState {
   final Failure error;
-
-  const PaymentSendDocumentFailureState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentSendDocumentFailureState({required this.error});
 }
 
 class PaymentSendDocumentSuccessState extends PaymentSendDocumentState {
   final List<File> files;
-
-  const PaymentSendDocumentSuccessState({required this.files});
-
-  @override
-  List<Object?> get props => [files];
+  PaymentSendDocumentSuccessState({required this.files});
 }
 
-class PaymentRegistrationEmptyState extends PaymentSendDocumentState {
-  const PaymentRegistrationEmptyState();
-}
+// Registration (old)
 
-class PaymentRegistrationLoadingState extends PaymentSendDocumentState {
-  const PaymentRegistrationLoadingState();
-}
+class PaymentRegistrationEmptyState extends PaymentSendDocumentState {}
+
+class PaymentRegistrationLoadingState extends PaymentSendDocumentState {}
 
 class PaymentRegistrationFailureState extends PaymentSendDocumentState {
   final Failure error;
-
-  const PaymentRegistrationFailureState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentRegistrationFailureState({required this.error});
 }
 
-class PaymentRegistrationSuccessState extends PaymentSendDocumentState {
-  const PaymentRegistrationSuccessState();
-}
+class PaymentRegistrationSuccessState extends PaymentSendDocumentState {}
 
-class PaymentRegistrationDocumentSuccessState extends PaymentSendDocumentState {
-  const PaymentRegistrationDocumentSuccessState();
-}
+// Step 1 [Document]
+class PaymentRegistrationDocumentSuccessState
+    extends PaymentSendDocumentState {}
 
 class PaymentRegistrationDocumentFailureState extends PaymentSendDocumentState {
   final Failure error;
-
-  const PaymentRegistrationDocumentFailureState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentRegistrationDocumentFailureState({required this.error});
 }
 
 class PaymentRegistrationDocumentUnknownProviderFailureState
-    extends PaymentSendDocumentState {
-  const PaymentRegistrationDocumentUnknownProviderFailureState();
-}
+    extends PaymentSendDocumentState {}
 
-class PaymentRegistrationDocumentEmptyState extends PaymentSendDocumentState {
-  const PaymentRegistrationDocumentEmptyState();
-}
+class PaymentRegistrationDocumentEmptyState extends PaymentSendDocumentState {}
 
-class PaymentRegistrationDocumentLoadingState extends PaymentSendDocumentState {
-  const PaymentRegistrationDocumentLoadingState();
-}
+class PaymentRegistrationDocumentLoadingState
+    extends PaymentSendDocumentState {}
 
-class PaymentRegistrationFinanceSuccessState extends PaymentSendDocumentState {
-  const PaymentRegistrationFinanceSuccessState();
-}
+// Step 2 [Finance]
+class PaymentRegistrationFinanceSuccessState extends PaymentSendDocumentState {}
 
 class PaymentRegistrationFinanceFailureState extends PaymentSendDocumentState {
   final Failure error;
-
-  const PaymentRegistrationFinanceFailureState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentRegistrationFinanceFailureState({required this.error});
 }
 
-class PaymentRegistrationFinanceEmptyState extends PaymentSendDocumentState {
-  const PaymentRegistrationFinanceEmptyState();
-}
+class PaymentRegistrationFinanceEmptyState extends PaymentSendDocumentState {}
 
-class PaymentRegistrationFinanceLoadingState extends PaymentSendDocumentState {
-  const PaymentRegistrationFinanceLoadingState();
-}
+class PaymentRegistrationFinanceLoadingState extends PaymentSendDocumentState {}
 
-class PaymentRegistrationFileSuccessState extends PaymentSendDocumentState {
-  const PaymentRegistrationFileSuccessState();
-}
+// Step 3 [File]
+class PaymentRegistrationFileSuccessState extends PaymentSendDocumentState {}
 
 class PaymentRegistrationFileFailureState extends PaymentSendDocumentState {
   final Failure error;
-
-  const PaymentRegistrationFileFailureState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentRegistrationFileFailureState({required this.error});
 }
 
-class PaymentRegistrationFileEmptyState extends PaymentSendDocumentState {
-  const PaymentRegistrationFileEmptyState();
-}
+class PaymentRegistrationFileEmptyState extends PaymentSendDocumentState {}
 
-class PaymentRegistrationFileLoadingState extends PaymentSendDocumentState {
-  const PaymentRegistrationFileLoadingState();
-}
+class PaymentRegistrationFileLoadingState extends PaymentSendDocumentState {}

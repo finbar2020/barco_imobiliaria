@@ -1,31 +1,17 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_params.dart';
 
-abstract class ResinMenuEvent extends Equatable {
-  const ResinMenuEvent();
-
-  @override
-  List<Object?> get props => [];
+abstract class ResinMenuEvent {
+  ResinMenuEvent();
 }
 
-class ResinMenuLoadingsEvent extends ResinMenuEvent {
-  const ResinMenuLoadingsEvent();
-}
+class ResinMenuLoadingsEvent extends ResinMenuEvent {}
 
 class ResinMenuLoadedEvent extends ResinMenuEvent {
-  final ResinParams params;
-
-  const ResinMenuLoadedEvent({required this.params});
-
-  @override
-  List<Object?> get props => [params];
+  ResinParams params;
+  ResinMenuLoadedEvent({required this.params});
 }
 
 class ResinMenuErrorEvent extends ResinMenuEvent {
-  final String errorMessageKey;
-
-  const ResinMenuErrorEvent({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinMenuErrorEvent({required this.errorMessageKey});
 }

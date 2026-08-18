@@ -1,39 +1,27 @@
-import 'package:essentials/essentials.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:lello/feature/accountability/domain/entity/accountability_doubt.dart';
 
-abstract class QuestionListState extends Equatable {
-  const QuestionListState();
+import 'package:essentials/essentials.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+abstract class QuestionListState {}
 
-class QuestionListEmptyState extends QuestionListState {
-  const QuestionListEmptyState();
-}
+class QuestionListEmptyState extends QuestionListState {}
 
-class QuestionListLoadingState extends QuestionListState {
-  const QuestionListLoadingState();
-}
+class QuestionListLoadingState extends QuestionListState {}
 
 class QuestionListLoadedState extends QuestionListState {
   final List<AccountabilityDoubt> data;
 
-  const QuestionListLoadedState({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  QuestionListLoadedState({
+    required this.data,
+  });
 }
 
 class QuestionListFailedState extends QuestionListState {
   final Failure error;
   final String? errorMessageKey;
-
-  const QuestionListFailedState({
+  QuestionListFailedState({
     required this.error,
     this.errorMessageKey,
   });
-
-  @override
-  List<Object?> get props => [error, errorMessageKey];
 }

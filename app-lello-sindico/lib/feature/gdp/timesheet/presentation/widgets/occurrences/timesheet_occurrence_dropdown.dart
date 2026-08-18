@@ -26,28 +26,6 @@ class TimesheetOccurrenceDropdown extends StatefulWidget {
 
 class _TimesheetOccurrenceDropdownState
     extends State<TimesheetOccurrenceDropdown> {
-  late final ValueNotifier<String?> _valueListenable;
-
-  @override
-  void initState() {
-    super.initState();
-    _valueListenable = ValueNotifier(widget.selectedValue);
-  }
-
-  @override
-  void didUpdateWidget(covariant TimesheetOccurrenceDropdown oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedValue != _valueListenable.value) {
-      _valueListenable.value = widget.selectedValue;
-    }
-  }
-
-  @override
-  void dispose() {
-    _valueListenable.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -64,23 +42,21 @@ class _TimesheetOccurrenceDropdownState
                 LelloTextStyles.subBody(theme)!.copyWith(color: Colors.black),
           ),
           items: widget.items
-              .map((String item) => DropdownItem<String>(
+              .map((String item) => DropdownMenuItem<String>(
                     value: item,
-                    height: 40,
-                    child: Text(
-                      item,
-                      style: LelloTextStyles.subBody(theme)!
-                          .copyWith(color: Colors.black),
+                    child: Container(
+                      child: Text(
+                        item,
+                        style: LelloTextStyles.subBody(theme)!
+                            .copyWith(color: Colors.black),
+                      ),
                     ),
                   ))
               .toList(),
-          valueListenable: _valueListenable,
-          onChanged: (value) {
-            _valueListenable.value = value;
-            widget.onChanged?.call(value);
-          },
+          value: widget.selectedValue,
+          onChanged: widget.onChanged,
           buttonStyleData: ButtonStyleData(
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             padding: widget.selectedValue != null
                 ? widget.selectedValue == 'Abonar'
                     ? EdgeInsets.only(left: 60.0)
@@ -88,6 +64,9 @@ class _TimesheetOccurrenceDropdownState
                 : EdgeInsets.only(left: 20.0),
             height: 40,
             width: 170,
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
           ),
         ),
       ),

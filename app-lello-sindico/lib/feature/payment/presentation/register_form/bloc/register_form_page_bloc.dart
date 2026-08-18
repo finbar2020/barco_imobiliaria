@@ -31,7 +31,7 @@ class RegisterFormPageBloc
         )) {
     on<RegisterFormBlocPageStepChangedEvent>(
         handleRegisterFormBlocPageLoadingEvent);
-    on<RegisterFormBlocPageFieldChangedEvent>(
+    on<RegisterFormBlocPageFieldChanged>(
         handleRegisterFormBlocPageFieldChangedEvent);
   }
 
@@ -41,7 +41,7 @@ class RegisterFormPageBloc
   }
 
   void handleRegisterFormBlocPageFieldChangedEvent(
-      RegisterFormBlocPageFieldChangedEvent event, Emitter emit) {
+      RegisterFormBlocPageFieldChanged event, Emitter emit) {
     var isComplete = event.formData.checkStep(event.step);
 
     final updatedStepCompletion = Map<int, bool>.from(state.stepCompletion);

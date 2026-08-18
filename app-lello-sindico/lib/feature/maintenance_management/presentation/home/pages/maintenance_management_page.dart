@@ -57,8 +57,6 @@ class _MaintenanceManagementPageState extends State<MaintenanceManagementPage>
   String? _lastLoadedCondominiumId;
   String? _pendingSwitchCondominiumId;
   bool _isSwitchingCondominium = false;
-  final ValueNotifier<Condominium?> _condoDropdownValue =
-      ValueNotifier<Condominium?>(null);
 
   static const _scheduleOption = MaintenanceManagementOptionModel(
     title: 'maintenance_management_schedule',
@@ -229,7 +227,6 @@ class _MaintenanceManagementPageState extends State<MaintenanceManagementPage>
   @override
   void dispose() {
     tabController.dispose();
-    _condoDropdownValue.dispose();
     super.dispose();
   }
 
@@ -1010,10 +1007,6 @@ class _MaintenanceManagementPageState extends State<MaintenanceManagementPage>
             );
           }
 
-          if (_condoDropdownValue.value?.id != selectedCondominium?.id) {
-            _condoDropdownValue.value = selectedCondominium;
-          }
-
           return DropdownButtonHideUnderline(
             child: DropdownButton2<Condominium>(
               isExpanded: true,
@@ -1042,9 +1035,10 @@ class _MaintenanceManagementPageState extends State<MaintenanceManagementPage>
                 ),
               ),
               menuItemStyleData: const MenuItemStyleData(
+                height: 72,
                 padding: EdgeInsets.symmetric(horizontal: 12),
               ),
-              valueListenable: _condoDropdownValue,
+              value: selectedCondominium,
               iconStyleData: IconStyleData(
                 icon: Icon(
                   Icons.arrow_drop_down,
@@ -1077,9 +1071,8 @@ class _MaintenanceManagementPageState extends State<MaintenanceManagementPage>
                   if ((condo.number ?? '').isNotEmpty) condo.number!,
                 ].join(' - ');
                 final isSelected = condo.id == selectedCondominium?.id;
-                return DropdownItem<Condominium>(
+                return DropdownMenuItem<Condominium>(
                   value: condo,
-                  height: 72,
                   child: Container(
                     color: Colors.white,
                     child: Row(
@@ -1141,7 +1134,6 @@ class _MaintenanceManagementPageState extends State<MaintenanceManagementPage>
                 if (condo == null) return;
                 if (condo.id == selectedCondominium?.id) return;
 
-                _condoDropdownValue.value = condo;
                 setState(() {
                   _pendingSwitchCondominiumId = condo.id;
                   _isSwitchingCondominium = true;

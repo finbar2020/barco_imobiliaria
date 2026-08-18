@@ -53,7 +53,7 @@ class _MessageHandlerState extends State<MessageHandler> {
         android: initializationSettingsAndroid, iOS: initializationSettingsiOS);
 
     flutterLocalNotificationsPlugin.initialize(
-      settings: initializationSettings,
+      initializationSettings,
       onDidReceiveNotificationResponse: (details) async {
         selectNotification(details.payload);
       },
@@ -107,11 +107,8 @@ class _MessageHandlerState extends State<MessageHandler> {
         groupChannelName,
         groupChannelDescription,
       );
-      await flutterLocalNotificationsPlugin.show(
-          id: 0,
-          title: message.notification?.title,
-          body: message.notification?.body,
-          notificationDetails: notificationSpecifics,
+      await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, notificationSpecifics,
           payload: jsonEncode(data));
     });
 

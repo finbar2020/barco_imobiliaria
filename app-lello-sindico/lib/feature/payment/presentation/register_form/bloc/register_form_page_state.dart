@@ -1,15 +1,12 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/payment/domain/entity/payment_data.dart';
 
-/// Estado único do wizard de registro (form). Mantém copyWith como padrão
-/// aceito para formulários/wizards.
-class RegisterFormPageStepChangedState extends Equatable {
+class RegisterFormPageStepChangedState {
   final int totalSteps;
   final int currentStep;
   final Map<int, bool> stepCompletion;
   final PaymentDataEntity formData;
 
-  const RegisterFormPageStepChangedState({
+  RegisterFormPageStepChangedState({
     required this.totalSteps,
     required this.currentStep,
     required this.stepCompletion,
@@ -28,8 +25,4 @@ class RegisterFormPageStepChangedState extends Equatable {
       formData: formData ?? this.formData,
     );
   }
-
-  @override
-  List<Object?> get props =>
-      [totalSteps, currentStep, stepCompletion, formData];
 }

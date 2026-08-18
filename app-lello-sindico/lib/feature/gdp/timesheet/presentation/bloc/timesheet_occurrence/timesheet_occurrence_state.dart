@@ -1,15 +1,11 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/timesheet/domain/entity/timesheet_ocurrence_entity.dart';
 
-abstract class TimesheetOccurrenceState extends Equatable {
-  const TimesheetOccurrenceState();
-
-  @override
-  List<Object?> get props => [];
+abstract class TimesheetOccurrenceState {
+  TimesheetOccurrenceState();
 }
 
 class TimesheetOccurrenceLoadingState extends TimesheetOccurrenceState {
-  const TimesheetOccurrenceLoadingState();
+  TimesheetOccurrenceLoadingState();
 }
 
 class TimesheetOccurrenceLoadedState extends TimesheetOccurrenceState {
@@ -18,20 +14,15 @@ class TimesheetOccurrenceLoadedState extends TimesheetOccurrenceState {
   final bool saveFailed;
   final String? employeeFiltered;
   final String? typeFiltered;
-
-  const TimesheetOccurrenceLoadedState({
+  TimesheetOccurrenceLoadedState({
     required this.list,
     this.saveSuccess = false,
     this.saveFailed = false,
     this.employeeFiltered,
     this.typeFiltered,
   });
-
-  @override
-  List<Object?> get props =>
-      [list, saveSuccess, saveFailed, employeeFiltered, typeFiltered];
 }
 
 class TimesheetOccurrenceFailedState extends TimesheetOccurrenceState {
-  const TimesheetOccurrenceFailedState();
+  TimesheetOccurrenceFailedState() : super();
 }

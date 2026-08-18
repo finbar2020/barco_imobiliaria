@@ -92,7 +92,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage> {
                           //   selectedHours = hours;
                           // });
                         },
-                        onSubmit: () {})),
+                        onSubmit: () {
+                          print(selectedDay);
+                          print(selectedHours);
+                        })),
               )),
         );
       },
@@ -113,6 +116,8 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage> {
       ReservationCalendarWidget(
         space: space,
         onDaySelected: (date, Space space) async {
+          state.selectedDay = date;
+
           bloc.beginLoadHours(date, unit.id!, space.id!);
           if (state.selectedHours != null) {
             setState(() {
@@ -211,7 +216,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage> {
                     final reservatedDayUntil =
                         "${formatter.format(state.selectedDay!)} ${selectedHours?.until ?? state.availableHours!.first.until}";
 
-                    bloc.beginSendRegistration(
+                    await bloc.beginSendRegistration(
                         space.id!,
                         space,
                         unit.id!,

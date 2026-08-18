@@ -122,7 +122,9 @@ class ReservationHistoryCalendarPageState
       ReservationCalendarHistoryWidget(
         reserveNotificationContext: widget.spaceNotificationContext,
         space: space,
-        onDaySelected: (date, Space space) async {},
+        onDaySelected: (date, Space space) async {
+          state.selectedDay = date;
+        },
         pastIsEnable: false,
       ),
     ]);

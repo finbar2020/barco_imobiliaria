@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:lello/feature/space/domain/entity/reservation_payment_method.dart';
 import 'package:lello/feature/space/domain/entity/space.dart';
 import 'package:lello/feature/space/registration/domain/entity/space_registration_step.dart';
-import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc.dart';
+import 'package:lello/feature/space/registration/presentation/bloc/registration/space_registration_bloc_impl.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_rule.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -171,7 +171,7 @@ class _SpaceDetailWidgetState extends State<SpaceDetailWidget> {
 
   Widget _buildHeader(
       ThemeData theme, String title, SpaceRegistrationStep step) {
-    final index = SpaceRegistrationBloc.stepOrder.indexOf(step) + 1;
+    final index = SpaceRegistrationBlocImpl.stepOrder.indexOf(step) + 1;
     return ListTile(
       title: Text(title, style: LelloTextStyles.subtitleBold(theme)),
       trailing: Visibility(
@@ -181,7 +181,7 @@ class _SpaceDetailWidgetState extends State<SpaceDetailWidget> {
           children: [
             Text(
                 sprintf(getString(context, "register_payment_step"),
-                    [index, SpaceRegistrationBloc.stepOrder.length - 2]),
+                    [index, SpaceRegistrationBlocImpl.stepOrder.length - 2]),
                 style: LelloTextStyles.subBody(theme)),
             SizedBox(width: Dimens.spacing),
             SecondaryButton(

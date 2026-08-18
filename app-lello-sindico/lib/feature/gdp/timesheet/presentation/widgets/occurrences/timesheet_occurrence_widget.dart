@@ -207,21 +207,8 @@ class TimesheetOccurrenceBottomSheet extends StatefulWidget {
 
 class _TimesheetOccurrenceBottomSheetState
     extends State<TimesheetOccurrenceBottomSheet> {
-  late final ValueNotifier<String?> selectedValueListenable;
+  String selectedValue = 'Esquecimento';
   List<String> items = ["Esquecimento", "Falha"];
-
-  @override
-  void initState() {
-    super.initState();
-    selectedValueListenable = ValueNotifier('Esquecimento');
-  }
-
-  @override
-  void dispose() {
-    selectedValueListenable.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -281,9 +268,8 @@ class _TimesheetOccurrenceBottomSheetState
                     isExpanded: true,
                     alignment: AlignmentDirectional.centerEnd,
                     items: items
-                        .map((String item) => DropdownItem<String>(
+                        .map((String item) => DropdownMenuItem<String>(
                               value: item,
-                              height: 60,
                               child: Text(
                                 item,
                                 style: LelloTextStyles.subtitle(theme)!
@@ -291,9 +277,11 @@ class _TimesheetOccurrenceBottomSheetState
                               ),
                             ))
                         .toList(),
-                    valueListenable: selectedValueListenable,
+                    value: selectedValue,
                     onChanged: (value) {
-                      selectedValueListenable.value = value;
+                      setState(() {
+                        selectedValue = value!;
+                      });
                     },
                     iconStyleData: IconStyleData(
                         icon: Icon(Icons.keyboard_arrow_down_outlined)),
@@ -301,7 +289,10 @@ class _TimesheetOccurrenceBottomSheetState
                       decoration:
                           BoxDecoration(border: Border.all(color: Colors.grey)),
                       overlayColor:
-                          WidgetStateProperty.all(Colors.transparent),
+                          MaterialStateProperty.all(Colors.transparent),
+                    ),
+                    menuItemStyleData: const MenuItemStyleData(
+                      height: 60,
                     ),
                   ),
                 ),
@@ -309,9 +300,8 @@ class _TimesheetOccurrenceBottomSheetState
                 PrimaryButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      widget.controller.saveDefaultHour(
-                          selectedValueListenable.value ?? 'Esquecimento',
-                          widget.list);
+                      widget.controller
+                          .saveDefaultHour(selectedValue, widget.list);
                     },
                     text: getString(context, "save")),
                 SizedBox(height: Dimens.spacing),

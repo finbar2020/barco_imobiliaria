@@ -5,23 +5,15 @@ import '../../../domain/entity/efficiency_entity.dart';
 import '../../../domain/entity/reset_schedule_event_entity.dart';
 
 abstract class ScheduleEventsState extends Equatable {
-  const ScheduleEventsState();
-
   @override
   List<Object?> get props => [];
 }
 
-class ScheduleEventsInitialState extends ScheduleEventsState {
-  const ScheduleEventsInitialState();
-}
+class ScheduleEventsInitialState extends ScheduleEventsState {}
 
-class ScheduleEventsLoadingState extends ScheduleEventsState {
-  const ScheduleEventsLoadingState();
-}
+class ScheduleEventsLoadingState extends ScheduleEventsState {}
 
-class ResetScheduleEventLoadingState extends ScheduleEventsState {
-  const ResetScheduleEventLoadingState();
-}
+class ResetScheduleEventLoadingState extends ScheduleEventsState {}
 
 class ResetScheduleEventSuccessState extends ScheduleEventsState {
   final ResetScheduleEventEntity resetResult;

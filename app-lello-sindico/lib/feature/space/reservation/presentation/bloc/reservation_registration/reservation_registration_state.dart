@@ -1,25 +1,21 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_registration.dart';
 
-abstract class ReservationRegistrationState extends Equatable {
+abstract class ReservationRegistrationState {
   final ReservationRegistration? registration;
   final String? condominiumId;
 
-  const ReservationRegistrationState(this.registration, this.condominiumId);
-
-  @override
-  List<Object?> get props => [registration, condominiumId];
+  ReservationRegistrationState(this.registration, this.condominiumId);
 }
 
-class ReservationRegistrationInitialState extends ReservationRegistrationState {
-  const ReservationRegistrationInitialState(
+class ReservationRegistrationIdleState extends ReservationRegistrationState {
+  ReservationRegistrationIdleState(
     ReservationRegistration? registration,
     String? condominiumId,
   ) : super(registration, condominiumId);
 }
 
 class ReservationRegistrationFormState extends ReservationRegistrationState {
-  const ReservationRegistrationFormState(
+  ReservationRegistrationFormState(
     ReservationRegistration registration,
     String condominiumId,
   ) : super(registration, condominiumId);

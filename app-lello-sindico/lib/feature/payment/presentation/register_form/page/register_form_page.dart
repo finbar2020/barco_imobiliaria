@@ -85,6 +85,7 @@ class _RegisterFormPageState extends State<RegisterFormPage>
           BlocConsumer<RegisterFormPageBloc, RegisterFormPageStepChangedState>(
         bloc: controller.bloc,
         listener: (context, state) {
+          print("[helper] listener: ${state.currentStep}");
           WidgetsBinding.instance.addPostFrameCallback((_) {
             pageController.animateToPage(
               state.currentStep,
@@ -133,6 +134,9 @@ class _RegisterFormPageState extends State<RegisterFormPage>
                         Expanded(
                           child: PageView(
                             controller: pageController,
+                            onPageChanged: (value) {
+                              print("[helper] onPageChanged: $value");
+                            },
                             //onPageChanged: onPageChanged,
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
@@ -409,6 +413,7 @@ class _RegisterFormPageState extends State<RegisterFormPage>
   }
 
   void _nextPage(RegisterFormPageStepChangedState state, {bool? lastStep}) {
+    print("[helper] _nextPage: ${state.currentStep}, lastStep: $lastStep");
     PaymentScreens tela = _getCurrentScreenByStep(state);
     if (lastStep == true) {
       controller.lastStepSendPaymentAnalyticsLog();
@@ -446,7 +451,7 @@ class _RegisterFormPageState extends State<RegisterFormPage>
   }
 
   _checkStep(PaymentDataEntity paymentdata) {
-    controller.bloc.add(RegisterFormBlocPageFieldChangedEvent(
+    controller.bloc.add(RegisterFormBlocPageFieldChanged(
         controller.bloc.state.currentStep, paymentdata));
   }
 }

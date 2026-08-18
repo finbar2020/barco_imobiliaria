@@ -1,36 +1,21 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_refund.dart';
 
-abstract class ResinReceiptDetailsState extends Equatable {
-  final String? flushbarMessageKey;
-
-  const ResinReceiptDetailsState({this.flushbarMessageKey});
-
-  @override
-  List<Object?> get props => [flushbarMessageKey];
+abstract class ResinReceiptDetailsState {
+  String? flushbarMessageKey;
+  ResinReceiptDetailsState({this.flushbarMessageKey});
 }
 
-class ResinReceiptDetailsLoadingState extends ResinReceiptDetailsState {
-  const ResinReceiptDetailsLoadingState();
-}
+class ResinReceiptDetailsLoadingState extends ResinReceiptDetailsState {}
 
 class ResinReceiptDetailsErrorState extends ResinReceiptDetailsState {
-  final String errorMessageKey;
-
-  const ResinReceiptDetailsErrorState({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinReceiptDetailsErrorState({required this.errorMessageKey});
 }
 
 class ResinReceiptDetailsLoadedState extends ResinReceiptDetailsState {
-  final ResinRefund refund;
-
-  const ResinReceiptDetailsLoadedState({
-    super.flushbarMessageKey,
+  ResinRefund refund;
+  ResinReceiptDetailsLoadedState({
+    String? flushbarMessageKey,
     required this.refund,
-  });
-
-  @override
-  List<Object?> get props => [refund, flushbarMessageKey];
+  }) : super(flushbarMessageKey: flushbarMessageKey);
 }

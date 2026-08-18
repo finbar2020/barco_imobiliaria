@@ -1,42 +1,27 @@
-import 'package:equatable/equatable.dart';
-
+import '../../../../condominium/domain/entity/condominium.dart';
 import '../../../domain/entity/maintenance_management_entity.dart';
 
-abstract class MaintenanceManagementState extends Equatable {
-  const MaintenanceManagementState();
+abstract class MaintenanceManagementState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class MaintenanceManagementIdleState extends MaintenanceManagementState {}
 
-class MaintenanceManagementLoadingState extends MaintenanceManagementState {
-  const MaintenanceManagementLoadingState();
-}
+class MaintenanceManagementLoadingState extends MaintenanceManagementState {}
 
 class MaintenanceManagementErrorState extends MaintenanceManagementState {
   final String message;
 
-  const MaintenanceManagementErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  MaintenanceManagementErrorState(this.message);
 }
 
 class MaintenanceManagementLoadedState extends MaintenanceManagementState {
   final CondominiumInfoEntity data;
 
-  const MaintenanceManagementLoadedState(this.data);
-
-  @override
-  List<Object?> get props => [data];
+  MaintenanceManagementLoadedState(this.data);
 }
 
 class MaintenanceManagementWarningModalState
     extends MaintenanceManagementState {
   final CondominiumInfoEntity entity;
 
-  const MaintenanceManagementWarningModalState(this.entity);
-
-  @override
-  List<Object?> get props => [entity];
+  MaintenanceManagementWarningModalState(this.entity);
 }

@@ -44,7 +44,7 @@ enum TaskEditScope {
   }
 }
 
-enum TaskEditStatus { savedSingle, savedFuture, discarded, error }
+enum TaskEditOutcome { savedSingle, savedFuture, discarded, error }
 
 class TaskEditState extends Equatable {
   final TaskDetailsEntity task;
@@ -57,7 +57,7 @@ class TaskEditState extends Equatable {
   final TaskEditDialogType dialog;
   final TaskEditScope? pendingScope;
   final bool isSaving;
-  final TaskEditStatus? outcome;
+  final TaskEditOutcome? outcome;
   final String? errorMessage;
   final String? startDate;
   final String? endDate;
@@ -92,7 +92,7 @@ class TaskEditState extends Equatable {
     TaskEditDialogType? dialog,
     TaskEditScope? pendingScope,
     bool? isSaving,
-    TaskEditStatus? outcome,
+    TaskEditOutcome? outcome,
     String? errorMessage,
     String? startDate,
     String? endDate,

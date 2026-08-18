@@ -1,33 +1,24 @@
 import 'dart:io';
-
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/timesheet/domain/entity/timesheet_occurrence_vacation_entity.dart';
 import 'package:lello/feature/gdp/timesheet/domain/entity/timesheet_ocurrence_entity.dart';
 
-abstract class TimesheetDetailsListState extends Equatable {
-  const TimesheetDetailsListState();
-
-  @override
-  List<Object?> get props => [];
+abstract class TimesheetDetailsListState {
+  TimesheetDetailsListState();
 }
 
 class TimesheetDetailsListLoadingState extends TimesheetDetailsListState {
-  const TimesheetDetailsListLoadingState();
+  TimesheetDetailsListLoadingState();
 }
 
 class TimesheetDetailsListLoadedState extends TimesheetDetailsListState {
   final List<TimesheetOccurrenceEntity> list;
   final bool saveSuccess;
   final bool saveFailed;
-
-  const TimesheetDetailsListLoadedState({
+  TimesheetDetailsListLoadedState({
     required this.list,
     this.saveSuccess = false,
     this.saveFailed = false,
   });
-
-  @override
-  List<Object?> get props => [list, saveSuccess, saveFailed];
 }
 
 class TimesheetVacationsLoadedState extends TimesheetDetailsListState {
@@ -35,18 +26,14 @@ class TimesheetVacationsLoadedState extends TimesheetDetailsListState {
   final bool getArchiveFailed;
   final File? pdf;
   final String? filename;
-
-  const TimesheetVacationsLoadedState({
+  TimesheetVacationsLoadedState({
     required this.list,
     this.getArchiveFailed = false,
     this.pdf,
     this.filename,
   });
-
-  @override
-  List<Object?> get props => [list, getArchiveFailed, pdf, filename];
 }
 
 class TimesheetDetailsListFailedState extends TimesheetDetailsListState {
-  const TimesheetDetailsListFailedState();
+  TimesheetDetailsListFailedState() : super();
 }

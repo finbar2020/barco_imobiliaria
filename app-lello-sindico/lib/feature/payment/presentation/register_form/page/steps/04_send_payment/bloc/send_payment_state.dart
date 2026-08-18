@@ -1,34 +1,17 @@
 import 'package:essentials/essentials.dart';
 
-abstract class SendPaymentState extends Equatable {
-  const SendPaymentState();
+abstract class SendPaymentState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class SendPaymentEmptyState extends SendPaymentState {}
 
-class SendPaymentEmptyState extends SendPaymentState {
-  const SendPaymentEmptyState();
-}
-
-class SendPaymentLoadingState extends SendPaymentState {
-  const SendPaymentLoadingState();
-}
+class SendPaymentLoadingState extends SendPaymentState {}
 
 class SendPaymentSuccessState extends SendPaymentState {
-  final dynamic value;
-
-  const SendPaymentSuccessState({required this.value});
-
-  @override
-  List<Object?> get props => [value];
+  var value;
+  SendPaymentSuccessState({required this.value});
 }
 
 class SendPaymentFailureState extends SendPaymentState {
   final Failure? error;
-
-  const SendPaymentFailureState({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  SendPaymentFailureState({this.error});
 }

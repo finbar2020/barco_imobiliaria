@@ -110,11 +110,9 @@ class _QuestionCreateStateWidget extends State<QuestionCreateFormWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DottedBorder(
-                      options: RectDottedBorderOptions(
-                        strokeWidth: 1,
-                        dashPattern: const [3.0, 3.0],
-                        color: LelloTheme.palleteOf(theme).secondary(),
-                      ),
+                      strokeWidth: 1,
+                      dashPattern: const [3.0, 3.0],
+                      color: LelloTheme.palleteOf(theme).secondary(),
                       child: Material(
                         child: InkWell(
                           onTap: () {

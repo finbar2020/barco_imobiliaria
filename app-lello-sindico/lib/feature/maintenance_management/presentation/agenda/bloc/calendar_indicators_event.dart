@@ -1,26 +1,33 @@
-import 'package:equatable/equatable.dart';
 import '../../../domain/entity/filter_options_entity.dart';
 
-abstract class CalendarIndicatorsEvent extends Equatable {
-  const CalendarIndicatorsEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class CalendarIndicatorsEvent {}
 
 class LoadCalendarIndicatorsEvent extends CalendarIndicatorsEvent {
   final int month;
   final int year;
   final FilterOptionsEntity? appliedFilters;
 
-  const LoadCalendarIndicatorsEvent({
+  LoadCalendarIndicatorsEvent({
     required this.month,
     required this.year,
     this.appliedFilters,
   });
 
   @override
-  List<Object?> get props => [month, year, appliedFilters];
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LoadCalendarIndicatorsEvent &&
+          runtimeType == other.runtimeType &&
+          month == other.month &&
+          year == other.year &&
+          appliedFilters == other.appliedFilters;
+
+  @override
+  int get hashCode => month.hashCode ^ year.hashCode ^ appliedFilters.hashCode;
+
+  @override
+  String toString() =>
+      'LoadCalendarIndicatorsEvent(month: $month, year: $year, appliedFilters: $appliedFilters)';
 }
 
 class RefreshCalendarIndicatorsEvent extends CalendarIndicatorsEvent {
@@ -28,16 +35,30 @@ class RefreshCalendarIndicatorsEvent extends CalendarIndicatorsEvent {
   final int year;
   final FilterOptionsEntity? appliedFilters;
 
-  const RefreshCalendarIndicatorsEvent({
+  RefreshCalendarIndicatorsEvent({
     required this.month,
     required this.year,
     this.appliedFilters,
   });
 
   @override
-  List<Object?> get props => [month, year, appliedFilters];
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RefreshCalendarIndicatorsEvent &&
+          runtimeType == other.runtimeType &&
+          month == other.month &&
+          year == other.year &&
+          appliedFilters == other.appliedFilters;
+
+  @override
+  int get hashCode => month.hashCode ^ year.hashCode ^ appliedFilters.hashCode;
+
+  @override
+  String toString() =>
+      'RefreshCalendarIndicatorsEvent(month: $month, year: $year, appliedFilters: $appliedFilters)';
 }
 
 class ClearCalendarIndicatorsCacheEvent extends CalendarIndicatorsEvent {
-  const ClearCalendarIndicatorsCacheEvent();
+  @override
+  String toString() => 'ClearCalendarIndicatorsCacheEvent';
 }

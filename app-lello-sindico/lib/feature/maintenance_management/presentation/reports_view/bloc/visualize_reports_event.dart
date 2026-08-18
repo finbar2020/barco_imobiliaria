@@ -1,25 +1,15 @@
-import 'package:equatable/equatable.dart';
-
 import '../../enums/efficiency_scope_enum.dart';
 
-abstract class VisualizeReportsEvent extends Equatable {
-  const VisualizeReportsEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class VisualizeReportsEvent {}
 
 class LoadFormularyByMonthEvent extends VisualizeReportsEvent {
   final String dtStart;
   final String untilDate;
 
-  const LoadFormularyByMonthEvent({
+  LoadFormularyByMonthEvent({
     required this.dtStart,
     required this.untilDate,
   });
-
-  @override
-  List<Object?> get props => [dtStart, untilDate];
 }
 
 class LoadFormularyByMonthWithFiltersEvent extends VisualizeReportsEvent {
@@ -31,7 +21,7 @@ class LoadFormularyByMonthWithFiltersEvent extends VisualizeReportsEvent {
   final List<String>? typeTask;
   final List<String>? status;
 
-  const LoadFormularyByMonthWithFiltersEvent({
+  LoadFormularyByMonthWithFiltersEvent({
     required this.dtStart,
     required this.untilDate,
     this.responsibleIds,
@@ -40,22 +30,9 @@ class LoadFormularyByMonthWithFiltersEvent extends VisualizeReportsEvent {
     this.typeTask,
     this.status,
   });
-
-  @override
-  List<Object?> get props => [
-        dtStart,
-        untilDate,
-        responsibleIds,
-        assetIds,
-        localIds,
-        typeTask,
-        status,
-      ];
 }
 
-class ResetReportsEvent extends VisualizeReportsEvent {
-  const ResetReportsEvent();
-}
+class ResetReportsEvent extends VisualizeReportsEvent {}
 
 class LoadReportsEfficiencyEvent extends VisualizeReportsEvent {
   final String dtStart;
@@ -66,7 +43,7 @@ class LoadReportsEfficiencyEvent extends VisualizeReportsEvent {
   final List<String>? typeTask;
   final List<String>? status;
 
-  const LoadReportsEfficiencyEvent({
+  LoadReportsEfficiencyEvent({
     required this.dtStart,
     required this.untilDate,
     this.responsibleIds,
@@ -75,35 +52,18 @@ class LoadReportsEfficiencyEvent extends VisualizeReportsEvent {
     this.typeTask,
     this.status,
   });
-
-  @override
-  List<Object?> get props => [
-        dtStart,
-        untilDate,
-        responsibleIds,
-        assetIds,
-        localIds,
-        typeTask,
-        status,
-      ];
 }
 
 class SearchReportsEfficiencyEvent extends VisualizeReportsEvent {
   final String query;
 
-  const SearchReportsEfficiencyEvent(this.query);
-
-  @override
-  List<Object?> get props => [query];
+  SearchReportsEfficiencyEvent(this.query);
 }
 
 class ChangeReportsEfficiencyScopeEvent extends VisualizeReportsEvent {
   final EfficiencyScope scope;
 
-  const ChangeReportsEfficiencyScopeEvent(this.scope);
-
-  @override
-  List<Object?> get props => [scope];
+  ChangeReportsEfficiencyScopeEvent(this.scope);
 }
 
 class LoadTaskBySectorEvent extends VisualizeReportsEvent {
@@ -115,7 +75,7 @@ class LoadTaskBySectorEvent extends VisualizeReportsEvent {
   final List<String>? typeTask;
   final List<String>? status;
 
-  const LoadTaskBySectorEvent({
+  LoadTaskBySectorEvent({
     required this.dtStart,
     required this.untilDate,
     this.responsibleIds,
@@ -124,17 +84,6 @@ class LoadTaskBySectorEvent extends VisualizeReportsEvent {
     this.typeTask,
     this.status,
   });
-
-  @override
-  List<Object?> get props => [
-        dtStart,
-        untilDate,
-        responsibleIds,
-        assetIds,
-        localIds,
-        typeTask,
-        status,
-      ];
 }
 
 class LoadTaskByMonthEvent extends VisualizeReportsEvent {
@@ -146,7 +95,7 @@ class LoadTaskByMonthEvent extends VisualizeReportsEvent {
   final List<String>? typeTask;
   final List<String>? status;
 
-  const LoadTaskByMonthEvent({
+  LoadTaskByMonthEvent({
     required this.dtStart,
     required this.untilDate,
     this.responsibleIds,
@@ -155,15 +104,4 @@ class LoadTaskByMonthEvent extends VisualizeReportsEvent {
     this.typeTask,
     this.status,
   });
-
-  @override
-  List<Object?> get props => [
-        dtStart,
-        untilDate,
-        responsibleIds,
-        assetIds,
-        localIds,
-        typeTask,
-        status,
-      ];
 }

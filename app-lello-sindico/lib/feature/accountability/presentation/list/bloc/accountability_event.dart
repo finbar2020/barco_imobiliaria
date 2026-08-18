@@ -2,35 +2,20 @@ import 'package:essentials/essentials.dart';
 
 import '../../../domain/entity/accountability_periods.dart';
 
-abstract class AccountabilityPeriodsEvent extends Equatable {
-  const AccountabilityPeriodsEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class AccountabilityPeriodsEvent {}
 
 class AccountabilityPeriodsLoadedEvent extends AccountabilityPeriodsEvent {
   final List<AccountabilityPeriods> period;
-
-  const AccountabilityPeriodsLoadedEvent({required this.period});
-
-  @override
-  List<Object?> get props => [period];
+  AccountabilityPeriodsLoadedEvent({required this.period});
 }
 
-class AccountabilityPeriodsLoadingEvent extends AccountabilityPeriodsEvent {
-  const AccountabilityPeriodsLoadingEvent();
-}
+class AccountabilityPeriodsLoadingEvent extends AccountabilityPeriodsEvent {}
 
 class AccountabilityPeriodsFailedEvent extends AccountabilityPeriodsEvent {
   final Failure failure;
-
-  const AccountabilityPeriodsFailedEvent({required this.failure});
-
-  @override
-  List<Object?> get props => [failure];
+  AccountabilityPeriodsFailedEvent({
+    required this.failure,
+  });
 }
 
-class AccountabilityPeriodsEmptyEvent extends AccountabilityPeriodsEvent {
-  const AccountabilityPeriodsEmptyEvent();
-}
+class AccountabilityPeriodsEmptyEvent extends AccountabilityPeriodsEvent {}

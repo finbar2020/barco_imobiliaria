@@ -1,18 +1,10 @@
-import 'package:essentials/essentials.dart';
 
-abstract class HomeSliverAppBarState extends Equatable {
-  final bool lockScroll;
+class HomeSliverAppBarState {
+	final bool lockScroll;
 
-  const HomeSliverAppBarState(this.lockScroll);
-
-  @override
-  List<Object?> get props => [lockScroll];
-}
-
-class HomeSliverAppBarInitialState extends HomeSliverAppBarState {
-  const HomeSliverAppBarInitialState([super.lockScroll = false]);
+	HomeSliverAppBarState(this.lockScroll);
 }
 
 class HomeSliverAppBarLockState extends HomeSliverAppBarState {
-  const HomeSliverAppBarLockState(bool isLocked) : super(isLocked);
+	HomeSliverAppBarLockState(bool isLocked) : super(isLocked);
 }

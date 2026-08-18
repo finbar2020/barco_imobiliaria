@@ -1,35 +1,24 @@
-import 'package:essentials/essentials.dart';
+import 'package:essentials/functional/failure.dart';
 
-abstract class TimesheetListPendingAppointmentState extends Equatable {
-  const TimesheetListPendingAppointmentState();
-
-  @override
-  List<Object?> get props => [];
+abstract class TimesheetListPendingAppointmentState {
+  TimesheetListPendingAppointmentState();
 }
 
 class TimesheetListPendingAppointmentLoadingState
     extends TimesheetListPendingAppointmentState {
-  const TimesheetListPendingAppointmentLoadingState();
+  TimesheetListPendingAppointmentLoadingState();
 }
 
 class TimesheetListPendingAppointmentLoadedState
     extends TimesheetListPendingAppointmentState {
   final List<String> appointments;
-
-  const TimesheetListPendingAppointmentLoadedState({
+  TimesheetListPendingAppointmentLoadedState({
     required this.appointments,
   });
-
-  @override
-  List<Object?> get props => [appointments];
 }
 
 class TimesheetListPendingAppointmentFailedState
     extends TimesheetListPendingAppointmentState {
   final Failure err;
-
-  const TimesheetListPendingAppointmentFailedState(this.err);
-
-  @override
-  List<Object?> get props => [err];
+  TimesheetListPendingAppointmentFailedState(this.err) : super();
 }

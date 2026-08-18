@@ -9,36 +9,36 @@ class TaskReportBloc extends Bloc<TaskReportEvent, TaskReportState> {
   TaskReportBloc({
     required GetTaskReportUseCase getTaskReportUseCase,
   })  : _getTaskReportUseCase = getTaskReportUseCase,
-        super(const TaskReportInitialState()) {
-    on<LoadTaskReportEvent>(_onLoadTaskReport);
-    on<RefreshTaskReportEvent>(_onRefreshTaskReport);
+        super(TaskReportInitial()) {
+    on<LoadTaskReport>(_onLoadTaskReport);
+    on<RefreshTaskReport>(_onRefreshTaskReport);
   }
 
   Future<void> _onLoadTaskReport(
-    LoadTaskReportEvent event,
+    LoadTaskReport event,
     Emitter<TaskReportState> emit,
   ) async {
-    emit(const TaskReportLoadingState());
+    emit(TaskReportLoading());
 
     try {
       final result = await _getTaskReportUseCase(event.eventId);
       result.fold(
-        (failure) => emit(TaskReportErrorState(message: failure.toString())),
-        (report) => emit(TaskReportLoadedState(report: report)),
+        (failure) => emit(TaskReportError(message: failure.toString())),
+        (report) => emit(TaskReportLoaded(report: report)),
       );
     } catch (e) {
-      emit(TaskReportErrorState(message: e.toString()));
+      emit(TaskReportError(message: e.toString()));
     }
   }
 
   Future<void> _onRefreshTaskReport(
-    RefreshTaskReportEvent event,
+    RefreshTaskReport event,
     Emitter<TaskReportState> emit,
   ) async {
     // Mantém o estado atual durante o refresh se já tem dados
     final currentState = state;
-    if (currentState is! TaskReportLoadedState) {
-      emit(const TaskReportLoadingState());
+    if (currentState is! TaskReportLoaded) {
+      emit(TaskReportLoading());
     }
 
     try {
@@ -46,20 +46,20 @@ class TaskReportBloc extends Bloc<TaskReportEvent, TaskReportState> {
       result.fold(
         (failure) {
           // Se já tinha dados carregados, volta ao estado anterior em caso de erro
-          if (currentState is TaskReportLoadedState) {
+          if (currentState is TaskReportLoaded) {
             emit(currentState);
           } else {
-            emit(TaskReportErrorState(message: failure.toString()));
+            emit(TaskReportError(message: failure.toString()));
           }
         },
-        (report) => emit(TaskReportLoadedState(report: report)),
+        (report) => emit(TaskReportLoaded(report: report)),
       );
     } catch (e) {
       // Se já tinha dados carregados, volta ao estado anterior em caso de erro
-      if (currentState is TaskReportLoadedState) {
+      if (currentState is TaskReportLoaded) {
         emit(currentState);
       } else {
-        emit(TaskReportErrorState(message: e.toString()));
+        emit(TaskReportError(message: e.toString()));
       }
     }
   }

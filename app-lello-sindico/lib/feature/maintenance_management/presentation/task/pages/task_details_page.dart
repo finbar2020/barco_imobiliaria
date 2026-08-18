@@ -759,14 +759,14 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                   }
 
                   final result =
-                      await Navigator.of(context).push<TaskEditStatus>(
+                      await Navigator.of(context).push<TaskEditOutcome>(
                     MaterialPageRoute(
                       builder: (_) => TaskEditPage(task: currentState.task),
                     ),
                   );
 
-                  if (result == TaskEditStatus.savedSingle ||
-                      result == TaskEditStatus.savedFuture) {
+                  if (result == TaskEditOutcome.savedSingle ||
+                      result == TaskEditOutcome.savedFuture) {
                     _bloc.loadTaskDetails(widget.taskId);
                   }
                 } else if (value == 'delete') {

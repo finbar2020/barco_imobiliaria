@@ -48,7 +48,7 @@ class RegisterFormPageController {
   setPaymentData(ProcessFilesResponseEntity data) {
     paymentData = data.paymentData!;
     supplier = data.supplierData;
-    bloc.add(RegisterFormBlocPageFieldChangedEvent(0, paymentData));
+    bloc.add(RegisterFormBlocPageFieldChanged(0, paymentData));
   }
 
   setIsAutofill(bool autofill) {

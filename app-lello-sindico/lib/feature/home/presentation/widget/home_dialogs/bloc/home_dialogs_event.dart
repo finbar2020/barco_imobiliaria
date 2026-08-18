@@ -1,26 +1,12 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/condominium/domain/entity/condominium.dart';
 
-abstract class HomeDialogEvent extends Equatable {
-  const HomeDialogEvent();
+abstract class HomeDialogEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class InitialEvent extends HomeDialogEvent {}
 
-class InitialEvent extends HomeDialogEvent {
-  const InitialEvent();
-}
-
-class NeedsUpdateEvent extends HomeDialogEvent {
-  const NeedsUpdateEvent();
-}
+class NeedsUpdateEvent extends HomeDialogEvent {}
 
 class AlertSwitchRoleEvent extends HomeDialogEvent {
-  final Condominium switchCondominium;
-
-  const AlertSwitchRoleEvent({required this.switchCondominium});
-
-  @override
-  List<Object?> get props => [switchCondominium];
+  Condominium switchCondominium;
+  AlertSwitchRoleEvent({required this.switchCondominium});
 }

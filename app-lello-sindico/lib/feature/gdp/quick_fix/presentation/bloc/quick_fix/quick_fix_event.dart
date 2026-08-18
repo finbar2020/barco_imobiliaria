@@ -1,17 +1,7 @@
-import 'package:essentials/essentials.dart';
-
-abstract class QuickFixEvent extends Equatable {
-  const QuickFixEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class QuickFixEvent {}
 
 class QuickFixLoadEvent extends QuickFixEvent {
   final String condominiumId;
 
-  const QuickFixLoadEvent({required this.condominiumId});
-
-  @override
-  List<Object?> get props => [condominiumId];
+  QuickFixLoadEvent({required this.condominiumId});
 }

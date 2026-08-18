@@ -37,7 +37,6 @@ class _ResinHistoryRefundWidgetState extends State<ResinHistoryRefundWidget> {
     return BlocConsumer<ResinHistoryRefundBloc, ResinHistoryRefundState>(
       bloc: widget.controller.bloc,
       listener: (context, state) {
-        _showSnackBar(context, state.flushbarMessageKey);
         if (state is ResinRefundDetailsLoadedState) {
           Navigator.pushNamed(
             context,
@@ -50,6 +49,11 @@ class _ResinHistoryRefundWidgetState extends State<ResinHistoryRefundWidget> {
         }
       },
       builder: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showSnackBar(
+              context, widget.controller.bloc.state.flushbarMessageKey);
+          widget.controller.bloc.state.flushbarMessageKey = null;
+        });
         if (state is ResinDeleteHistoryRefundLoadingState) {
           return _buildCancelRefundLoading(context);
         }

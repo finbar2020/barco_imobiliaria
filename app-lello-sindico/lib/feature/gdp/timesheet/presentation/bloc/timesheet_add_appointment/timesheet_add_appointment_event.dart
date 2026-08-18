@@ -1,25 +1,14 @@
-import 'package:essentials/essentials.dart';
-
-abstract class TimesheetAddAppointmentEvent extends Equatable {
-  const TimesheetAddAppointmentEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class TimesheetAddAppointmentEvent {}
 
 class TimesheetAddAppointmentLoadingEvent extends TimesheetAddAppointmentEvent {
-  const TimesheetAddAppointmentLoadingEvent();
+  TimesheetAddAppointmentLoadingEvent();
 }
 
 class TimesheetAddAppointmentSuccessEvent extends TimesheetAddAppointmentEvent {
-  const TimesheetAddAppointmentSuccessEvent();
+  TimesheetAddAppointmentSuccessEvent();
 }
 
 class TimesheetAddAppointmentFailedEvent extends TimesheetAddAppointmentEvent {
-  final String? message;
-
-  const TimesheetAddAppointmentFailedEvent({this.message});
-
-  @override
-  List<Object?> get props => [message];
+  String? message;
+  TimesheetAddAppointmentFailedEvent({this.message});
 }

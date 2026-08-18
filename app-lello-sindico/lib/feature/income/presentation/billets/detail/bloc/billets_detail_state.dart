@@ -1,35 +1,24 @@
-import 'package:essentials/essentials.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:lello/feature/income/domain/entity/billet.dart';
 
-abstract class BilletsDetailState extends Equatable {
-  const BilletsDetailState();
+import 'package:essentials/essentials.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+abstract class BilletsDetailState {}
 
-class BilletsDetailEmptyState extends BilletsDetailState {
-  const BilletsDetailEmptyState();
-}
+class BilletsDetailEmptyState extends BilletsDetailState {}
 
-class BilletsDetailLoadingState extends BilletsDetailState {
-  const BilletsDetailLoadingState();
-}
+class BilletsDetailLoadingState extends BilletsDetailState {}
 
 class BilletsDetailFailureState extends BilletsDetailState {
   final Failure error;
-
-  const BilletsDetailFailureState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  BilletsDetailFailureState({
+    required this.error,
+  });
 }
 
 class BilletsDetailSuccessState extends BilletsDetailState {
   final Billet? billet;
-
-  const BilletsDetailSuccessState({this.billet});
-
-  @override
-  List<Object?> get props => [billet];
+  BilletsDetailSuccessState({
+    this.billet,
+  });
 }

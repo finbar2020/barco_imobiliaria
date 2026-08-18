@@ -28,12 +28,14 @@ class _ResinReceiptDetailsWidgetState extends State<ResinReceiptDetailsWidget> {
   Widget build(BuildContext context) {
     Environment env = ApplicationContainer.instance().resolve<Environment>();
 
-    return BlocConsumer<ResinReceiptDetailsBloc, ResinReceiptDetailsState>(
+    return BlocBuilder<ResinReceiptDetailsBloc, ResinReceiptDetailsState>(
       bloc: widget.controller.bloc,
-      listener: (context, state) {
-        _showSnackBar(context, state.flushbarMessageKey);
-      },
       builder: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showSnackBar(
+              context, widget.controller.bloc.state.flushbarMessageKey);
+          widget.controller.bloc.state.flushbarMessageKey = null;
+        });
         if (state is ResinReceiptDetailsLoadingState) {
           return const Column(
             children: [

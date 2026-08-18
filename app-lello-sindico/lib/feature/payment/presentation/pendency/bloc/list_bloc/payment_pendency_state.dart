@@ -1,61 +1,33 @@
 import 'package:essentials/essentials.dart';
+import 'package:lello/feature/payment/domain/entity/contas_pagar.dart';
 import 'package:lello/feature/payment/domain/entity/payment_installment_in_approval.dart';
 
-abstract class PaymentPendencyState extends Equatable {
-  const PaymentPendencyState();
+abstract class PaymentPendencyState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class PaymentPendencyEmptyState extends PaymentPendencyState {}
 
-class PaymentPendencyEmptyState extends PaymentPendencyState {
-  const PaymentPendencyEmptyState();
-}
-
-class PaymentCheckProfileLoadingState extends PaymentPendencyState {
-  const PaymentCheckProfileLoadingState();
-}
+class PaymentCheckProfileLoadingState extends PaymentPendencyState {}
 
 class PaymentCheckProfileSuccessState extends PaymentPendencyState {
   final bool success;
-
-  const PaymentCheckProfileSuccessState({required this.success});
-
-  @override
-  List<Object?> get props => [success];
+  PaymentCheckProfileSuccessState({required this.success});
 }
 
 class PaymentCheckProfileFailureState extends PaymentPendencyState {
   final Failure? error;
-
-  const PaymentCheckProfileFailureState({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentCheckProfileFailureState({this.error});
 }
 
-class PaymentPendencyLoadingState extends PaymentPendencyState {
-  const PaymentPendencyLoadingState();
-}
+class PaymentPendencyLoadingState extends PaymentPendencyState {}
 
-class PaymentPendencyPagingState extends PaymentPendencyState {
-  const PaymentPendencyPagingState();
-}
+class PaymentPendencyPagingState extends PaymentPendencyState {}
 
 class PaymentPendencySuccessState extends PaymentPendencyState {
   final List<PaymentInstallmentInApprovalEntity> data;
-
-  const PaymentPendencySuccessState({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  PaymentPendencySuccessState({required this.data});
 }
 
 class PaymentPendencyFailureState extends PaymentPendencyState {
   final Failure? error;
-
-  const PaymentPendencyFailureState({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentPendencyFailureState({this.error});
 }

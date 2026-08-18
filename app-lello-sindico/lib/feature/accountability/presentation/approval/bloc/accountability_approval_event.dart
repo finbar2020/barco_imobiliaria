@@ -3,44 +3,29 @@ import 'package:lello/feature/accountability/domain/entity/accountability.dart';
 
 import '../../../domain/entity/accountability_aproval.dart';
 
-abstract class AccountabilityApprovalEvent extends Equatable {
-  const AccountabilityApprovalEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class AccountabilityApprovalEvent {}
 
 class AccountabilityApprovalSetupEvent extends AccountabilityApprovalEvent {
   final Accountability accountability;
-
-  const AccountabilityApprovalSetupEvent({required this.accountability});
-
-  @override
-  List<Object?> get props => [accountability];
+  AccountabilityApprovalSetupEvent({
+    required this.accountability,
+  });
 }
 
-class AccountabilityApprovalInitialEvent extends AccountabilityApprovalEvent {
-  const AccountabilityApprovalInitialEvent();
-}
+class AccountabilityApprovalIdleEvent extends AccountabilityApprovalEvent {}
 
-class AccountabilityApprovalLoadingEvent extends AccountabilityApprovalEvent {
-  const AccountabilityApprovalLoadingEvent();
-}
+class AccountabilityApprovalLoadingEvent extends AccountabilityApprovalEvent {}
 
 class AccountabilityApprovalFailedEvent extends AccountabilityApprovalEvent {
   final Failure error;
-
-  const AccountabilityApprovalFailedEvent(this.error);
-
-  @override
-  List<Object?> get props => [error];
+  AccountabilityApprovalFailedEvent(
+    this.error,
+  );
 }
 
 class AccountabilityApprovalApprovedEvent extends AccountabilityApprovalEvent {
   final AccountabilityApproval approval;
-
-  const AccountabilityApprovalApprovedEvent({required this.approval});
-
-  @override
-  List<Object?> get props => [approval];
+  AccountabilityApprovalApprovedEvent({
+    required this.approval,
+  });
 }

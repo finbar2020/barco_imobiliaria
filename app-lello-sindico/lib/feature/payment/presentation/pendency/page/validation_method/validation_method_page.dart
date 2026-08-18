@@ -325,12 +325,23 @@ class _ValidationMethodPageState extends State<ValidationMethodPage> {
       Iterable<AuthMessages> authMessages = <AuthMessages>[
         IOSAuthMessages(
           cancelButton: getString(context, "spash_biometric_cancel"),
+          goToSettingsButton: getString(context, "spash_biometric_settings"),
+          goToSettingsDescription:
+              getString(context, "spash_biometric_settings_description"),
+          lockOut: getString(context, "spash_biometric_lockout"),
           localizedFallbackTitle:
               getString(context, "spash_biometric_fallback"),
         ),
         AndroidAuthMessages(
           cancelButton: getString(context, "spash_biometric_cancel"),
-          signInHint: getString(context, "spash_biometric_hint"),
+          biometricHint: getString(context, "spash_biometric_hint"),
+          biometricNotRecognized:
+              getString(context, "spash_biometric_not_recognized"),
+          biometricRequiredTitle:
+              getString(context, "spash_biometric_required_title"),
+          goToSettingsButton: getString(context, "spash_biometric_settings"),
+          goToSettingsDescription:
+              getString(context, "spash_biometric_settings_description"),
           signInTitle: getString(context, "spash_biometric_signin_title"),
         ),
       ];

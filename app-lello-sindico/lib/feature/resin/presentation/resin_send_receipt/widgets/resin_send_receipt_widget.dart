@@ -34,12 +34,13 @@ class _ResinSendReceiptWidgetState extends State<ResinSendReceiptWidget> {
       widget.controller.filter.endDate = widget.params.filterEndDate;
     }
 
-    return BlocConsumer<ResinSendReceiptBloc, ResinSendReceiptState>(
+    return BlocBuilder<ResinSendReceiptBloc, ResinSendReceiptState>(
       bloc: bloc,
-      listener: (context, state) {
-        _showSnackBar(context, state.flushbarMessageKey);
-      },
       builder: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showSnackBar(context, bloc.state.flushbarMessageKey);
+          bloc.state.flushbarMessageKey = null;
+        });
         if (state is ResinSendReceiptLoadingState) {
           return _buildLoading(context);
         }

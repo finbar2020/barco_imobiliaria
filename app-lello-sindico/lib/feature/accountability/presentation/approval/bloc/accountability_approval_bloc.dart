@@ -4,12 +4,10 @@ import 'package:lello/feature/accountability/presentation/approval/bloc/accounta
 
 class AccountabilityApprovalBloc
     extends Bloc<AccountabilityApprovalEvent, AccountabilityApprovalState> {
-  AccountabilityApprovalBloc()
-      : super(const AccountabilityApprovalInitialState()) {
+  AccountabilityApprovalBloc() : super(AccountabilityApprovalIdleState()) {
     on<AccountabilityApprovalSetupEvent>(
         handleAccountabilityApprovalSetupEvent);
-    on<AccountabilityApprovalInitialEvent>(
-        handleAccountabilityApprovalInitialEvent);
+    on<AccountabilityApprovalIdleEvent>(handleAccountabilityApprovalIdleEvent);
     on<AccountabilityApprovalLoadingEvent>(
         handleAccountabilityApprovalLoadingEvent);
     on<AccountabilityApprovalFailedEvent>(
@@ -30,9 +28,9 @@ class AccountabilityApprovalBloc
     emit(AccountabilityApprovalSetupState());
   }
 
-  void handleAccountabilityApprovalInitialEvent(
-      AccountabilityApprovalInitialEvent event, Emitter emit) {
-    emit(const AccountabilityApprovalInitialState());
+  void handleAccountabilityApprovalIdleEvent(
+      AccountabilityApprovalIdleEvent event, Emitter emit) {
+    emit(AccountabilityApprovalIdleState());
   }
 
   void handleAccountabilityApprovalLoadingEvent(

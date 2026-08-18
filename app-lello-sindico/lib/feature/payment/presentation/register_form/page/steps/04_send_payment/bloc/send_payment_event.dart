@@ -1,34 +1,17 @@
 import 'package:essentials/essentials.dart';
 
-abstract class SendPaymentEvent extends Equatable {
-  const SendPaymentEvent();
+abstract class SendPaymentEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+class SendPaymentEmptyEvent extends SendPaymentEvent {}
 
-class SendPaymentEmptyEvent extends SendPaymentEvent {
-  const SendPaymentEmptyEvent();
-}
-
-class SendPaymentLoadingEvent extends SendPaymentEvent {
-  const SendPaymentLoadingEvent();
-}
+class SendPaymentLoadingEvent extends SendPaymentEvent {}
 
 class SendPaymentSuccessEvent extends SendPaymentEvent {
-  final int? value;
-
-  const SendPaymentSuccessEvent({required this.value});
-
-  @override
-  List<Object?> get props => [value];
+  int? value;
+  SendPaymentSuccessEvent({required this.value});
 }
 
 class SendPaymentFailureEvent extends SendPaymentEvent {
   final Failure error;
-
-  const SendPaymentFailureEvent({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  SendPaymentFailureEvent({required this.error});
 }

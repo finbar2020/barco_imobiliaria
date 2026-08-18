@@ -1,23 +1,15 @@
-import 'package:equatable/equatable.dart';
 import '../../../domain/entity/task_details_entity.dart';
 import '../../../domain/entity/task_formularies_entity.dart';
 import '../../../domain/entity/task_files_entity.dart';
 import 'task_details_event.dart';
 
-abstract class TaskDetailsState extends Equatable {
+abstract class TaskDetailsState {
   const TaskDetailsState();
-
-  @override
-  List<Object?> get props => [];
 }
 
-class TaskDetailsInitialState extends TaskDetailsState {
-  const TaskDetailsInitialState();
-}
+class TaskDetailsInitialState extends TaskDetailsState {}
 
-class TaskDetailsLoadingState extends TaskDetailsState {
-  const TaskDetailsLoadingState();
-}
+class TaskDetailsLoadingState extends TaskDetailsState {}
 
 class TaskDetailsLoadedState extends TaskDetailsState {
   final TaskDetailsEntity task;
@@ -53,34 +45,18 @@ class TaskDetailsLoadedState extends TaskDetailsState {
       isLoadingFiles: isLoadingFiles ?? this.isLoadingFiles,
     );
   }
-
-  @override
-  List<Object?> get props => [
-        task,
-        formularies,
-        files,
-        selectedTab,
-        isLoadingFormularies,
-        isLoadingFiles,
-      ];
 }
 
 class TaskDetailsErrorState extends TaskDetailsState {
   final String message;
 
   const TaskDetailsErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class TaskDetailsCreatingTaskState extends TaskDetailsState {
   final TaskDetailsEntity task;
 
   const TaskDetailsCreatingTaskState(this.task);
-
-  @override
-  List<Object?> get props => [task];
 }
 
 class TaskDetailsTaskCreatedState extends TaskDetailsState {
@@ -91,16 +67,10 @@ class TaskDetailsTaskCreatedState extends TaskDetailsState {
     required this.taskId,
     required this.eventId,
   });
-
-  @override
-  List<Object?> get props => [taskId, eventId];
 }
 
 class TaskDetailsTaskCreationErrorState extends TaskDetailsState {
   final String message;
 
   const TaskDetailsTaskCreationErrorState(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }

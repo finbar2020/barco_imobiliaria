@@ -1,29 +1,21 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/gdp/timesheet/domain/entity/timesheet_day_appointments_check_in_data_entity.dart';
 
-abstract class TimesheetDayAppointmentsDetailsState extends Equatable {
-  const TimesheetDayAppointmentsDetailsState();
-
-  @override
-  List<Object?> get props => [];
+abstract class TimesheetDayAppointmentsDetailsState {
+  TimesheetDayAppointmentsDetailsState();
 }
 
 class TimesheetDayAppointmentsDetailsLoadingState
     extends TimesheetDayAppointmentsDetailsState {
-  const TimesheetDayAppointmentsDetailsLoadingState();
+  TimesheetDayAppointmentsDetailsLoadingState();
 }
 
 class TimesheetDayAppointmentsDetailsLoadedState
     extends TimesheetDayAppointmentsDetailsState {
-  final List<TimesheetDayAppointmentsCheckInData> details;
-
-  const TimesheetDayAppointmentsDetailsLoadedState({required this.details});
-
-  @override
-  List<Object?> get props => [details];
+  List<TimesheetDayAppointmentsCheckInData> details;
+  TimesheetDayAppointmentsDetailsLoadedState({required this.details});
 }
 
 class TimesheetDayAppointmentsDetailsFailedState
     extends TimesheetDayAppointmentsDetailsState {
-  const TimesheetDayAppointmentsDetailsFailedState();
+  TimesheetDayAppointmentsDetailsFailedState() : super();
 }

@@ -11,22 +11,22 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
   final EditScheduleEventUseCase _editScheduleEventUseCase;
 
   TaskEditBloc(this._editScheduleEventUseCase) : super(_initialState()) {
-    on<TaskEditStartedEvent>(_onStarted);
-    on<TaskEditToggleAllDayEvent>(_onToggleAllDay);
-    on<TaskEditCheckInChangedEvent>(_onCheckInChanged);
-    on<TaskEditModeChangedEvent>(_onModeChanged);
-    on<TaskEditReminderChangedEvent>(_onReminderChanged);
-    on<TaskEditWeekDayToggledEvent>(_onWeekDayToggled);
-    on<TaskEditOrientationChangedEvent>(_onOrientationChanged);
-    on<TaskEditDiscardPressedEvent>(_onDiscardPressed);
-    on<TaskEditSavePressedEvent>(_onSavePressed);
-    on<TaskEditDialogDismissedEvent>(_onDialogDismissed);
-    on<TaskEditScopeSelectedEvent>(_onScopeSelected);
-    on<TaskEditConfirmScopeEvent>(_onConfirmScope);
-    on<TaskEditConfirmDiscardEvent>(_onConfirmDiscard);
-    on<TaskEditStatusClearedEvent>(_onOutcomeCleared);
-    on<TaskEditStartDateChangedEvent>(_onStartDateChanged);
-    on<TaskEditEndDateChangedEvent>(_onEndDateChanged);
+    on<TaskEditStarted>(_onStarted);
+    on<TaskEditToggleAllDay>(_onToggleAllDay);
+    on<TaskEditCheckInChanged>(_onCheckInChanged);
+    on<TaskEditModeChanged>(_onModeChanged);
+    on<TaskEditReminderChanged>(_onReminderChanged);
+    on<TaskEditWeekDayToggled>(_onWeekDayToggled);
+    on<TaskEditOrientationChanged>(_onOrientationChanged);
+    on<TaskEditDiscardPressed>(_onDiscardPressed);
+    on<TaskEditSavePressed>(_onSavePressed);
+    on<TaskEditDialogDismissed>(_onDialogDismissed);
+    on<TaskEditScopeSelected>(_onScopeSelected);
+    on<TaskEditConfirmScope>(_onConfirmScope);
+    on<TaskEditConfirmDiscard>(_onConfirmDiscard);
+    on<TaskEditOutcomeCleared>(_onOutcomeCleared);
+    on<TaskEditStartDateChanged>(_onStartDateChanged);
+    on<TaskEditEndDateChanged>(_onEndDateChanged);
   }
 
   static TaskEditState _initialState() => TaskEditState(
@@ -48,10 +48,10 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
       );
 
   void initialize(TaskDetailsEntity task) {
-    add(TaskEditStartedEvent(task));
+    add(TaskEditStarted(task));
   }
 
-  void _onStarted(TaskEditStartedEvent event, Emitter<TaskEditState> emit) {
+  void _onStarted(TaskEditStarted event, Emitter<TaskEditState> emit) {
     final schedule = event.task.schedule;
     final rRule = event.task.rRule;
     final rruleString = schedule?.rrule ?? '';
@@ -121,16 +121,16 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
   }
 
   void _onToggleAllDay(
-      TaskEditToggleAllDayEvent event, Emitter<TaskEditState> emit) {
+      TaskEditToggleAllDay event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(isAllDay: event.value));
   }
 
   void _onCheckInChanged(
-      TaskEditCheckInChangedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditCheckInChanged event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(checkInTime: event.value));
   }
 
-  void _onModeChanged(TaskEditModeChangedEvent event, Emitter<TaskEditState> emit) {
+  void _onModeChanged(TaskEditModeChanged event, Emitter<TaskEditState> emit) {
     final shouldClearWeekDays = event.mode == TaskScheduleMode.daily;
     emit(
       state.copyWith(
@@ -142,12 +142,12 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
   }
 
   void _onReminderChanged(
-      TaskEditReminderChangedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditReminderChanged event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(reminder: event.value));
   }
 
   void _onWeekDayToggled(
-      TaskEditWeekDayToggledEvent event, Emitter<TaskEditState> emit) {
+      TaskEditWeekDayToggled event, Emitter<TaskEditState> emit) {
     final updated = Set<TaskWeekDay>.from(state.selectedWeekDays);
     if (updated.contains(event.day)) {
       updated.remove(event.day);
@@ -158,31 +158,31 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
   }
 
   void _onOrientationChanged(
-      TaskEditOrientationChangedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditOrientationChanged event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(orientation: event.value));
   }
 
   void _onDiscardPressed(
-      TaskEditDiscardPressedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditDiscardPressed event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(dialog: TaskEditDialogType.discard));
   }
 
-  void _onSavePressed(TaskEditSavePressedEvent event, Emitter<TaskEditState> emit) {
+  void _onSavePressed(TaskEditSavePressed event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(dialog: TaskEditDialogType.scope));
   }
 
   void _onDialogDismissed(
-      TaskEditDialogDismissedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditDialogDismissed event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(dialog: TaskEditDialogType.none, pendingScope: null));
   }
 
   void _onScopeSelected(
-      TaskEditScopeSelectedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditScopeSelected event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(pendingScope: event.scope));
   }
 
   Future<void> _onConfirmScope(
-      TaskEditConfirmScopeEvent event, Emitter<TaskEditState> emit) async {
+      TaskEditConfirmScope event, Emitter<TaskEditState> emit) async {
     emit(
       state.copyWith(
         dialog: TaskEditDialogType.none,
@@ -306,7 +306,7 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
             state.copyWith(
               isSaving: false,
               pendingScope: null,
-              outcome: TaskEditStatus.error,
+              outcome: TaskEditOutcome.error,
               errorMessage: 'Erro ao editar evento',
             ),
           );
@@ -318,7 +318,7 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
               state.copyWith(
                 isSaving: false,
                 pendingScope: null,
-                outcome: TaskEditStatus.error,
+                outcome: TaskEditOutcome.error,
                 errorMessage: response.message ?? 'Erro ao editar evento',
               ),
             );
@@ -326,8 +326,8 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
           }
 
           final outcome = selectedScope == TaskEditScope.fromThis
-              ? TaskEditStatus.savedFuture
-              : TaskEditStatus.savedSingle;
+              ? TaskEditOutcome.savedFuture
+              : TaskEditOutcome.savedSingle;
 
           emit(
             state.copyWith(
@@ -345,7 +345,7 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
         state.copyWith(
           isSaving: false,
           pendingScope: null,
-          outcome: TaskEditStatus.error,
+          outcome: TaskEditOutcome.error,
           errorMessage: 'Erro inesperado ao editar evento',
         ),
       );
@@ -372,25 +372,25 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
   }
 
   void _onConfirmDiscard(
-      TaskEditConfirmDiscardEvent event, Emitter<TaskEditState> emit) {
+      TaskEditConfirmDiscard event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(
       dialog: TaskEditDialogType.none,
-      outcome: TaskEditStatus.discarded,
+      outcome: TaskEditOutcome.discarded,
     ));
   }
 
   void _onOutcomeCleared(
-      TaskEditStatusClearedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditOutcomeCleared event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(outcome: null));
   }
 
   void _onStartDateChanged(
-      TaskEditStartDateChangedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditStartDateChanged event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(startDate: event.date));
   }
 
   void _onEndDateChanged(
-      TaskEditEndDateChangedEvent event, Emitter<TaskEditState> emit) {
+      TaskEditEndDateChanged event, Emitter<TaskEditState> emit) {
     emit(state.copyWith(endDate: event.date));
   }
 

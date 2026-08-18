@@ -1,55 +1,43 @@
 import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resident/domain/entity/resident.dart';
 
-abstract class UnitDetailState extends Equatable {
+abstract class UnitDetailState {
   final List<Resident> residents;
 
-  const UnitDetailState(this.residents);
-
-  @override
-  List<Object?> get props => [residents];
+  UnitDetailState(this.residents);
 }
 
 class UnitDetailLoadingState extends UnitDetailState {
-  const UnitDetailLoadingState() : super(const []);
+  UnitDetailLoadingState() : super([]);
 }
 
 class UnitDetailLoadFailedState extends UnitDetailState {
   final Failure error;
-
-  const UnitDetailLoadFailedState(this.error) : super(const []);
-
-  @override
-  List<Object?> get props => [residents, error];
+  UnitDetailLoadFailedState(this.error) : super([]);
 }
 
 class UnitDetailLoadedState extends UnitDetailState {
-  const UnitDetailLoadedState(super.residents);
+  final List<Resident> residents;
+  UnitDetailLoadedState(this.residents) : super(residents);
 }
 
 class UnitDetailSendInviteSmsSuccessState extends UnitDetailState {
+  final List<Resident> residents;
   final String link;
-
-  const UnitDetailSendInviteSmsSuccessState(super.residents, this.link);
-
-  @override
-  List<Object?> get props => [residents, link];
+  UnitDetailSendInviteSmsSuccessState(this.residents, this.link)
+      : super(residents);
 }
 
 class UnitDetailSendInviteLinkSuccessState extends UnitDetailState {
+  final List<Resident> residents;
   final String link;
-
-  const UnitDetailSendInviteLinkSuccessState(super.residents, this.link);
-
-  @override
-  List<Object?> get props => [residents, link];
+  UnitDetailSendInviteLinkSuccessState(this.residents, this.link)
+      : super(residents);
 }
 
 class UnitDetailSendInviteFailedState extends UnitDetailState {
+  final List<Resident> residents;
   final Failure error;
-
-  const UnitDetailSendInviteFailedState(super.residents, this.error);
-
-  @override
-  List<Object?> get props => [residents, error];
+  UnitDetailSendInviteFailedState(this.residents, this.error)
+      : super(residents);
 }

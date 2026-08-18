@@ -1,58 +1,34 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_refund.dart';
 
-abstract class ResinHistoryAdvanceState extends Equatable {
-  final String? flushbarMessageKey;
-
-  const ResinHistoryAdvanceState({this.flushbarMessageKey});
-
-  @override
-  List<Object?> get props => [flushbarMessageKey];
+abstract class ResinHistoryAdvanceState {
+  String? flushbarMessageKey;
+  ResinHistoryAdvanceState({this.flushbarMessageKey});
 }
 
-class ResinHistoryAdvanceEmptyState extends ResinHistoryAdvanceState {
-  const ResinHistoryAdvanceEmptyState();
-}
+class ResinHistoryAdvanceEmptyState extends ResinHistoryAdvanceState {}
 
-class ResinHistoryAdvanceLoadingState extends ResinHistoryAdvanceState {
-  const ResinHistoryAdvanceLoadingState();
-}
+class ResinHistoryAdvanceLoadingState extends ResinHistoryAdvanceState {}
 
 class ResinHistoryAdvanceErrorState extends ResinHistoryAdvanceState {
-  final String errorMessageKey;
-
-  const ResinHistoryAdvanceErrorState({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinHistoryAdvanceErrorState({required this.errorMessageKey});
 }
 
 class ResinHistoryAdvanceLoadedState extends ResinHistoryAdvanceState {
-  final List<ResinRefund> refunds;
-  final bool loadingRemote;
-  final bool updateRefunds;
-
-  const ResinHistoryAdvanceLoadedState({
+  List<ResinRefund> refunds;
+  bool loadingRemote;
+  bool updateRefunds;
+  ResinHistoryAdvanceLoadedState({
     required this.refunds,
     this.loadingRemote = false,
     this.updateRefunds = false,
-    super.flushbarMessageKey,
-  });
-
-  @override
-  List<Object?> get props =>
-      [refunds, loadingRemote, updateRefunds, flushbarMessageKey];
+    String? flushbarMessageKey,
+  }) : super(flushbarMessageKey: flushbarMessageKey);
 }
 
-class ResinDeleteHistoryAdvanceLoadingState extends ResinHistoryAdvanceState {
-  const ResinDeleteHistoryAdvanceLoadingState();
-}
+class ResinDeleteHistoryAdvanceLoadingState extends ResinHistoryAdvanceState {}
 
 class ResinAdvanceDetailsLoadedState extends ResinHistoryAdvanceState {
-  final ResinRefund refund;
-
-  const ResinAdvanceDetailsLoadedState(this.refund);
-
-  @override
-  List<Object?> get props => [refund];
+  ResinRefund refund;
+  ResinAdvanceDetailsLoadedState(this.refund);
 }

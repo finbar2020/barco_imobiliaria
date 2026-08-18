@@ -303,7 +303,7 @@ class _RegisterInstallmentsEditBottomSheetState
                         compareFn: (i, s) => i.id == s.id,
                         itemAsString: (item) =>
                             "${item.bankCode} - ${item.bankName}",
-                        onSelected: (item) =>
+                        onChanged: (item) =>
                             setState(() => selectedBank = item),
                         selectedItem: selectedBank,
                       ),

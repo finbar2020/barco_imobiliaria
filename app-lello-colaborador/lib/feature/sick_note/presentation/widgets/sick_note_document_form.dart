@@ -45,6 +45,12 @@ class _SickNoteDocumentFormState extends State<SickNoteDocumentForm>
   }
 
   @override
+  void dispose() {
+    animation.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(

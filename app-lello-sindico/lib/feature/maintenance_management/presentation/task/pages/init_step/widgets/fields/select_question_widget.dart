@@ -36,6 +36,7 @@ class SelectQuestionWidget extends BaseQuestionWidget {
 
     return DropdownButtonFormField<String>(
       value: currentAnswer,
+      isExpanded: true,
       onChanged: (value) {
         if (value != null) {
           onAnswerChanged(value);
@@ -46,6 +47,8 @@ class SelectQuestionWidget extends BaseQuestionWidget {
           value: option.id,
           child: Text(
             option.name,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: TextStyle(
               fontFamily: 'Anek Latin',
               fontSize: 16,

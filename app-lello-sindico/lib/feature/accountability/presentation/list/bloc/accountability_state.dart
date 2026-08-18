@@ -1,35 +1,26 @@
-import 'package:essentials/essentials.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:lello/feature/accountability/domain/entity/accountability_periods.dart';
 
-abstract class AccountabilityPeriodsState extends Equatable {
-  const AccountabilityPeriodsState();
+import 'package:essentials/essentials.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+abstract class AccountabilityPeriodsState {}
 
-class AccountabilityPeriodsLoadingState extends AccountabilityPeriodsState {
-  const AccountabilityPeriodsLoadingState();
-}
+class AccountabilityPeriodsLoadingState extends AccountabilityPeriodsState {}
 
 class AccountabilityPeriodsFailedState extends AccountabilityPeriodsState {
   final Failure error;
-
-  const AccountabilityPeriodsFailedState({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  AccountabilityPeriodsFailedState({
+    required this.error,
+  });
 }
 
 class AccountabilityPeriodsLoadedState extends AccountabilityPeriodsState {
   final List<AccountabilityPeriods> period;
-
-  const AccountabilityPeriodsLoadedState({required this.period});
-
-  @override
-  List<Object?> get props => [period];
+  AccountabilityPeriodsLoadedState({
+    required this.period,
+  });
 }
 
 class AccountabilityPeriodsEmptyState extends AccountabilityPeriodsState {
-  const AccountabilityPeriodsEmptyState();
+  AccountabilityPeriodsEmptyState();
 }

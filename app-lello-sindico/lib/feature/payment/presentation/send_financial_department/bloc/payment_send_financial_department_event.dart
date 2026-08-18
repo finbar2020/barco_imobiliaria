@@ -1,38 +1,23 @@
 import 'package:essentials/essentials.dart';
 
-abstract class PaymentSendFinancialDepartmentEvent extends Equatable {
-  const PaymentSendFinancialDepartmentEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class PaymentSendFinancialDepartmentEvent {}
 
 class PaymentSendFinancialDepartmentEmptyEvent
-    extends PaymentSendFinancialDepartmentEvent {
-  const PaymentSendFinancialDepartmentEmptyEvent();
-}
+    extends PaymentSendFinancialDepartmentEvent {}
 
 class PaymentSendFinancialDepartmentLoadingEvent
-    extends PaymentSendFinancialDepartmentEvent {
-  const PaymentSendFinancialDepartmentLoadingEvent();
-}
+    extends PaymentSendFinancialDepartmentEvent {}
 
 class PaymentSendFinancialDepartmentPagingEvent
-    extends PaymentSendFinancialDepartmentEvent {
-  const PaymentSendFinancialDepartmentPagingEvent();
-}
+    extends PaymentSendFinancialDepartmentEvent {}
 
 class PaymentSendFinancialDepartmentSuccessEvent
     extends PaymentSendFinancialDepartmentEvent {
-  const PaymentSendFinancialDepartmentSuccessEvent();
+  PaymentSendFinancialDepartmentSuccessEvent();
 }
 
 class PaymentSendFinancialDepartmentFailureEvent
     extends PaymentSendFinancialDepartmentEvent {
   final Failure? error;
-
-  const PaymentSendFinancialDepartmentFailureEvent({this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentSendFinancialDepartmentFailureEvent({this.error});
 }

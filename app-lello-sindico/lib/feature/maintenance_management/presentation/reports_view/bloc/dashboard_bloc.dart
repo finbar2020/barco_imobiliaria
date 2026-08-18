@@ -14,10 +14,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   void _onLoadInitialData(
     LoadInitialDataEvent event,
     Emitter<DashboardState> emit,
-  ) {
+  ) async {
+    emit(DashboardLoadingState());
+
     // Configuração inicial - 30 dias atrás até hoje
     final endDate = DateTime.now();
     final startDate = endDate.subtract(const Duration(days: 30));
+
+    await Future.delayed(
+        const Duration(milliseconds: 500)); // Simula carregamento
 
     emit(DashboardLoadedState(
       currentTabIndex: 0, // Inicia na aba "Rotina"
@@ -29,9 +34,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   void _onTabChanged(
     TabChangedEvent event,
     Emitter<DashboardState> emit,
-  ) {
+  ) async {
     final currentState = state;
     if (currentState is DashboardLoadedState) {
+      // Emite estado de loading temporário para transição suave
+      emit(DashboardLoadingState());
+
+      // Pequeno delay para mostrar o loading
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      // Emite novo estado com a aba atualizada
       emit(currentState.copyWith(currentTabIndex: event.tabIndex));
     }
   }
@@ -39,10 +51,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   void _onRefreshDashboard(
     RefreshDashboardEvent event,
     Emitter<DashboardState> emit,
-  ) {
+  ) async {
     final currentState = state;
     if (currentState is DashboardLoadedState) {
-      // Reemite o mesmo estado para forçar rebuild dos consumidores.
+      emit(DashboardLoadingState());
+
+      // Simula tempo de refresh
+      await Future.delayed(const Duration(milliseconds: 800));
+
       emit(currentState);
     }
   }
@@ -50,9 +66,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   void _onFiltersUpdated(
     FiltersUpdatedEvent event,
     Emitter<DashboardState> emit,
-  ) {
+  ) async {
     final currentState = state;
     if (currentState is DashboardLoadedState) {
+      emit(DashboardLoadingState());
+
+      // Pequeno delay para aplicação dos filtros
+      await Future.delayed(const Duration(milliseconds: 300));
+
       final hasFilters =
           event.appliedFilters != null && event.appliedFilters!.isNotEmpty;
 
@@ -67,7 +88,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   /// Método helper para disparar reload de todos os gráficos
   void reloadAllCharts() {
-    add(const RefreshDashboardEvent());
+    add(RefreshDashboardEvent());
   }
 
   /// Método helper para mudar aba

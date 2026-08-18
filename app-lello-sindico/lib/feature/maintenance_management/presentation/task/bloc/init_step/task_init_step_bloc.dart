@@ -1,5 +1,4 @@
 import 'package:essentials/essentials.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../domain/entity/task_details_entity.dart';
 import '../../../../domain/use_cases/get_event_details_use_case.dart';
@@ -19,23 +18,23 @@ class TaskInitStepBloc extends Bloc<TaskInitStepEvent, TaskInitStepState> {
     this._submitFormUseCase,
     this._resetScheduleEventUseCase,
   ) : super(const TaskInitStepState(eventId: '', task: null, taskId: '')) {
-    on<TaskInitStepStartedEvent>(_onStarted);
-    on<TaskInitStepAnswerChangedEvent>(_onAnswerChanged);
-    on<TaskInitStepSubmitPressedEvent>(_onSubmitPressed);
-    on<TaskInitStepBackPressedEvent>(_onBackPressed);
-    on<TaskInitStepConfirmDiscardEvent>(_onConfirmDiscard);
-    on<TaskInitStepRequestResetEvent>(_onRequestReset);
-    on<TaskInitStepConfirmResetEvent>(_onConfirmReset);
-    on<TaskInitStepDialogDismissedEvent>(_onDialogDismissed);
-    on<TaskInitStepStatusClearedEvent>(_onOutcomeCleared);
+    on<TaskInitStepStarted>(_onStarted);
+    on<TaskInitStepAnswerChanged>(_onAnswerChanged);
+    on<TaskInitStepSubmitPressed>(_onSubmitPressed);
+    on<TaskInitStepBackPressed>(_onBackPressed);
+    on<TaskInitStepConfirmDiscard>(_onConfirmDiscard);
+    on<TaskInitStepRequestReset>(_onRequestReset);
+    on<TaskInitStepConfirmReset>(_onConfirmReset);
+    on<TaskInitStepDialogDismissed>(_onDialogDismissed);
+    on<TaskInitStepOutcomeCleared>(_onOutcomeCleared);
   }
 
   void initialize(String eventId, TaskDetailsEntity task, String taskId) {
-    add(TaskInitStepStartedEvent(eventId, task, taskId));
+    add(TaskInitStepStarted(eventId, task, taskId));
   }
 
   Future<void> _onStarted(
-      TaskInitStepStartedEvent event, Emitter<TaskInitStepState> emit) async {
+      TaskInitStepStarted event, Emitter<TaskInitStepState> emit) async {
     // event.eventId contém o eventId (retornado do POST CreateTaskFromSchedule)
     // event.taskId contém o taskId original (da lista de schedule events)
     final eventId = event.eventId;
@@ -82,14 +81,14 @@ class TaskInitStepBloc extends Bloc<TaskInitStepEvent, TaskInitStepState> {
   }
 
   void _onAnswerChanged(
-      TaskInitStepAnswerChangedEvent event, Emitter<TaskInitStepState> emit) {
+      TaskInitStepAnswerChanged event, Emitter<TaskInitStepState> emit) {
     final updatedAnswers = Map<String, dynamic>.from(state.answers);
     updatedAnswers[event.questionId] = event.answer;
     emit(state.copyWith(answers: updatedAnswers));
   }
 
   Future<void> _onSubmitPressed(
-      TaskInitStepSubmitPressedEvent event, Emitter<TaskInitStepState> emit) async {
+      TaskInitStepSubmitPressed event, Emitter<TaskInitStepState> emit) async {
     if (!state.isFormValid) return;
 
     emit(state.copyWith(isSubmitting: true));
@@ -130,14 +129,14 @@ class TaskInitStepBloc extends Bloc<TaskInitStepEvent, TaskInitStepState> {
       (failure) {
         emit(state.copyWith(
           isSubmitting: false,
-          outcome: TaskInitStepStatus.error,
+          outcome: TaskInitStepOutcome.error,
           errorMessage: 'Erro ao enviar formulário: ${failure.toString()}',
         ));
       },
       (response) {
         emit(state.copyWith(
           isSubmitting: false,
-          outcome: TaskInitStepStatus.success,
+          outcome: TaskInitStepOutcome.success,
         ));
       },
     );
@@ -323,21 +322,21 @@ class TaskInitStepBloc extends Bloc<TaskInitStepEvent, TaskInitStepState> {
   }
 
   void _onBackPressed(
-      TaskInitStepBackPressedEvent event, Emitter<TaskInitStepState> emit) {
+      TaskInitStepBackPressed event, Emitter<TaskInitStepState> emit) {
     // Sempre mostra dialog de reset porque ao abrir a tela já inicia uma sessão
     // que precisa ser resetada ao sair, independente de ter dados preenchidos
     emit(state.copyWith(dialog: TaskInitStepDialogType.reset));
   }
 
   void _onRequestReset(
-      TaskInitStepRequestResetEvent event, Emitter<TaskInitStepState> emit) {
+      TaskInitStepRequestReset event, Emitter<TaskInitStepState> emit) {
     // Mostra dialog de confirmação do reset
     emit(state.copyWith(dialog: TaskInitStepDialogType.reset));
   }
 
   Future<void> _onConfirmReset(
-      TaskInitStepConfirmResetEvent event, Emitter<TaskInitStepState> emit) async {
-    debugPrint('[TaskInitStepBloc] _onConfirmReset iniciado');
+      TaskInitStepConfirmReset event, Emitter<TaskInitStepState> emit) async {
+    print('[TaskInitStepBloc] _onConfirmReset iniciado');
     // Fechar dialog
     emit(state.copyWith(dialog: TaskInitStepDialogType.none));
 
@@ -360,31 +359,31 @@ class TaskInitStepBloc extends Bloc<TaskInitStepEvent, TaskInitStepState> {
           // Reset realizado com sucesso, sai da tela
           emit(state.copyWith(
             isLoading: false,
-            outcome: TaskInitStepStatus.reset,
+            outcome: TaskInitStepOutcome.reset,
           ));
         },
       );
     } else {
       // Se não há taskId, apenas descarta
-      emit(state.copyWith(outcome: TaskInitStepStatus.discarded));
+      emit(state.copyWith(outcome: TaskInitStepOutcome.discarded));
     }
   }
 
   void _onConfirmDiscard(
-      TaskInitStepConfirmDiscardEvent event, Emitter<TaskInitStepState> emit) {
+      TaskInitStepConfirmDiscard event, Emitter<TaskInitStepState> emit) {
     emit(state.copyWith(
       dialog: TaskInitStepDialogType.none,
-      outcome: TaskInitStepStatus.discarded,
+      outcome: TaskInitStepOutcome.discarded,
     ));
   }
 
   void _onDialogDismissed(
-      TaskInitStepDialogDismissedEvent event, Emitter<TaskInitStepState> emit) {
+      TaskInitStepDialogDismissed event, Emitter<TaskInitStepState> emit) {
     emit(state.copyWith(dialog: TaskInitStepDialogType.none));
   }
 
   void _onOutcomeCleared(
-      TaskInitStepStatusClearedEvent event, Emitter<TaskInitStepState> emit) {
+      TaskInitStepOutcomeCleared event, Emitter<TaskInitStepState> emit) {
     emit(state.copyWith(outcome: null));
   }
 }

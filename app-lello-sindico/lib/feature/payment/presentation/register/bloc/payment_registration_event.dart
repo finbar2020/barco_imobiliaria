@@ -2,35 +2,20 @@ import 'dart:io';
 
 import 'package:essentials/essentials.dart';
 
-abstract class PaymentSendDocumentEvent extends Equatable {
-  const PaymentSendDocumentEvent();
+abstract class PaymentSendDocumentEvent {}
 
-  @override
-  List<Object?> get props => [];
-}
+// Send documents
 
-class PaymentSendDocumentEmptyEvent extends PaymentSendDocumentEvent {
-  const PaymentSendDocumentEmptyEvent();
-}
+class PaymentSendDocumentEmptyEvent extends PaymentSendDocumentEvent {}
 
-class PaymentSendDocumentLoadingEvent extends PaymentSendDocumentEvent {
-  const PaymentSendDocumentLoadingEvent();
-}
+class PaymentSendDocumentLoadingEvent extends PaymentSendDocumentEvent {}
 
 class PaymentSendDocumentFailureEvent extends PaymentSendDocumentEvent {
   final Failure error;
-
-  const PaymentSendDocumentFailureEvent({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  PaymentSendDocumentFailureEvent({required this.error});
 }
 
 class PaymentSendDocumentSuccessEvent extends PaymentSendDocumentEvent {
   final List<File> files;
-
-  const PaymentSendDocumentSuccessEvent({required this.files});
-
-  @override
-  List<Object?> get props => [files];
+  PaymentSendDocumentSuccessEvent({required this.files});
 }

@@ -1,40 +1,21 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/space/reservation/domain/entity/reservation_change_rules.dart';
 
-abstract class ReservationChangeRulesState extends Equatable {
-  const ReservationChangeRulesState();
+abstract class ReservationChangeRulesState {}
 
-  @override
-  List<Object?> get props => [];
-}
+class ReservationChangeRulesEmptyState extends ReservationChangeRulesState {}
 
-class ReservationChangeRulesEmptyState extends ReservationChangeRulesState {
-  const ReservationChangeRulesEmptyState();
-}
-
-class ReservationChangeRulesLoadingState extends ReservationChangeRulesState {
-  const ReservationChangeRulesLoadingState();
-}
+class ReservationChangeRulesLoadingState extends ReservationChangeRulesState {}
 
 class ReservationChangeRulesLoadedState extends ReservationChangeRulesState {
-  final ReservationChangeRules rules;
-
-  const ReservationChangeRulesLoadedState({
+  ReservationChangeRules rules;
+  ReservationChangeRulesLoadedState({
     required this.rules,
   });
-
-  @override
-  List<Object?> get props => [rules];
 }
 
-class PostSuccessState extends ReservationChangeRulesState {
-  const PostSuccessState();
-}
+class PostSuccessState extends ReservationChangeRulesState {}
 
-class ReservationChangeRulesFailedState extends ReservationChangeRulesState {
-  const ReservationChangeRulesFailedState();
-}
+class ReservationChangeRulesFailedState extends ReservationChangeRulesState {}
 
 class ReservationChangeRulesFailedGetState extends ReservationChangeRulesState {
-  const ReservationChangeRulesFailedGetState();
 }

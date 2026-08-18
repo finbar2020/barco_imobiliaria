@@ -1,25 +1,14 @@
-import 'package:equatable/equatable.dart';
-
 import '../../../../domain/entity/maintenance_task_event_entity.dart';
 import '../../../../domain/entity/efficiency_entity.dart';
 import '../../../enums/efficiency_scope_enum.dart';
 
-abstract class MaintenanceManagementCurrentWeekState extends Equatable {
-  const MaintenanceManagementCurrentWeekState();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class MaintenanceManagementCurrentWeekState {}
 
 class MaintenanceManagementCurrentWeekInitialState
-    extends MaintenanceManagementCurrentWeekState {
-  const MaintenanceManagementCurrentWeekInitialState();
-}
+    extends MaintenanceManagementCurrentWeekState {}
 
 class MaintenanceManagementCurrentWeekLoadingState
-    extends MaintenanceManagementCurrentWeekState {
-  const MaintenanceManagementCurrentWeekLoadingState();
-}
+    extends MaintenanceManagementCurrentWeekState {}
 
 class MaintenanceManagementCurrentWeekLoadedState
     extends MaintenanceManagementCurrentWeekState {
@@ -27,7 +16,7 @@ class MaintenanceManagementCurrentWeekLoadedState
   final List<MaintenanceTaskEventEntity> events;
   final EfficiencyScope currentScope;
 
-  const MaintenanceManagementCurrentWeekLoadedState({
+  MaintenanceManagementCurrentWeekLoadedState({
     required this.taskSummaryDay,
     required this.events,
     this.currentScope = EfficiencyScope.responsibles,
@@ -45,19 +34,13 @@ class MaintenanceManagementCurrentWeekLoadedState
       currentScope: currentScope ?? this.currentScope,
     );
   }
-
-  @override
-  List<Object?> get props => [taskSummaryDay, events, currentScope];
 }
 
 class MaintenanceManagementCurrentWeekErrorState
     extends MaintenanceManagementCurrentWeekState {
   final String message;
 
-  const MaintenanceManagementCurrentWeekErrorState({
+  MaintenanceManagementCurrentWeekErrorState({
     required this.message,
   });
-
-  @override
-  List<Object?> get props => [message];
 }

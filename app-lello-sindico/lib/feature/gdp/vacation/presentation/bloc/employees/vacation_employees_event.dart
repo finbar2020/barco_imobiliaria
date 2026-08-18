@@ -1,30 +1,13 @@
-import 'package:essentials/essentials.dart';
-
-abstract class VacationEmployeesEvent extends Equatable {
-  const VacationEmployeesEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class VacationEmployeesEvent {}
 
 class VacationEmployeesLoadEvent extends VacationEmployeesEvent {
   final String condominiumId;
-
-  const VacationEmployeesLoadEvent({required this.condominiumId});
-
-  @override
-  List<Object?> get props => [condominiumId];
+  VacationEmployeesLoadEvent({required this.condominiumId});
 }
 
-class VacationEmployeesNextPageEvent extends VacationEmployeesEvent {
-  const VacationEmployeesNextPageEvent();
-}
+class VacationEmployeesNextPageEvent extends VacationEmployeesEvent {}
 
 class VacationEmployeesSearchEvent extends VacationEmployeesEvent {
   final String query;
-
-  const VacationEmployeesSearchEvent({required this.query});
-
-  @override
-  List<Object?> get props => [query];
+  VacationEmployeesSearchEvent({required this.query});
 }

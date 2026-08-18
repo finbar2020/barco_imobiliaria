@@ -42,8 +42,8 @@ enum HomeItemEnum {
   employeeReferral
 }
 
-CircuitBreakerController circuitBreakController =
-    ApplicationContainer.instance().resolve();
+CircuitBreakerController get circuitBreakController =>
+    ApplicationContainer.instance().resolve<CircuitBreakerController>();
 
 extension HomeItemExtension on HomeItemEnum {
   String get titleKey {

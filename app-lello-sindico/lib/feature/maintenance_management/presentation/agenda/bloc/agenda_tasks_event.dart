@@ -1,11 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-abstract class AgendaTasksEvent extends Equatable {
-  const AgendaTasksEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class AgendaTasksEvent {}
 
 class LoadAgendaTasksEvent extends AgendaTasksEvent {
   final DateTime selectedDate;
@@ -17,7 +10,7 @@ class LoadAgendaTasksEvent extends AgendaTasksEvent {
   final List<String>? responsibles;
   final List<String>? employeeGroups;
 
-  const LoadAgendaTasksEvent({
+  LoadAgendaTasksEvent({
     required this.selectedDate,
     required this.orderBy,
     this.taskTypes,
@@ -27,18 +20,6 @@ class LoadAgendaTasksEvent extends AgendaTasksEvent {
     this.responsibles,
     this.employeeGroups,
   });
-
-  @override
-  List<Object?> get props => [
-        selectedDate,
-        orderBy,
-        taskTypes,
-        taskStatus,
-        locals,
-        assets,
-        responsibles,
-        employeeGroups,
-      ];
 }
 
 class RefreshAgendaTasksEvent extends AgendaTasksEvent {
@@ -51,7 +32,7 @@ class RefreshAgendaTasksEvent extends AgendaTasksEvent {
   final List<String>? responsibles;
   final List<String>? employeeGroups;
 
-  const RefreshAgendaTasksEvent({
+  RefreshAgendaTasksEvent({
     required this.selectedDate,
     required this.orderBy,
     this.taskTypes,
@@ -61,20 +42,6 @@ class RefreshAgendaTasksEvent extends AgendaTasksEvent {
     this.responsibles,
     this.employeeGroups,
   });
-
-  @override
-  List<Object?> get props => [
-        selectedDate,
-        orderBy,
-        taskTypes,
-        taskStatus,
-        locals,
-        assets,
-        responsibles,
-        employeeGroups,
-      ];
 }
 
-class ClearAgendaTasksCacheEvent extends AgendaTasksEvent {
-  const ClearAgendaTasksCacheEvent();
-}
+class ClearAgendaTasksCacheEvent extends AgendaTasksEvent {}

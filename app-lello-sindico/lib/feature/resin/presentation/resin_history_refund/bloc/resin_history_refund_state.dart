@@ -1,54 +1,32 @@
-import 'package:essentials/essentials.dart';
 import 'package:lello/feature/resin/domain/entity/resin_refund.dart';
 
-abstract class ResinHistoryRefundState extends Equatable {
-  final String? flushbarMessageKey;
-
-  const ResinHistoryRefundState({this.flushbarMessageKey});
-
-  @override
-  List<Object?> get props => [flushbarMessageKey];
+abstract class ResinHistoryRefundState {
+  String? flushbarMessageKey;
+  ResinHistoryRefundState({this.flushbarMessageKey});
 }
 
-class ResinHistoryRefundLoadingState extends ResinHistoryRefundState {
-  const ResinHistoryRefundLoadingState();
-}
+class ResinHistoryRefundLoadingState extends ResinHistoryRefundState {}
 
 class ResinHistoryRefundLoadedState extends ResinHistoryRefundState {
-  final List<ResinRefund> refunds;
-  final bool loadingRemote;
-  final bool updateRefunds;
-
-  const ResinHistoryRefundLoadedState({
+  List<ResinRefund> refunds;
+  bool loadingRemote;
+  bool updateRefunds;
+  ResinHistoryRefundLoadedState({
     required this.refunds,
     this.loadingRemote = false,
     this.updateRefunds = false,
-    super.flushbarMessageKey,
-  });
-
-  @override
-  List<Object?> get props =>
-      [refunds, loadingRemote, updateRefunds, flushbarMessageKey];
+    String? flushbarMessageKey,
+  }) : super(flushbarMessageKey: flushbarMessageKey);
 }
 
 class ResinHistoryRefundErrorState extends ResinHistoryRefundState {
-  final String errorMessageKey;
-
-  const ResinHistoryRefundErrorState({required this.errorMessageKey});
-
-  @override
-  List<Object?> get props => [errorMessageKey];
+  String errorMessageKey;
+  ResinHistoryRefundErrorState({required this.errorMessageKey});
 }
 
-class ResinDeleteHistoryRefundLoadingState extends ResinHistoryRefundState {
-  const ResinDeleteHistoryRefundLoadingState();
-}
+class ResinDeleteHistoryRefundLoadingState extends ResinHistoryRefundState {}
 
 class ResinRefundDetailsLoadedState extends ResinHistoryRefundState {
-  final ResinRefund refund;
-
-  const ResinRefundDetailsLoadedState(this.refund);
-
-  @override
-  List<Object?> get props => [refund];
+  ResinRefund refund;
+  ResinRefundDetailsLoadedState(this.refund);
 }

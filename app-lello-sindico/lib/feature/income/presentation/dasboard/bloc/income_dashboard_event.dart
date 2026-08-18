@@ -2,31 +2,18 @@ import 'package:essentials/essentials.dart';
 
 import '../../../domain/entity/income.dart';
 
-abstract class IncomeDashboardEvent extends Equatable {
-  const IncomeDashboardEvent();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class IncomeDashboardEvent {}
 
 class IncomeDashboardSuccessEvent extends IncomeDashboardEvent {
   final Income? income;
-
-  const IncomeDashboardSuccessEvent({this.income});
-
-  @override
-  List<Object?> get props => [income];
+  IncomeDashboardSuccessEvent({this.income});
 }
 
 class IncomeDashboardFailureEvent extends IncomeDashboardEvent {
   final Failure error;
-
-  const IncomeDashboardFailureEvent({required this.error});
-
-  @override
-  List<Object?> get props => [error];
+  IncomeDashboardFailureEvent({
+    required this.error,
+  });
 }
 
-class IncomeDashboardLoadingEvent extends IncomeDashboardEvent {
-  const IncomeDashboardLoadingEvent();
-}
+class IncomeDashboardLoadingEvent extends IncomeDashboardEvent {}

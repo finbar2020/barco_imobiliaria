@@ -1,23 +1,15 @@
 import 'dart:io';
 
-import 'package:equatable/equatable.dart';
-
 import '../enums/legal_obligation_tab.dart';
 
-abstract class LegalObligationEvent extends Equatable {
+abstract class LegalObligationEvent {
   const LegalObligationEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class LegalObligationLoadTabEvent extends LegalObligationEvent {
   final LegalObligationTab tab;
 
   const LegalObligationLoadTabEvent(this.tab);
-
-  @override
-  List<Object?> get props => [tab];
 }
 
 class LegalObligationLoadingEvent extends LegalObligationEvent {
@@ -28,22 +20,14 @@ class LegalObligationErrorEvent extends LegalObligationEvent {
   final String error;
 
   const LegalObligationErrorEvent(this.error);
-
-  @override
-  List<Object?> get props => [error];
 }
 
 class LegalObligationDownloadFileEvent extends LegalObligationEvent {
   final String id;
   final String type;
 
-  const LegalObligationDownloadFileEvent({
-    required this.id,
-    required this.type,
-  });
-
-  @override
-  List<Object?> get props => [id, type];
+  const LegalObligationDownloadFileEvent(
+      {required this.id, required this.type});
 }
 
 class LegalObligationUploadFileEvent extends LegalObligationEvent {
@@ -60,10 +44,6 @@ class LegalObligationUploadFileEvent extends LegalObligationEvent {
     required this.obligationType,
     required this.condoId,
   });
-
-  @override
-  List<Object?> get props =>
-      [file, expirationDate, obligationId, obligationType, condoId];
 }
 
 class LegalObligationSendTechnicalInspectionEmailEvent
@@ -77,9 +57,6 @@ class LegalObligationSendTechnicalInspectionEmailEvent
     required this.type,
     required this.id,
   });
-
-  @override
-  List<Object?> get props => [email, type, id];
 }
 
 class LegalObligationRequestPartnerRenewalEvent extends LegalObligationEvent {
@@ -90,9 +67,6 @@ class LegalObligationRequestPartnerRenewalEvent extends LegalObligationEvent {
     required this.type,
     required this.id,
   });
-
-  @override
-  List<Object?> get props => [type, id];
 }
 
 /// Disparado quando a tela de obrigações legais não retornou dados e o
@@ -103,7 +77,4 @@ class LegalObligationNotifyPartnerEmptyDataEvent extends LegalObligationEvent {
   const LegalObligationNotifyPartnerEmptyDataEvent({
     required this.type,
   });
-
-  @override
-  List<Object?> get props => [type];
 }

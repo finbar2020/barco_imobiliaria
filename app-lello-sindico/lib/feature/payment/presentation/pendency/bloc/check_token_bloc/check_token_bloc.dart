@@ -3,7 +3,7 @@ import 'package:lello/feature/payment/presentation/pendency/bloc/check_token_blo
 import 'package:lello/feature/payment/presentation/pendency/bloc/check_token_bloc/check_token_state.dart';
 
 class CheckTokenBloc extends Bloc<CheckTokenEvent, CheckTokenState> {
-  CheckTokenBloc() : super(const CheckTokenInitialState()) {
+  CheckTokenBloc() : super(CheckTokenInitial()) {
     on<CheckTokenInitialEvent>(handleCheckTokenInitialEvent);
     on<CheckTokenLoadingEvent>(handleCheckTokenLoadingEvent);
     on<CheckTokenSuccessEvent>(handleCheckTokenSuccessEvent);
@@ -21,53 +21,53 @@ class CheckTokenBloc extends Bloc<CheckTokenEvent, CheckTokenState> {
 
   void handleCheckTokenInitialEvent(
           CheckTokenInitialEvent event, Emitter emit) =>
-      emit(const CheckTokenInitialState());
+      emit(CheckTokenInitial());
 
   void handleCheckTokenLoadingEvent(
           CheckTokenLoadingEvent event, Emitter emit) =>
-      emit(const CheckTokenLoadingState());
+      emit(CheckTokenLoading());
 
   void handleCheckTokenSuccessEvent(
           CheckTokenSuccessEvent event, Emitter emit) =>
-      emit(CheckTokenSuccessState(success: event.success));
+      emit(CheckTokenSuccess(success: event.success));
 
   void handleCheckTokenFailureEvent(
           CheckTokenFailureEvent event, Emitter emit) =>
-      emit(CheckTokenFailureState(failure: event.failure));
+      emit(CheckTokenFailure(failure: event.failure));
 
   void handleResendTokenLoadingEvent(
           ResendTokenLoadingEvent event, Emitter emit) =>
-      emit(const ResendTokenLoadingState());
+      emit(ResendTokenLoading());
 
   void handleResendTokenSuccessEvent(
           ResendTokenSuccessEvent event, Emitter emit) =>
-      emit(ResendTokenSuccessState(id: event.id));
+      emit(ResendTokenSuccess(id: event.id));
 
   void handleResendTokenFailureEvent(
           ResendTokenFailureEvent event, Emitter emit) =>
-      emit(ResendTokenFailureState(failure: event.failure));
+      emit(ResendTokenFailure(failure: event.failure));
 
   void handleSendActionReasonLoadingEvent(
           SendActionReasonLoadingEvent event, Emitter emit) =>
-      emit(const SendActionReasonLoadingState());
+      emit(SendActionReasonLoading());
 
   void handleSendActionReasonSuccessEvent(
           SendActionReasonSuccessEvent event, Emitter emit) =>
-      emit(SendActionReasonSuccessState(success: event.success));
+      emit(SendActionReasonSuccess(success: event.success));
 
   void handleSendActionReasonFailureEvent(
           SendActionReasonFailureEvent event, Emitter emit) =>
-      emit(SendActionReasonFailureState(failure: event.failure));
+      emit(SendActionReasonFailure(failure: event.failure));
 
   void handleUpdateInstallmentsLoadingEvent(
           UpdateInstallmentsLoadingEvent event, Emitter emit) =>
-      emit(const UpdateInstallmentsLoadingState());
+      emit(UpdateInstallmentsLoading());
 
   void handleUpdateInstallmentsSuccessEvent(
           UpdateInstallmentsSuccessEvent event, Emitter emit) =>
-      emit(UpdateInstallmentsSuccessState(success: event.success));
+      emit(UpdateInstallmentsSuccess(success: event.success));
 
   void handleUpdateInstallmentsFailureEvent(
           UpdateInstallmentsFailureEvent event, Emitter emit) =>
-      emit(UpdateInstallmentsFailureState(failure: event.failure));
+      emit(UpdateInstallmentsFailure(failure: event.failure));
 }

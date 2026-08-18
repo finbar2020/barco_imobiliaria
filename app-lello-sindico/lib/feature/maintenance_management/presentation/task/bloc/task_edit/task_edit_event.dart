@@ -10,115 +10,115 @@ abstract class TaskEditEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class TaskEditStartedEvent extends TaskEditEvent {
+class TaskEditStarted extends TaskEditEvent {
   final TaskDetailsEntity task;
 
-  const TaskEditStartedEvent(this.task);
+  const TaskEditStarted(this.task);
 
   @override
   List<Object?> get props => [task];
 }
 
-class TaskEditToggleAllDayEvent extends TaskEditEvent {
+class TaskEditToggleAllDay extends TaskEditEvent {
   final bool value;
 
-  const TaskEditToggleAllDayEvent(this.value);
+  const TaskEditToggleAllDay(this.value);
 
   @override
   List<Object?> get props => [value];
 }
 
-class TaskEditCheckInChangedEvent extends TaskEditEvent {
+class TaskEditCheckInChanged extends TaskEditEvent {
   final String? value;
 
-  const TaskEditCheckInChangedEvent(this.value);
+  const TaskEditCheckInChanged(this.value);
 
   @override
   List<Object?> get props => [value];
 }
 
-class TaskEditModeChangedEvent extends TaskEditEvent {
+class TaskEditModeChanged extends TaskEditEvent {
   final TaskScheduleMode mode;
 
-  const TaskEditModeChangedEvent(this.mode);
+  const TaskEditModeChanged(this.mode);
 
   @override
   List<Object?> get props => [mode];
 }
 
-class TaskEditReminderChangedEvent extends TaskEditEvent {
+class TaskEditReminderChanged extends TaskEditEvent {
   final String value;
 
-  const TaskEditReminderChangedEvent(this.value);
+  const TaskEditReminderChanged(this.value);
 
   @override
   List<Object?> get props => [value];
 }
 
-class TaskEditWeekDayToggledEvent extends TaskEditEvent {
+class TaskEditWeekDayToggled extends TaskEditEvent {
   final TaskWeekDay day;
 
-  const TaskEditWeekDayToggledEvent(this.day);
+  const TaskEditWeekDayToggled(this.day);
 
   @override
   List<Object?> get props => [day];
 }
 
-class TaskEditOrientationChangedEvent extends TaskEditEvent {
+class TaskEditOrientationChanged extends TaskEditEvent {
   final String value;
 
-  const TaskEditOrientationChangedEvent(this.value);
+  const TaskEditOrientationChanged(this.value);
 
   @override
   List<Object?> get props => [value];
 }
 
-class TaskEditSavePressedEvent extends TaskEditEvent {
-  const TaskEditSavePressedEvent();
+class TaskEditSavePressed extends TaskEditEvent {
+  const TaskEditSavePressed();
 }
 
-class TaskEditDiscardPressedEvent extends TaskEditEvent {
-  const TaskEditDiscardPressedEvent();
+class TaskEditDiscardPressed extends TaskEditEvent {
+  const TaskEditDiscardPressed();
 }
 
-class TaskEditDialogDismissedEvent extends TaskEditEvent {
-  const TaskEditDialogDismissedEvent();
+class TaskEditDialogDismissed extends TaskEditEvent {
+  const TaskEditDialogDismissed();
 }
 
-class TaskEditStatusClearedEvent extends TaskEditEvent {
-  const TaskEditStatusClearedEvent();
+class TaskEditOutcomeCleared extends TaskEditEvent {
+  const TaskEditOutcomeCleared();
 }
 
-class TaskEditScopeSelectedEvent extends TaskEditEvent {
+class TaskEditScopeSelected extends TaskEditEvent {
   final TaskEditScope scope;
 
-  const TaskEditScopeSelectedEvent(this.scope);
+  const TaskEditScopeSelected(this.scope);
 
   @override
   List<Object?> get props => [scope];
 }
 
-class TaskEditConfirmScopeEvent extends TaskEditEvent {
-  const TaskEditConfirmScopeEvent();
+class TaskEditConfirmScope extends TaskEditEvent {
+  const TaskEditConfirmScope();
 }
 
-class TaskEditConfirmDiscardEvent extends TaskEditEvent {
-  const TaskEditConfirmDiscardEvent();
+class TaskEditConfirmDiscard extends TaskEditEvent {
+  const TaskEditConfirmDiscard();
 }
 
-class TaskEditStartDateChangedEvent extends TaskEditEvent {
+class TaskEditStartDateChanged extends TaskEditEvent {
   final String date;
 
-  const TaskEditStartDateChangedEvent(this.date);
+  const TaskEditStartDateChanged(this.date);
 
   @override
   List<Object?> get props => [date];
 }
 
-class TaskEditEndDateChangedEvent extends TaskEditEvent {
+class TaskEditEndDateChanged extends TaskEditEvent {
   final String date;
 
-  const TaskEditEndDateChangedEvent(this.date);
+  const TaskEditEndDateChanged(this.date);
 
   @override
   List<Object?> get props => [date];
