@@ -117,5 +117,6 @@ class _EmployeeReferralPageState extends State<EmployeeReferralPage> {
     } catch (err) {
       return defaultValue;
     }
+    return defaultValue;
   }
 }

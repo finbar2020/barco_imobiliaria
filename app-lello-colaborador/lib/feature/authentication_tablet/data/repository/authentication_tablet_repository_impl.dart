@@ -18,7 +18,7 @@ class AuthenticationTabletRepositoryImpl
     try {
       final request = await remoteDataSource.getInfoByCondoCode(condoCode);
       await localDataSource.save(condoCode, request);
-      TabletSessionUtils.setCondoCode(condoCode);
+      await TabletSessionUtils.setCondoCode(condoCode);
       CondominiumCodeInfo response = request.toEntity()!;
       return Success(response);
     } catch (e) {

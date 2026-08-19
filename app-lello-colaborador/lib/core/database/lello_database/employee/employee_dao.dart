@@ -19,5 +19,5 @@ class EmployeeDao extends DatabaseAccessor<LelloDatabase>
   Future<void> insert(List<Insertable<EmployeeData>> data) => batch((b) =>
       b.insertAll(database.employeeTable, data, mode: InsertMode.replace));
 
-  Future<int> clear() => delete(database.condominiumTable).go();
+  Future<int> clear() => delete(database.employeeTable).go();
 }

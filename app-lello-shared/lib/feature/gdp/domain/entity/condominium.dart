@@ -18,9 +18,9 @@ class CondominiumGDP {
       );
 
   factory CondominiumGDP.fromMe(condominium) => CondominiumGDP(
-        id: condominium.id,
-        name: condominium.name,
-        reference: condominium.condominiumId,
+        id: condominium?.id ?? "",
+        name: condominium?.name,
+        reference: condominium?.condominiumId ?? "",
       );
 
   List<Object?> get props => [id, name, reference];

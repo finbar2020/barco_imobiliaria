@@ -11,7 +11,11 @@ import '../../../../helpers/test_application_container.dart';
 
 void main() {
   testWidgets('exibe loading inicial', (tester) async {
-    final scope = await installTestTabletAuth();
+    // O atraso mantém o estado de loading visível: sem ele a busca resolve
+    // antes do primeiro frame e o teste vira uma corrida.
+    final scope = await installTestTabletAuth(
+      delay: const Duration(milliseconds: 200),
+    );
     addTearDown(scope.dispose);
 
     await pumpApp(
@@ -23,10 +27,13 @@ void main() {
       localized: true,
       shrinkWrap: false,
       surface: const Size(400, 600),
+      settle: false,
     );
-    await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 250));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('exibe lista vazia', (tester) async {
@@ -52,7 +59,10 @@ void main() {
   });
 
   testWidgets('exibe falha e tenta novamente', (tester) async {
-    final scope = await installTestTabletAuth(fail: true);
+    final scope = await installTestTabletAuth(
+      fail: true,
+      delay: const Duration(milliseconds: 200),
+    );
     addTearDown(scope.dispose);
 
     await pumpApp(
@@ -64,13 +74,19 @@ void main() {
       localized: true,
       shrinkWrap: false,
       surface: const Size(400, 600),
+      settle: false,
     );
+    await tester.pump(const Duration(milliseconds: 250));
     await tester.pumpAndSettle();
 
     expect(find.text('Falha ao buscar/enviar pontos.'), findsOneWidget);
+
     await tester.tap(find.text('Tentar novamente'));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 250));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('exibe pontos pendentes', (tester) async {

@@ -106,5 +106,6 @@ class _SickNotePageState extends State<SickNotePage> {
     } catch (err) {
       return defaultValue;
     }
+    return defaultValue;
   }
 }

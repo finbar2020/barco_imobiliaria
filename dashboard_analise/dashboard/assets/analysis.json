@@ -1,54 +1,23 @@
 {
-  "generatedAt": "2026-08-17T09:25:11.883929",
-  "rootPath": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria",
+  "generatedAt": "2026-08-19T13:20:02.624879",
+  "rootPath": "/Users/viguidolin/Desktop/barco/barco_imobiliaria",
   "workBranches": [
     {
       "name": "feature/all_tests",
       "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-      "presentIn": [
-        "app-lello-colaborador",
-        "app-lello-essentials",
-        "app-lello-morar",
-        "app-lello-morar-viver",
-        "app-lello-shared",
-        "app-lello-sindico",
-        "app-lello-sindico-viver"
-      ],
-      "currentOn": [
-        "app-lello-sindico"
-      ]
+      "presentIn": [],
+      "currentOn": []
     },
     {
       "name": "feature/libs-upgrade-wave0",
       "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-      "presentIn": [
-        "app-lello-colaborador",
-        "app-lello-essentials",
-        "app-lello-morar",
-        "app-lello-morar-viver",
-        "app-lello-shared",
-        "app-lello-sindico",
-        "app-lello-sindico-viver"
-      ],
-      "currentOn": [
-        "app-lello-colaborador",
-        "app-lello-essentials",
-        "app-lello-morar",
-        "app-lello-morar-viver",
-        "app-lello-shared",
-        "app-lello-sindico-viver"
-      ]
+      "presentIn": [],
+      "currentOn": []
     },
     {
       "name": "feature/bloc-9-migration",
       "purpose": "Higienização e padronização dos BLoCs (abstract+impl, events/states separados).",
-      "presentIn": [
-        "app-lello-colaborador",
-        "app-lello-essentials",
-        "app-lello-morar",
-        "app-lello-shared",
-        "app-lello-sindico"
-      ],
+      "presentIn": [],
       "currentOn": []
     }
   ],
@@ -59,7 +28,7 @@
       "description": "Flutter app for Lello condominiuns employees.",
       "version": "2.10.16+236",
       "type": "app",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-colaborador",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-colaborador",
       "platforms": [
         "android",
         "ios",
@@ -69,24 +38,24 @@
         "linux"
       ],
       "git": {
-        "currentBranch": "feature/libs-upgrade-wave0",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/bloc-9-migration",
             "purpose": "Higienização e padronização dos BLoCs (abstract+impl, events/states separados).",
-            "present": true,
+            "present": false,
             "current": false
           }
         ]
@@ -99,12 +68,12 @@
         "lockFlutterSdk": ">=3.44.0"
       },
       "coverage": {
-        "available": false,
-        "hit": 0,
-        "found": 0,
-        "percent": 0.0,
-        "testFiles": 1,
-        "goldenImages": 0
+        "available": true,
+        "hit": 14167,
+        "found": 15717,
+        "percent": 90.1,
+        "testFiles": 194,
+        "goldenImages": 106
       },
       "packageUpdates": {
         "scanned": false,
@@ -203,6 +172,18 @@
           "version": "^4.0.0",
           "isPathDependency": false,
           "isGit": false
+        },
+        {
+          "name": "sqflite_common_ffi",
+          "version": "^2.3.6",
+          "isPathDependency": false,
+          "isGit": false
+        },
+        {
+          "name": "fake_cloud_firestore",
+          "version": "^4.2.0",
+          "isPathDependency": false,
+          "isGit": false
         }
       ],
       "dependencyOverrides": [
@@ -230,23 +211,23 @@
         "cleanCoverage": 80,
         "topLevelFolders": {
           "core": 57,
-          "environment": 8,
+          "environment": 7,
           "feature": 432
         },
         "topLevelFiles": [
-          "firebase_options.dart",
-          "firebase_options_hubert.dart",
-          "firebase_options_lello.dart",
-          "lello_app.dart",
           "main-dev.dart",
-          "main-dev1.dart",
-          "main-dev2.dart",
-          "main-dev3.dart",
-          "main-preprod.dart",
           "main-prod.dart",
+          "lello_app.dart",
           "main-staging.dart",
+          "main-dev1.dart",
+          "main-preprod.dart",
+          "firebase_options.dart",
+          "main.dart",
+          "firebase_options_hubert.dart",
+          "main-dev3.dart",
           "main-stagingme.dart",
-          "main.dart"
+          "firebase_options_lello.dart",
+          "main-dev2.dart"
         ],
         "layerFirstFolders": [],
         "presentationSubUsage": {
@@ -310,11 +291,11 @@
         }
       },
       "stats": {
-        "dartFiles": 510,
-        "totalLines": 39847,
-        "codeLines": 35695,
+        "dartFiles": 509,
+        "totalLines": 39872,
+        "codeLines": 35711,
         "generatedFiles": 52,
-        "testFiles": 1
+        "testFiles": 194
       },
       "features": [
         {
@@ -362,7 +343,7 @@
           "hasDomain": true,
           "hasPresentation": true,
           "fileCount": 45,
-          "lineCount": 4261,
+          "lineCount": 4262,
           "presentationSubfolders": [
             "bloc",
             "controllers",
@@ -404,7 +385,7 @@
           "hasDomain": true,
           "hasPresentation": true,
           "fileCount": 26,
-          "lineCount": 1308,
+          "lineCount": 1309,
           "presentationSubfolders": [
             "bloc",
             "pages",
@@ -412,12 +393,12 @@
           ]
         },
         {
-          "name": "manual_timesheet",
+          "name": "proof",
           "hasData": true,
           "hasDomain": true,
           "hasPresentation": true,
           "fileCount": 22,
-          "lineCount": 975,
+          "lineCount": 872,
           "presentationSubfolders": [
             "bloc",
             "page",
@@ -439,12 +420,12 @@
           ]
         },
         {
-          "name": "proof",
+          "name": "manual_timesheet",
           "hasData": true,
           "hasDomain": true,
           "hasPresentation": true,
           "fileCount": 22,
-          "lineCount": 872,
+          "lineCount": 976,
           "presentationSubfolders": [
             "bloc",
             "page",
@@ -457,7 +438,7 @@
           "hasDomain": true,
           "hasPresentation": true,
           "fileCount": 22,
-          "lineCount": 1112,
+          "lineCount": 1123,
           "presentationSubfolders": [
             "bloc",
             "page",
@@ -470,7 +451,7 @@
           "hasDomain": true,
           "hasPresentation": true,
           "fileCount": 14,
-          "lineCount": 807,
+          "lineCount": 818,
           "presentationSubfolders": [
             "bloc"
           ]
@@ -586,10 +567,10 @@
             }
           },
           {
-            "name": "authentication_tablet",
+            "name": "proof",
             "blocs": 1,
             "cubits": 0,
-            "loc": 196,
+            "loc": 167,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -598,8 +579,8 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 5,
-              "eventClasses": 3,
+              "stateClasses": 7,
+              "eventClasses": 2,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
@@ -611,10 +592,10 @@
             }
           },
           {
-            "name": "digital_point",
+            "name": "preferences",
             "blocs": 1,
             "cubits": 0,
-            "loc": 798,
+            "loc": 122,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -623,7 +604,7 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 11,
+              "stateClasses": 5,
               "eventClasses": 4,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
@@ -650,6 +631,31 @@
             "standardization": {
               "stateClasses": 7,
               "eventClasses": 2,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "sync_digital_points",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 178,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 1,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
@@ -711,10 +717,10 @@
             }
           },
           {
-            "name": "preferences",
+            "name": "digital_point",
             "blocs": 1,
             "cubits": 0,
-            "loc": 122,
+            "loc": 798,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -723,7 +729,7 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 5,
+              "stateClasses": 11,
               "eventClasses": 4,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
@@ -736,35 +742,10 @@
             }
           },
           {
-            "name": "proof",
+            "name": "authentication_tablet",
             "blocs": 1,
             "cubits": 0,
-            "loc": 167,
-            "absImplPairs": 0,
-            "filesNoEquatable": 0,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 7,
-              "eventClasses": 2,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 0,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
-            "name": "session",
-            "blocs": 1,
-            "cubits": 0,
-            "loc": 522,
+            "loc": 196,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -774,7 +755,7 @@
             "grade": 100,
             "standardization": {
               "stateClasses": 5,
-              "eventClasses": 4,
+              "eventClasses": 3,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
@@ -811,10 +792,10 @@
             }
           },
           {
-            "name": "sync_digital_points",
+            "name": "session",
             "blocs": 1,
             "cubits": 0,
-            "loc": 178,
+            "loc": 533,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -824,7 +805,7 @@
             "grade": 100,
             "standardization": {
               "stateClasses": 5,
-              "eventClasses": 1,
+              "eventClasses": 4,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
@@ -840,7 +821,7 @@
           "features": 13,
           "blocs": 22,
           "cubits": 0,
-          "loc": 4615,
+          "loc": 4626,
           "absImplPairs": 0,
           "filesNoEquatable": 0,
           "inlineEvents": 0,
@@ -869,27 +850,27 @@
       "description": "A new Flutter package project.",
       "version": "0.0.1",
       "type": "library",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-essentials",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-essentials",
       "platforms": [],
       "git": {
-        "currentBranch": "feature/libs-upgrade-wave0",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/bloc-9-migration",
             "purpose": "Higienização e padronização dos BLoCs (abstract+impl, events/states separados).",
-            "present": true,
+            "present": false,
             "current": false
           }
         ]
@@ -1747,25 +1728,25 @@
         "cleanFeatures": 0,
         "cleanCoverage": 0,
         "topLevelFolders": {
-          "analytics": 7,
-          "api": 1,
-          "app_update": 3,
-          "auto_size_text": 1,
-          "base": 9,
-          "configs": 8,
-          "enum": 5,
-          "extension": 4,
-          "functional": 4,
-          "input_formatter": 4,
-          "methods": 10,
-          "modal": 6,
-          "network": 5,
-          "observers": 1,
-          "paginator": 6,
-          "providers": 1,
-          "stores": 1,
           "ui": 47,
-          "validator": 2
+          "methods": 10,
+          "validator": 2,
+          "extension": 4,
+          "providers": 1,
+          "enum": 5,
+          "network": 5,
+          "stores": 1,
+          "app_update": 3,
+          "input_formatter": 4,
+          "configs": 8,
+          "api": 1,
+          "auto_size_text": 1,
+          "modal": 6,
+          "paginator": 6,
+          "observers": 1,
+          "functional": 4,
+          "base": 9,
+          "analytics": 7
         },
         "topLevelFiles": [
           "app_localization.dart",
@@ -1868,7 +1849,7 @@
       "description": "Flutter app for Lello Condominios and their clients as residents.",
       "version": "1.33.2+545",
       "type": "app",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-morar",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-morar",
       "platforms": [
         "android",
         "ios",
@@ -1876,24 +1857,24 @@
         "linux"
       ],
       "git": {
-        "currentBranch": "feature/libs-upgrade-wave0",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/bloc-9-migration",
             "purpose": "Higienização e padronização dos BLoCs (abstract+impl, events/states separados).",
-            "present": true,
+            "present": false,
             "current": false
           }
         ]
@@ -2030,26 +2011,26 @@
         "cleanFeatures": 21,
         "cleanCoverage": 88,
         "topLevelFolders": {
-          "core": 52,
-          "environment": 8,
-          "feature": 918,
           "generated": 4,
-          "l10n": 0
+          "l10n": 0,
+          "core": 52,
+          "environment": 7,
+          "feature": 918
         },
         "topLevelFiles": [
-          "firebase_options.dart",
-          "lello_app.dart",
           "main-dev.dart",
-          "main-dev1.dart",
-          "main-dev2.dart",
-          "main-dev3.dart",
-          "main-mock.dart",
-          "main-preprod.dart",
           "main-prod.dart",
+          "lello_app.dart",
           "main-staging.dart",
+          "main-dev1.dart",
+          "main-preprod.dart",
+          "firebase_options.dart",
+          "main.dart",
+          "main-dev3.dart",
           "main-stagingme.dart",
           "main-test.dart",
-          "main.dart"
+          "main-dev2.dart",
+          "main-mock.dart"
         ],
         "layerFirstFolders": [],
         "presentationSubUsage": {
@@ -2108,9 +2089,9 @@
         }
       },
       "stats": {
-        "dartFiles": 991,
-        "totalLines": 87819,
-        "codeLines": 79518,
+        "dartFiles": 990,
+        "totalLines": 87808,
+        "codeLines": 79509,
         "generatedFiles": 117,
         "testFiles": 1
       },
@@ -2159,20 +2140,6 @@
           ]
         },
         {
-          "name": "ia_bella",
-          "hasData": true,
-          "hasDomain": true,
-          "hasPresentation": true,
-          "fileCount": 59,
-          "lineCount": 3909,
-          "presentationSubfolders": [
-            "bloc",
-            "controllers",
-            "page",
-            "widgets"
-          ]
-        },
-        {
           "name": "reservation",
           "hasData": true,
           "hasDomain": true,
@@ -2184,6 +2151,20 @@
             "controller",
             "page",
             "widget"
+          ]
+        },
+        {
+          "name": "ia_bella",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 59,
+          "lineCount": 3909,
+          "presentationSubfolders": [
+            "bloc",
+            "controllers",
+            "page",
+            "widgets"
           ]
         },
         {
@@ -2479,6 +2460,31 @@
             }
           },
           {
+            "name": "reports_book",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 871,
+            "absImplPairs": 1,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 1,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 15,
+              "eventClasses": 15,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
             "name": "agreements",
             "blocs": 1,
             "cubits": 0,
@@ -2498,6 +2504,56 @@
               "idleInitialStates": 0,
               "singleClassStates": 0,
               "dedicatedErrorStates": 2,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "reservation",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 901,
+            "absImplPairs": 0,
+            "filesNoEquatable": 1,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 12,
+              "eventClasses": 10,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "ia_bella",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 440,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 20,
+              "eventClasses": 20,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 3,
               "nonConstBaseStates": 0,
               "outcomeEnumStates": 0,
               "grade": 100
@@ -2529,26 +2585,26 @@
             }
           },
           {
-            "name": "ia_bella",
+            "name": "me",
             "blocs": 1,
             "cubits": 0,
-            "loc": 440,
+            "loc": 459,
             "absImplPairs": 0,
-            "filesNoEquatable": 0,
+            "filesNoEquatable": 2,
             "inlineEvents": 0,
             "inlineStates": 0,
             "filesWithPrint": 0,
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 20,
-              "eventClasses": 20,
+              "stateClasses": 24,
+              "eventClasses": 34,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
-              "dedicatedErrorStates": 3,
-              "nonConstBaseStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
               "outcomeEnumStates": 0,
               "grade": 100
             }
@@ -2604,81 +2660,6 @@
             }
           },
           {
-            "name": "me",
-            "blocs": 1,
-            "cubits": 0,
-            "loc": 459,
-            "absImplPairs": 0,
-            "filesNoEquatable": 2,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 24,
-              "eventClasses": 34,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 1,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
-            "name": "reports_book",
-            "blocs": 1,
-            "cubits": 0,
-            "loc": 871,
-            "absImplPairs": 1,
-            "filesNoEquatable": 0,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 1,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 15,
-              "eventClasses": 15,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 0,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
-            "name": "reservation",
-            "blocs": 1,
-            "cubits": 0,
-            "loc": 901,
-            "absImplPairs": 0,
-            "filesNoEquatable": 1,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 12,
-              "eventClasses": 10,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 1,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
             "name": "session",
             "blocs": 1,
             "cubits": 0,
@@ -2704,10 +2685,10 @@
             }
           },
           {
-            "name": "access_control",
+            "name": "preferences",
             "blocs": 0,
             "cubits": 0,
-            "loc": 476,
+            "loc": 365,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -2717,57 +2698,7 @@
             "grade": 100,
             "standardization": {
               "stateClasses": 13,
-              "eventClasses": 13,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 0,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
-            "name": "accountability",
-            "blocs": 0,
-            "cubits": 0,
-            "loc": 131,
-            "absImplPairs": 0,
-            "filesNoEquatable": 0,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 5,
-              "eventClasses": 5,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 0,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
-            "name": "billets",
-            "blocs": 0,
-            "cubits": 0,
-            "loc": 163,
-            "absImplPairs": 0,
-            "filesNoEquatable": 0,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 5,
-              "eventClasses": 5,
+              "eventClasses": 8,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
@@ -2804,6 +2735,31 @@
             }
           },
           {
+            "name": "accountability",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 131,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 5,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
             "name": "easy_fix",
             "blocs": 0,
             "cubits": 0,
@@ -2829,10 +2785,35 @@
             }
           },
           {
-            "name": "preferences",
+            "name": "billets",
             "blocs": 0,
             "cubits": 0,
-            "loc": 365,
+            "loc": 163,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 5,
+              "eventClasses": 5,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "access_control",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 476,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -2842,12 +2823,37 @@
             "grade": 100,
             "standardization": {
               "stateClasses": 13,
-              "eventClasses": 8,
+              "eventClasses": 13,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
               "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "vehicles",
+            "blocs": 0,
+            "cubits": 0,
+            "loc": 258,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 12,
+              "eventClasses": 12,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 1,
               "nonConstBaseStates": 0,
               "outcomeEnumStates": 0,
               "grade": 100
@@ -2902,31 +2908,6 @@
               "outcomeEnumStates": 0,
               "grade": 100
             }
-          },
-          {
-            "name": "vehicles",
-            "blocs": 0,
-            "cubits": 0,
-            "loc": 258,
-            "absImplPairs": 0,
-            "filesNoEquatable": 0,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 12,
-              "eventClasses": 12,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 1,
-              "nonConstBaseStates": 0,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
           }
         ],
         "totals": {
@@ -2962,7 +2943,7 @@
       "description": "A new Flutter project.",
       "version": "1.33.2+545",
       "type": "app",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-morar-viver",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-morar-viver",
       "platforms": [
         "android",
         "ios",
@@ -2972,19 +2953,19 @@
         "linux"
       ],
       "git": {
-        "currentBranch": "feature/libs-upgrade-wave0",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/bloc-9-migration",
@@ -3134,23 +3115,23 @@
         "cleanFeatures": 0,
         "cleanCoverage": 0,
         "topLevelFolders": {
-          "feature": 2,
           "generated": 4,
-          "l10n": 0
+          "l10n": 0,
+          "feature": 2
         },
         "topLevelFiles": [
-          "firebase_options_hubert.dart",
           "firebase_options_lello_viver.dart",
-          "lello_viver_app.dart",
           "main-dev.dart",
-          "main-dev1.dart",
-          "main-dev2.dart",
-          "main-dev3.dart",
-          "main-preprod.dart",
           "main-prod.dart",
           "main-staging.dart",
+          "main-dev1.dart",
+          "lello_viver_app.dart",
+          "main-preprod.dart",
+          "main.dart",
+          "firebase_options_hubert.dart",
+          "main-dev3.dart",
           "main-stagingme.dart",
-          "main.dart"
+          "main-dev2.dart"
         ],
         "layerFirstFolders": [],
         "presentationSubUsage": {
@@ -3207,23 +3188,23 @@
       },
       "features": [
         {
-          "name": "onboarding",
-          "hasData": false,
-          "hasDomain": false,
-          "hasPresentation": true,
-          "fileCount": 1,
-          "lineCount": 135,
-          "presentationSubfolders": [
-            "page"
-          ]
-        },
-        {
           "name": "splash",
           "hasData": false,
           "hasDomain": false,
           "hasPresentation": true,
           "fileCount": 1,
           "lineCount": 404,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "onboarding",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 135,
           "presentationSubfolders": [
             "page"
           ]
@@ -3264,27 +3245,27 @@
       "description": "A new Flutter package project.",
       "version": "0.0.2",
       "type": "package",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-shared",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-shared",
       "platforms": [],
       "git": {
-        "currentBranch": "feature/libs-upgrade-wave0",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/bloc-9-migration",
             "purpose": "Higienização e padronização dos BLoCs (abstract+impl, events/states separados).",
-            "present": true,
+            "present": false,
             "current": false
           }
         ]
@@ -3406,8 +3387,8 @@
         "cleanCoverage": 58,
         "topLevelFolders": {
           "core": 32,
-          "feature": 670,
-          "samples": 10
+          "samples": 10,
+          "feature": 670
         },
         "topLevelFiles": [
           "shared_features.dart"
@@ -3603,6 +3584,15 @@
           ]
         },
         {
+          "name": "ghost_notification",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 10,
+          "lineCount": 272,
+          "presentationSubfolders": []
+        },
+        {
           "name": "expired_session",
           "hasData": true,
           "hasDomain": true,
@@ -3613,15 +3603,6 @@
             "bloc",
             "page"
           ]
-        },
-        {
-          "name": "ghost_notification",
-          "hasData": true,
-          "hasDomain": true,
-          "hasPresentation": false,
-          "fileCount": 10,
-          "lineCount": 272,
-          "presentationSubfolders": []
         },
         {
           "name": "connection",
@@ -3651,6 +3632,15 @@
           "presentationSubfolders": []
         },
         {
+          "name": "start_security",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": false,
+          "fileCount": 2,
+          "lineCount": 125,
+          "presentationSubfolders": []
+        },
+        {
           "name": "access_settings_permission_denied",
           "hasData": false,
           "hasDomain": false,
@@ -3668,15 +3658,6 @@
           "hasPresentation": false,
           "fileCount": 2,
           "lineCount": 11,
-          "presentationSubfolders": []
-        },
-        {
-          "name": "start_security",
-          "hasData": false,
-          "hasDomain": false,
-          "hasPresentation": false,
-          "fileCount": 2,
-          "lineCount": 125,
           "presentationSubfolders": []
         },
         {
@@ -3753,10 +3734,10 @@
             }
           },
           {
-            "name": "authentication",
+            "name": "registration",
             "blocs": 1,
             "cubits": 0,
-            "loc": 172,
+            "loc": 319,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -3765,14 +3746,39 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 6,
-              "eventClasses": 8,
+              "stateClasses": 11,
+              "eventClasses": 11,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
               "dedicatedErrorStates": 0,
               "nonConstBaseStates": 0,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "reset_password",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 522,
+            "absImplPairs": 0,
+            "filesNoEquatable": 0,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 15,
+              "eventClasses": 17,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 1,
               "outcomeEnumStates": 0,
               "grade": 100
             }
@@ -3828,10 +3834,10 @@
             }
           },
           {
-            "name": "registration",
+            "name": "authentication",
             "blocs": 1,
             "cubits": 0,
-            "loc": 319,
+            "loc": 172,
             "absImplPairs": 0,
             "filesNoEquatable": 0,
             "inlineEvents": 0,
@@ -3840,39 +3846,14 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 11,
-              "eventClasses": 11,
+              "stateClasses": 6,
+              "eventClasses": 8,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
               "dedicatedErrorStates": 0,
               "nonConstBaseStates": 0,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
-            "name": "reset_password",
-            "blocs": 1,
-            "cubits": 0,
-            "loc": 522,
-            "absImplPairs": 0,
-            "filesNoEquatable": 0,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 15,
-              "eventClasses": 17,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 1,
               "outcomeEnumStates": 0,
               "grade": 100
             }
@@ -3986,33 +3967,32 @@
       "description": "Flutter app for Lello Condominiuns and their clients as managers.",
       "version": "1.32.1+561",
       "type": "app",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-sindico",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-sindico",
       "platforms": [
         "android",
         "ios",
-        "web",
         "macos",
         "linux"
       ],
       "git": {
-        "currentBranch": "feature/all_tests",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/bloc-9-migration",
             "purpose": "Higienização e padronização dos BLoCs (abstract+impl, events/states separados).",
-            "present": true,
+            "present": false,
             "current": false
           }
         ]
@@ -4150,25 +4130,25 @@
         "cleanFeatures": 21,
         "cleanCoverage": 66,
         "topLevelFolders": {
-          "core": 114,
-          "environment": 9,
-          "feature": 2368,
           "generated": 3,
-          "l10n": 0
+          "l10n": 0,
+          "core": 114,
+          "environment": 8,
+          "feature": 2368
         },
         "topLevelFiles": [
-          "firebase_options.dart",
-          "lello_app.dart",
           "main-dev.dart",
-          "main-dev1.dart",
-          "main-dev2.dart",
-          "main-dev3.dart",
-          "main-mock.dart",
-          "main-preprod.dart",
           "main-prod.dart",
+          "lello_app.dart",
           "main-staging.dart",
+          "main-dev1.dart",
+          "main-preprod.dart",
+          "firebase_options.dart",
+          "main.dart",
+          "main-dev3.dart",
           "main-stagingme.dart",
-          "main.dart"
+          "main-dev2.dart",
+          "main-mock.dart"
         ],
         "layerFirstFolders": [],
         "presentationSubUsage": {
@@ -4260,9 +4240,9 @@
         }
       },
       "stats": {
-        "dartFiles": 2503,
-        "totalLines": 211832,
-        "codeLines": 188961,
+        "dartFiles": 2502,
+        "totalLines": 211822,
+        "codeLines": 188953,
         "generatedFiles": 313,
         "testFiles": 246
       },
@@ -4395,20 +4375,6 @@
           ]
         },
         {
-          "name": "condominium",
-          "hasData": true,
-          "hasDomain": true,
-          "hasPresentation": true,
-          "fileCount": 63,
-          "lineCount": 3291,
-          "presentationSubfolders": [
-            "bloc",
-            "detail",
-            "page",
-            "widget"
-          ]
-        },
-        {
           "name": "income",
           "hasData": true,
           "hasDomain": true,
@@ -4420,6 +4386,20 @@
             "dasboard",
             "detail",
             "page"
+          ]
+        },
+        {
+          "name": "condominium",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": true,
+          "fileCount": 63,
+          "lineCount": 3291,
+          "presentationSubfolders": [
+            "bloc",
+            "detail",
+            "page",
+            "widget"
           ]
         },
         {
@@ -4591,15 +4571,6 @@
           "presentationSubfolders": []
         },
         {
-          "name": "consultant_lello",
-          "hasData": true,
-          "hasDomain": true,
-          "hasPresentation": false,
-          "fileCount": 12,
-          "lineCount": 206,
-          "presentationSubfolders": []
-        },
-        {
           "name": "splash",
           "hasData": true,
           "hasDomain": true,
@@ -4609,6 +4580,15 @@
           "presentationSubfolders": [
             "page"
           ]
+        },
+        {
+          "name": "consultant_lello",
+          "hasData": true,
+          "hasDomain": true,
+          "hasPresentation": false,
+          "fileCount": 12,
+          "lineCount": 206,
+          "presentationSubfolders": []
         },
         {
           "name": "vehicles",
@@ -4649,17 +4629,6 @@
           ]
         },
         {
-          "name": "lello",
-          "hasData": false,
-          "hasDomain": false,
-          "hasPresentation": true,
-          "fileCount": 1,
-          "lineCount": 315,
-          "presentationSubfolders": [
-            "page"
-          ]
-        },
-        {
           "name": "notifications",
           "hasData": false,
           "hasDomain": false,
@@ -4675,6 +4644,17 @@
           "hasPresentation": true,
           "fileCount": 1,
           "lineCount": 129,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "lello",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 315,
           "presentationSubfolders": [
             "page"
           ]
@@ -4858,31 +4838,6 @@
             }
           },
           {
-            "name": "income",
-            "blocs": 3,
-            "cubits": 0,
-            "loc": 326,
-            "absImplPairs": 0,
-            "filesNoEquatable": 6,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 18,
-              "eventClasses": 17,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 6,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
             "name": "unit",
             "blocs": 3,
             "cubits": 0,
@@ -4903,6 +4858,31 @@
               "singleClassStates": 0,
               "dedicatedErrorStates": 0,
               "nonConstBaseStates": 4,
+              "outcomeEnumStates": 0,
+              "grade": 100
+            }
+          },
+          {
+            "name": "income",
+            "blocs": 3,
+            "cubits": 0,
+            "loc": 326,
+            "absImplPairs": 0,
+            "filesNoEquatable": 6,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 18,
+              "eventClasses": 17,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 0,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 6,
               "outcomeEnumStates": 0,
               "grade": 100
             }
@@ -4983,10 +4963,10 @@
             }
           },
           {
-            "name": "access_management",
+            "name": "nonpayment",
             "blocs": 1,
             "cubits": 0,
-            "loc": 105,
+            "loc": 87,
             "absImplPairs": 0,
             "filesNoEquatable": 2,
             "inlineEvents": 0,
@@ -4995,16 +4975,41 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 7,
-              "eventClasses": 7,
+              "stateClasses": 4,
+              "eventClasses": 4,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
-              "dedicatedErrorStates": 1,
+              "dedicatedErrorStates": 0,
               "nonConstBaseStates": 2,
               "outcomeEnumStates": 0,
               "grade": 100
+            }
+          },
+          {
+            "name": "reports_book",
+            "blocs": 1,
+            "cubits": 0,
+            "loc": 325,
+            "absImplPairs": 0,
+            "filesNoEquatable": 2,
+            "inlineEvents": 0,
+            "inlineStates": 0,
+            "filesWithPrint": 0,
+            "filesWithMapEventToState": 0,
+            "grade": 100,
+            "standardization": {
+              "stateClasses": 14,
+              "eventClasses": 21,
+              "stateNoSuffix": 0,
+              "eventNoSuffix": 1,
+              "idleInitialStates": 0,
+              "singleClassStates": 0,
+              "dedicatedErrorStates": 0,
+              "nonConstBaseStates": 2,
+              "outcomeEnumStates": 0,
+              "grade": 99
             }
           },
           {
@@ -5058,31 +5063,6 @@
             }
           },
           {
-            "name": "dashboard_preferences",
-            "blocs": 1,
-            "cubits": 0,
-            "loc": 142,
-            "absImplPairs": 0,
-            "filesNoEquatable": 2,
-            "inlineEvents": 0,
-            "inlineStates": 0,
-            "filesWithPrint": 0,
-            "filesWithMapEventToState": 0,
-            "grade": 100,
-            "standardization": {
-              "stateClasses": 6,
-              "eventClasses": 6,
-              "stateNoSuffix": 0,
-              "eventNoSuffix": 0,
-              "idleInitialStates": 0,
-              "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 1,
-              "outcomeEnumStates": 0,
-              "grade": 100
-            }
-          },
-          {
             "name": "me",
             "blocs": 1,
             "cubits": 0,
@@ -5108,10 +5088,10 @@
             }
           },
           {
-            "name": "nonpayment",
+            "name": "access_management",
             "blocs": 1,
             "cubits": 0,
-            "loc": 87,
+            "loc": 105,
             "absImplPairs": 0,
             "filesNoEquatable": 2,
             "inlineEvents": 0,
@@ -5120,23 +5100,23 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 4,
-              "eventClasses": 4,
+              "stateClasses": 7,
+              "eventClasses": 7,
               "stateNoSuffix": 0,
               "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
-              "dedicatedErrorStates": 0,
+              "dedicatedErrorStates": 1,
               "nonConstBaseStates": 2,
               "outcomeEnumStates": 0,
               "grade": 100
             }
           },
           {
-            "name": "reports_book",
+            "name": "dashboard_preferences",
             "blocs": 1,
             "cubits": 0,
-            "loc": 325,
+            "loc": 142,
             "absImplPairs": 0,
             "filesNoEquatable": 2,
             "inlineEvents": 0,
@@ -5145,16 +5125,16 @@
             "filesWithMapEventToState": 0,
             "grade": 100,
             "standardization": {
-              "stateClasses": 14,
-              "eventClasses": 21,
+              "stateClasses": 6,
+              "eventClasses": 6,
               "stateNoSuffix": 0,
-              "eventNoSuffix": 1,
+              "eventNoSuffix": 0,
               "idleInitialStates": 0,
               "singleClassStates": 0,
               "dedicatedErrorStates": 0,
-              "nonConstBaseStates": 2,
+              "nonConstBaseStates": 1,
               "outcomeEnumStates": 0,
-              "grade": 99
+              "grade": 100
             }
           },
           {
@@ -5241,7 +5221,7 @@
       "description": "A new Flutter project.",
       "version": "1.32.1+561",
       "type": "app",
-      "path": "C:\\Users\\vigui\\Desktop\\Projetos\\lello\\projetos\\projeto\\barco_imobiliaria\\app-lello-sindico-viver",
+      "path": "/Users/viguidolin/Desktop/barco/barco_imobiliaria/app-lello-sindico-viver",
       "platforms": [
         "android",
         "ios",
@@ -5251,19 +5231,19 @@
         "linux"
       ],
       "git": {
-        "currentBranch": "feature/libs-upgrade-wave0",
+        "currentBranch": "",
         "workBranches": [
           {
             "name": "feature/all_tests",
             "purpose": "Testes: unitário, integração, interação, golden e cobertura.",
-            "present": true,
+            "present": false,
             "current": false
           },
           {
             "name": "feature/libs-upgrade-wave0",
             "purpose": "Upgrade de bibliotecas. Versões pinadas — atualizar quebra o app.",
-            "present": true,
-            "current": true
+            "present": false,
+            "current": false
           },
           {
             "name": "feature/bloc-9-migration",
@@ -5277,8 +5257,8 @@
         "fvmFlutter": "3.38.9",
         "dartSdkConstraint": ">=3.6.0 <4.0.0",
         "flutterSdkConstraint": "",
-        "lockDartSdk": ">=3.12.0 <4.0.0",
-        "lockFlutterSdk": ">=3.44.0"
+        "lockDartSdk": "",
+        "lockFlutterSdk": ""
       },
       "coverage": {
         "available": false,
@@ -5420,22 +5400,22 @@
         "cleanFeatures": 0,
         "cleanCoverage": 0,
         "topLevelFolders": {
-          "feature": 2,
           "generated": 3,
-          "l10n": 0
+          "l10n": 0,
+          "feature": 2
         },
         "topLevelFiles": [
-          "firebase_options_hubert.dart",
-          "firebase_options_lello.dart",
-          "lello_viver_app.dart",
           "main-dev.dart",
-          "main-dev1.dart",
-          "main-dev2.dart",
-          "main-dev3.dart",
-          "main-preprod.dart",
           "main-prod.dart",
           "main-staging.dart",
-          "main.dart"
+          "main-dev1.dart",
+          "lello_viver_app.dart",
+          "main-preprod.dart",
+          "main.dart",
+          "firebase_options_hubert.dart",
+          "main-dev3.dart",
+          "firebase_options_lello.dart",
+          "main-dev2.dart"
         ],
         "layerFirstFolders": [],
         "presentationSubUsage": {
@@ -5446,28 +5426,7 @@
         "primary": "setState (puro)",
         "detectedByPubspec": [],
         "packages": {},
-        "resolvedPackages": {
-          "bloc": {
-            "version": "9.2.1",
-            "dependency": "transitive"
-          },
-          "flutter_bloc": {
-            "version": "9.1.1",
-            "dependency": "transitive"
-          },
-          "get": {
-            "version": "4.7.2",
-            "dependency": "transitive"
-          },
-          "get_it": {
-            "version": "9.2.1",
-            "dependency": "transitive"
-          },
-          "provider": {
-            "version": "6.1.5+1",
-            "dependency": "transitive"
-          }
-        },
+        "resolvedPackages": {},
         "counts": {
           "bloc": 0,
           "cubit": 0,
@@ -5492,23 +5451,23 @@
       },
       "features": [
         {
-          "name": "onboarding",
-          "hasData": false,
-          "hasDomain": false,
-          "hasPresentation": true,
-          "fileCount": 1,
-          "lineCount": 127,
-          "presentationSubfolders": [
-            "page"
-          ]
-        },
-        {
           "name": "splash",
           "hasData": false,
           "hasDomain": false,
           "hasPresentation": true,
           "fileCount": 1,
           "lineCount": 270,
+          "presentationSubfolders": [
+            "page"
+          ]
+        },
+        {
+          "name": "onboarding",
+          "hasData": false,
+          "hasDomain": false,
+          "hasPresentation": true,
+          "fileCount": 1,
+          "lineCount": 127,
           "presentationSubfolders": [
             "page"
           ]

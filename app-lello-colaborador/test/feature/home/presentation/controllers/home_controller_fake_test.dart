@@ -12,7 +12,7 @@ import 'package:colaborador/feature/session/domain/entity/session.dart';
 import 'package:colaborador/feature/session/presentation/bloc/session_bloc.dart';
 import 'package:colaborador/feature/session/presentation/bloc/session_state.dart';
 import 'package:colaborador/feature/me/domain/entity/digital_timesheet_status_enum.dart';
-import 'package:essentials/essentials.dart';
+import 'package:essentials/essentials.dart' hide isNull, isNotNull;
 import 'package:essentials/methods/device/device_identifier_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -289,6 +289,25 @@ void main() {
       );
       expect(controller.mostAccessedCards, contains(HomeItemEnum.proof));
       expect(controller.mostAccessedCards, isNot(contains(HomeItemEnum.sendTimeSheet)));
+    });
+  });
+
+  group('HomeController.colaboradorHomeTimer', () {
+    test('parar antes de iniciar não estoura', () {
+      final controller = _controller(_PrefsSessionBloc());
+
+      expect(controller.colaboradorHomeTimer, isNull);
+      expect(controller.colaboradorHomeTimerStop, returnsNormally);
+    });
+
+    test('iniciar cria o temporizador', () async {
+      final controller = _controller(_PrefsSessionBloc());
+
+      controller.colaboradorHomeTimerStart();
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(controller.colaboradorHomeTimer, isNotNull);
+      controller.colaboradorHomeTimerStop();
     });
   });
 

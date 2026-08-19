@@ -19,5 +19,6 @@ class CondominiumEmployeeScheduleDao extends DatabaseAccessor<LelloDatabase>
       batch((b) => b.insertAll(database.condominiumEmployeeScheduleTable, data,
           mode: InsertMode.replace));
 
-  Future<int> clear() => delete(database.condominiumTable).go();
+  Future<int> clear() =>
+      delete(database.condominiumEmployeeScheduleTable).go();
 }

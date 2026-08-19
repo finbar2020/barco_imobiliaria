@@ -146,9 +146,7 @@ class _HomeRegisterPointButtonState extends State<HomeRegisterPointButton> {
               Launch.urlUri(
                 context,
                 UrlsUri.pontoDigital(
-                  url: pontoDigital != null
-                      ? pontoDigital["link"]
-                      : pontoDigital,
+                  url: pontoDigital?["link"] ?? "",
                 ),
                 mode: LaunchMode.externalApplication,
               );

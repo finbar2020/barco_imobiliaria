@@ -13,6 +13,7 @@ import 'package:colaborador/feature/me/domain/enum/device_type_allowed_enum.dart
 import 'package:colaborador/feature/session/domain/entity/session.dart';
 import 'package:colaborador/feature/session/presentation/bloc/session_bloc.dart';
 import 'package:colaborador/feature/session/presentation/bloc/session_state.dart';
+import 'package:essentials/essentials.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Condominium testCondominium({
@@ -46,11 +47,14 @@ Me testMe({
   String id = 'm1',
   List<Condominium>? condominiums,
   bool isTabletSession = false,
+  String email = 'ana@lello.com',
+  String phone = '',
 }) {
   return Me(
     id: id,
     name: 'ana silva',
-    email: 'ana@lello.com',
+    email: email,
+    phone: phone,
     condominiums: condominiums ?? [testCondominium()],
     isTabletSession: isTabletSession,
   );
@@ -60,6 +64,13 @@ Session testSession() {
   final condo = testCondominium();
   return Session(me: testMe(condominiums: [condo]), condominium: condo);
 }
+
+/// Sessão construída a partir de um [Me] já pronto — útil para variar flags
+/// como `isTabletSession` sem recriar o condomínio.
+Session testSessionOf(Me me) => Session(
+      me: me,
+      condominium: me.condominiums.first,
+    );
 
 class FakeSessionBloc extends Fake implements SessionBloc {
   FakeSessionBloc([Session? session]) : session = session ?? testSession();
@@ -78,6 +89,9 @@ class FakeSessionBloc extends Fake implements SessionBloc {
 
   @override
   bool checkRback(String rbac) => true;
+
+  @override
+  FirebaseRemoteConfig? get remoteConfig => null;
 }
 
 DigitalPointEntity testPoint({
@@ -104,8 +118,8 @@ DigitalPointEntity testPoint({
   );
 }
 
-File testTempFile() {
-  final file = File('${Directory.systemTemp.path}/colaborador_test_file.bin');
+File testTempFile([String name = 'colaborador_test_file.bin']) {
+  final file = File('${Directory.systemTemp.path}/$name');
   file.writeAsStringSync('x');
   return file;
 }

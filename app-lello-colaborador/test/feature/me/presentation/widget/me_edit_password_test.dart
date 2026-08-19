@@ -107,6 +107,9 @@ void main() {
       localized: true,
       shrinkWrap: false,
       surface: const Size(400, 720),
+      // O indicador de progresso anima indefinidamente: com settle o pump
+      // nunca estabiliza.
+      settle: false,
     );
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);

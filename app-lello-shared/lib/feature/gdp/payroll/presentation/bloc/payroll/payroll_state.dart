@@ -27,7 +27,7 @@ class PayrollLoadFailedState extends PayrollState {
   final Failure error;
 
   const PayrollLoadFailedState(
-      List<Payroll> data, Payroll detail, String condominiumId, this.error)
+      List<Payroll> data, Payroll? detail, String condominiumId, this.error)
       : super(data, detail, condominiumId);
 
   @override

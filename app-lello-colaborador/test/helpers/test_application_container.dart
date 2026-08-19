@@ -14,6 +14,8 @@ import 'package:colaborador/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:colaborador/feature/home/presentation/bloc/register_point_bloc.dart';
 import 'package:colaborador/feature/home/presentation/controllers/home_controller.dart';
 import 'package:colaborador/feature/home/presentation/controllers/register_point_controller.dart';
+import 'package:colaborador/core/bloc/inactivity/inactivity_cubit.dart';
+import 'package:colaborador/feature/home/presentation/widget/home_dialogs/bloc/home_dialogs_bloc.dart';
 import 'package:colaborador/feature/proof/domain/entity/proof.dart';
 import 'package:colaborador/feature/proof/domain/entity/proofFile.dart';
 import 'package:colaborador/feature/proof/domain/use_case/get_proof/get_proof.dart';
@@ -66,7 +68,7 @@ class TestCircuitBreakerController extends CircuitBreakerController {
 }
 
 class LoadedSessionBloc extends Fake implements SessionBloc {
-  LoadedSessionBloc([Session? session])
+  LoadedSessionBloc([Session? session, this.remoteConfigOverride])
       : session = session ?? testSession(),
         loadedState = SessionLoadedState(
           session: session ?? testSession(),
@@ -75,6 +77,9 @@ class LoadedSessionBloc extends Fake implements SessionBloc {
 
   final Session session;
   final SessionLoadedState loadedState;
+
+  /// Permite testar telas que leem o remote config sem tocar no app.
+  final FirebaseRemoteConfig? remoteConfigOverride;
 
   @override
   SessionState get state => loadedState;
@@ -90,11 +95,23 @@ class LoadedSessionBloc extends Fake implements SessionBloc {
 
   @override
   bool get iSPreferencesPersonalizationActive => true;
+
+  @override
+  FirebaseRemoteConfig? get remoteConfig => remoteConfigOverride;
+
+  @override
+  bool get canRegisterPoint => true;
+
+  @override
+  String getBaseUrl() => 'http://localhost';
 }
 
 class _FakeConnectivity extends Fake implements AppConnectivity {
   @override
   bool isConnected(List<ConnectivityResult> result) => true;
+
+  @override
+  Future<bool> checkConnectivity() async => true;
 
   @override
   Future<bool> isOfflineMode() async => false;
@@ -108,9 +125,32 @@ class _FakeGetToken extends Fake implements GetToken {
       Success(AccessToken()..accessToken = 't');
 }
 
-class _FakeGhost extends Fake implements GhostNotificationUsecase {}
+class _FakeGhost extends Fake implements GhostNotificationUsecase {
+  final calls = <GhostNotificationParams>[];
 
-class _FakeAuthStore extends Fake implements AuthenticationStore {}
+  @override
+  Future<Try<String?>> call(GhostNotificationParams params) async {
+    calls.add(params);
+    return Success('ok');
+  }
+}
+
+class _FakeSendPush extends Fake implements SendPushCallback {
+  @override
+  Future<Try<bool>> call(SendPushCallbackParams? params) async => Success(true);
+}
+
+class _FakeAuthStore extends Fake implements AuthenticationStore {
+  _FakeAuthStore([this.customHeader]);
+
+  final Map<String, String>? customHeader;
+
+  @override
+  final AuthenticationBloc bloc = AuthenticationBloc();
+
+  @override
+  Map<String, String>? getCustomHeader() => customHeader;
+}
 
 class _FakeGetPoints extends Fake implements GetPointsUsecase {
   @override
@@ -136,14 +176,19 @@ class FakeGetProof extends Fake implements GetProofUseCase {
     this.fail = false,
     this.empty = false,
     this.nullProofName = false,
+    this.delay,
   });
 
   final bool fail;
   final bool empty;
   final bool nullProofName;
+  final Duration? delay;
+  final dates = <DateTime>[];
 
   @override
   Future<Try<List<ProofEntity>>> call(GetProofParams params) async {
+    dates.add(params.date);
+    if (delay != null) await Future<void>.delayed(delay!);
     if (fail) return Rejection(KnownFailure('500', 'erro'));
     if (empty) return Success(const []);
     return Success([
@@ -178,14 +223,19 @@ class FakeGetPendingPoints extends Fake implements GetPendingPointsUsecase {
     this.fail = false,
     this.empty = false,
     this.points,
+    this.delay,
   });
 
   final bool fail;
   final bool empty;
   final List<DigitalPointEntity>? points;
 
+  /// Atraso opcional para manter o estado de loading observável no teste.
+  final Duration? delay;
+
   @override
   Future<Try<List<DigitalPointEntity>>> call([void params]) async {
+    if (delay != null) await Future<void>.delayed(delay!);
     if (fail) return Rejection(UnknownFailure('points'));
     if (empty) return Success(const []);
     return Success(points ?? [testPoint()]);
@@ -198,9 +248,10 @@ class _FakeSyncWorker extends Fake implements SyncDigitalPointsWorker {
 }
 
 class TestProofScope {
-  TestProofScope(this.proofBloc);
+  TestProofScope(this.proofBloc, this.getProof);
 
   final ProofBloc proofBloc;
+  final FakeGetProof getProof;
 
   Future<void> dispose() async {
     await proofBloc.close();
@@ -246,6 +297,8 @@ Future<TestApplicationContainerScope> installTestApplicationContainer({
   Session? session,
   bool circuitVisible = true,
   PageController? pageController,
+  FirebaseRemoteConfig? remoteConfig,
+  Map<String, String>? customHeader,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final locator = ApplicationContainer.instance().locator;
@@ -253,7 +306,7 @@ Future<TestApplicationContainerScope> installTestApplicationContainer({
     await locator.reset(dispose: true);
   }
 
-  final sessionBloc = LoadedSessionBloc(session);
+  final sessionBloc = LoadedSessionBloc(session, remoteConfig);
   final homeBloc = HomeBloc(
     registerFcm: _FakeRegisterFcm(),
     sessionBloc: sessionBloc,
@@ -282,6 +335,7 @@ Future<TestApplicationContainerScope> installTestApplicationContainer({
   locator.registerSingleton<Environment>(TestEnvironment());
   locator.registerSingleton<SessionBloc>(sessionBloc);
   locator.registerSingleton<HomeController>(homeController);
+  locator.registerSingleton<AuthenticationStore>(_FakeAuthStore(customHeader));
   locator.registerSingleton<RegisterPointController>(registerPointController);
   locator.registerSingleton<CircuitBreakerController>(
     TestCircuitBreakerController(
@@ -290,6 +344,15 @@ Future<TestApplicationContainerScope> installTestApplicationContainer({
     ),
   );
   locator.registerFactory<Validator>(() => ValidatorImpl());
+  locator.registerSingleton<AppConnectivity>(_FakeConnectivity());
+  locator.registerSingleton<InactivityCubit>(
+    InactivityCubit(sessionBloc: sessionBloc),
+  );
+  locator.registerFactory<HomeDialogBloc>(
+    () => HomeDialogBloc(sessionBloc: sessionBloc),
+  );
+  locator.registerSingleton<GhostNotificationUsecase>(_FakeGhost());
+  locator.registerSingleton<SendPushCallback>(_FakeSendPush());
 
   return TestApplicationContainerScope._(
     homeBloc: homeBloc,
@@ -335,6 +398,7 @@ Future<TestProofScope> installTestProofContainer({
   bool failProof = false,
   bool empty = false,
   bool nullProofName = false,
+  Duration? delay,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final locator = ApplicationContainer.instance().locator;
@@ -343,12 +407,14 @@ Future<TestProofScope> installTestProofContainer({
   }
 
   final sessionBloc = LoadedSessionBloc();
+  final getProof = FakeGetProof(
+    fail: failProof,
+    empty: empty,
+    nullProofName: nullProofName,
+    delay: delay,
+  );
   final proofBloc = ProofBloc(
-    getProofUseCase: FakeGetProof(
-      fail: failProof,
-      empty: empty,
-      nullProofName: nullProofName,
-    ),
+    getProofUseCase: getProof,
     getProofFileUseCase: FakeGetProofFile(),
     sessionBloc: sessionBloc,
   );
@@ -358,13 +424,14 @@ Future<TestProofScope> installTestProofContainer({
   locator.registerSingleton<ProofBloc>(proofBloc);
   locator.registerFactory<Validator>(() => ValidatorImpl());
 
-  return TestProofScope(proofBloc);
+  return TestProofScope(proofBloc, getProof);
 }
 
 Future<TestTabletAuthScope> installTestTabletAuth({
   bool fail = false,
   bool empty = false,
   List<DigitalPointEntity>? points,
+  Duration? delay,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final locator = ApplicationContainer.instance().locator;
@@ -378,6 +445,7 @@ Future<TestTabletAuthScope> installTestTabletAuth({
       fail: fail,
       empty: empty,
       points: points,
+      delay: delay,
     ),
     syncPoints: _FakeSyncWorker(),
   );
