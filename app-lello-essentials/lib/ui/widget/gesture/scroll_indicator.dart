@@ -10,42 +10,9 @@ class ScrollIndicator extends StatefulWidget {
   State<ScrollIndicator> createState() => _ScrollIndicatorState();
 }
 
-class _ScrollIndicatorState extends State<ScrollIndicator>
-    with TickerProviderStateMixin {
-  late Animation<double> animation;
-  late AnimationController controller;
-  final Tween<double> _rotationTween = Tween(begin: 0, end: 2);
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-
-    animation = _rotationTween.animate(controller)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.repeat();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.forward();
-        }
-      });
-
-    controller.forward();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
+/// O Lottie anima sozinho (`animate`/`repeat`), então não há controller
+/// próprio nem `setState` a cada frame.
+class _ScrollIndicatorState extends State<ScrollIndicator> {
   @override
   Widget build(BuildContext context) {
     return Lottie.asset(
@@ -54,6 +21,8 @@ class _ScrollIndicatorState extends State<ScrollIndicator>
       width: widget.width,
       animate: true,
       repeat: true,
+      // O asset é declarado pelo app hospedeiro; sem ele não renderiza nada.
+      errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
     );
   }
 }

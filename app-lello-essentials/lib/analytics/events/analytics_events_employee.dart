@@ -7,7 +7,7 @@ class AnalyticsEventsEmployee {
   static esqueciSenhaFinalizado() =>
       AnalyticsEvent("esqueci_senha_finalizado", "lthniw", Type.write);
   static redefinirSenha() =>
-      AnalyticsEvent("redefinir_senha", "1o19zn", Type.read);
+      AnalyticsEvent("redefinir_senha", "1o19zn", Type.write);
 
   static sessaoIniciar() =>
       AnalyticsEvent("sessao_iniciar", "7zsp7g", Type.read);
@@ -16,7 +16,7 @@ class AnalyticsEventsEmployee {
   static edicaoCadastradoAcessar() =>
       AnalyticsEvent("edicao_cadastro_acessar", "55z19b", Type.read);
   static edicaoCadastradoSucesso() =>
-      AnalyticsEvent("edicao_cadastro_tela_de_sucesso", "y1dqrv", Type.read);
+      AnalyticsEvent("edicao_cadastro_tela_de_sucesso", "y1dqrv", Type.write);
 
   //Comfort
   static comodidadesCtaOptIn() =>
@@ -81,6 +81,8 @@ class AnalyticsEventsEmployee {
       AnalyticsEvent("documentos_ferias_acessar", "ducmvu", Type.read);
   static documentosBeneficiosAcessar() =>
       AnalyticsEvent("documentos_beneficios_acessar", "fk0kkg", Type.read);
+  // TODO(negócio): nome com typo ("redimentos"); manter até alinhar com o
+  // dashboard, pois o nome é contrato com o Firebase.
   static documentosInfoRendimentosAcessar() =>
       AnalyticsEvent("documentos_info_redimentos_acessar", "2lsrcj", Type.read);
 
@@ -172,5 +174,5 @@ class AnalyticsEventsEmployee {
   static indicaVagaAcessar() =>
       AnalyticsEvent("indica_vaga_acessar", "ybzfox", Type.read);
   static indicaVagaEventoFinalizado() =>
-      AnalyticsEvent("indica_vaga_envio_sucesso", "3bel3i", Type.read);
+      AnalyticsEvent("indica_vaga_envio_sucesso", "3bel3i", Type.write);
 }

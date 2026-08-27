@@ -154,19 +154,21 @@ class AppUpdateConfig {
     var versionLocal = localVersion.split(".");
     var versionRemote = remoteVersion.split(".");
 
-    bool result = false;
-    for (int i = 0; i < versionLocal.length && i < versionRemote.length; i++) {
-      int v1int = int.parse(versionLocal[i]),
-          v2int = int.parse(versionRemote[i]);
-      if (v1int == v2int) {
-        result = false;
-      } else if (v1int > v2int) {
+    // Segmentos ausentes contam como 0 (1.2 == 1.2.0 < 1.2.1). Segmentos não
+    // numéricos continuam lançando (tratado no catch de quem chama).
+    final length = versionLocal.length > versionRemote.length
+        ? versionLocal.length
+        : versionRemote.length;
+    for (int i = 0; i < length; i++) {
+      int v1int = i < versionLocal.length ? int.parse(versionLocal[i]) : 0,
+          v2int = i < versionRemote.length ? int.parse(versionRemote[i]) : 0;
+      if (v1int > v2int) {
         return false;
-      } else {
+      } else if (v1int < v2int) {
         return true;
       }
     }
-    return result;
+    return false;
   }
 
   static bool? _checkDateDifference(date) {
@@ -243,10 +245,10 @@ class AppUpdateConfig {
         Navigator.of(context, rootNavigator: true).pop();
         continueSplashAction();
       } else {
+        // `launchAppStore` já chama `continueSplashAction` (uma única vez).
         launchAppStore(appStoreLink, context, continueSplashAction);
         if (allowDismissal) {
           Navigator.of(context, rootNavigator: true).pop();
-          continueSplashAction();
         }
       }
     };
@@ -300,7 +302,8 @@ class AppUpdateConfig {
                     actions: actions,
                   ),
             onWillPop: () {
-              continueSplashAction();
+              // Só segue a splash quando o diálogo realmente fecha.
+              if (allowDismissal) continueSplashAction();
               return Future.value(allowDismissal);
             });
       },

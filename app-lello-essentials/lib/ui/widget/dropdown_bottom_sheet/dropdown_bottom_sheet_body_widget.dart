@@ -23,21 +23,29 @@ class DropdownBottomSheetBodyWidget<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DropdownBottomSheetBodyWidget> createState() =>
-      _DropdownBottomSheetBodyWidgetState();
+  State<DropdownBottomSheetBodyWidget<T>> createState() =>
+      _DropdownBottomSheetBodyWidgetState<T>();
 }
 
-class _DropdownBottomSheetBodyWidgetState
-    extends State<DropdownBottomSheetBodyWidget> {
-  List<DropdownBottomSheetElement> visibleElements = [];
-  DropdownBottomSheetElement? selectedElement;
+class _DropdownBottomSheetBodyWidgetState<T>
+    extends State<DropdownBottomSheetBodyWidget<T>> {
+  List<DropdownBottomSheetElement<T>> visibleElements = [];
+  DropdownBottomSheetElement<T>? selectedElement;
   String filter = "";
+  final FixedExtentScrollController _pickerController =
+      FixedExtentScrollController();
 
   @override
   void initState() {
     super.initState();
     visibleElements = widget.dropDownElements;
     selectedElement = visibleElements.isNotEmpty ? visibleElements.first : null;
+  }
+
+  @override
+  void dispose() {
+    _pickerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,27 +110,37 @@ class _DropdownBottomSheetBodyWidgetState
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: Dimens.spacingMedium),
-          child: PrimaryTextFormField(
-            textInputType: TextInputType.text,
-            action: TextInputAction.done,
-            hint: getString(context, "filter", defaultText: "Filtro"),
-            onChanged: (value) {
-              setState(() {
-                visibleElements = widget.dropDownElements
-                    .where(
-                      (element) => element.text
-                          .toLowerCase()
-                          .contains(value.toLowerCase()),
-                    )
-                    .toList();
-              });
-            },
+        if (widget.showFilter)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Dimens.spacingMedium),
+            child: PrimaryTextFormField(
+              textInputType: TextInputType.text,
+              action: TextInputAction.done,
+              hint: getString(context, "filter", defaultText: "Filtro"),
+              onChanged: (value) {
+                setState(() {
+                  filter = value;
+                  visibleElements = widget.dropDownElements
+                      .where(
+                        (element) => element.text
+                            .toLowerCase()
+                            .contains(value.toLowerCase()),
+                      )
+                      .toList();
+                  // Ao filtrar, o picker volta ao primeiro item visível e o
+                  // elemento selecionado acompanha o que está na tela.
+                  selectedElement =
+                      visibleElements.isNotEmpty ? visibleElements.first : null;
+                  if (_pickerController.hasClients) {
+                    _pickerController.jumpToItem(0);
+                  }
+                });
+              },
+            ),
           ),
-        ),
         Expanded(
           child: CupertinoPicker(
+            scrollController: _pickerController,
             itemExtent: 56,
             onSelectedItemChanged: (value) {
               selectedElement = visibleElements[value];

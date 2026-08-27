@@ -61,11 +61,10 @@ class CheckFile {
       }
       return false;
     } catch (e) {
-      if (e is ArgumentError) {
-        return true;
-      } else {
-        return true;
-      }
+      // Só senha conta como "protegido": PdfPasswordException do pdfrx (ou o
+      // ArgumentError das versões antigas). Outros erros (arquivo corrompido,
+      // sem lib nativa) não são proteção por senha.
+      return e is PdfPasswordException || e is ArgumentError;
     }
   }
 

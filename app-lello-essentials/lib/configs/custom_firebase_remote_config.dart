@@ -23,6 +23,8 @@ class CustomFirebaseRemoteConfig {
   static String rolloutRegistration = "rolout_registration";
   static String rentSellLink = "rent_sell_link";
   static String newHome = "new_home";
+  /// Alias de [mostAccessedCards] (mesma chave remota); mantido por
+  /// compatibilidade. Prefira [mostAccessedCards].
   static String mostAcessedManager = "most_accessed_cards";
   static String circuitBreaker = "circuit_breaker_json";
   static String horta = "horta";

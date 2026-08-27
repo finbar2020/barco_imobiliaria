@@ -1,7 +1,7 @@
 import 'package:essentials/configs/brand_configuration.dart';
 
 /// Configurações da marca Hubert.
-class HubertConfiguration implements BrandConfiguration {
+class HubertConfiguration extends BrandConfiguration {
   const HubertConfiguration();
 
   @override

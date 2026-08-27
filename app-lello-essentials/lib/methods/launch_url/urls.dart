@@ -21,7 +21,8 @@ class UrlsUri {
 
   static Uri whatsApp(String phone, {String? message}) {
     String path = "$phone/";
-    Map<String, dynamic>? queryParameters = {"text": message};
+    final Map<String, dynamic>? queryParameters =
+        (message == null || message.isEmpty) ? null : {"text": message};
     return Uri.https("wa.me", path, queryParameters);
   }
 

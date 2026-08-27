@@ -22,7 +22,7 @@ class Dimens {
 
   ///Tamanho: 85
   static final homeBalanceHeightCollapsed = 85.0;
-  //Tamanho: 40
+  ///Tamanho: 44.7
   static final homeMenuIconSize = 44.7;
 
   Dimens._();

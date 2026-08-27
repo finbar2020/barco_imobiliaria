@@ -11,7 +11,8 @@ class ApiPerformaceMonitor {
       final metric = FirebasePerformance.instance.newHttpMetric(
           request.url.normalizePath().toString(),
           perf.HttpMethod.values.firstWhere(
-            (element) => element.toString() == request.method,
+            (element) =>
+                element.name.toUpperCase() == request.method.toUpperCase(),
             orElse: () => perf.HttpMethod.Get,
           ));
 

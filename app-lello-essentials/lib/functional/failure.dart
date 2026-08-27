@@ -9,8 +9,7 @@ abstract class Failure {
       other is Failure && other.code == code && other.error == error;
 
   @override
-  // TODO: implement hashCode
-  int get hashCode => super.hashCode;
+  int get hashCode => Object.hash(code, error);
 }
 
 class UnknownFailure extends Failure {

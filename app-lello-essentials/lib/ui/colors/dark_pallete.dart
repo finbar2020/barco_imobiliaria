@@ -3,18 +3,43 @@ import 'package:flutter/material.dart';
 import 'color_pallete.dart';
 
 class DarkPallete implements ColorPallete {
-  static final DarkPallete _instance = DarkPallete._internal();
+  /// Cores padrão do singleton.
+  static const Color defaultPrimary = Color(0xFFCB2640);
+  static const Color defaultSecondary = Color(0xFFCB2640);
 
-  Color _primary = Color(0xFFCB2640);
-  Color _secondary = Color(0xFFCB2640);
+  static final DarkPallete _instance =
+      DarkPallete._internal(defaultPrimary, defaultSecondary);
 
+  Color _primary;
+  Color _secondary;
+
+  /// Sem parâmetros devolve o singleton compartilhado. Com `primary` e/ou
+  /// `secondary` devolve uma NOVA instância com essas cores (as omitidas são
+  /// herdadas do singleton) sem alterar o singleton. Para mudar as cores do
+  /// singleton use [customize] / [restoreDefaults].
   factory DarkPallete({Color? primary, Color? secondary}) {
+    if (primary == null && secondary == null) return _instance;
+    return DarkPallete._internal(
+        primary ?? _instance._primary, secondary ?? _instance._secondary);
+  }
+
+  DarkPallete._internal(this._primary, this._secondary);
+
+  /// Altera as cores do singleton (afeta todo `DarkPallete()`); as cores
+  /// omitidas são mantidas. Use só para trocar a identidade visual global
+  /// (ex.: `LelloTheme.viverDefaultTheme`).
+  static DarkPallete customize({Color? primary, Color? secondary}) {
     _instance._primary = primary ?? _instance._primary;
     _instance._secondary = secondary ?? _instance._secondary;
     return _instance;
   }
 
-  DarkPallete._internal();
+  /// Restaura as cores padrão do singleton.
+  static DarkPallete restoreDefaults() {
+    _instance._primary = defaultPrimary;
+    _instance._secondary = defaultSecondary;
+    return _instance;
+  }
 
   @override
   Color primary() => _primary;

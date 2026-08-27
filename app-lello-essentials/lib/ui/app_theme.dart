@@ -71,23 +71,52 @@ class LelloTheme {
         chipTheme: ChipThemeData(
           showCheckmark: false,
         ),
+        // Registra a paleta usada para que `palleteOf` a recupere depois.
+        extensions: <ThemeExtension<dynamic>>[_PalleteExtension(pallete)],
       );
 
+  /// Paleta de um tema. Temas criados por [themeWithPallete] devolvem a
+  /// própria paleta com que foram criados (inclusive instâncias customizadas,
+  /// preservadas por `copyWith`). Para outros temas o brilho decide entre
+  /// clara e escura, e a carimbeira só é reconhecida (pela cor primária) em
+  /// temas claros.
   static ColorPallete palleteOf(ThemeData data) {
-    // Verifica se é o tema carimbeira baseado na cor primária
+    final registered = data.extension<_PalleteExtension>()?.pallete;
+    if (registered != null) return registered;
+    if (data.brightness == Brightness.dark) return DarkPallete();
     if (data.primaryColor.value == CarimbeiraPallete().primary().value) {
       return CarimbeiraPallete();
     }
-    return data.brightness == Brightness.light ? LightPallete() : DarkPallete();
+    return LightPallete();
   }
 
+  /// Tema "viver": aplica preto como primary/secondary no singleton
+  /// [LightPallete] (efeito global do qual os apps viver dependem).
   static ThemeData get viverDefaultTheme => themeWithPallete(Brightness.light,
-      LightPallete(primary: Colors.black, secondary: Colors.black));
-  static ThemeData get lelloDefaultTheme => themeWithPallete(
-      Brightness.light,
-      LightPallete(
-          primary: LightPallete().primary(),
-          secondary: LightPallete().secondary()));
+      LightPallete.customize(primary: Colors.black, secondary: Colors.black));
+
+  /// Tema Lello padrão: restaura explicitamente o vermelho Lello no singleton
+  /// [LightPallete] (desfaz o efeito de [viverDefaultTheme]).
+  static ThemeData get lelloDefaultTheme =>
+      themeWithPallete(Brightness.light, LightPallete.restoreDefaults());
 
   LelloTheme._();
+}
+
+/// Extensão de tema que guarda a [ColorPallete] usada em
+/// [LelloTheme.themeWithPallete], para [LelloTheme.palleteOf] não depender de
+/// heurísticas por cor.
+class _PalleteExtension extends ThemeExtension<_PalleteExtension> {
+  const _PalleteExtension(this.pallete);
+
+  final ColorPallete pallete;
+
+  @override
+  ThemeExtension<_PalleteExtension> copyWith({ColorPallete? pallete}) =>
+      _PalleteExtension(pallete ?? this.pallete);
+
+  @override
+  ThemeExtension<_PalleteExtension> lerp(
+          ThemeExtension<_PalleteExtension>? other, double t) =>
+      other is _PalleteExtension && t >= 0.5 ? other : this;
 }

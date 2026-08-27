@@ -9,6 +9,8 @@
 /// final whatsapp = FlavorConfig.config.supportWhatsAppNumber;
 /// ```
 abstract class BrandConfiguration {
+  const BrandConfiguration();
+
   /// Nome da marca
   String get brandName;
 

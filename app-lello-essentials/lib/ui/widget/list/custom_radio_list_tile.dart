@@ -33,7 +33,7 @@ class CustomRadioListTile<T> extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        if (value != groupValue) onChanged!(value);
+        if (value != groupValue) onChanged?.call(value);
       },
       child: Padding(
         padding: padding,
@@ -46,7 +46,7 @@ class CustomRadioListTile<T> extends StatelessWidget {
                 groupValue: groupValue,
                 value: value,
                 onChanged: (T? newValue) {
-                  onChanged!(newValue);
+                  onChanged?.call(newValue);
                 },
               ),
             ),

@@ -1,5 +1,4 @@
 import 'package:essentials/enum/app_origin_enum.dart';
-import 'package:essentials/ui/widget/app_review/app_review_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,14 +19,17 @@ class AppReviewDialog {
       bool isReviewAvailable = await inAppReview.isAvailable();
       if (isReviewAvailable) {
         String? date = prefs.getString(_key);
-        if (date == null || date.isEmpty) {
+        // Data ausente, vazia ou inválida (corrompida) é tratada como
+        // "sem data": grava a data atual para reiniciar o intervalo.
+        if (date == null || date.isEmpty || DateTime.tryParse(date) == null) {
           _setDate();
         } else {
           bool showReviewDialog =
               _checkDateInterval(date: date, reviewInterval: reviewInterval);
           if (showReviewDialog) {
-            // Validação concluída: Mostrar dialog;
-            // _show(context: context, origin: origin);
+            // Validação concluída: usa o fluxo de review nativo da loja.
+            // O dialog próprio (AppReviewDialogWidget) foi desativado; `context`
+            // e `origin` permanecem na assinatura por compatibilidade.
             inAppReview.requestReview();
           }
         }
@@ -48,20 +50,6 @@ class AppReviewDialog {
     } catch (e) {
       return false;
     }
-  }
-
-  // Função responsável por exibir o Dialog de avaliação na tela.
-  // ignore: unused_element
-  static Future _show({
-    required BuildContext context,
-    required AppOriginEnum origin,
-  }) async {
-    _setDate();
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AppReviewDialogWidget(appOriginEnum: origin),
-    );
   }
 
   // Função responsável por atualizar a data da última exibição do dialog de avaliação.

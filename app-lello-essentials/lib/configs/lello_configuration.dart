@@ -1,7 +1,7 @@
 import 'package:essentials/configs/brand_configuration.dart';
 
 /// Configurações da marca Lello.
-class LelloConfiguration implements BrandConfiguration {
+class LelloConfiguration extends BrandConfiguration {
   const LelloConfiguration();
 
   @override

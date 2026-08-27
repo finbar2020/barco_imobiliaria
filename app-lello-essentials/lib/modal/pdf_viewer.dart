@@ -73,11 +73,13 @@ class _PDFScreenState extends State<PDFScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await _saveFile(file, context);
-      Flushbar(
-        message: getString(context, "download_success"),
-        duration: Duration(seconds: 2),
-      ).show(context);
+      final saved = await _saveFile(file, context);
+      if (saved) {
+        Flushbar(
+          message: getString(context, "download_success"),
+          duration: Duration(seconds: 2),
+        ).show(context);
+      }
     } catch (e) {
       debugPrint('[PDFScreen] Download error: $e');
       Flushbar(
@@ -339,30 +341,33 @@ class _PDFScreenState extends State<PDFScreen> {
     );
   }
 
-  Future _saveFile(File file, BuildContext context) async {
+  /// Devolve `true` quando o arquivo foi salvo (e aberto). Sem diretório de
+  /// destino avisa "canot_download_file" e devolve `false`; falha na cópia é
+  /// propagada para quem chamou tratar.
+  Future<bool> _saveFile(File file, BuildContext context) async {
+    Directory? appDocDir;
     try {
-      Directory? appDocDir = Platform.isIOS
+      appDocDir = Platform.isIOS
           ? await getApplicationDocumentsDirectory()
           : await getExternalStorageDirectory();
-      if (appDocDir == null) {
-        throw Exception("canot_download_file");
-      }
-      String appDocPath = appDocDir.path;
-      try {
-        var path = '$appDocPath/${widget.fileName ?? Path.basename(file.path)}';
-        if (path != file.path) {
-          await file.copy(path);
-        }
-        OpenFile.open(path);
-      } catch (e) {
-        print(e);
-      }
     } catch (e) {
+      debugPrint('[PDFScreen] Storage directory error: $e');
+      appDocDir = null;
+    }
+    if (appDocDir == null) {
       Flushbar(
         duration: Duration(seconds: 5),
         message: getString(context, "canot_download_file"),
       ).show(context);
+      return false;
     }
+    String appDocPath = appDocDir.path;
+    var path = '$appDocPath/${widget.fileName ?? Path.basename(file.path)}';
+    if (path != file.path) {
+      await file.copy(path);
+    }
+    OpenFile.open(path);
+    return true;
   }
 
   Widget _pdfFile(String path, ThemeData theme) {

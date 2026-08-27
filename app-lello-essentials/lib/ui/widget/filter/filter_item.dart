@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../app_localization.dart';
-import '../../app_theme.dart';
 import '../../dimens.dart';
 
 class FilterItem extends StatelessWidget {
@@ -17,6 +16,7 @@ class FilterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[300],
@@ -33,7 +33,7 @@ class FilterItem extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    style: LelloTheme.light.textTheme.bodyMedium,
+                    style: theme.textTheme.bodyMedium,
                     text: getString(
                       context,
                       title,
@@ -42,11 +42,11 @@ class FilterItem extends StatelessWidget {
                   if (content != null)
                     TextSpan(
                       text: ": ",
-                      style: LelloTheme.light.textTheme.bodyMedium,
+                      style: theme.textTheme.bodyMedium,
                     ),
                   if (content != null)
                     TextSpan(
-                      style: LelloTheme.light.textTheme.bodyMedium?.merge(
+                      style: theme.textTheme.bodyMedium?.merge(
                         const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

@@ -12,7 +12,8 @@ class ListBuilder {
       physics: physics,
       itemBuilder: (context, index) {
         final item = items[index];
-        return item.shouldWrapContent!
+        // `shouldWrapContent` nulo é tratado como `false`.
+        return (item.shouldWrapContent ?? false)
             ? ListTile(
                 contentPadding: EdgeInsets.symmetric(
                     horizontal: Dimens.spacingMedium, vertical: 0),
