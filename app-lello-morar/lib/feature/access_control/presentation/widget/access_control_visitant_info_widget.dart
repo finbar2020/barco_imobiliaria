@@ -843,12 +843,11 @@ class _AccessControlVisitantInfoWidgetState
                 ? "access_control_save_send_button"
                 : "save"),
         onPressed: () {
-          if (choiceEntry == AccessControlTypeEntry.unavailable.index) {
-            Flushbar(
-              duration: Duration(seconds: 5),
-              message: getString(context, "validation_invalid_authorization"),
-            )..show(context);
-          } else if (choiceEntry != AccessControlTypeEntry.interfonar.index &&
+          // `_firstBuild` sempre define `choiceEntry` (acesso direto ou
+          // interfonar) a partir da autorização, e a tile só troca entre esses
+          // dois valores; logo `unavailable` nunca chega aqui e a validação
+          // "validation_invalid_authorization" foi removida por ser morta.
+          if (choiceEntry != AccessControlTypeEntry.interfonar.index &&
               _selectAccess == "Pontual" &&
               firstDate == null) {
             Flushbar(
@@ -862,8 +861,7 @@ class _AccessControlVisitantInfoWidgetState
               duration: Duration(seconds: 3),
               message: "Necessário informar uma data de início e final.",
             )..show(context);
-          } else if (_formKey.currentState!.validate() &&
-              choiceEntry != AccessControlTypeEntry.unavailable.index) {
+          } else if (_formKey.currentState!.validate()) {
             List<AccessControlItens> itens = [];
             widget.state.visitant.gestUnits.last.autorizationTypeInt =
                 choiceEntry;
@@ -1314,40 +1312,32 @@ class _AccessControlVisitantInfoWidgetState
     );
   }
 
+  /// O formato ("+55 ..." ou "(DD) ...") é testado no texto original; os
+  /// recortes são feitos sobre os dígitos.
   String _initialDDD(String initialValue) {
-    var initial = initialValue.trim();
-    initial = initial.replaceAll(RegExp(r'[^0-9]'), '');
-    if (initial.isNotEmpty) {
-      if (initial.startsWith("+55") && initial.length > 4)
-        return initial.substring(3, 5);
-      if (initial.startsWith("(") && initial.length > 4)
-        return initial.substring(1, 3);
-      if (initial.length == 11 || initial.length == 12) initial.substring(0, 2);
-      if (initial.length > 9) return initial.substring(0, 2);
+    final raw = initialValue.trim();
+    final digits = raw.replaceAll(RegExp(r'[^0-9]'), '');
+    if (raw.startsWith("+55")) {
+      return digits.length > 4 ? digits.substring(2, 4) : "";
     }
+    if (raw.startsWith("(")) {
+      return digits.length > 2 ? digits.substring(0, 2) : "";
+    }
+    if (digits.length > 9) return digits.substring(0, 2);
     return "";
   }
 
   String _initialPhone(String initialValue) {
-    var initial = initialValue.trim();
-    initial = initial.replaceAll(RegExp(r'[^0-9]'), '');
-    if (initial.isNotEmpty) {
-      if (initial.startsWith("+55") && initial.length > 4)
-        return initial.substring(5).trim();
-      if (initial.startsWith("(")) {
-        if (initial.length > 5) {
-          return initial.substring(4).trim();
-        }
-      } else {
-        if (initial.length == 11 || initial.length == 12)
-          return initial.substring(2, initial.length);
-        if (initial.length > 9)
-          return initial.substring(2, initial.length);
-        else
-          return initial;
-      }
+    final raw = initialValue.trim();
+    final digits = raw.replaceAll(RegExp(r'[^0-9]'), '');
+    if (raw.startsWith("+55")) {
+      return digits.length > 4 ? digits.substring(4) : "";
     }
-    return "";
+    if (raw.startsWith("(")) {
+      return digits.length > 2 ? digits.substring(2) : "";
+    }
+    if (digits.length > 9) return digits.substring(2);
+    return digits;
   }
 
   String _getPhone(String ddd, String phone) {

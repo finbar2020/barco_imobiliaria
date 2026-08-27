@@ -88,7 +88,10 @@ class _MyReportReplyPageState extends State<MyReportReplyPage>
     if (state is NewReplyReportsFailureState) {
       controller.replyReport(state.CurrentReport, state.content);
     } else {
-      controller.seeReportDetails(controller.reportsBloc.state.report!);
+      final report = state.report;
+      if (report != null) {
+        controller.seeReportDetails(report);
+      }
       Navigator.pop(context);
     }
   }

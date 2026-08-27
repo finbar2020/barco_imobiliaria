@@ -30,7 +30,7 @@ class UnitContactDataEntity {
       correspondenceEmail: json['emailCorrespondencia'] ?? '',
       careEmail: json['emailAosCuidados'] ?? '',
       careName: json['nomeAosCuidados'] ?? '',
-      useContactEmail: json['usarEmailContato'] ?? '',
+      useContactEmail: json['usarEmailContato'] ?? false,
     );
   }
 

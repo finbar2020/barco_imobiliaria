@@ -86,13 +86,15 @@ class ReportsGetReportFailureEvent extends ReportsFailureEvent {
   final List<Report> allReports;
   final Failure? failure;
 
+  /// [report] é a ocorrência cuja busca falhou, para o "tentar novamente".
   const ReportsGetReportFailureEvent({
+    super.report,
     required this.allReports,
     required this.failure,
   });
 
   @override
-  List<Object?> get props => [allReports, failure];
+  List<Object?> get props => [...super.props, allReports, failure];
 }
 
 class NewReplyReportsFailureEvent extends ReportsFailureEvent {

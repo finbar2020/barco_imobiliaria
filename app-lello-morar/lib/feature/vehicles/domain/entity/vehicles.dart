@@ -51,7 +51,7 @@ class Vehicle {
       return toBeginningOfSentenceCase(enumToString(VehiclesType.moto));
     } else if (value == getString(context, "me_vehicles_car")) {
       return toBeginningOfSentenceCase(enumToString(VehiclesType.carro));
-    } else if (value!.toUpperCase() ==
+    } else if (value?.toUpperCase() ==
         getString(context, "me_vehicles_bike").toUpperCase()) {
       return toBeginningOfSentenceCase(enumToString(VehiclesType.bicicleta));
     } else {

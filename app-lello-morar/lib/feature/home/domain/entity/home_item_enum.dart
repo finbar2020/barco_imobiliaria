@@ -84,6 +84,7 @@ extension HomeItemExtension on HomeItemEnum {
       case "my_preferences":
         return HomeItemEnum.myPreferences;
       case "receiving_documents":
+      case "receipt_of_documents":
         return HomeItemEnum.receiveDocuments;
       default:
         return null;

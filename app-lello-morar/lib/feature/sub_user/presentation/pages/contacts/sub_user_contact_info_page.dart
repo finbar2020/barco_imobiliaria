@@ -362,9 +362,9 @@ class _SubUserContactInfoPageState extends State<SubUserContactInfoPage> {
                             clear: () {
                               controller.changeExpirationDate(null);
                               controller.creationUser = controller.creationUser
-                                  ?.copyWith(expiresAt: null);
+                                  ?.copyWith(clearExpiresAt: true);
                               controller.creationUser = controller.creationUser!
-                                  .copyWith(expiresAt: null);
+                                  .copyWith(clearExpiresAt: true);
                               setState(() {});
                             },
                           ),

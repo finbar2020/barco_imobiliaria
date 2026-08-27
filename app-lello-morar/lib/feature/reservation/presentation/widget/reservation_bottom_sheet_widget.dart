@@ -190,22 +190,30 @@ class _ReservationBottomSheetWidgetState
             SizedBox(height: Dimens.spacingSmall),
             Row(
               children: [
-                _buildLegendItem(
-                  theme,
-                  getString(context, "blockade"),
-                  LelloTheme.palleteOf(theme).warning(),
+                // Flexible: cada item da legenda pode encolher (com
+                // reticências) em vez de estourar a largura.
+                Flexible(
+                  child: _buildLegendItem(
+                    theme,
+                    getString(context, "blockade"),
+                    LelloTheme.palleteOf(theme).warning(),
+                  ),
                 ),
                 SizedBox(width: Dimens.spacing),
-                _buildLegendItem(
-                  theme,
-                  getString(context, "space_reserved_a"),
-                  theme.primaryColor,
+                Flexible(
+                  child: _buildLegendItem(
+                    theme,
+                    getString(context, "space_reserved_a"),
+                    theme.primaryColor,
+                  ),
                 ),
                 SizedBox(width: Dimens.spacing),
-                _buildLegendItem(
-                  theme,
-                  getString(context, "space_reservation_vacancy"),
-                  LelloTheme.palleteOf(theme).separator(),
+                Flexible(
+                  child: _buildLegendItem(
+                    theme,
+                    getString(context, "space_reservation_vacancy"),
+                    LelloTheme.palleteOf(theme).separator(),
+                  ),
                 ),
               ],
             ),
@@ -394,6 +402,7 @@ class _ReservationBottomSheetWidgetState
 
   Row _buildLegendItem(ThemeData theme, String title, Color color) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -406,11 +415,13 @@ class _ReservationBottomSheetWidgetState
           ),
         ),
         SizedBox(width: Dimens.spacingXSmall),
-        Text(
-          title,
-          overflow: TextOverflow.ellipsis,
-          style: LelloTextStyles.caption(theme)!.copyWith(
-            color: LelloTheme.palleteOf(theme).greyDarker(),
+        Flexible(
+          child: Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            style: LelloTextStyles.caption(theme)!.copyWith(
+              color: LelloTheme.palleteOf(theme).greyDarker(),
+            ),
           ),
         ),
       ],

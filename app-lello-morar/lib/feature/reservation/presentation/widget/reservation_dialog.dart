@@ -149,57 +149,6 @@ class _ReservationDialogState extends State<ReservationDialog> {
     return file;
   }
 
-  Widget _buildFailureBilet(ThemeData theme) {
-    return Dialog(
-      child: Container(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: SvgPicture.asset("assets/ic_billet_alert.svg"),
-            ),
-            SizedBox(height: Dimens.spacing),
-            Text(
-              "${getString(context, "chat_error_title")}!",
-              textAlign: TextAlign.center,
-              style: LelloTextStyles.subtitle(theme)!
-                  .copyWith(color: HexColor("#61000000")),
-            ),
-            Text(
-              getString(context, "reserve_available_billet"),
-              textAlign: TextAlign.center,
-              style: LelloTextStyles.subtitle(theme)!
-                  .copyWith(color: HexColor("#61000000")),
-            ),
-            SizedBox(height: Dimens.spacingLarge),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      getString(context, "ok"),
-                      style: LelloTextStyles.subBody(theme)!.copyWith(
-                        color: theme.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   String _getMessage(String? keyMessage) {
     if (keyMessage == null) return getString(context, "reserve_limit_date");
 

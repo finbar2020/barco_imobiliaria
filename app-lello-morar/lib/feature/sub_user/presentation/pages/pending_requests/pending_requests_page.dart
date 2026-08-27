@@ -102,7 +102,8 @@ class _PendingRequestsPageState extends State<PendingRequestsPage> {
 
               if (state is SubUserLoadedState) {
                 if (state.pendingRequests.isEmpty) {
-                  Navigator.of(context).pop();
+                  _closeWhenEmpty(context);
+                  return const SizedBox();
                 }
                 return _buildContent(theme, context, state.pendingRequests);
               }
@@ -115,6 +116,18 @@ class _PendingRequestsPageState extends State<PendingRequestsPage> {
     );
   }
 
+  bool _closing = false;
+
+  /// Não se pode navegar durante o build: agenda o pop para depois do frame
+  /// e garante que ele aconteça uma única vez.
+  void _closeWhenEmpty(BuildContext context) {
+    if (_closing) return;
+    _closing = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop();
+    });
+  }
+
   Widget _buildContent(
     ThemeData theme,
     BuildContext context,
@@ -123,6 +136,7 @@ class _PendingRequestsPageState extends State<PendingRequestsPage> {
       SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

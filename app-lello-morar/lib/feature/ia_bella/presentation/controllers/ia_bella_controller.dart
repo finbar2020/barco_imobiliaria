@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -329,13 +330,16 @@ class IaBellaController {
     _addTempMessage(tempMessage);
 
     final messageEntity = _createMessageEntity(userMessage.text);
-    final result = await _sendMessageToUseCase(messageEntity).timeout(
-      Duration(seconds: 60),
-      onTimeout: () {
-        _handleMessageTimeout(context);
-        return Future.error("Timeout");
-      },
-    );
+    final Try<IaBellaDataEntity> result;
+    try {
+      result = await _sendMessageToUseCase(messageEntity)
+          .timeout(Duration(seconds: 60));
+    } on TimeoutException {
+      // O dialogo de timeout ja orienta o usuario; completa sem erro
+      // assincrono solto (nenhum chamador trata o Future).
+      _handleMessageTimeout(context);
+      return;
+    }
     result.fold(
       (error) => _handleError(error, tempMessage),
       (response) => _handleResponse(response, tempMessage),

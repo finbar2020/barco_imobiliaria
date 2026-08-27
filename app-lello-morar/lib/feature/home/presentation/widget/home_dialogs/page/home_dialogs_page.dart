@@ -16,8 +16,9 @@ class _HomeDialogsWidgetState extends State<HomeDialogsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocListener<HomeDialogBloc, HomeDialogState>(
       bloc: dialogBloc,
+      child: const SizedBox.shrink(),
       listener: (context, state) {
         if (state is NeedsUpdateState) {
           AppUpdateConfig.showDialogUpDate(

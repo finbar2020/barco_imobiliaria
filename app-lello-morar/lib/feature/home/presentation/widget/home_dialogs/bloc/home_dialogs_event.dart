@@ -1,3 +1,4 @@
+import 'package:essentials/enum/app_origin_enum.dart';
 import 'package:essentials/essentials.dart';
 import 'package:morar/feature/home/domain/entity/unity.dart';
 import 'package:morar/feature/me/domain/entity/condominium.dart';
@@ -14,7 +15,16 @@ class InitialEvent extends HomeDialogEvent {
 }
 
 class NeedsUpdateEvent extends HomeDialogEvent {
-  const NeedsUpdateEvent();
+  final NeedsUpdate needsUpdate;
+  final AppOriginEnum appOriginEnum;
+
+  const NeedsUpdateEvent({
+    this.needsUpdate = NeedsUpdate.minor,
+    this.appOriginEnum = AppOriginEnum.owner,
+  });
+
+  @override
+  List<Object?> get props => [needsUpdate, appOriginEnum];
 }
 
 class ComfortEvent extends HomeDialogEvent {

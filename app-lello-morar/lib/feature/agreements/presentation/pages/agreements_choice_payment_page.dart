@@ -137,23 +137,29 @@ class _AgreementsChoicePaymentPageState
                             SizedBox(
                               width: Dimens.spacingSmall,
                             ),
-                            Text(
-                              getString(context, "agreements_understand"),
-                              overflow: TextOverflow.ellipsis,
-                              style: LelloTextStyles.subBody(theme)!.copyWith(
-                                color: LelloTheme.palleteOf(theme).textAccent(),
-                                decoration: TextDecoration.underline,
-                                decorationColor: LelloTheme.palleteOf(theme)
-                                    .textAccent(),
+                            Flexible(
+                              child: Text(
+                                getString(context, "agreements_understand"),
+                                overflow: TextOverflow.ellipsis,
+                                style:
+                                    LelloTextStyles.subBody(theme)!.copyWith(
+                                  color:
+                                      LelloTheme.palleteOf(theme).textAccent(),
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: LelloTheme.palleteOf(theme)
+                                      .textAccent(),
+                                ),
                               ),
                             ),
-                            Text(
-                              getString(
-                                  context, "agreements_understand_options"),
-                              overflow: TextOverflow.ellipsis,
-                              style: LelloTextStyles.subBody(theme)!.copyWith(
-                                  color:
-                                      LelloTheme.palleteOf(theme).textOpaque()),
+                            Flexible(
+                              child: Text(
+                                getString(
+                                    context, "agreements_understand_options"),
+                                overflow: TextOverflow.ellipsis,
+                                style: LelloTextStyles.subBody(theme)!.copyWith(
+                                    color: LelloTheme.palleteOf(theme)
+                                        .textOpaque()),
+                              ),
                             ),
                           ],
                         ),

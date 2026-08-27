@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:essentials/enum/app_origin_enum.dart';
 import 'package:essentials/essentials.dart';
 import 'package:flutter/material.dart';
 import 'package:morar/feature/home/domain/entity/unity.dart';
@@ -21,6 +22,8 @@ class HomeDialogBloc extends Bloc<HomeDialogEvent, HomeDialogState> {
       : super(const HomeDialogInitialState()) {
     on<InitialEvent>(_checkJobs);
     on<AlertSwitchRoleEvent>(_checkSwitchRoles);
+    on<NeedsUpdateEvent>(_showUpdate);
+    on<ComfortEvent>(_showComfort);
     initialState();
   }
 
@@ -28,8 +31,12 @@ class HomeDialogBloc extends Bloc<HomeDialogEvent, HomeDialogState> {
     add(const InitialEvent());
   }
 
-  void showUpdate() {
-    add(const NeedsUpdateEvent());
+  void showUpdate({
+    NeedsUpdate needsUpdate = NeedsUpdate.minor,
+    AppOriginEnum appOriginEnum = AppOriginEnum.owner,
+  }) {
+    add(NeedsUpdateEvent(
+        needsUpdate: needsUpdate, appOriginEnum: appOriginEnum));
   }
 
   void showConfort() {
@@ -114,6 +121,21 @@ class HomeDialogBloc extends Bloc<HomeDialogEvent, HomeDialogState> {
       switchUnity = null;
       return;
     }
+  }
+
+  Future<void> _showUpdate(
+    NeedsUpdateEvent event,
+    Emitter<HomeDialogState> emit,
+  ) async {
+    emit(NeedsUpdateState(
+        appOriginEnum: event.appOriginEnum, needsUpdate: event.needsUpdate));
+  }
+
+  Future<void> _showComfort(
+    ComfortEvent event,
+    Emitter<HomeDialogState> emit,
+  ) async {
+    emit(const ComfortState());
   }
 
   Future<void> _checkSwitchRoles(

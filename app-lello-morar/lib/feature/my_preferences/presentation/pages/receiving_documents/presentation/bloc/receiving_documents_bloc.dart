@@ -86,7 +86,7 @@ class ReceivingDocumentsBloc
     add(const ReceivingDocumentsLoadingEvent());
     final unitId = sessionBloc.state.session?.unity?.notificationContext;
     if (unitId != null) {
-      final result = await _getUnitPersonalDataUseCase(int.tryParse(unitId)!);
+      final result = await _getUnitPersonalDataUseCase(int.tryParse(unitId) ?? 0);
       result.fold(
         (error) {
           add(

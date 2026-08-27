@@ -196,12 +196,12 @@ class _DashboardItemState extends State<DashboardItem> {
                   title: "manager_inactive_message");
             });
       } else {
-        stopAnalyticsTimer;
+        stopAnalyticsTimer();
         Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer());
       }
     } else if (text == "comfort") {
       if (sessionBloc.checkRback(ApplicationRbac.morarComodidades)) {
-        stopAnalyticsTimer;
+        stopAnalyticsTimer();
         if (widget.onComfortTap != null) {
           widget.onComfortTap!();
           startAnalyticsTimer();
@@ -223,7 +223,7 @@ class _DashboardItemState extends State<DashboardItem> {
                   "",
               accessRouteOrigin: ComfortPageOriginEnum.dashboard,
             ),
-          ).then((_) => startAnalyticsTimer);
+          ).then((_) => startAnalyticsTimer());
         }
       }
     } else if (text == "authorize_entry") {
@@ -238,10 +238,10 @@ class _DashboardItemState extends State<DashboardItem> {
                   title: "manager_no_concierge");
             });
       } else {
-        stopAnalyticsTimer;
+        stopAnalyticsTimer();
         Navigator.pushNamed(context, route,
                 arguments: AcessControlPageArgs(isGeneric: widget.isGeneric))
-            .then((_) => startAnalyticsTimer);
+            .then((_) => startAnalyticsTimer());
       }
     } else if (text == "mailing_title") {
       if (!widget.sessionBloc
@@ -255,8 +255,8 @@ class _DashboardItemState extends State<DashboardItem> {
                   title: "manager_no_concierge");
             });
       } else {
-        stopAnalyticsTimer;
-        Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer);
+        stopAnalyticsTimer();
+        Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer());
       }
     } else if (text == "agreements") {
       if (!widget.sessionBloc.checkRback(ApplicationRbac.morarAcordos)) {
@@ -285,8 +285,8 @@ class _DashboardItemState extends State<DashboardItem> {
         referenceValue:
             sessionBloc.state.session!.condominium?.reference?.toString() ?? "",
       );
-      stopAnalyticsTimer;
-      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer);
+      stopAnalyticsTimer();
+      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer());
     } else if (text == 'me_vehicles_title') {
       OwnerAnalyticsLogEvents.logEvent(
         event: AnalyticsEventsOwner.veiculoAcessar(),
@@ -296,8 +296,8 @@ class _DashboardItemState extends State<DashboardItem> {
         referenceValue:
             sessionBloc.state.session!.condominium?.reference?.toString() ?? "",
       );
-      stopAnalyticsTimer;
-      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer);
+      stopAnalyticsTimer();
+      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer());
     } else if (text == 'documents') {
       OwnerAnalyticsLogEvents.logEvent(
         event: AnalyticsEventsOwner.documentosAcessar(),
@@ -306,8 +306,8 @@ class _DashboardItemState extends State<DashboardItem> {
         referenceValue:
             sessionBloc.state.session!.condominium?.reference?.toString() ?? "",
       );
-      stopAnalyticsTimer;
-      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer);
+      stopAnalyticsTimer();
+      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer());
     } else if (text == 'horta_title') {
       if (widget.horta != null) {
         showDialog(
@@ -330,8 +330,8 @@ class _DashboardItemState extends State<DashboardItem> {
         ApplicationRoute.receivingDocuments,
       );
     } else {
-      stopAnalyticsTimer;
-      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer);
+      stopAnalyticsTimer();
+      Navigator.pushNamed(context, route).then((_) => startAnalyticsTimer());
     }
   }
 

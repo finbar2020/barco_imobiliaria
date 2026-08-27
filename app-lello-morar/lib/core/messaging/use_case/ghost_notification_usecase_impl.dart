@@ -105,11 +105,9 @@ class GhostNotificationUsecaseImpl extends GhostNotificationUsecase {
     try {
       final getUser =
           await getMe.call(DataOrigin.remote).timeout(Duration(seconds: 20));
-      getUser.fold((l) {
-        return redirectForSplash(params, model);
-      }, (r) {
+      getUser.fold((l) => null, (r) {
         sessionBloc.updateMe(r);
-        return me = r;
+        me = r;
       });
       if (me != null) {
         var successCustomData = await setCustomData(params, getMe: me);
@@ -118,7 +116,7 @@ class GhostNotificationUsecaseImpl extends GhostNotificationUsecase {
         var switchR = await switchRoles.call(SwitchParams(
             role: sessionBloc.state.session!.unity!.id!,
             name: sessionBloc.state.session!.tokenName!));
-        switchR.fold((l) {
+        return await switchR.fold<Future<Try<String?>>>((l) {
           print("updateUserGhost: Falha no Switch roles remoto");
           return redirectForSplash(params, successModel);
         }, (token) {
@@ -138,7 +136,6 @@ class GhostNotificationUsecaseImpl extends GhostNotificationUsecase {
       print("updateUserGhost: catch => Erro ao buscar o Me");
       return redirectForSplash(params, model);
     }
-    return Success("");
   }
 
   Future<GhostNotificationModel> setData(
@@ -172,7 +169,8 @@ class GhostNotificationUsecaseImpl extends GhostNotificationUsecase {
     return model;
   }
 
-  setCustomData(GhostNotificationParams params, {Me? getMe}) async {
+  Future<Map<String, dynamic>> setCustomData(GhostNotificationParams params,
+      {Me? getMe}) async {
     var packageInfo = await PackageInfo.fromPlatform();
     var appVersion = packageInfo.version;
     Me? me = sessionBloc.state.session?.me;
@@ -204,7 +202,7 @@ class GhostNotificationUsecaseImpl extends GhostNotificationUsecase {
     }
   }
 
-  redirectForSplash(
+  Future<Try<String?>> redirectForSplash(
       GhostNotificationParams params, GhostNotificationModel model) async {
     model.type = params.type;
     if (navigatorKey.currentState != null) {

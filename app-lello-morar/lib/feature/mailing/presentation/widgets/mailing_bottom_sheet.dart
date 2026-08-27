@@ -63,7 +63,8 @@ class _MailingBottomSheetState extends State<MailingBottomSheet> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      Expanded(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -76,8 +77,11 @@ class _MailingBottomSheetState extends State<MailingBottomSheet> {
                             style: LelloTextStyles.body(theme),
                           ),
                         ],
-                      ),
-                      Row(
+                      )),
+                      SizedBox(width: Dimens.spacingSmall),
+                      Flexible(
+                          child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
                             height: 10.0,
@@ -88,14 +92,17 @@ class _MailingBottomSheetState extends State<MailingBottomSheet> {
                             ),
                           ),
                           SizedBox(width: Dimens.spacingSmall),
-                          Text(
-                            "${getString(context, widget.mailing.statusMailing)}",
-                            style: LelloTextStyles.subBody(theme)!.copyWith(
-                              color: color(widget.mailing.status ?? "", theme),
+                          Flexible(
+                            child: Text(
+                              "${getString(context, widget.mailing.statusMailing)}",
+                              style: LelloTextStyles.subBody(theme)!.copyWith(
+                                color:
+                                    color(widget.mailing.status ?? "", theme),
+                              ),
                             ),
                           ),
                         ],
-                      ),
+                      )),
                     ],
                   ),
                   SizedBox(height: Dimens.spacing),

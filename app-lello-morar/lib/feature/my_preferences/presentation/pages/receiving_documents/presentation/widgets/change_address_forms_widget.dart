@@ -315,9 +315,9 @@ class _ChangeAddressFormsWidgetState extends State<ChangeAddressFormsWidget> {
                               ),
                               onChanged: isFieldsEnabled
                                   ? (value) async {
-                                      _checkIfHasChanges();
                                       stateController.text =
                                           value ?? stateController.text;
+                                      _checkIfHasChanges();
                                       await widget.bloc.getCities(
                                         uf: stateController.text,
                                       );
@@ -442,9 +442,10 @@ class _ChangeAddressFormsWidgetState extends State<ChangeAddressFormsWidget> {
           removeDiacritics(info.localidade?.toUpperCase() ?? ""),
     );
 
-    setState(() {
-      zipCodeError = null;
-    });
+    zipCodeError = null;
+    // Recalcula depois do preenchimento automático (o onChanged do CEP
+    // avaliou antes dos campos serem preenchidos).
+    _checkIfHasChanges();
   }
 
   void _fillFields(AddressDataEntity address) {

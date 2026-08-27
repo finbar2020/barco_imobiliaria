@@ -50,8 +50,10 @@ class _FeedbackRowState extends State<FeedbackRow> {
   }
 
   void _handleSendFeedback() async {
-    bool success = await widget.onSendFeedback();
-    if (success) {
+    // `onSendFeedback` devolve `null` quando o dialogo e fechado sem enviar
+    // ("Voltar"); trata como cancelamento.
+    final success = await widget.onSendFeedback();
+    if (success == true) {
       setState(() {
         negativeFeedbackSent = true;
       });

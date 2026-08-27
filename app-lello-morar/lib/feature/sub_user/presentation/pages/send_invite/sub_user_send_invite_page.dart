@@ -126,7 +126,9 @@ class _SubUserSendInvitePageState extends State<SubUserSendInvitePage> {
                         Text(
                           getString(
                             context,
-                            args.subUser.cpf!.length > 14 ? "cnpj" : "email",
+                            (args.subUser.cpf?.length ?? 0) > 14
+                                ? "cnpj"
+                                : "email",
                           ),
                           style: LelloTextStyles.bodyBold(theme),
                         ),

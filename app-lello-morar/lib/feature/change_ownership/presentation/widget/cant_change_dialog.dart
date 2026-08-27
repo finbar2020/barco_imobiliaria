@@ -74,19 +74,23 @@ class CantChangeDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      getString(context, "later").toUpperCase(),
-                      style: LelloTextStyles.subBody(theme)!.copyWith(
-                        color: LelloTheme.palleteOf(theme).text(),
+                  Flexible(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        getString(context, "later").toUpperCase(),
+                        style: LelloTextStyles.subBody(theme)!.copyWith(
+                          color: LelloTheme.palleteOf(theme).text(),
+                        ),
                       ),
                     ),
                   ),
-                  InkWell(
+                  SizedBox(width: Dimens.spacingSmall),
+                  Flexible(
+                      child: InkWell(
                     onTap: () async {
                       String message =
                           getString(context, "whats_app_default_message");
@@ -96,22 +100,24 @@ class CantChangeDialog extends StatelessWidget {
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
-                    child: Row(children: [
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
                       SvgPicture.asset(
                         "assets/ic_whats_red.svg",
                         color: theme.primaryColor,
                       ),
                       SizedBox(width: Dimens.spacingSmall),
-                      Text(
-                        getString(context,
-                                "registration_lello_warning_no_data_btn")
-                            .toUpperCase(),
-                        style: LelloTextStyles.subBody(theme)!.copyWith(
-                          color: theme.primaryColor,
+                      Flexible(
+                        child: Text(
+                          getString(context,
+                                  "registration_lello_warning_no_data_btn")
+                              .toUpperCase(),
+                          style: LelloTextStyles.subBody(theme)!.copyWith(
+                            color: theme.primaryColor,
+                          ),
                         ),
                       ),
                     ]),
-                  ),
+                  )),
                 ],
               ),
             ],

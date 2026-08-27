@@ -66,7 +66,8 @@ class SubUserRemoteDataSourceImpl extends SubUserRemoteDataSource {
   Future<bool> updateAccessRequestStatus(
       UpdateAccessRequestStatusModel body) async {
     final response = await api.updateAccessRequestStatus(body);
-    return response.isSuccessful;
+    if (response.isSuccessful) return true;
+    throw response.error ?? "";
   }
 
   @override

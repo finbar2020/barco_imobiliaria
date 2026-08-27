@@ -199,7 +199,12 @@ class _ChangeAddressFormState extends State<ChangeAddressForm> {
                       SizedBox(height: Dimens.spacingSmall),
                       DropdownButtonFormField<String>(
                         isExpanded: true,
-                        value: controller.addressStateController.text,
+                        // Sem UF (ou UF fora da lista) o valor precisa ser
+                        // nulo: '' não está entre os itens do dropdown.
+                        value: controller.states
+                                .contains(controller.addressStateController.text)
+                            ? controller.addressStateController.text
+                            : null,
                         items: List.from(
                           controller.states
                               .map(

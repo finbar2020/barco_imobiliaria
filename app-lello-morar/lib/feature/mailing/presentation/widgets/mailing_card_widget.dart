@@ -22,7 +22,8 @@ class MailingCardWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              Expanded(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -36,8 +37,11 @@ class MailingCardWidget extends StatelessWidget {
                     style: LelloTextStyles.subtitleBold(theme),
                   ),
                 ],
-              ),
-              Row(
+              )),
+              SizedBox(width: Dimens.spacingSmall),
+              Flexible(
+                  child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     height: 10.0,
@@ -48,15 +52,17 @@ class MailingCardWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: Dimens.spacingSmall),
-                  Text(
-                    "${getString(context, model.statusMailing)}",
-                    overflow: TextOverflow.ellipsis,
-                    style: LelloTextStyles.subBody(theme)!.copyWith(
-                      color: color(model.status ?? "", theme),
+                  Flexible(
+                    child: Text(
+                      "${getString(context, model.statusMailing)}",
+                      overflow: TextOverflow.ellipsis,
+                      style: LelloTextStyles.subBody(theme)!.copyWith(
+                        color: color(model.status ?? "", theme),
+                      ),
                     ),
                   ),
                 ],
-              ),
+              )),
             ],
           ),
           SizedBox(height: Dimens.spacingSmall),

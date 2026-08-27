@@ -42,6 +42,8 @@ class UploaderImpl extends Uploader {
       final headers = <String, String>{};
       if (accessToken != null) {
         headers["Authorization"] = "Bearer ${accessToken.accessToken}";
+      } else {
+        throw Exception("missing_access_token");
       }
 
       dio.Dio().post(
@@ -51,10 +53,7 @@ class UploaderImpl extends Uploader {
               contentType:
                   MediaType.parse(lookupMimeType(file.path) ?? "image/jpeg")),
         }),
-        options: dio.Options(headers: {
-          "Authorization":
-              "Bearer ${accessToken!.accessToken}", // set content-length
-        }),
+        options: dio.Options(headers: headers),
         onReceiveProgress: (count, total) {
           progress?.add((total / count) * 100);
         },

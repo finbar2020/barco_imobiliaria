@@ -164,7 +164,11 @@ class _SubUserEditPageState extends State<SubUserEditPage> {
             : [],
       ),
       body: MultiBlocListener(
-        listeners: [_meListener(context), _editListener(context)],
+        listeners: [
+          _meListener(context),
+          _editListener(context),
+          _serviceListener(context),
+        ],
         child: BlocConsumer(
           bloc: _controller.editBloc,
           listener: (_, __) {},
@@ -320,14 +324,11 @@ class _SubUserEditPageState extends State<SubUserEditPage> {
     if (_formKey.currentState?.validate() == false) return;
     if (_isLoading) return;
 
+    // A edição do usuário principal acontece na página de perfil (ramo
+    // `editMainUser` acima, e `editMainUser == userSelected.mainUser`), então
+    // o antigo fluxo inline `selected.mainUser && activeEditMainUser` era
+    // inalcançável e foi removido.
     final selected = _controller.userSelected!;
-    if (selected.mainUser && _controller.activeEditMainUser) {
-      if (_formKey.currentState!.validate()) {
-        setState(() => _controller.activeEditMainUser = true);
-        await _controller.updateMainUser();
-      }
-      return;
-    }
     if (selected.role != null && selected.role != 'morar.proprietario') {
       setState(() => _isLoading = true);
       await _controller.subUserUpdate(isBlock: false, isUseApp: false);
@@ -390,6 +391,25 @@ class _SubUserEditPageState extends State<SubUserEditPage> {
     );
   }
 
+  /// `checkService` emite CheckServiceOnline/OfflineState no SubUsersBloc
+  /// (não no editBloc), então a navegação para a captura facial escuta o
+  /// bloc certo.
+  BlocListener _serviceListener(BuildContext context) {
+    return BlocListener(
+      bloc: _controller.bloc,
+      listener: (context, state) {
+        if (state is CheckServiceOnlineState) {
+          Navigator.pushReplacementNamed(
+              context, ApplicationRoute.subUserServiceOn,
+              arguments:
+                  SubUserServiceOnPageArgs(subUser: _controller.userSelected!));
+        } else if (state is CheckServiceOfflineState) {
+          Navigator.pushNamed(context, ApplicationRoute.subUserServiceOff);
+        }
+      },
+    );
+  }
+
   BlocListener _editListener(BuildContext context) {
     return BlocListener(
       bloc: _controller.editBloc,
@@ -411,13 +431,6 @@ class _SubUserEditPageState extends State<SubUserEditPage> {
                   builder: (_) => SubUserRemoveSuccessPage(
                       name: _controller.userSelected?.name ?? '')));
           _controller.getSubUsers();
-        } else if (state is CheckServiceOnlineState) {
-          Navigator.pushReplacementNamed(
-              context, ApplicationRoute.subUserServiceOn,
-              arguments:
-                  SubUserServiceOnPageArgs(subUser: _controller.userSelected!));
-        } else if (state is CheckServiceOfflineState) {
-          Navigator.pushNamed(context, ApplicationRoute.subUserServiceOff);
         } else if (state is SubUserEditSendInviteSuccessState) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (_) => SendInviteSuccessPage()));
@@ -559,68 +572,67 @@ class AppAccessWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Builder(
-                    builder: (context) {
-                      if (!(model.useApp ?? false)) {
-                        return Row(
-                          children: [
-                            SvgPicture.asset('assets/bi_phone_blocked.svg'),
-                            SizedBox(width: Dimens.spacingSmall),
-                            Text(
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (!(model.useApp ?? false)) {
+                      return Row(
+                        children: [
+                          SvgPicture.asset('assets/bi_phone_blocked.svg'),
+                          SizedBox(width: Dimens.spacingSmall),
+                          Flexible(
+                            child: Text(
                               getString(context, "resident_blocked_access_app"),
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: LightPallete().grey(),
                               ),
                             ),
-                          ],
-                        );
-                      }
-                      if (model.useApp! && model.registered!) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset('assets/bi_phone.svg'),
-                                SizedBox(width: Dimens.spacingSmall),
-                                Text(
-                                  getString(
-                                      context, "resident_installed_access_app"),
-                                  style: TextStyle(
-                                    color: LightPallete().success(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      }
+                          ),
+                        ],
+                      );
+                    }
+                    if (model.useApp! && model.registered!) {
                       return Row(
                         children: [
-                          SvgPicture.asset(
-                            'assets/bi_phone.svg',
-                            colorFilter: ColorFilter.mode(
-                              LelloTheme.palleteOf(theme).textAccent(),
-                              painting.BlendMode.srcIn,
-                            ),
-                          ),
+                          SvgPicture.asset('assets/bi_phone.svg'),
                           SizedBox(width: Dimens.spacingSmall),
-                          Text(
-                            getString(context, "resident_liberated_access_app"),
-                            style: TextStyle(
-                              color: LightPallete().textAccent(),
+                          Flexible(
+                            child: Text(
+                              getString(
+                                  context, "resident_installed_access_app"),
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: LightPallete().success(),
+                              ),
                             ),
                           ),
                         ],
                       );
-                    },
-                  ),
-                ],
+                    }
+                    return Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/bi_phone.svg',
+                          colorFilter: ColorFilter.mode(
+                            LelloTheme.palleteOf(theme).textAccent(),
+                            painting.BlendMode.srcIn,
+                          ),
+                        ),
+                        SizedBox(width: Dimens.spacingSmall),
+                        Flexible(
+                          child: Text(
+                            getString(context, "resident_liberated_access_app"),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: LightPallete().textAccent(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
               if (!model.mainUser)
                 SecondaryButton(
@@ -763,26 +775,24 @@ class UseFacialBiometricsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Builder(
+                  Expanded(
+                    child: Builder(
                     builder: (context) {
                       return controller.userSelected!.useFacialBiometric!
                           ? Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                        'assets/biometric_registered_icon.svg'),
-                                    SizedBox(width: Dimens.spacingSmall),
-                                    Text(
-                                      getString(context,
-                                          "residents_register_sub_user_biometric_registered"),
-                                      style: TextStyle(
-                                        color: LightPallete().success(),
-                                      ),
+                                SvgPicture.asset(
+                                    'assets/biometric_registered_icon.svg'),
+                                SizedBox(width: Dimens.spacingSmall),
+                                Flexible(
+                                  child: Text(
+                                    getString(context,
+                                        "residents_register_sub_user_biometric_registered"),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: LightPallete().success(),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ],
                             )
@@ -933,36 +943,42 @@ class UseFacialBiometricsWidget extends StatelessWidget {
                                         ? 'assets/biometric_registered_icon.svg'
                                         : 'assets/biometric_not_registered_icon.svg'),
                                     SizedBox(width: Dimens.spacingSmall),
-                                    Text(
-                                      controller.userSelected!.mainUser
-                                          ? controller.userSelected!
-                                                  .useFacialBiometric!
-                                              ? getString(context,
-                                                  "residents_register_sub_user_biometric_registered")
-                                              : getString(context,
-                                                  "residents_register_sub_user_biometric_not_registered")
-                                          : getString(context,
-                                              "residents_register_sub_user_send_invide"),
-                                      style: (controller
-                                                  .userSelected!.mainUser &&
-                                              controller.userSelected!
-                                                  .useFacialBiometric!)
-                                          ? TextStyle(
-                                              color: LightPallete().success(),
-                                            )
-                                          : TextStyle(
-                                              color: LightPallete().warning(),
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              decorationColor:
-                                                  LightPallete().warning(),
-                                            ),
+                                    Flexible(
+                                      child: Text(
+                                        controller.userSelected!.mainUser
+                                            ? controller.userSelected!
+                                                    .useFacialBiometric!
+                                                ? getString(context,
+                                                    "residents_register_sub_user_biometric_registered")
+                                                : getString(context,
+                                                    "residents_register_sub_user_biometric_not_registered")
+                                            : getString(context,
+                                                "residents_register_sub_user_send_invide"),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: (controller
+                                                    .userSelected!.mainUser &&
+                                                controller.userSelected!
+                                                    .useFacialBiometric!)
+                                            ? TextStyle(
+                                                color:
+                                                    LightPallete().success(),
+                                              )
+                                            : TextStyle(
+                                                color:
+                                                    LightPallete().warning(),
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor:
+                                                    LightPallete().warning(),
+                                              ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                             );
                     },
+                  ),
                   ),
                 ],
               ),

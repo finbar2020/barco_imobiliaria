@@ -34,10 +34,18 @@ class ChangeAddressFailurePage extends StatelessWidget {
                   SizedBox(height: Dimens.spacingXLarge),
                   PrimaryButton(
                       onPressed: () {
-                        controller.updateAddress(
-                          condominiumId: controller.session.condominium!.id!,
-                          unit: controller.updatedUnit,
-                        );
+                        final condominiumId =
+                            controller.session.condominium!.id!;
+                        if (controller.unit == null) {
+                          // A falha foi no carregamento: recarrega a unidade.
+                          controller.getEasyFixUnit(
+                              condominiumId: condominiumId);
+                        } else {
+                          controller.updateAddress(
+                            condominiumId: condominiumId,
+                            unit: controller.updatedUnit,
+                          );
+                        }
                         Navigator.pop(context);
                       },
                       child: Text(

@@ -26,7 +26,6 @@ class _IABellaPageState extends State<IABellaPage> {
   ScrollController scrollController = ScrollController();
 
   BellaMessageEntity? _pendingMessage;
-  bool _messageSent = false;
   bool _sessionReady = false;
   bool _handledInitialMessage = false;
   bool _showChips = true;
@@ -135,15 +134,6 @@ class _IABellaPageState extends State<IABellaPage> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollToBottom();
         });
-        if (!_messageSent &&
-            _pendingMessage != null &&
-            state is IaBellaSessionStartedState) {
-          _messageSent = true;
-          _showChips = false;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _controller.sendMessage(context, _pendingMessage!);
-          });
-        }
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, result) async {
@@ -171,7 +161,6 @@ class _IABellaPageState extends State<IABellaPage> {
                         _controller.selectedRequestResolved!,
                         () {
                           setState(() {
-                            _messageSent = false;
                             _handledInitialMessage = true;
                             _sessionReady = false;
                             _pendingMessage = null;
@@ -226,7 +215,6 @@ class _IABellaPageState extends State<IABellaPage> {
                           _controller.selectedRequestResolved!,
                           () {
                             setState(() {
-                              _messageSent = false;
                               _handledInitialMessage = true;
                               _sessionReady = false;
                               _pendingMessage = null;

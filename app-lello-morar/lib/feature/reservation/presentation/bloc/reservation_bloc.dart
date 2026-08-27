@@ -546,7 +546,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
 
   String wordAdjust(String word) {
     if (word == 'Mudanca') {
-      return "MudanÃ§a";
+      return "Mudança";
     }
     String text = word.toLowerCase();
     return "${text[0].toUpperCase()}${text.substring(1).toLowerCase()}";

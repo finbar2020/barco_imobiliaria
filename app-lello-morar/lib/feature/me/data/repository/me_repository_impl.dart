@@ -33,7 +33,7 @@ class MeRepositoryImpl extends MeRepository {
   Future<Try> updatePassword(
       String cpf, String originPassword, String password) async {
     try {
-      final model = MePasswordModel.init(cpf, password, originPassword);
+      final model = MePasswordModel.init(cpf, originPassword, password);
       await remoteDataSource.updatePassword(model);
       return Success(null);
     } catch (e, stacktrace) {

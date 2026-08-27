@@ -78,6 +78,7 @@ class _AgreementsPageState extends State<AgreementsPage>
   @override
   void dispose() {
     bloc.isFirstMadeCall = false;
+    controller.dispose();
     super.dispose();
   }
 
@@ -337,7 +338,7 @@ class _AgreementsPageState extends State<AgreementsPage>
     } else if (MAX_CARDS > 0 && index + 1 > MAX_CARDS) {
       return true;
     } else {
-      if (state.checkList[index] != 0) {
+      if (!state.checkList[index]) {
         if (state.checkList[index - 1]) {
           return false;
         } else {
@@ -355,7 +356,7 @@ class _AgreementsPageState extends State<AgreementsPage>
     } else if (MAX_CARDS > 0 && index + 1 > MAX_CARDS) {
       return 0.3;
     } else {
-      if (state.checkList[index] != 0) {
+      if (!state.checkList[index]) {
         if (state.checkList[index - 1]) {
           return 1.0;
         } else {

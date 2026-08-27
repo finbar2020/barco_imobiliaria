@@ -116,25 +116,32 @@ class SubUserOwnerCardWidget extends StatelessWidget {
                         child: model.useFacialBiometric!
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/biometric_registered_icon.svg'),
-                                      SizedBox(width: Dimens.spacingSmall),
-                                      Flexible(
-                                        child: Text(
-                                          getString(context,
-                                              "residents_register_sub_user_biometric_registered"),
-                                          style: TextStyle(
-                                            color: LightPallete().success(),
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/biometric_registered_icon.svg'),
+                                        SizedBox(width: Dimens.spacingSmall),
+                                        Flexible(
+                                          child: Text(
+                                            getString(context,
+                                                "residents_register_sub_user_biometric_registered"),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: LightPallete().success(),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                  StreamBuilder<List<CircuitItemRule>>(
+                                  Flexible(
+                                    child: StreamBuilder<List<CircuitItemRule>>(
                                       stream: circuitBreakController
                                           .ruleStream.stream,
                                       builder: (context, snapshot) {
@@ -160,22 +167,28 @@ class SubUserOwnerCardWidget extends StatelessWidget {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text(
-                                                      getString(context,
-                                                          "residents_send_new_photo"),
-                                                      style: TextStyle(
-                                                        color: LightPallete()
-                                                            .warning(),
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
+                                                    Flexible(
+                                                      child: Text(
+                                                        getString(context,
+                                                            "residents_send_new_photo"),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          color: LightPallete()
+                                                              .warning(),
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
                                             ));
-                                      })
+                                      }),
+                                  ),
                                 ],
                               )
                             : IgnorePointer(

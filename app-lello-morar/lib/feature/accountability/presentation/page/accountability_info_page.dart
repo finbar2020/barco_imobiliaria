@@ -46,7 +46,7 @@ class _AccountabilityInfoPageState extends State<AccountabilityInfoPage> {
               context,
               ApplicationRoute.accountability,
             );
-            return true;
+            return false;
           },
           child: Scaffold(
             appBar: CustomAppBar(title: "accountability_title"),

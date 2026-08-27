@@ -29,6 +29,22 @@ class ReportContents {
     this.public,
   });
 
+  /// Cópia rasa. Os estados do bloc comparam `ReportContents` por referência,
+  /// então trocar o anexo precisa de uma instância nova para gerar um estado
+  /// diferente do anterior (senão o bloc descarta a emissão).
+  ReportContents copy() => ReportContents(
+        id: id,
+        numReport: numReport,
+        typeUser: typeUser,
+        content: content,
+        attachment: attachment,
+        attachmentType: attachmentType,
+        dateContent: dateContent,
+        public: public,
+      )
+        ..attachmentLink = attachmentLink
+        ..attachmentFile = attachmentFile;
+
   @override
   String toString() =>
       'Report(id: $id, numReport: $numReport, typeUser: $typeUser, content: $content, attachment: $attachment, attachmentType: $attachmentType)';

@@ -61,10 +61,12 @@ class AccountabilityInfoDetailsEntryItemWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          child: Text(
-            title,
-            style: LelloTextStyles.bodyBold(theme),
+        Flexible(
+          child: Container(
+            child: Text(
+              title,
+              style: LelloTextStyles.bodyBold(theme),
+            ),
           ),
         ),
         SizedBox(width: Dimens.spacingXSmall),

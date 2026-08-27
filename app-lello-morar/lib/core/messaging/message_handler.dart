@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:essentials/enum/app_origin_enum.dart';
@@ -28,6 +29,8 @@ class _MessageHandlerState extends State<MessageHandler> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   String? selectedNotificationPayload;
+  StreamSubscription<RemoteMessage>? _onMessageOpenedAppSubscription;
+  StreamSubscription<RemoteMessage>? _onMessageSubscription;
   final String _key = SharedPreferencesKeys.ownerMessageDataCached;
   SendPushCallback sendPushCallback =
       ApplicationContainer.instance().resolve<SendPushCallback>();
@@ -63,7 +66,8 @@ class _MessageHandlerState extends State<MessageHandler> {
 
     // <- default icon name is @mipmap/ic_launcher
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    _onMessageOpenedAppSubscription =
+        FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print('FCM: onLauch $message');
       final NotificationModel data = NotificationModel.fromJson(message.data);
       var checkNeedsUpdate = await AppUpdateConfig.checkNeedsUpdate(
@@ -85,7 +89,8 @@ class _MessageHandlerState extends State<MessageHandler> {
       }
     });
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    _onMessageSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('FCM: onMessage: $message');
       print('FCM: onMessage: ${message.notification?.body}');
       if (message.notification == null) {
@@ -251,6 +256,13 @@ class _MessageHandlerState extends State<MessageHandler> {
   void saveMessageInCache({required NotificationModel data}) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_key, jsonEncode(data));
+  }
+
+  @override
+  void dispose() {
+    _onMessageOpenedAppSubscription?.cancel();
+    _onMessageSubscription?.cancel();
+    super.dispose();
   }
 
   @override

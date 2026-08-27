@@ -458,7 +458,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
   Future<bool> iSsplashIgnoreBiometricActive() async {
     if (firebaseRemoteConfig == null) {
-      if (await initFirebaseRemoteConfig().timeout(Duration(seconds: 10),
+      if (!await initFirebaseRemoteConfig().timeout(Duration(seconds: 10),
           onTimeout: () {
         return false;
       })) {

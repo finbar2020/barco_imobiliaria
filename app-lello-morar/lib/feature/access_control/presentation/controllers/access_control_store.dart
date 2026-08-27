@@ -163,12 +163,6 @@ class AccessControlStore {
       return false;
     }, (res) {
       gestId = res.idGest!;
-      bloc.add(SaveVisitantLoadedEvent(
-        visitants: visitants,
-        providers: providers,
-        isVisitant: model.prestador == false,
-        useFacial: useFacialBiometric,
-      ));
       return true;
     });
     if (result) {
@@ -189,15 +183,7 @@ class AccessControlStore {
           ),
         );
         return false;
-      }, (res) {
-        bloc.add(SaveVisitantLoadedEvent(
-          visitants: visitants,
-          providers: providers,
-          isVisitant: model.prestador == false,
-          useFacial: useFacialBiometric,
-        ));
-        return true;
-      });
+      }, (res) => true);
       if (resultVisist) {
         OwnerAnalyticsLogEvents.logEvent(
           event: AnalyticsEventsOwner.autorizacaoEntradasAgendamentosSucesso(),
@@ -248,6 +234,15 @@ class AccessControlStore {
           if (resultSendInvite == false) {
             return false;
           }
+        } else {
+          // Único `SaveVisitantLoadedEvent` do fluxo sem biometria: a página
+          // só deve navegar quando o cadastro + agendamento terminaram.
+          bloc.add(SaveVisitantLoadedEvent(
+            visitants: visitants,
+            providers: providers,
+            isVisitant: model.prestador == false,
+            useFacial: useFacialBiometric,
+          ));
         }
       } else {
         await deleteVisitantUsecase.call(DeleteVisitantParam(
@@ -302,15 +297,7 @@ class AccessControlStore {
         );
         return false;
       },
-      (res) {
-        bloc.add(SaveVisitantLoadedEvent(
-            visitants: visitants,
-            providers: providers,
-            useFacial: authorizations.useFacialBiometric ?? false,
-            isVisitant: model.type == "GEST",
-            newVisit: true));
-        return true;
-      },
+      (res) => true,
     );
     if (success) {
       final responseVisit = await addVisit.call(AddVisitParam(
@@ -331,18 +318,7 @@ class AccessControlStore {
           );
           return false;
         },
-        (res) {
-          bloc.add(
-            SaveVisitantLoadedEvent(
-              visitants: visitants,
-              providers: providers,
-              isVisitant: model.type == "GEST",
-              useFacial: authorizations.useFacialBiometric ?? false,
-              newVisit: true,
-            ),
-          );
-          return true;
-        },
+        (res) => true,
       );
 
       if (successResponseVisit) {
@@ -372,7 +348,7 @@ class AccessControlStore {
                       : AccessControlInviteUserType.serviceprovider),
             ),
           );
-          responseSendInvite.fold(
+          return responseSendInvite.fold(
             (error) {
               bloc.add(
                 SaveVisitantFailureEvent(
@@ -400,27 +376,9 @@ class AccessControlStore {
           );
         }
       }
-    } else {
-      bloc.add(
-        SaveVisitantLoadedEvent(
-          visitants: visitants,
-          providers: providers,
-          isVisitant: model.type == "GEST",
-          useFacial: authorizations.useFacialBiometric ?? false,
-          newVisit: true,
-        ),
-      );
-      return false;
     }
-    bloc.add(
-      SaveVisitantFailureEvent(
-        visitants: visitants,
-        providers: providers,
-        visitant: model,
-        model: authorizations,
-        failureInvite: false,
-      ),
-    );
+    // As falhas de edição e de agendamento já emitiram o
+    // `SaveVisitantFailureEvent` no respectivo `fold`.
     return false;
   }
 

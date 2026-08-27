@@ -78,6 +78,7 @@ class SubUser {
     ConciergeCreator? creator,
     bool? flagBoletoEmail,
     String? accessRenewalRequestStatus,
+    bool clearExpiresAt = false,
   }) {
     return SubUser(
       id: id ?? this.id,
@@ -88,7 +89,7 @@ class SubUser {
       role: role ?? this.role,
       accessRenewalRequestDate:
           accessRenewalRequestDate ?? this.accessRenewalRequestDate,
-      expiresAt: expiresAt,
+      expiresAt: clearExpiresAt ? null : (expiresAt ?? this.expiresAt),
       roleDescription: roleDescription ?? this.roleDescription,
       blocked: blocked ?? this.blocked,
       useApp: useApp ?? this.useApp,

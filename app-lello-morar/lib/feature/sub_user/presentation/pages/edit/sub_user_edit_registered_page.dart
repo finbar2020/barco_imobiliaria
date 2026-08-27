@@ -86,14 +86,10 @@ class _SubUserEditRegisteredPage extends State<SubUserEditRegisteredPage> {
       );
     }).toList();
 
-    final selectedRole = controller.roles.firstWhere(
-      (e) => e.description == controller.userSelected?.roleDescription,
-      orElse: () => SubUserRole(
-        role: controller.userSelected?.role ?? '',
-        description: controller.userSelected?.roleDescription ?? '',
-        enabled: true,
-      ),
-    );
+    final selectedRole = controller.roles.cast<SubUserRole?>().firstWhere(
+          (e) => e?.description == controller.userSelected?.roleDescription,
+          orElse: () => null,
+        );
 
     final canEdit = sessionBloc.checkRback(
                 ApplicationRbac.morarMoradoresSubmoradoresDetalhes) &&

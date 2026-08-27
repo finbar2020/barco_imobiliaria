@@ -17,9 +17,11 @@ class PreferencesHomeCardsBloc extends Bloc {
 
   void handlePreferencesLoadedEvent(
       PreferencesHomeCardsLoadedEvent event, Emitter emit) {
+    // Copia as listas: o controller as altera in place e, sem cópia, o
+    // Equatable veria o novo estado igual ao anterior e não o emitiria.
     emit(PreferencesHomeCardsLoadedState(
-      cards: event.cards,
-      favorites: event.favorites,
+      cards: List.of(event.cards),
+      favorites: List.of(event.favorites),
       success: event.success,
       showOnboarding: event.showOnboarding,
     ));

@@ -93,30 +93,39 @@ class _AgreementCardState extends State<AgreementCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.agreement.date,
-              style: LelloTextStyles.subtitle(theme)?.copyWith(
-                color: LelloTheme.palleteOf(theme).textLight(),
+            Flexible(
+              child: Text(
+                widget.agreement.date,
+                overflow: TextOverflow.ellipsis,
+                style: LelloTextStyles.subtitle(theme)?.copyWith(
+                  color: LelloTheme.palleteOf(theme).textLight(),
+                ),
               ),
             ),
             SizedBox(width: Dimens.spacingSmall),
-            Row(
-              children: [
-                Text(
-                  widget.agreement.getStatusInfo(context),
-                  style: LelloTextStyles.caption(theme)?.copyWith(
-                    color: widget.agreement.getStatusColor(theme),
+            Flexible(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      widget.agreement.getStatusInfo(context),
+                      overflow: TextOverflow.ellipsis,
+                      style: LelloTextStyles.caption(theme)?.copyWith(
+                        color: widget.agreement.getStatusColor(theme),
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(width: Dimens.spacingSmall),
-                Container(
-                  height: 10.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                      color: widget.agreement.getStatusColor(theme),
-                      borderRadius: BorderRadius.circular(25.0)),
-                ),
-              ],
+                  SizedBox(width: Dimens.spacingSmall),
+                  Container(
+                    height: 10.0,
+                    width: 10.0,
+                    decoration: BoxDecoration(
+                        color: widget.agreement.getStatusColor(theme),
+                        borderRadius: BorderRadius.circular(25.0)),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -197,7 +206,7 @@ class _AgreementCardState extends State<AgreementCard> {
         "agreement_go_to_pay",
         () {
           UrlLauncherNative.openUrl(widget.agreement.getPaymentLink.toString())
-              .then((value) => _registerAnalyticsEvent(sessionBloc, false));
+              .then((value) => _registerAnalyticsEventPartner(sessionBloc));
         },
         otherColor: true,
       ));
@@ -418,6 +427,16 @@ class _AgreementCardState extends State<AgreementCard> {
         message: getString(context, "request_fine_error_message"),
       )..show(context);
     }
+  }
+
+  void _registerAnalyticsEventPartner(SessionBloc sessionBloc) {
+    OwnerAnalyticsLogEvents.logEvent(
+      userId: sessionBloc.state.session?.me?.id ?? "",
+      event: AnalyticsEventsOwner.acordosAcessarSiteParceiroVamosParcelar(),
+      unitValue: sessionBloc.state.session!.unity?.namedTitle.toString() ?? "",
+      referenceValue:
+          sessionBloc.state.session!.condominium?.reference?.toString() ?? "",
+    );
   }
 
   void _registerAnalyticsEvent(SessionBloc sessionBloc, bool billetView) {

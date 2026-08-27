@@ -113,7 +113,12 @@ class _MePageState extends State<MePage> {
             if ((state is MeEditPhoneChangedState ||
                     state is MeEditEmailChangedState) &&
                 !(state is MeEditRequestingCodeState) &&
-                !(state is MeEditRequestCodeFailedState)) {
+                !(state is MeEditRequestCodeFailedState) &&
+                // `MeEditNoContactAvailableState` herda de
+                // `MeEditPhoneChangedState`, mas o aviso ja esta aberto e
+                // exibe a mensagem de contato vazio; abrir outro empilharia
+                // um segundo bottom sheet.
+                !(state is MeEditNoContactAvailableState)) {
               var isPhoneCheck = state is MeEditPhoneChangedState;
               var isEmailCheck = state is MeEditEmailChangedState;
               Modal.showBottomSheet(

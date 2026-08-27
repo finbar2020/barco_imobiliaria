@@ -57,36 +57,45 @@ class AgreementAccessNotAllowedDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    getString(context, "later").toUpperCase(),
-                    style: LelloTextStyles.subBody(theme)!.copyWith(
-                      color: LelloTheme.palleteOf(theme).text(),
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      getString(context, "later").toUpperCase(),
+                      overflow: TextOverflow.ellipsis,
+                      style: LelloTextStyles.subBody(theme)!.copyWith(
+                        color: LelloTheme.palleteOf(theme).text(),
+                      ),
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () async {
-                    _openWhatsapp(context);
-                  },
-                  child: Row(children: [
-                    SvgPicture.asset(
-                      "assets/ic_whats_red.svg",
-                      color: theme.primaryColor,
-                    ),
-                    SizedBox(width: Dimens.spacingSmall),
-                    Text(
-                      getString(
-                              context, "registration_lello_warning_no_data_btn")
-                          .toUpperCase(),
-                      style: LelloTextStyles.subBody(theme)!.copyWith(
+                SizedBox(width: Dimens.spacingSmall),
+                Flexible(
+                  child: InkWell(
+                    onTap: () async {
+                      _openWhatsapp(context);
+                    },
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      SvgPicture.asset(
+                        "assets/ic_whats_red.svg",
                         color: theme.primaryColor,
                       ),
-                    ),
-                  ]),
+                      SizedBox(width: Dimens.spacingSmall),
+                      Flexible(
+                        child: Text(
+                          getString(context,
+                                  "registration_lello_warning_no_data_btn")
+                              .toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: LelloTextStyles.subBody(theme)!.copyWith(
+                            color: theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
                 ),
               ],
             ),

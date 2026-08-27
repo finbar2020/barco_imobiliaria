@@ -37,6 +37,11 @@ class _InCarePageState extends State<InCarePage> {
     return PopScope(
       canPop: !_bloc.hasUnsavedChanges,
       onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) {
+          // A rota já saiu: nada a fazer (evita um segundo pop).
+          _isDialogShowing = false;
+          return;
+        }
         if (_bloc.hasUnsavedChanges && !_isDialogShowing) {
           _isDialogShowing = true;
           final shouldPop = await showDialog(
@@ -77,13 +82,10 @@ class _InCarePageState extends State<InCarePage> {
               ),
             ),
           );
-          if (shouldPop == true) {
+          _isDialogShowing = false;
+          if (shouldPop == true && context.mounted) {
             Navigator.pop(context);
-          } else {
-            _isDialogShowing = false;
           }
-        } else {
-          Navigator.pop(context);
         }
       },
       child: Theme(

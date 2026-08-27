@@ -286,7 +286,7 @@ class NotificationController {
   }
 
   void setRedirectNotification(String? notificationId, String uuidGroup) {
-    this.redirectNotificationId = redirectNotificationId;
+    this.redirectNotificationId = notificationId;
     this.redirectUuidGroup = uuidGroup;
   }
 }
