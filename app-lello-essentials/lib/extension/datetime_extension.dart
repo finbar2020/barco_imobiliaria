@@ -4,13 +4,14 @@ class DateTimeUtils {
   static DateTime? fromFormattedString(String? date) {
     if (date == null) return null;
     List<String> dateList = date.split('/');
+    if (dateList.length != 3) return null;
     dateList = dateList.map((e) {
       if (e.length == 1) {
         return "0$e";
       }
       return e;
     }).toList();
-    return DateTime.parse(
+    return DateTime.tryParse(
       "${dateList[2]}-${dateList[1]}-${dateList[0]}",
     );
   }

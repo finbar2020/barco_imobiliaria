@@ -17,7 +17,7 @@ abstract class Try<T> extends Either<Failure, T> {
 
   static B foldAll<B>(List<Try> tries, B Function(Failure l) ifLeft,
       B Function(List<dynamic> data) ifRight) {
-    if (tries.length == 0) ifRight([]);
+    if (tries.length == 0) return ifRight([]);
     final data = [];
     for (var it in tries) {
       if (it is Success) {

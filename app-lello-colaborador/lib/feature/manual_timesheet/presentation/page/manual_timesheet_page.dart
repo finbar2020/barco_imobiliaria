@@ -105,5 +105,6 @@ class _ManualTimeSheetPageState extends State<ManualTimeSheetPage> {
     } catch (err) {
       return defaultValue;
     }
+    return defaultValue;
   }
 }

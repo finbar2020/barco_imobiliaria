@@ -43,3 +43,7 @@ class AlertSwitchRoleState extends HomeDialogState {
 class NotificationPermissionState extends HomeDialogState {
   const NotificationPermissionState();
 }
+
+class ComfortState extends HomeDialogState {
+  const ComfortState();
+}

@@ -44,6 +44,8 @@ class MessageHandlerState extends State<MessageHandler> {
   String? selectedNotificationPayload;
 
   StreamSubscription? _sessionSubscription;
+  StreamSubscription? _onMessageOpenedAppSubscription;
+  StreamSubscription? _onMessageSubscription;
 
   @override
   void initState() {
@@ -78,7 +80,8 @@ class MessageHandlerState extends State<MessageHandler> {
       });
     }
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    _onMessageOpenedAppSubscription =
+        FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       if (kDebugMode) {
         log('FCM: onLauch $message');
       }
@@ -93,7 +96,8 @@ class MessageHandlerState extends State<MessageHandler> {
       switchRedirect(data);
     });
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    _onMessageSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (kDebugMode) {
         log('FCM: onMessage: $message');
         log('${message.notification?.body}');
@@ -151,6 +155,10 @@ class MessageHandlerState extends State<MessageHandler> {
   @override
   void dispose() {
     _sessionSubscription?.cancel();
+    // Os streams de push são estáticos: sem cancelar, um estado já descartado
+    // continua reagindo às mensagens e navega com um `context` morto.
+    _onMessageOpenedAppSubscription?.cancel();
+    _onMessageSubscription?.cancel();
     super.dispose();
   }
 

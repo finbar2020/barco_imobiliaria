@@ -6,14 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:morar/core/dependency/application_container.dart';
 import 'package:morar/core/navigation/application_route.dart';
+import 'package:morar/feature/access_control/presentation/page/access_control_page.dart';
 import 'package:morar/feature/access_control/presentation/bloc/access_control_state.dart';
 import 'package:morar/feature/session/presentation/bloc/session_bloc.dart';
 
 class AccessControlInviteSuccessPage extends StatefulWidget {
   final SaveVisitantLoadedState state;
+  final bool isGeneric;
   const AccessControlInviteSuccessPage({
     Key? key,
     required this.state,
+    this.isGeneric = false,
   }) : super(key: key);
 
   @override
@@ -137,6 +140,10 @@ class _AccessControlInviteSuccessPageState
                           Navigator.pushReplacementNamed(
                             context,
                             ApplicationRoute.accessControl,
+                            arguments: AcessControlPageArgs(
+                              tabIndex: widget.state.isVisitant ? 0 : 1,
+                              isGeneric: widget.isGeneric,
+                            ),
                           );
                         },
                       ),

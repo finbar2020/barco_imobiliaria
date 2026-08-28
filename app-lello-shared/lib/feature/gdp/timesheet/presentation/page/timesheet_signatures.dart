@@ -33,6 +33,10 @@ class _TimesheetSignaturesPageState extends State<TimesheetSignaturesPage> {
   GlobalKey<RefreshIndicatorState> refreshKey =
       GlobalKey<RefreshIndicatorState>();
   late Completer<void> _refreshCompleter;
+
+  /// Marca a recarga disparada pelo próprio listener (`refreshKey.show()`),
+  /// para que o `onRefresh` do RefreshIndicator não peça outra recarga.
+  bool _programmaticRefresh = false;
   late ScrollController controller2;
 
   DateTime firstDayMonth =
@@ -74,7 +78,10 @@ class _TimesheetSignaturesPageState extends State<TimesheetSignaturesPage> {
                 //         SharedApplicationRoute.gdpTimesheetMenu));
               }
               if (state is TimesheetSignaturesLoadingState) {
-                refreshKey.currentState?.show();
+                if (refreshKey.currentState != null) {
+                  _programmaticRefresh = true;
+                  refreshKey.currentState!.show();
+                }
               } else {
                 _refreshCompleter.complete();
                 _refreshCompleter = Completer<void>();
@@ -218,7 +225,13 @@ class _TimesheetSignaturesPageState extends State<TimesheetSignaturesPage> {
       child: RefreshIndicator(
         key: refreshKey,
         onRefresh: () async {
-          bloc.beginRefresh();
+          if (_programmaticRefresh) {
+            _programmaticRefresh = false;
+            // A recarga já estava em curso: só acompanha o fim dela.
+            if (bloc.state is! TimesheetSignaturesLoadingState) return;
+          } else {
+            bloc.beginRefresh();
+          }
           return _refreshCompleter.future;
         },
         child: ListView.separated(

@@ -237,11 +237,13 @@ class ValidatorImpl implements Validator {
     if (optional && (text == null || text == "" || text.length == 0))
       return null;
 
-    var numbers = text!.replaceAll(RegExp(r'[\.\-]'), '');
+    // Nulo é tratado como vazio (campo obrigatório), sem `text!`.
+    final value = text ?? "";
+    var numbers = value.replaceAll(RegExp(r'[\.\-]'), '');
     if (numbers.length > 11) {
-      return validateCNPJ(text);
+      return validateCNPJ(value);
     } else {
-      return validateCPF(text);
+      return validateCPF(value);
     }
   }
 
@@ -345,7 +347,7 @@ class ValidatorImpl implements Validator {
 
   @override
   String? validateRNE(String? text) {
-    var txt = text!.replaceAll(RegExp(r'[\.\-]'), '');
+    var txt = (text ?? "").replaceAll(RegExp(r'[\.\-]'), '');
     return validateExactLength(txt, 8);
   }
 }

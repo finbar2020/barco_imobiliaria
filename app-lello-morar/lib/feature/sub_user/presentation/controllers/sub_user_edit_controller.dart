@@ -12,6 +12,7 @@ import 'package:morar/feature/sub_user/presentation/stores/sub_user_store.dart';
 import '../../../access_control/domain/entity/access_control_send_invite.dart';
 import '../../domain/entity/sub_user_role.dart';
 import '../bloc/sub_user_edit_bloc.dart';
+import '../bloc/sub_users_bloc.dart';
 
 class SubUserEditController {
   final SubUserStore _store;
@@ -74,7 +75,8 @@ class SubUserEditController {
     SubUser? newUser = await _store.subUserUpdate(
       userSelected: userSelected!.copyWith(
           flagBoletoEmail: !isBlock && (userSelected?.flagBoletoEmail == true),
-          expiresAt: selectedExpirationDate),
+          expiresAt: selectedExpirationDate,
+          clearExpiresAt: selectedExpirationDate == null),
       isBlock: isBlock,
       isUseApp: isUseApp,
       expirationDate: selectedExpirationDate,
@@ -128,6 +130,8 @@ class SubUserEditController {
   String get biometricImageLink => session.me?.biometriaImageLink ?? "";
 
   SubUserEditBloc get editBloc => _store.editBloc;
+
+  SubUsersBloc get bloc => _store.bloc;
 
   Future<void> updateMainUser() async {
     newMe?.email = emailController.text;

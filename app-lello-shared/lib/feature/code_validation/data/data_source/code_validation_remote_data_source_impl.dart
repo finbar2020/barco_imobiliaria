@@ -18,7 +18,7 @@ class CodeValidationRemoteDataSourceImpl
     final response = await api.postValidation(model);
 
     if (response.statusCode == 202) return model;
-    throw Exception(response.body);
+    throw response.error ?? Exception(response.body);
   }
 
   @override

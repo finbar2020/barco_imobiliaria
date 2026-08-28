@@ -60,7 +60,7 @@ class _PhoneFormFieldState extends FormFieldState<String> {
   String? _initialDDD() {
     final String initial = widget.initialValue ?? "";
     if (initial != "") {
-      if (initial.startsWith("(") && initial.length > 4)
+      if (initial.startsWith("(") && initial.length >= 4)
         return initial.substring(1, 3);
       if (initial.length > 9) return initial.substring(0, 2);
     }
@@ -71,7 +71,7 @@ class _PhoneFormFieldState extends FormFieldState<String> {
     final String initial = widget.initialValue?.trim() ?? "";
     if (initial != "") {
       if (initial.startsWith("(")) {
-        if (initial.length > 5) {
+        if (initial.length > 4) {
           return initial.substring(4).trim();
         }
       } else {
@@ -94,7 +94,8 @@ class _PhoneFormFieldState extends FormFieldState<String> {
       isStartingWidget = false;
     }
     widget.widgetValidator?.context = context;
-    return Row(
+    final ThemeData theme = Theme.of(context);
+    final Row fields = Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
@@ -131,9 +132,7 @@ class _PhoneFormFieldState extends FormFieldState<String> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             maxLength: 9,
-            onFieldSubmitted: (value) => widget.onFieldSubmitted != null
-                ? widget.onFieldSubmitted!(value)
-                : () {},
+            onFieldSubmitted: (value) => widget.onFieldSubmitted?.call(value),
             onChanged: (value) {
               if (value.length == 0) {
                 FocusScope.of(context).requestFocus(dddNode);
@@ -148,6 +147,25 @@ class _PhoneFormFieldState extends FormFieldState<String> {
                 counterText: ""),
           ),
         )
+      ],
+    );
+    if (errorText == null) return fields;
+    // Mensagem do `validator` externo, no estilo de erro dos outros campos.
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        fields,
+        Padding(
+          padding: EdgeInsets.only(
+              top: Dimens.spacingSmall, left: Dimens.spacingSmall),
+          child: Text(
+            errorText!,
+            style: theme.inputDecorationTheme.errorStyle ??
+                theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.error),
+          ),
+        ),
       ],
     );
   }

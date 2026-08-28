@@ -33,7 +33,10 @@ Future<Map<String, dynamic>>? myBackgroundMessageHandler(
     if (kDebugMode) {
       log('Home Push Notification Teste $data');
     }
-    return data;
+    if (data is Map) {
+      return Future.value(Map<String, dynamic>.from(data));
+    }
+    return null;
   }
   return null;
 }

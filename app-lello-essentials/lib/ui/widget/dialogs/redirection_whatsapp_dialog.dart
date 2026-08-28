@@ -49,7 +49,8 @@ class RedirectionWhatsappDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    String? message = getString(context, whatsAppMessage);
+    // `whatsAppMessage` é opcional: sem chave usa a chave vazia (mensagem "").
+    String? message = getString(context, whatsAppMessage ?? "");
     return Dialog(
       child: Container(
         padding: EdgeInsets.all(Dimens.spacingMedium),

@@ -28,7 +28,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
     final result = await getEmployee.call(GetEmployeeParam(
         condominiumId: condominiumId, employeeId: event.employeeId));
     emit(result.fold(
-        (err) => EmployeeLoadFailedState(data!, condominiumId, err),
+        (err) => EmployeeLoadFailedState(data, condominiumId, err),
         (res) => EmployeeLoadedState(res, condominiumId)));
   }
 

@@ -22,11 +22,14 @@ class CircuitBreakerController {
     _createStreamdatabase();
   }
 
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _snapshotsSubscription;
+
   void _createStreamdatabase() {
     try {
       var colection = database.collection(
           environment.isProduction ? "circuit_break" : "circuit_break_homolog");
-      colection.snapshots().listen((event) {
+      _snapshotsSubscription = colection.snapshots().listen((event) {
+        if (ruleStream.isClosed) return;
         listCircuitRules = event.docs
             .map<CircuitItemRule>((e) => CircuitItemRule.fromMap(e))
             .toList();
@@ -43,6 +46,8 @@ class CircuitBreakerController {
 
   //Dispose
   void dispose() {
+    _snapshotsSubscription?.cancel();
+    _snapshotsSubscription = null;
     ruleStream.close();
   }
 
@@ -102,70 +107,35 @@ class CircuitBreakerController {
   }) {
     if (minVersion.isEmpty && maxVersion.isEmpty) return true;
 
-    if (minVersion.isEmpty && maxVersion.isNotEmpty) {
-      final currentVersionParts = currentVersion.split('.');
-      final maxVersionParts = maxVersion.split('.');
-
-      for (int i = 0;
-          i < currentVersionParts.length && i < maxVersionParts.length;
-          i++) {
-        final currentPart = int.parse(currentVersionParts[i]);
-        final maxPart = int.parse(maxVersionParts[i]);
-
-        if (currentPart < maxPart) {
-          return true;
-        } else if (currentPart > maxPart) {
-          return false;
-        }
-      }
-      // Retorna versões iguais como true
-      return currentVersionParts.length <= maxVersionParts.length;
-    } else if (minVersion.isNotEmpty && maxVersion.isEmpty) {
-      final currentVersionParts = currentVersion.split('.');
-      final minVersionParts = minVersion.split('.');
-
-      for (int i = 0;
-          i < currentVersionParts.length && i < minVersionParts.length;
-          i++) {
-        final currentPart = int.parse(currentVersionParts[i]);
-        final minPart = int.parse(minVersionParts[i]);
-
-        if (currentPart > minPart) {
-          return true;
-        } else if (currentPart < minPart) {
-          return false;
-        }
-      }
-      // Retorna versões iguais como true
-      return currentVersionParts.length <= minVersionParts.length;
-    } else {
-      //minVersion e maxVersion não vazias
-      final currentVersionParts = currentVersion.split('.');
-      final minVersionParts = minVersion.split('.');
-      final maxVersionParts = maxVersion.split('.');
-
-      var minLength = currentVersionParts.length;
-      if (minVersionParts.isNotEmpty && minVersionParts.length < minLength) {
-        minLength = minVersionParts.length;
-      }
-      if (maxVersionParts.isNotEmpty && maxVersionParts.length < minLength) {
-        minLength = maxVersionParts.length;
-      }
-
-      for (int i = 0; i < minLength; i++) {
-        final currentPart = int.parse(currentVersionParts[i]);
-        final minPart = int.parse(minVersionParts[i]);
-        final maxPart = int.parse(maxVersionParts[i]);
-
-        if (currentPart < minPart || currentPart > maxPart) {
-          return false;
-        } else if (currentPart > minPart || currentPart < maxPart) {
-          return true;
-        }
-      }
-
-      return true; // As versões são iguais
+    if (minVersion.isNotEmpty &&
+        _compareVersions(currentVersion, minVersion) < 0) {
+      return false;
     }
+
+    if (maxVersion.isNotEmpty &&
+        _compareVersions(currentVersion, maxVersion) > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Compara duas versões segmento a segmento, tratando segmentos ausentes
+  /// como 0 (`2.0` equivale a `2.0.0`).
+  /// Devolve negativo se [a] < [b], 0 se iguais e positivo se [a] > [b].
+  int _compareVersions(String a, String b) {
+    final aParts = a.split('.');
+    final bParts = b.split('.');
+    final length = aParts.length > bParts.length ? aParts.length : bParts.length;
+
+    for (int i = 0; i < length; i++) {
+      final aPart = i < aParts.length ? int.parse(aParts[i]) : 0;
+      final bPart = i < bParts.length ? int.parse(bParts[i]) : 0;
+
+      if (aPart != bPart) return aPart < bPart ? -1 : 1;
+    }
+
+    return 0;
   }
 
   bool checkReferenceInList(

@@ -361,7 +361,8 @@ class _ChangeOwnershipState extends State<ChangeOwnership> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Column(
+                                          Flexible(
+                                              child: Column(
                                             children: [
                                               InkWell(
                                                 child: SvgPicture.asset(
@@ -385,12 +386,14 @@ class _ChangeOwnershipState extends State<ChangeOwnership> {
                                               Text(
                                                   getString(context,
                                                       "reports_request_pick_image_from_gallery"),
+                                                  textAlign: TextAlign.center,
                                                   style:
                                                       LelloTextStyles.bodyBold(
                                                           theme)),
                                             ],
-                                          ),
-                                          Column(
+                                          )),
+                                          Flexible(
+                                              child: Column(
                                             children: [
                                               InkWell(
                                                 child: SvgPicture.asset(
@@ -414,12 +417,14 @@ class _ChangeOwnershipState extends State<ChangeOwnership> {
                                               Text(
                                                   getString(context,
                                                       "reports_camera"),
+                                                  textAlign: TextAlign.center,
                                                   style:
                                                       LelloTextStyles.bodyBold(
                                                           theme)),
                                             ],
-                                          ),
-                                          Column(
+                                          )),
+                                          Flexible(
+                                              child: Column(
                                             children: [
                                               InkWell(
                                                 child: SvgPicture.asset(
@@ -440,11 +445,12 @@ class _ChangeOwnershipState extends State<ChangeOwnership> {
                                               Text(
                                                   getString(context,
                                                       "reports_create_attachment"),
+                                                  textAlign: TextAlign.center,
                                                   style:
                                                       LelloTextStyles.bodyBold(
                                                           theme)),
                                             ],
-                                          ),
+                                          )),
                                         ],
                                       )
                                     : _buildImageItem(

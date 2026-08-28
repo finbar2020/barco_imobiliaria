@@ -17,7 +17,7 @@ class RegistrationRepositoryImpl extends RegistrationRepository {
       FirebaseCrashlytics.instance.recordError(
         e,
         stacktrace,
-        reason: 'cpfId: ${entity.cpf!.substring(0, 5)}',
+        reason: 'cpfId: ${_cpfId(entity.cpf)}',
       );
       return Rejection<Registration>(UnknownFailure(e));
     }
@@ -34,7 +34,7 @@ class RegistrationRepositoryImpl extends RegistrationRepository {
       FirebaseCrashlytics.instance.recordError(
         e,
         stacktrace,
-        reason: 'cpfId: ${cpf.substring(0, 5)}',
+        reason: 'cpfId: ${_cpfId(cpf)}',
       );
       return Rejection<RegistrationLelloUser>(UnknownFailure(e));
     }
@@ -57,6 +57,14 @@ class RegistrationRepositoryImpl extends RegistrationRepository {
       );
       return Rejection<RegisterFcmToken>(UnknownFailure(e));
     }
+  }
+
+  /// Prefixo do cpf usado apenas para identificar o erro no Crashlytics.
+  /// Tolera cpf nulo ou menor que 5 caracteres para nunca lançar dentro do
+  /// `catch` e sempre devolver a falha ao chamador.
+  String _cpfId(String? cpf) {
+    if (cpf == null) return '';
+    return cpf.length <= 5 ? cpf : cpf.substring(0, 5);
   }
 
   Failure _mapApiFailure(ApiFailure err) {

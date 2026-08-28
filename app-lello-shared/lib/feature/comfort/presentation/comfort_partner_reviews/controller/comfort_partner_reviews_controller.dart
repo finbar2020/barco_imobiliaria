@@ -98,8 +98,8 @@ class ComfortPartnerReviewsController {
     );
   }
 
-  Future<void> close() {
-    _subscription?.cancel();
-    return close();
+  Future<void> close() async {
+    await _subscription?.cancel();
+    await comfortPartnerReviewsBloc.close();
   }
 }

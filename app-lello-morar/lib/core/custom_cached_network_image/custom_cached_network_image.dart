@@ -29,14 +29,16 @@ class CustomCachedNetworkImage extends StatelessWidget {
 
     final SessionBloc sessionBloc = BlocProvider.of(context);
     String baseUrl = sessionBloc.getBaseUrl();
+    bool canLoad = customHeader != null;
     if (differentBaseUrl != null) {
       baseUrl = differentBaseUrl!;
 
       ///Must not send customHeader to another baseUrl.
       customHeader = null;
+      canLoad = true;
     }
 
-    return (link?.isNotEmpty == true && customHeader != null)
+    return (link?.isNotEmpty == true && canLoad)
         ? CachedNetworkImage(
             httpHeaders: customHeader,
             imageUrl: "$baseUrl$link",

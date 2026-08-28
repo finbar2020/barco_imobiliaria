@@ -3,18 +3,43 @@ import 'package:flutter/material.dart';
 import 'color_pallete.dart';
 
 class CarimbeiraPallete implements ColorPallete {
-  static final CarimbeiraPallete _instance = CarimbeiraPallete._internal();
+  /// Cores padrão do singleton.
+  static const Color defaultPrimary = Color(0xFFFFAB66);
+  static const Color defaultSecondary = Color(0xFFEE4713);
 
-  Color _primary = Color(0xFFFFAB66);
-  Color _secondary = Color(0xFFEE4713);
+  static final CarimbeiraPallete _instance =
+      CarimbeiraPallete._internal(defaultPrimary, defaultSecondary);
 
+  Color _primary;
+  Color _secondary;
+
+  /// Sem parâmetros devolve o singleton compartilhado. Com `primary` e/ou
+  /// `secondary` devolve uma NOVA instância com essas cores (as omitidas são
+  /// herdadas do singleton) sem alterar o singleton. Para mudar as cores do
+  /// singleton use [customize] / [restoreDefaults].
   factory CarimbeiraPallete({Color? primary, Color? secondary}) {
+    if (primary == null && secondary == null) return _instance;
+    return CarimbeiraPallete._internal(
+        primary ?? _instance._primary, secondary ?? _instance._secondary);
+  }
+
+  CarimbeiraPallete._internal(this._primary, this._secondary);
+
+  /// Altera as cores do singleton (afeta todo `CarimbeiraPallete()`); as cores
+  /// omitidas são mantidas. Use só para trocar a identidade visual global
+  /// (ex.: `LelloTheme.viverDefaultTheme`).
+  static CarimbeiraPallete customize({Color? primary, Color? secondary}) {
     _instance._primary = primary ?? _instance._primary;
     _instance._secondary = secondary ?? _instance._secondary;
     return _instance;
   }
 
-  CarimbeiraPallete._internal();
+  /// Restaura as cores padrão do singleton.
+  static CarimbeiraPallete restoreDefaults() {
+    _instance._primary = defaultPrimary;
+    _instance._secondary = defaultSecondary;
+    return _instance;
+  }
 
   @override
   Color primary() => _primary;

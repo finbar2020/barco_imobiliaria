@@ -60,7 +60,7 @@ class PeriodConfig {
   get getEnd => start?.add(Duration(days: days != null ? days! - 1 : 0));
 
   get getStartFormatted =>
-      start != null ? DateFormat('dd/MM/yyyy').format(start!) : "";
+      start != null ? DateFormat('dd/MM/yyyy').format(start!) : null;
   get getEndFormatted =>
       start != null ? DateFormat('dd/MM/yyyy').format(getEnd) : "";
 }
@@ -108,15 +108,6 @@ class _GDPVacationPageState extends State<GDPVacationPage> {
       loaded = true;
     }
 
-    var curestState = bloc.state;
-    if (curestState is VacationGDPLoadedState) {
-      _getLockedDays(curestState.lockedDays.locked_days);
-      _getvacationEndDateFormatted(curestState);
-      _formatAllow13(curestState, context);
-      configPeriodVacationList(curestState);
-      configPeriodDaysVacationList(curestState);
-    }
-
     return Theme(
         data: theme,
         child: Scaffold(
@@ -131,7 +122,8 @@ class _GDPVacationPageState extends State<GDPVacationPage> {
 
                     List<PeriodConfig> scheduleConfig = [];
 
-                    for (Vacation v in vacationConfig!.scheduledVacations!) {
+                    for (Vacation v
+                        in vacationConfig?.scheduledVacations ?? []) {
                       PeriodConfig asd = PeriodConfig();
                       //asd.start = v.vacationStartDate;
                       asd.start = new DateFormat('dd/MM/yyyy')
@@ -161,7 +153,11 @@ class _GDPVacationPageState extends State<GDPVacationPage> {
               bloc: bloc,
               builder: (context, state) {
                 if (state is VacationGDPLoadedState) {
-                  _checkReadPageOnly(bloc.state as VacationGDPLoadedState);
+                  // Precisa rodar aqui (e não no `build` do State): quando o
+                  // bloc emite `Loaded` só o BlocConsumer é reconstruído, e
+                  // sem isto os dropdowns ficariam sem opções.
+                  _configureFromState(state, context);
+                  _checkReadPageOnly(state);
                   return _buildBody(theme, state, allow13);
                 }
                 if (state is VacationGDPLoadingState)
@@ -521,11 +517,10 @@ class _GDPVacationPageState extends State<GDPVacationPage> {
                           onChanged: (newValue) {
                             setState(() {
                               formatedAllow13 = newValue.toString();
-                              if (newValue == "No" || newValue == "Não") {
-                                allow13Value = "N";
-                              } else {
-                                allow13Value = "S";
-                              }
+                              // `allow13` é [não, sim]: compara pela posição
+                              // na lista, não pelo texto traduzido.
+                              allow13Value =
+                                  newValue == allow13.last ? "S" : "N";
                             });
                           },
                           onTap: () {
@@ -705,6 +700,14 @@ class _GDPVacationPageState extends State<GDPVacationPage> {
 
   _formatAquisitivePeriod(VacationGDPLoadedState state) {
     periodDate = state.data!.getPeriodVacation;
+  }
+
+  void _configureFromState(VacationGDPLoadedState state, BuildContext context) {
+    _getLockedDays(state.lockedDays.locked_days);
+    _getvacationEndDateFormatted(state);
+    _formatAllow13(state, context);
+    configPeriodVacationList(state);
+    configPeriodDaysVacationList(state);
   }
 
   void configPeriodVacationList(VacationGDPLoadedState state) {

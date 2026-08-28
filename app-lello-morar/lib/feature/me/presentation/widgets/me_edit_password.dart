@@ -206,7 +206,7 @@ class _MeEditPasswordState extends State<MeEditPassword> {
     final form = _formKey.currentState;
     if (form!.validate() && newPasswordConfirm == newPassword) {
       form.save();
-      widget.controller.beginEditSavePassword(newPassword!, originPassword!);
+      widget.controller.beginEditSavePassword(originPassword!, newPassword!);
     }
   }
 }

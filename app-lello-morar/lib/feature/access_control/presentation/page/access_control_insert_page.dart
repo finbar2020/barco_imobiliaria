@@ -101,6 +101,8 @@ class _AccessControlInsertPageState extends State<AccessControlInsertPage> {
           return Container();
         },
         listener: (context, state) {
+          // A store só emite `SaveVisitantLoadedState` ao terminar o fluxo
+          // (cadastro + agendamento [+ convite]); não há estados de progresso.
           if (state is SaveVisitantLoadedState) {
             if (state.newVisit) {
               Navigator.pushReplacement(

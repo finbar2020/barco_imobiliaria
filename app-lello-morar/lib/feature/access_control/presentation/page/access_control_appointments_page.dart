@@ -37,12 +37,11 @@ class AccessControlAppointmentsPage extends StatefulWidget {
       _AccessControlAppointmentsPageState();
 }
 
-List<AccessControlAuthorizations> expiredsAuth = [];
-List<AccessControlAuthorizations> activesAuth = [];
-
 class _AccessControlAppointmentsPageState
     extends State<AccessControlAppointmentsPage> {
   late SessionBloc sessionBloc;
+  final List<AccessControlAuthorizations> expiredsAuth = [];
+  final List<AccessControlAuthorizations> activesAuth = [];
   @override
   void initState() {
     sessionBloc = ApplicationContainer.instance().resolve();
@@ -63,13 +62,6 @@ class _AccessControlAppointmentsPageState
       });
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    expiredsAuth.clear();
-    activesAuth.clear();
-    super.dispose();
   }
 
   @override
@@ -111,7 +103,10 @@ class _AccessControlAppointmentsPageState
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        AccessControlInviteSuccessPage(state: state),
+                        AccessControlInviteSuccessPage(
+                      state: state,
+                      isGeneric: widget.isGeneric,
+                    ),
                   ),
                 );
               } else {

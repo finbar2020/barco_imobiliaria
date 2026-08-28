@@ -495,8 +495,11 @@ class _ComfortPageState extends State<ComfortPage>
   void onCouponSelected(
       ComfortPartnerCoupon coupon, ComfortPageArgs comfortPageArgs) {
     List<ComfortPartner?> partners = comfortPartnersController.partnersList();
-    ComfortPartner? partner = partners
-        .firstWhere((element) => element?.id == coupon.partnerId, orElse: null);
+    // Sem parceiro correspondente o toque é ignorado (antes o
+    // `firstWhere(..., orElse: null)` lançava `StateError`).
+    final matches =
+        partners.where((element) => element?.id == coupon.partnerId);
+    ComfortPartner? partner = matches.isEmpty ? null : matches.first;
     if (partner != null) {
       onPartnerSelected(partner, comfortPageArgs);
     }

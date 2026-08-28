@@ -107,7 +107,7 @@ class _ToYourCondoPageState extends State<ToYourCondoPage>
                 comfortPartnersController: widget.comfortPartnersController,
                 reference: comfortPageArgs.reference,
                 unit: comfortPageArgs.unit,
-                appOriginEnum: AppOriginEnum.manager))
+                appOriginEnum: widget.appOriginEnum))
         .then((value) => widget.comfortPartnersController
             .comfortCategoryAnalyticsTimerStart(
                 ComfortPartnerCategory.toYourCondo,
@@ -130,16 +130,9 @@ class _ToYourCondoPageState extends State<ToYourCondoPage>
             bloc: widget.comfortPartnersController.comfortPartnersBloc,
             listener: (context, state) {},
             builder: (context, state) {
-              if (state is! LoadedComfortPartnersState) {
-                return Column(
-                  children: [
-                    Expanded(child: LoadingWidget()),
-                  ],
-                );
-              }
-
+              // O estado de erro não estende o carregado: precisa ser
+              // testado antes, senão o `ErrorHandlingWidget` nunca aparece.
               if (state is ErrorComfortPartnersState) {
-                Navigator.pop(context);
                 return Padding(
                   padding: EdgeInsets.all(Dimens.spacingMedium),
                   child: ErrorHandlingWidget(
@@ -153,13 +146,24 @@ class _ToYourCondoPageState extends State<ToYourCondoPage>
                 );
               }
 
+              if (state is! LoadedComfortPartnersState) {
+                return Column(
+                  children: [
+                    Expanded(child: LoadingWidget()),
+                  ],
+                );
+              }
+
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                if (_scrollController.hasClients) {
-                  setState(() {
-                    isScrollable =
-                        _scrollController.position.maxScrollExtent != 0;
-                  });
-                }
+                if (!mounted || !_scrollController.hasClients) return;
+                final scrollable =
+                    _scrollController.position.maxScrollExtent != 0;
+                // Sem esta comparação o `setState` roda a cada frame e
+                // agenda outro build indefinidamente.
+                if (scrollable == isScrollable) return;
+                setState(() {
+                  isScrollable = scrollable;
+                });
               });
               return Scrollbar(
                 thickness: 4,

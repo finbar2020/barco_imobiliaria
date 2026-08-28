@@ -209,8 +209,11 @@ class _ReportMessageWidgetState extends State<ReportMessageWidget> {
                   widget.content.attachmentFile == null
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          // Expanded: as legendas quebram de linha em telas
+                          // estreitas em vez de estourar a largura.
                           children: [
-                            Column(
+                            Expanded(
+                                child: Column(
                               children: [
                                 InkWell(
                                   child: SvgPicture.asset(
@@ -230,11 +233,13 @@ class _ReportMessageWidgetState extends State<ReportMessageWidget> {
                                 Text(
                                     getString(context,
                                         "reports_request_pick_image_from_gallery"),
+                                    textAlign: TextAlign.center,
                                     style:
                                         LelloTextStyles.bodyBold(widget.theme)),
                               ],
-                            ),
-                            Column(
+                            )),
+                            Expanded(
+                                child: Column(
                               children: [
                                 InkWell(
                                   child: SvgPicture.asset(
@@ -252,11 +257,13 @@ class _ReportMessageWidgetState extends State<ReportMessageWidget> {
                                   height: 10.0,
                                 ),
                                 Text(getString(context, "reports_camera"),
+                                    textAlign: TextAlign.center,
                                     style:
                                         LelloTextStyles.bodyBold(widget.theme)),
                               ],
-                            ),
-                            Column(
+                            )),
+                            Expanded(
+                                child: Column(
                               children: [
                                 InkWell(
                                   child: SvgPicture.asset(
@@ -275,10 +282,11 @@ class _ReportMessageWidgetState extends State<ReportMessageWidget> {
                                 Text(
                                     getString(
                                         context, "reports_create_attachment"),
+                                    textAlign: TextAlign.center,
                                     style:
                                         LelloTextStyles.bodyBold(widget.theme)),
                               ],
-                            ),
+                            )),
                           ],
                         )
                       : _buildImageItem(

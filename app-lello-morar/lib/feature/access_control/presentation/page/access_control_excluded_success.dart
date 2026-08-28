@@ -33,6 +33,7 @@ class _AccessControlExcludedSuccessPageState
         Navigator.pushReplacementNamed(
           context,
           ApplicationRoute.accessControl,
+          arguments: AcessControlPageArgs(isGeneric: widget.isGeneric),
         );
         return true;
       },

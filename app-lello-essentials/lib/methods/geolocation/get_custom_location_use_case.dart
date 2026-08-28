@@ -29,12 +29,16 @@ class GetCustomPositionUseCase
       // Get Last know Position
       finalPosition ??= await _getLastKnowPosition();
 
+      // Captura antes de atualizar a memória: só é "cache" se a posição
+      // obtida for igual à que já estava guardada.
+      final fromCache = finalPosition != null && finalPosition == _lastPosition;
+
       // Update memory Position
       _lastPosition = finalPosition;
       _lastPositionTime = DateTime.now().toUtc();
       sw?.stop();
 
-      logAnalytics(finalPosition);
+      logAnalytics(finalPosition, fromCache: fromCache);
 
       if (finalPosition == null) return Rejection(UnknownFailure(""));
 
@@ -141,7 +145,7 @@ class GetCustomPositionUseCase
     }
   }
 
-  logAnalytics(Position? pos) {
+  logAnalytics(Position? pos, {bool? fromCache}) {
     if (pos == null) {
       FirebaseAnalytics.instance.logEvent(name: "get_location_err");
     } else {
@@ -150,7 +154,7 @@ class GetCustomPositionUseCase
         "accuracy": pos.accuracy.toString(),
         "accuracy_requested": accuracyLevel.toString(),
         "elapsed_ms": sw?.elapsedMilliseconds.toString() ?? "",
-        "cache": pos == _lastPosition ? "true" : "false",
+        "cache": (fromCache ?? pos == _lastPosition) ? "true" : "false",
       });
     }
   }

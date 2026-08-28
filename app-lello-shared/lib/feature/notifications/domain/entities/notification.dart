@@ -58,9 +58,13 @@ class SingleNotification {
         date!.month == now.month &&
         date!.day == now.day) {
       return "Hoje, às $hoursFormat";
-    } else if (date!.year == now.year &&
-        date!.month == now.month &&
-        ((date!.day - now.day) == -1)) {
+    }
+    // Compara com o dia anterior de verdade (a virada de mês/ano é tratada
+    // pela normalização do `DateTime`).
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    if (date!.year == yesterday.year &&
+        date!.month == yesterday.month &&
+        date!.day == yesterday.day) {
       return "Ontem, às $hoursFormat";
     }
     DateFormat dateExtended = DateFormat("d 'de' MMMM 'de' yyyy", 'pt_BR');

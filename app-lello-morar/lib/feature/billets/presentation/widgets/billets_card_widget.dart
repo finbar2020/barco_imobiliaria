@@ -33,14 +33,20 @@ class BilletsCardWidget extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "${model.mes}/${model.period!.year}",
-                              overflow: TextOverflow.ellipsis,
-                              style: LelloTextStyles.body(theme)!.copyWith(
-                                color: LelloTheme.palleteOf(theme).textOpaque(),
+                            Flexible(
+                              child: Text(
+                                "${model.mes}/${model.period!.year}",
+                                overflow: TextOverflow.ellipsis,
+                                style: LelloTextStyles.body(theme)!.copyWith(
+                                  color:
+                                      LelloTheme.palleteOf(theme).textOpaque(),
+                                ),
                               ),
                             ),
-                            Row(
+                            SizedBox(width: Dimens.spacingSmall),
+                            Flexible(
+                                child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   height: 10.0,
@@ -51,16 +57,18 @@ class BilletsCardWidget extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(width: Dimens.spacingSmall),
-                                Text(
-                                  getString(context, model.statusText),
-                                  overflow: TextOverflow.ellipsis,
-                                  style:
-                                      LelloTextStyles.subBody(theme)!.copyWith(
-                                    color: model.color(theme),
+                                Flexible(
+                                  child: Text(
+                                    getString(context, model.statusText),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: LelloTextStyles.subBody(theme)!
+                                        .copyWith(
+                                      color: model.color(theme),
+                                    ),
                                   ),
                                 )
                               ],
-                            )
+                            ))
                           ],
                         ),
                         SizedBox(height: Dimens.spacingXSmall),

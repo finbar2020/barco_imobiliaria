@@ -15,7 +15,9 @@ class AnalyticsTimer {
   final Map<String, String> otherParameters;
 
   late DateTime _startTime;
-  late DateTime _endTime;
+
+  /// Nulo enquanto o timer não foi parado; nesse caso o fim é `DateTime.now()`.
+  DateTime? _endTime;
 
   AnalyticsTimer({
     required this.userType,
@@ -34,11 +36,12 @@ class AnalyticsTimer {
   }
 
   Duration getDuration() {
-    return _endTime.difference(_startTime);
+    return (_endTime ?? DateTime.now()).difference(_startTime);
   }
 
   void logEvent() {
-    final duration = getDuration();
+    final endTime = _endTime ?? DateTime.now();
+    final duration = endTime.difference(_startTime);
     if (duration.inSeconds <= 0) {
       return;
     }
@@ -46,9 +49,9 @@ class AnalyticsTimer {
     final defaultParameters = {
       'userType': userType,
       'startDate': _startTime.toFormattedString(),
-      'endDate': _endTime.toFormattedString(),
+      'endDate': endTime.toFormattedString(),
       'startHour': DateFormat("HH:mm:ss").format(_startTime),
-      'endHour': DateFormat("HH:mm:ss").format(_endTime),
+      'endHour': DateFormat("HH:mm:ss").format(endTime),
       'durationInSeconds': duration.inSeconds.toString(),
     };
 

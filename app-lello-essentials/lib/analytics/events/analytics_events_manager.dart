@@ -65,6 +65,8 @@ class AnalyticsEventsManager {
       AnalyticsEvent("ponto_assinafolha_acessar", "x2fhga", Type.read);
   static pontoAssinaFolhaFinalizado() =>
       AnalyticsEvent("ponto_assinafolha_finalizado", "w6og64", Type.write);
+  // TODO(negócio): compartilha o token Adjust "w6og64" com
+  // pontoAssinaFolhaFinalizado; precisa de token próprio do painel Adjust.
   static pontoInserirEventoFinalizado() =>
       AnalyticsEvent("ponto_inserir_evento_finalizado", "w6og64", Type.write);
 
@@ -241,8 +243,8 @@ class AnalyticsEventsManager {
       AnalyticsEvent("comodidades_vamos_la_dialog", "17ekvf", Type.read);
   static comodidadesCtaOptIn() =>
       AnalyticsEvent("comodidades_cta_opt_in", "o601fv", Type.write);
-  static comodidadesMinhasSolicitacoesAcessar() =>
-      AnalyticsEvent("comodidades_solicitacoes_acessar", "wpccd4", Type.read);
+  static comodidadesMinhasSolicitacoesAcessar() => AnalyticsEvent(
+      "comodidades_minhas_solicitacoes_acessar", "wpccd4", Type.read);
   static comodidadesCtaRedirecionamento() =>
       AnalyticsEvent("comodidades_cta_redirect", "1ivz7p", Type.read);
   static comodidadesCtaCardFechar() =>

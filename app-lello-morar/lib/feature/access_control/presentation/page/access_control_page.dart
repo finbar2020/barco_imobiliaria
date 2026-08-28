@@ -58,7 +58,8 @@ class _AccessControlPageState extends State<AccessControlPage>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     AcessControlPageArgs arguments =
-        ModalRoute.of(context)?.settings.arguments as AcessControlPageArgs;
+        ModalRoute.of(context)?.settings.arguments as AcessControlPageArgs? ??
+            AcessControlPageArgs(isGeneric: false);
     if (arguments.tabIndex != null) {
       controller.animateTo(arguments.tabIndex!);
       arguments.tabIndex = null;

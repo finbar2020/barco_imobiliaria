@@ -129,8 +129,11 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
                           children: [
                             Theme(
                               data: chipTheme,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                              // Wrap: em telas estreitas os chips quebram de
+                              // linha em vez de estourar a largura.
+                              child: Wrap(
+                                spacing: Dimens.spacing,
+                                runSpacing: Dimens.spacingXSmall,
                                 children: [
                                   if (controller.hasFreeArea)
                                     ChoiceChip(
@@ -174,8 +177,6 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
                                       },
                                     ),
                                   if (controller.hasPaidArea)
-                                    SizedBox(width: Dimens.spacing),
-                                  if (controller.hasPaidArea)
                                     FilterChip(
                                       selectedColor:
                                           LelloTheme.palleteOf(theme).grey(),
@@ -214,8 +215,6 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
                                         });
                                       },
                                     ),
-                                  if (controller.hasMovingArea)
-                                    SizedBox(width: Dimens.spacing),
                                   if (controller.hasMovingArea)
                                     FilterChip(
                                       selected: controller.isMovingAreaSelected,
@@ -368,6 +367,9 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
       {required ReservationBloc bloc,
       required Space space,
       required BuildContext context}) {
+    // `animateToTab(1)` descarta esta aba; a avaliação do app roda depois de
+    // fechar o diálogo de sucesso e precisa de um contexto que continue vivo.
+    final BuildContext liveContext = Navigator.of(context).context;
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -392,7 +394,7 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
                       space: curentState.space,
                       condominium: curentState.session?.condominium,
                       unity: curentState.session?.unity,
-                    )).then((value) => AppReview.call(context: context));
+                    )).then((value) => AppReview.call(context: liveContext));
           }
         }
       },
@@ -449,36 +451,44 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    getString(context, "later").toUpperCase(),
-                    style: LelloTextStyles.subBody(theme)!.copyWith(
-                      color: LelloTheme.palleteOf(theme).text(),
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      getString(context, "later").toUpperCase(),
+                      overflow: TextOverflow.ellipsis,
+                      style: LelloTextStyles.subBody(theme)!.copyWith(
+                        color: LelloTheme.palleteOf(theme).text(),
+                      ),
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () async {
-                    _openWhatsapp(context);
-                  },
-                  child: Row(children: [
-                    SvgPicture.asset(
-                      "assets/ic_whats_red.svg",
-                      color: theme.primaryColor,
-                    ),
-                    SizedBox(width: Dimens.spacingSmall),
-                    Text(
-                      getString(
-                              context, "registration_lello_warning_no_data_btn")
-                          .toUpperCase(),
-                      style: LelloTextStyles.subBody(theme)!.copyWith(
+                SizedBox(width: Dimens.spacingSmall),
+                Flexible(
+                  child: InkWell(
+                    onTap: () async {
+                      _openWhatsapp(context);
+                    },
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      SvgPicture.asset(
+                        "assets/ic_whats_red.svg",
                         color: theme.primaryColor,
                       ),
-                    ),
-                  ]),
+                      SizedBox(width: Dimens.spacingSmall),
+                      Flexible(
+                          child: Text(
+                        getString(context,
+                                "registration_lello_warning_no_data_btn")
+                            .toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: LelloTextStyles.subBody(theme)!.copyWith(
+                          color: theme.primaryColor,
+                        ),
+                      )),
+                    ]),
+                  ),
                 ),
               ],
             ),
@@ -489,10 +499,10 @@ class _ReservationNewReservePageState extends State<ReservationNewReservePage> {
   }
 
   bool _checkCanReserveSpace(Space space, Unity unit) {
-    if (space.reservationRule.blockedForDefaulters!) {
+    if (space.reservationRule.blockedForDefaulters == true) {
       if (unit.compliant == false) return false;
     }
-    if (space.reservationRule.blockedForSettlers!) {
+    if (space.reservationRule.blockedForSettlers == true) {
       if (unit.agreement == true) return false;
     }
     return true;

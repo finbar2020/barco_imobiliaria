@@ -143,11 +143,15 @@ class SubUserStore {
 
     if (isBlock) {
       userSelected = userSelected.copyWith(
-          blocked: !userSelected.blocked!, expiresAt: expirationDate);
+          blocked: !userSelected.blocked!,
+          expiresAt: expirationDate,
+          clearExpiresAt: expirationDate == null);
     }
     if (isUseApp) {
       userSelected = userSelected.copyWith(
-          useApp: !userSelected.useApp!, expiresAt: expirationDate);
+          useApp: !userSelected.useApp!,
+          expiresAt: expirationDate,
+          clearExpiresAt: expirationDate == null);
     }
     OwnerAnalyticsLogEvents.logEvent(
       event: AnalyticsEventsOwner.moradoresAcessarEditarBloquear(),
@@ -163,6 +167,7 @@ class SubUserStore {
       unitId: sessionBloc.state.session!.unity!.id!,
       mainUser: false,
       expiresAt: expirationDate,
+      clearExpiresAt: expirationDate == null,
     );
 
     final response =
@@ -554,7 +559,7 @@ class SubUserStore {
 
     return response.fold((error) {
       editBloc.add(SubUserDeleteErrorEvent(error: error));
-      throw error;
+      return false;
     }, (success) {
       editBloc.add(
         SubUserDeleteSuccessEvent(

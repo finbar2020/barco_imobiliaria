@@ -12,7 +12,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     var moneyStr = string.replaceAll(RegExp(r"\D"), "");
     if (moneyStr.length > 16) moneyStr = moneyStr.substring(0, 16);
-    final money = int.parse(moneyStr) / 100;
+    final money = (moneyStr.isEmpty ? 0 : int.parse(moneyStr)) / 100;
     final formatCurrency = NumberFormat.currency(symbol: "");
     final symbol = showSymbol ? "R\$" : "";
     final text = "$symbol${formatCurrency.format(money)}";

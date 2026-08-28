@@ -66,9 +66,14 @@ class ReportsController {
 
   Future<void> getReport({required Report report}) async {
     var curentState = reportsBloc.state;
-    List<Report> allReports;
+    List<Report>? allReports;
     if (curentState is ReportsLoadedState) {
       allReports = curentState.allReports;
+    } else if (curentState is ReportsGetReportFailureState) {
+      // "Tentar novamente" a partir da falha da busca anterior.
+      allReports = curentState.allReports;
+    }
+    if (allReports != null) {
       reportsBloc.add(
         ReportsLoadingEvent(report: report),
       );
@@ -81,7 +86,8 @@ class ReportsController {
       );
       response.fold(
         (error) => reportsBloc.add(
-          ReportsGetReportFailureEvent(allReports: allReports, failure: error),
+          ReportsGetReportFailureEvent(
+              report: report, allReports: allReports!, failure: error),
         ),
         (data) {
           data.newMessage = report.newMessage;
@@ -229,11 +235,14 @@ class ReportsController {
       CroppedFile? croppedFile = await showImageCropper(image.path);
 
       if (croppedFile != null) {
-        content.attachmentFile = File(croppedFile.path);
-        content.attachmentType = "image";
+        // Instância nova: um `SendReportState` com o mesmo `ReportContents`
+        // seria igual ao anterior e o bloc não o emitiria.
+        final updated = content.copy()
+          ..attachmentFile = File(croppedFile.path)
+          ..attachmentType = "image";
 
         return reportsBloc.add(
-          SendReportEvent(report: report, content: content),
+          SendReportEvent(report: report, content: updated),
         );
       }
     }
@@ -247,35 +256,39 @@ class ReportsController {
         allowMultiple: false);
 
     if (file != null && file.count > 0) {
+      // Instância nova: ver `beginPickImage`.
       if (CheckFile.isFileExceedMaxSizePermitted(
         file: File(file.files.first.path!),
       )) {
-        content.attachmentFile = null;
-        content.attachmentType = null;
+        final cleared = content.copy()
+          ..attachmentFile = null
+          ..attachmentType = null;
 
         return reportsBloc.add(
           SendReportEvent(
               report: newReport,
-              content: content,
+              content: cleared,
               flushbarMessage: "document_size_exceeds_limit"),
         );
       }
       if (await CheckFile.isFileEncrypted(file: File(file.files.first.path!))) {
-        content.attachmentFile = null;
-        content.attachmentType = null;
+        final cleared = content.copy()
+          ..attachmentFile = null
+          ..attachmentType = null;
 
         return reportsBloc.add(
           SendReportEvent(
               report: newReport,
-              content: content,
+              content: cleared,
               flushbarMessage: "document_protected_or_encrypted"),
         );
       }
-      content.attachmentFile = File(file.files.first.path!);
-      content.attachmentType = "application/pdf";
+      final updated = content.copy()
+        ..attachmentFile = File(file.files.first.path!)
+        ..attachmentType = "application/pdf";
 
       return reportsBloc.add(
-        SendReportEvent(report: newReport, content: content),
+        SendReportEvent(report: newReport, content: updated),
       );
     }
   }

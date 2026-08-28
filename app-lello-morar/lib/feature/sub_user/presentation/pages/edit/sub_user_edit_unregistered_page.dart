@@ -101,16 +101,14 @@ class _SubUserEditUnregisteredPage extends State<SubUserEditUnregisteredPage> {
                             icon: Icon(Icons.keyboard_arrow_down),
                             underline: SizedBox.shrink(),
                             hint: Text(getString(context, "choose_an_option")),
-                            value: controller.roles.firstWhere(
-                              (element) =>
-                                  element.description ==
-                                  controller.userSelected!.roleDescription,
-                              orElse: () => SubUserRole(
-                                role: controller.userSelected?.role,
-                                description:
-                                    controller.userSelected?.roleDescription,
-                              ),
-                            ),
+                            value: controller.roles
+                                .cast<SubUserRole?>()
+                                .firstWhere(
+                                  (element) =>
+                                      element?.description ==
+                                      controller.userSelected?.roleDescription,
+                                  orElse: () => null,
+                                ),
                             items: controller.roles.map((SubUserRole item) {
                               return DropdownMenuItem<SubUserRole>(
                                 value: item,
@@ -343,12 +341,15 @@ class _SubUserEditUnregisteredPage extends State<SubUserEditUnregisteredPage> {
                         keyboardType: TextInputType.numberWithOptions(),
                         validator: null,
                         selectDate: () async {
+                          final now = DateTime.now();
+                          final current = controller.selectedExpirationDate;
                           final date = await datePicker(
                             context,
-                            selectedDate: (controller.userSelected?.expiresAt?.difference(DateTime.now()).inDays ?? 0) < 0
-                                ? DateTime.now()
-                                : controller.selectedExpirationDate,
-                            firstDate: DateTime.now(),
+                            selectedDate:
+                                (current == null || current.isBefore(now))
+                                    ? now
+                                    : current,
+                            firstDate: now,
                           );
                           if (date.isAfter(DateTime.now())) {
                             controller.changeExpirationDate(date);
@@ -361,9 +362,9 @@ class _SubUserEditUnregisteredPage extends State<SubUserEditUnregisteredPage> {
                         clear: () {
                           controller.changeExpirationDate(null);
                           controller.userSelected = controller.userSelected
-                              ?.copyWith(expiresAt: null);
+                              ?.copyWith(clearExpiresAt: true);
                           controller.userSelected = controller.userSelected!
-                              .copyWith(expiresAt: null);
+                              .copyWith(clearExpiresAt: true);
                           setState(() {});
                         },
                       ),

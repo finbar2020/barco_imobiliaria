@@ -25,6 +25,10 @@ class _PayslipEmployeesPageState extends State<PayslipEmployeesPage> {
   // final PayslipEmployeesBloc bloc = ApplicationContainer.instance().resolve();
   late PayslipEmployeesBloc bloc;
   final refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  /// Marca a recarga disparada pelo próprio listener (`refreshKey.show()`),
+  /// para que o `onRefresh` do RefreshIndicator não peça outra recarga.
+  bool _programmaticRefresh = false;
   late Completer<void> _refreshCompleter;
   late ScrollController controller;
 
@@ -50,7 +54,12 @@ class _PayslipEmployeesPageState extends State<PayslipEmployeesPage> {
             bloc: bloc,
             listener: (context, state) {
               if (state is PayslipEmployeesLoadingState) {
-                refreshKey.currentState!.show();
+                // Durante o carregamento o builder mostra só o indicador, ou
+                // seja, o RefreshIndicator pode nem estar na árvore.
+                if (refreshKey.currentState != null) {
+                  _programmaticRefresh = true;
+                  refreshKey.currentState!.show();
+                }
               } else {
                 _refreshCompleter.complete();
                 _refreshCompleter = Completer<void>();
@@ -117,7 +126,13 @@ class _PayslipEmployeesPageState extends State<PayslipEmployeesPage> {
       child: RefreshIndicator(
         key: refreshKey,
         onRefresh: () async {
-          bloc.beginRefresh();
+          if (_programmaticRefresh) {
+            _programmaticRefresh = false;
+            // A recarga já estava em curso: só acompanha o fim dela.
+            if (bloc.state is! PayslipEmployeesLoadingState) return;
+          } else {
+            bloc.beginRefresh();
+          }
           return _refreshCompleter.future;
         },
         child: ListView.separated(

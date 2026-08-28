@@ -163,7 +163,7 @@ class _SubUserFormDetailsState extends State<SubUserFormDetails> {
                     widget.controller.changeExpirationDate(null);
                     widget.controller.userSelected = widget
                         .controller.userSelected
-                        ?.copyWith(expiresAt: null);
+                        ?.copyWith(clearExpiresAt: true);
                   },
                 ),
                 SizedBox(height: Dimens.spacingSmall),

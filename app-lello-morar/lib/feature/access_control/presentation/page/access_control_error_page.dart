@@ -1,6 +1,7 @@
 import 'package:essentials/essentials.dart';
 import 'package:flutter/material.dart';
 import 'package:morar/core/navigation/application_route.dart';
+import 'package:morar/feature/access_control/presentation/page/access_control_page.dart';
 import 'package:morar/feature/access_control/domain/entity/access_control.dart';
 import 'package:morar/feature/access_control/domain/entity/access_control_authorizations.dart';
 import 'package:morar/feature/access_control/presentation/controllers/access_control_store.dart';
@@ -38,6 +39,7 @@ class _AccessControlErrorPageState extends State<AccessControlErrorPage> {
         Navigator.pushReplacementNamed(
           context,
           ApplicationRoute.accessControl,
+          arguments: AcessControlPageArgs(isGeneric: widget.isGeneric),
         );
         return true;
       },

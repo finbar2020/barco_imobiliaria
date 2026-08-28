@@ -104,12 +104,10 @@ class _PartnerCouponsListViewState extends State<PartnerCouponsListView>
                   partner: widget.partner,
                   coupon: coupons[index],
                   onPressed: widget.onPressed,
-                  onShowDialog: widget.onShowDialog!(widget.partner,
-                          coupon: coupons[index]) ??
-                      () {},
-                  onDialogDismissed: widget.onDialogDismissed!(widget.partner,
-                          coupon: coupons[index]) ??
-                      () {},
+                  onShowDialog: () => widget.onShowDialog
+                      ?.call(widget.partner, coupon: coupons[index]),
+                  onDialogDismissed: () => widget.onDialogDismissed
+                      ?.call(widget.partner, coupon: coupons[index]),
                   onLifecyclePaused: widget.onLifecyclePaused ?? () {},
                   onLifecycleResumed: widget.onLifecycleResumed ?? () {},
                   onLifecycleDetached: widget.onLifecycleDetached ?? () {},

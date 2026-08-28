@@ -52,6 +52,7 @@ import 'package:essentials/essentials.dart' hide isNotNull, isNull, equals;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_features/shared_features.dart';
 
+import '../../helpers/firebase_mocks.dart';
 import '../../helpers/fixtures.dart';
 
 class _FakeUploader extends Fake implements Uploader {
@@ -239,6 +240,12 @@ class _FakeMeLocal extends Fake implements MeLocalDataSource {
 
 class _FakeMeRemote extends Fake implements MeRemoteDataSource {
   bool fail = false;
+
+  @override
+  Future<MeModel> get() async {
+    if (fail) throw Exception('boom');
+    return MeModel.fromEntity(testMe())!;
+  }
 
   @override
   Future<MeModel> patch(MeModel me, String code) async {
@@ -474,6 +481,30 @@ void main() {
       expect(await repo.selectFromCache(), isA<Rejection<Me?>>());
       expect(await repo.updatePassword('1', 'old', 'new'), isA<Rejection<Me?>>());
       expect(await repo.clear(), isA<Rejection<Nothing>>());
+    });
+
+    test('select busca no remoto e guarda em cache', () async {
+      await setUpFakeFirebase();
+      final local = _FakeMeLocal();
+      final repo = MeRepositoryImpl(
+        localDataSource: local,
+        remoteDataSource: _FakeMeRemote(),
+      );
+
+      final result = await repo.select();
+
+      expect(result, isA<Success<Me>>());
+      expect(await repo.selectFromCache(), isA<Success<Me?>>());
+    });
+
+    test('select rejeita falha do remoto', () async {
+      await setUpFakeFirebase();
+      final repo = MeRepositoryImpl(
+        localDataSource: _FakeMeLocal(),
+        remoteDataSource: _FakeMeRemote()..fail = true,
+      );
+
+      expect(await repo.select(), isA<Rejection<Me>>());
     });
   });
 

@@ -66,7 +66,7 @@ class ReservationRuleModel {
             ..closeHour = entity.closeHour
             ..defaultDuration = entity.defaultDuration
             ..timeBetweenReservations = entity.timeBetweenReservations
-            ..limitation = enumToString(entity.limitation)
+            ..limitation = _limitationName(entity.limitation)
             ..limit = entity.limit
             ..sendEmailToManager = entity.sendEmailToManager
             ..sendEmailToResident = entity.sendEmailToResident
@@ -88,8 +88,7 @@ class ReservationRuleModel {
     ..closeHour = this.closeHour
     ..defaultDuration = this.defaultDuration
     ..timeBetweenReservations = this.timeBetweenReservations
-    ..limitation =
-        stringToEnum(ReservationLimitation.values, this.limitation!).toString()
+    ..limitation = _limitationEnum(this.limitation).toString()
     ..limit = this.limit
     ..sendEmailToManager = this.sendEmailToManager
     ..sendEmailToResident = this.sendEmailToResident
@@ -100,4 +99,16 @@ class ReservationRuleModel {
     ..reservationRangeMinimum = this.reservationRangeMinimum
     ..reservationRangeMaximum = this.reservationRangeMaximum
     ..expirationDays = this.expirationDays;
+
+  /// Aceita tanto o nome do enum ("day") quanto o `toString()`
+  /// ("ReservationLimitation.day"); nulo/desconhecido cai em `none`.
+  static ReservationLimitation _limitationEnum(String? value) {
+    if (value == null) return ReservationLimitation.none;
+    final name = value.contains('.') ? value.split('.').last : value;
+    return stringToEnum(ReservationLimitation.values, name) ??
+        ReservationLimitation.none;
+  }
+
+  static String _limitationName(String? value) =>
+      enumToString(_limitationEnum(value))!;
 }

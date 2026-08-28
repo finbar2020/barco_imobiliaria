@@ -146,7 +146,8 @@ class _PreferencesZeroPaperPageState extends State<PreferencesZeroPaperPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      Flexible(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Opacity(
@@ -182,13 +183,15 @@ class _PreferencesZeroPaperPageState extends State<PreferencesZeroPaperPage> {
                           ),
                           SizedBox(height: Dimens.spacing),
                         ],
-                      ),
-                      Column(
+                      )),
+                      Flexible(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             getString(
                                 context, "preferences_zero_paper_digital"),
+                            textAlign: TextAlign.center,
                             style: LelloTextStyles.body(theme)!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
@@ -252,13 +255,15 @@ class _PreferencesZeroPaperPageState extends State<PreferencesZeroPaperPage> {
                           ),
                           SizedBox(height: Dimens.spacing),
                         ],
-                      ),
-                      Column(
+                      )),
+                      Flexible(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             getString(
                                 context, "preferences_zero_paper_printed"),
+                            textAlign: TextAlign.center,
                             style: LelloTextStyles.body(theme)!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
@@ -322,7 +327,7 @@ class _PreferencesZeroPaperPageState extends State<PreferencesZeroPaperPage> {
                           ),
                           SizedBox(height: Dimens.spacing),
                         ],
-                      ),
+                      )),
                     ],
                   ),
                   SizedBox(height: Dimens.spacing),

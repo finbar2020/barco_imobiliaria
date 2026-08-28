@@ -79,3 +79,6 @@ ios/fastlane/report.xml
 .fvm/
 # AI Agent config
 .agent/
+
+# Relatórios de cobertura (gerados por flutter test --coverage / genhtml)
+/coverage/

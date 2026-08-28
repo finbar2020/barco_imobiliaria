@@ -48,7 +48,11 @@ class _ComfortPartnersListViewHorizontalScrollingState
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    widget.onCategoryDispose(widget.partners.first.category);
+    // A lista pode estar vazia (categoria sem parceiros): `partners.first`
+    // lançaria `StateError` no desmonte.
+    widget.onCategoryDispose(widget.partners.isNotEmpty
+        ? widget.partners.first.category
+        : category);
     widget.stopAnalyticsTimer();
     super.dispose();
   }

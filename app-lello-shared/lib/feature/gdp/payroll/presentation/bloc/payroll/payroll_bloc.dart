@@ -37,7 +37,7 @@ class PayrollBloc extends Bloc<PayrollEvent, PayrollState> {
         await listPayroll.call(ListPayrollParam(condominiumId: condominiumId));
     emit(result.fold(
         (err) => PayrollLoadFailedState(
-            state.data, state.detail!, condominiumId, err),
+            state.data, state.detail, condominiumId, err),
         (res) => PayrollListLoadedState(res, condominiumId)));
   }
 
@@ -54,7 +54,7 @@ class PayrollBloc extends Bloc<PayrollEvent, PayrollState> {
     final result = await getPayroll.call(
         GetPayrollParam(condominiumId: condominiumId, period: event.period));
     emit(result.fold(
-        (err) => PayrollLoadFailedState(data, detail!, condominiumId, err),
+        (err) => PayrollLoadFailedState(data, detail, condominiumId, err),
         (res) => PayrollLoadedState(data, res, condominiumId)));
   }
 

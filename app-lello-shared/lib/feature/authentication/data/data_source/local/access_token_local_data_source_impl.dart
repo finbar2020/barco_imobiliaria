@@ -49,8 +49,10 @@ class AccessTokenLocalDataSourceImpl extends AccessTokenLocalDataSource {
     var boxRefresh = await Hive.openBox(_boxNameRefreshToken);
 
     if (model == null) {
-      box.clear();
-      boxRefresh.clear();
+      // Sem `await` a limpeza só terminaria depois do retorno e o token ainda
+      // poderia ser lido logo em seguida.
+      await box.clear();
+      await boxRefresh.clear();
     } else {
       box.delete(_key + role);
 

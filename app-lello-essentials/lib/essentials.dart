@@ -211,7 +211,6 @@ export 'modal/share.dart';
 //? Network
 export 'network/api_failure.dart';
 export 'network/api_failure_converter.dart';
-export 'network/authorization_header_interceptor.dart';
 export 'network/api_performace_monitor.dart';
 
 //? store

@@ -25,9 +25,8 @@ class TertiaryButton extends StatelessWidget {
     return TextButton(
       child: this.child ??
           Text(this.text ?? "",
-              style: LelloTextStyles.inverseButton(theme)?.copyWith(
-                  color: style?.color ??
-                      LelloTextStyles.inverseButton(theme)?.color)),
+              // `style` completo mesclado ao estilo padrão (cor de link).
+              style: LelloTextStyles.inverseButton(theme)?.merge(style)),
       onPressed: onPressed,
       onLongPress: onLongPress,
     );

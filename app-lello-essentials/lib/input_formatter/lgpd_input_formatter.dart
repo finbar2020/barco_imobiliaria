@@ -2,7 +2,7 @@ class LgpdFormatter {
   static String formatEmail(String? email) {
     if (email == null) return "";
     return email.replaceAllMapped(
-        RegExp(r'(?<=[\w]{3})[\w-\._\+%]*(?=[\w]{2}@)'), (match) {
+        RegExp(r'(?<=[\w]{3})[\w-\._\+%]+(?=[\w]{2}@)'), (match) {
       return '*';
     });
   }

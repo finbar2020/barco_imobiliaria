@@ -8,10 +8,18 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
     on<ReportFileLoadedEvent>(handleReportFileLoadedEvent);
     on<ReportPostedEvent>(handleReportPostedEvent);
     on<NewReplyReportsFailureEvent>(handleNewReplyReportsFailureEvent);
+    on<NewReportsFailureEvent>(handleNewReportsFailureEvent);
     on<PreviewReportEvent>(handlePreviewReportEvent);
     on<ReportSendSuccessEvent>(handleReportSendSuccessEvent);
     on<ReportsBookFirstEvent>(handleReportsBookFirstEvent);
-    on<ReportsFailureEvent>(handleReportsFailureEvent);
+    // As falhas específicas herdam de `ReportsFailureEvent` e têm handler
+    // próprio: o genérico só responde ao evento exato, senão o bloc emitiria
+    // um `ReportsFailureState` logo depois do estado específico.
+    on<ReportsFailureEvent>((event, emit) {
+      if (event.runtimeType == ReportsFailureEvent) {
+        handleReportsFailureEvent(event, emit);
+      }
+    });
     on<ReportsGetReportFailureEvent>(handleReportsGetReportFailureEvent);
     on<ReportsLoadedEvent>(handleReportsLoadedEvent);
     on<ReportsLoadingEvent>(handleReportsLoadingEvent);
@@ -61,6 +69,18 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
     ));
   }
 
+  void handleNewReportsFailureEvent(
+    NewReportsFailureEvent event,
+    Emitter<ReportsState> emit,
+  ) {
+    emit(NewReportsFailureState(
+      report: event.report,
+      content: event.content,
+      attachment: event.attachment,
+      failure: event.failure,
+    ));
+  }
+
   void handlePreviewReportEvent(
     PreviewReportEvent event,
     Emitter<ReportsState> emit,
@@ -101,6 +121,7 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
     Emitter<ReportsState> emit,
   ) {
     emit(ReportsGetReportFailureState(
+      report: event.report,
       allReports: event.allReports,
       failure: event.failure,
     ));

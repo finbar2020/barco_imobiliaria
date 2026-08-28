@@ -33,7 +33,7 @@ class TimesheetFilterModel {
   TimesheetFilter toEntity() => TimesheetFilter()
     ..name = this.name
     ..id = this.id
-    ..type = stringToEnum(TimesheetTypeEnum.values, this.type!)
+    ..type = stringToEnum(TimesheetTypeEnum.values, this.type)
     ..dobFrom = this.dobFrom
     ..dobTo = this.dobTo;
 }

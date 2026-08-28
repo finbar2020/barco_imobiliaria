@@ -30,7 +30,7 @@ class HomeController {
   final GetPointsUsecase _getPointsUsecase;
   final GetToken getToken;
   late GhostNotificationUsecase ghostNotificationUsecase;
-  late AnalyticsTimer colaboradorHomeTimer;
+  AnalyticsTimer? colaboradorHomeTimer;
 
   final HomeBloc homeBloc;
 
@@ -262,6 +262,6 @@ class HomeController {
   }
 
   void colaboradorHomeTimerStop() {
-    colaboradorHomeTimer.stopTimer();
+    colaboradorHomeTimer?.stopTimer();
   }
 }

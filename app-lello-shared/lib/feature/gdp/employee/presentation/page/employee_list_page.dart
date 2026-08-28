@@ -33,6 +33,10 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   late ScrollController controller;
   final _indicatorKey = GlobalKey<RefreshIndicatorState>();
 
+  /// Marca a recarga disparada pelo próprio listener (`_indicatorKey.show()`),
+  /// para que o `onRefresh` do RefreshIndicator não peça outra recarga.
+  bool _programmaticRefresh = false;
+
   @override
   void initState() {
     bloc = widget.appContainer.resolve();
@@ -51,7 +55,8 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
           if (!(state is EmployeeListLoadingState)) {
             _refreshCompleter.complete();
             _refreshCompleter = Completer<void>();
-          } else {
+          } else if (_indicatorKey.currentState != null) {
+            _programmaticRefresh = true;
             _indicatorKey.currentState!.show();
           }
         },
@@ -130,27 +135,31 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     if (state is EmployeeListLoadFailedState)
       return Container(
         child: Center(
-          child: Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Ocorreu um erro, tente novamente mais tarde',
-                  style: LelloTextStyles.body(theme),
-                ),
-                Text(
-                  'Se o problema persistir entre em contato com o suporte',
-                  style: LelloTextStyles.body(theme),
-                )
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Ocorreu um erro, tente novamente mais tarde',
+                style: LelloTextStyles.body(theme),
+              ),
+              Text(
+                'Se o problema persistir entre em contato com o suporte',
+                style: LelloTextStyles.body(theme),
+              )
+            ],
           ),
         ),
       );
     return RefreshIndicator(
       key: _indicatorKey,
       onRefresh: () async {
-        bloc.beginRefresh();
+        if (_programmaticRefresh) {
+          _programmaticRefresh = false;
+          // A recarga já estava em curso: só acompanha o fim dela.
+          if (bloc.state is! EmployeeListLoadingState) return;
+        } else {
+          bloc.beginRefresh();
+        }
         return _refreshCompleter.future;
       },
       child: Visibility(

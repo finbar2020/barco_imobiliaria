@@ -291,12 +291,18 @@ class _ResinHistoryFilterWidgetState
           ),
         ),
         onTap: () async {
+          final DateTime firstDate = getTwoYearsAgo();
+          final DateTime lastDate = widget.filter.endDate ?? DateTime.now();
+          // Com apenas a data final preenchida (e no passado) o padrão
+          // `DateTime.now()` ficaria depois de `lastDate` e violaria a
+          // asserção do `showDatePicker`.
           DateTime? selected = await showDatePicker(
             context: context,
             initialEntryMode: DatePickerEntryMode.calendarOnly,
-            initialDate: widget.filter.startDate ?? DateTime.now(),
-            firstDate: getTwoYearsAgo(),
-            lastDate: widget.filter.endDate ?? DateTime.now(),
+            initialDate: _clampDate(
+                widget.filter.startDate ?? DateTime.now(), firstDate, lastDate),
+            firstDate: firstDate,
+            lastDate: lastDate,
           );
           if (selected != null) {
             setState(() {
@@ -334,12 +340,15 @@ class _ResinHistoryFilterWidgetState
           ),
         ),
         onTap: () async {
+          final DateTime firstDate = widget.filter.startDate ?? getTwoYearsAgo();
+          final DateTime lastDate = DateTime.now();
           DateTime? selected = await showDatePicker(
             context: context,
             initialEntryMode: DatePickerEntryMode.calendarOnly,
-            initialDate: widget.filter.endDate ?? DateTime.now(),
-            firstDate: widget.filter.startDate ?? getTwoYearsAgo(),
-            lastDate: DateTime.now(),
+            initialDate: _clampDate(
+                widget.filter.endDate ?? DateTime.now(), firstDate, lastDate),
+            firstDate: firstDate,
+            lastDate: lastDate,
           );
           if (selected != null) {
             setState(() {
@@ -349,6 +358,13 @@ class _ResinHistoryFilterWidgetState
         },
       ),
     );
+  }
+
+  /// Mantém [date] dentro do intervalo aceito pelo `showDatePicker`.
+  DateTime _clampDate(DateTime date, DateTime firstDate, DateTime lastDate) {
+    if (date.isBefore(firstDate)) return firstDate;
+    if (date.isAfter(lastDate)) return lastDate;
+    return date;
   }
 
   Row _datePickerBuilder(BuildContext context) {

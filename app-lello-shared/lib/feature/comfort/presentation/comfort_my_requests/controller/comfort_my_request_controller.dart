@@ -38,7 +38,7 @@ class ComfortMyRequestsController {
   final sessionBloc;
   final GetToken getToken;
 
-  late AnalyticsTimer comfortMyRequestsTimer, comfortMyRequestsBottomSheetTimer;
+  AnalyticsTimer? comfortMyRequestsTimer, comfortMyRequestsBottomSheetTimer;
 
   ComfortRequestsFilter? filter;
   List<ComfortSubcategories> subcategories = [];
@@ -145,10 +145,12 @@ class ComfortMyRequestsController {
 
     response.fold(
         (error) => comfortMyRequestsBloc.add(ErrorComfortMyRequestsEvent(
-            errorMessageKey: 'errorMessageKey',
-            errorCode: null,
+            errorMessageKey: 'comfort_get_subcategories_error',
+            errorCode: error.code.toString(),
             errorDescription: null)), (response) {
-      subcategories.addAll(response);
+      subcategories
+        ..clear()
+        ..addAll(response);
       return comfortMyRequestsBloc
           .add(LoadedSubcategoriesMyRequestEvent(subcategories: subcategories));
     });
@@ -198,7 +200,12 @@ class ComfortMyRequestsController {
           ),
         );
       }
-      throw error;
+      // O `Failure` não é uma `Exception`: relançá-lo faria o
+      // `PagingController` propagar um erro não tratado. O erro é registrado
+      // no próprio controller de paginação, que passa a exibir o indicador
+      // de erro da página.
+      pagingController.value = pagingController.value.copyWith(error: error);
+      return <ComfortCompletedRequest>[];
     }, (response) {
       if (page == 1) {
         myRequests.clear();
@@ -299,9 +306,10 @@ class ComfortMyRequestsController {
     }
   }
 
-  Future<void> close() {
-    _subscription?.cancel();
-    return close();
+  Future<void> close() async {
+    await _subscription?.cancel();
+    pagingController.dispose();
+    await comfortMyRequestsBloc.close();
   }
 
   Future<void> resendRequest(String? requestId) async {
@@ -491,7 +499,7 @@ class ComfortMyRequestsController {
   }
 
   void comfortMyRequestsAnalyticsTimerStop() {
-    comfortMyRequestsTimer.stopTimer();
+    comfortMyRequestsTimer?.stopTimer();
   }
 
   void comfortMyRequestsBottomSheetAnalyticsTimerStart() async {
@@ -506,7 +514,7 @@ class ComfortMyRequestsController {
   }
 
   void comfortMyRequestsBottomSheetAnalyticsTimerStop() {
-    comfortMyRequestsBottomSheetTimer.stopTimer();
+    comfortMyRequestsBottomSheetTimer?.stopTimer();
   }
 
   void updateItem(ComfortCompletedRequest updatedItem, int index) {

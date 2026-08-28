@@ -53,6 +53,7 @@ class ComfortRequestPurchaseModel {
             ..rating = entity.rating
             ..comment = entity.comment
             ..purchaseDone = entity.purchaseDone
+            ..purchaseDate = entity.purchaseDate
             ..dateResend = entity.dateResend
             ..typeCTA = entity.typeCTA
             ..canCancel = entity.canCancel

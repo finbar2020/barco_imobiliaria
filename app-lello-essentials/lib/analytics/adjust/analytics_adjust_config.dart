@@ -152,7 +152,7 @@ class AnalyticsAdjustConfig {
     };
 
     config.deferredDeeplinkCallback = (String? uri) {
-      log('[Adjust]: Received deferred deeplink: ' + uri!);
+      log('[Adjust]: Received deferred deeplink: ${uri ?? '(null)'}');
     };
 
     // // Add session callback parameters.

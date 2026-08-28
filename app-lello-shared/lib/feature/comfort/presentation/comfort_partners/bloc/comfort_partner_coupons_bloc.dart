@@ -5,9 +5,17 @@ import 'package:shared_features/feature/comfort/presentation/comfort_partners/bl
 class ComfortPartnerCouponsBloc
     extends Bloc<ComfortPartnerCouponsEvent, ComfortPartnerCouponsState> {
   ComfortPartnerCouponsBloc() : super(const EmptyCouponsState()) {
+    on<EmptyCouponsEvent>(handleEmptyCouponsEvent);
     on<LoadingCouponsEvent>(handleLoadingCouponsEvent);
     on<LoadedCouponsEvent>(handleLoadedCouponsEvent);
     on<CouponsErrorEvent>(handleLoadedCouponsErrorEvent);
+  }
+
+  void handleEmptyCouponsEvent(
+      EmptyCouponsEvent event, Emitter<ComfortPartnerCouponsState> emit) {
+    emit(
+      const EmptyCouponsState(),
+    );
   }
 
   void handleLoadingCouponsEvent(

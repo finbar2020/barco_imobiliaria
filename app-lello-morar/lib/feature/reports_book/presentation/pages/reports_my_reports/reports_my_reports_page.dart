@@ -121,10 +121,12 @@ class _MyReportsPageState extends State<MyReportsPage>
       required SessionBloc sessionBloc}) {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       if (arguments.reportNotificationContext?.isNotEmpty == true && mounted) {
-        var item = state.allReports.cast<Report?>().firstWhere((element) =>
-            element?.numReport == arguments.reportNotificationContext ||
-            element?.notificationParameter ==
-                arguments.reportNotificationContext);
+        var item = state.allReports.cast<Report?>().firstWhere(
+            (element) =>
+                element?.numReport == arguments.reportNotificationContext ||
+                element?.notificationParameter ==
+                    arguments.reportNotificationContext,
+            orElse: () => null);
         if (item != null) {
           controller.getReport(report: item);
           Navigator.pushNamed(

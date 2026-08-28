@@ -65,6 +65,9 @@ class VacationEmployeesBloc
       return VacationEmployeesLoadedState(
           data, query, condominiumId, data.length == 0);
     }));
+
+    // Uma busca digitada durante o carregamento fica pendente: dispara agora.
+    _handlePendingSearch(query);
   }
 
   Future<void> _mapNextPage(

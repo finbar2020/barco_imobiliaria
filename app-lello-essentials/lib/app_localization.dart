@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 class AppLocalization {
   final Locale locale;
-  late Map<String, String> _localizedStrings;
+  Map<String, String> _localizedStrings = {};
 
   AppLocalization(this.locale);
 
@@ -15,6 +15,12 @@ class AppLocalization {
 
   static AppLocalization of(BuildContext context) {
     return Localizations.of(context, AppLocalization);
+  }
+
+  /// Como [of], mas devolve `null` quando o delegate não está registrado no
+  /// contexto (em vez de estourar `TypeError`).
+  static AppLocalization? maybeOf(BuildContext context) {
+    return Localizations.of<AppLocalization>(context, AppLocalization);
   }
 
   Future load() async {
@@ -40,7 +46,7 @@ String getString(BuildContext? context, String key, {String defaultText = ""}) {
     return defaultText;
   } else {
     return context != null
-        ? (AppLocalization.of(context).translate(key) ?? defaultText)
+        ? (AppLocalization.maybeOf(context)?.translate(key) ?? defaultText)
         : defaultText;
   }
 }

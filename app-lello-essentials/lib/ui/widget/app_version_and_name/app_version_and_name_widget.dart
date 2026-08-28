@@ -21,6 +21,21 @@ class AppVersionAndNameWidget extends StatefulWidget {
 
 class _AppVersionAndNameWidgetState extends State<AppVersionAndNameWidget> {
   PackageInfo? packageInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPackageInfo();
+  }
+
+  /// Busca o `PackageInfo` uma única vez e só atualiza o estado se o widget
+  /// ainda estiver montado.
+  Future<void> _loadPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    if (!mounted) return;
+    setState(() => packageInfo = info);
+  }
+
   @override
   Widget build(BuildContext context) {
     String version = _getVersion();
@@ -54,18 +69,8 @@ class _AppVersionAndNameWidgetState extends State<AppVersionAndNameWidget> {
     );
   }
 
-  String _getVersion() {
-    if (packageInfo != null)
-      return "${_getName()}${packageInfo!.version}";
-    else {
-      PackageInfo.fromPlatform().then((value) {
-        setState(() {
-          packageInfo = value;
-        });
-      });
-      return "";
-    }
-  }
+  String _getVersion() =>
+      packageInfo == null ? "" : "${_getName()}${packageInfo!.version}";
 
   String _getName() {
     switch (widget.appOrigin) {

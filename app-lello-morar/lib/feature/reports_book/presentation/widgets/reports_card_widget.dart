@@ -123,34 +123,39 @@ class ReportsCardWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(Dimens.spacingSmall),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    getString(context, report.getSituation),
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        LelloTextStyles.body(theme)!.copyWith(
-                                      color: color(
-                                          closed: report.closed!, theme: theme),
+                        // Flexible: limita a largura da situação para as
+                        // reticências do texto funcionarem.
+                        Flexible(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(Dimens.spacingSmall),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      getString(context, report.getSituation),
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          LelloTextStyles.body(theme)!.copyWith(
+                                        color: color(
+                                            closed: report.closed!,
+                                            theme: theme),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: Dimens.spacing),
-                            Icon(
-                              Icons.keyboard_arrow_right,
-                              size: 35.0,
-                              color: LelloTheme.palleteOf(theme).grey(),
-                            ),
-                          ],
+                              SizedBox(height: Dimens.spacing),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                size: 35.0,
+                                color: LelloTheme.palleteOf(theme).grey(),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

@@ -125,6 +125,7 @@ class _AccessTableState extends State<AccessTable> {
                 ),
                 Expanded(
                   child: Scrollbar(
+                    controller: _horizontalScrollController,
                     thumbVisibility: true,
                     trackVisibility: true,
                     thickness: 5,

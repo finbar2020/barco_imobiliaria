@@ -314,7 +314,7 @@ class _AgreementsDayPaymentPageState extends State<AgreementsDayPaymentPage> {
                             ),
                           )
                         : IgnorePointer(
-                            ignoring: !checked && !loading,
+                            ignoring: !checked || loading,
                             child: Opacity(
                               opacity: checked && !loading ? 1.0 : 0.3,
                               child: PrimaryButton(

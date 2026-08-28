@@ -37,6 +37,12 @@ class CertificateNoOutstandingDebtController {
       (unit) async {
         this.unit = unit;
         setTextFields(unit);
+        if (email.isEmpty || mobilePhone.isEmpty || phone.isEmpty) {
+          // Cadastro incompleto: mostra o formulário para completar os dados
+          // antes de gerar a certidão.
+          bloc.add(UnitProfileLoadedEvent(unit: unit));
+          return;
+        }
         generateCertificateNoOutstandingDebt(
             unitProfile: requestCertificateNoOutstandingDebt);
       },
@@ -96,9 +102,9 @@ class CertificateNoOutstandingDebtController {
 
   String? mobilePhoneFormatted(String phone) {
     if (phone.isNotEmpty) {
-      final ddd = mobilePhone.substring(0, 2);
-      final first = mobilePhone.substring(2, 7);
-      final second = mobilePhone.substring(7);
+      final ddd = phone.substring(0, 2);
+      final first = phone.substring(2, 7);
+      final second = phone.substring(7);
       return "($ddd) $first-$second";
     }
     return null;

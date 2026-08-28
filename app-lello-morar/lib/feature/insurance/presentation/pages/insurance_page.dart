@@ -197,80 +197,9 @@ class _InsurancePageState extends State<InsurancePage> {
                                 ],
                               );
                             }
-                            if (state.model?.insuranceData?.cost ==
-                                controller.maxCost) {
-                              Column(
-                                children: [
-                                  Text(
-                                    "Agora você conta com a nossa ajuda para aqueles momentos em que um cano estourar, a máquina de lavar pifar, ou ainda algum outro acidente acontecer!",
-                                    textAlign: TextAlign.center,
-                                    style: LelloTextStyles.bodyBold(theme)!
-                                        .copyWith(color: Color(0xFF484848)),
-                                  ),
-                                  SizedBox(height: Dimens.spacingMedium),
-                                  Text(
-                                    "Oferecer a melhor cobertura do mercado contra possíveis acidentes do dia a dia faz parte do nosso propósito em garantir a sua comodidade.",
-                                    textAlign: TextAlign.center,
-                                    style: LelloTextStyles.body(theme)!
-                                        .copyWith(color: Color(0xFF484848)),
-                                  ),
-                                  SizedBox(height: Dimens.spacingMedium),
-                                  RichText(
-                                    textAlign: TextAlign.center,
-                                    text: new TextSpan(
-                                      style: LelloTextStyles.body(theme)!
-                                          .copyWith(color: Color(0xFF484848)),
-                                      children: <TextSpan>[
-                                        TextSpan(text: "Com o seguro "),
-                                        TextSpan(
-                                            text: "Casa Protegida Lello",
-                                            style: LelloTextStyles.bodyBold(
-                                                    theme)!
-                                                .copyWith(
-                                                    color: theme.primaryColor)),
-                                        TextSpan(text: ", você garante "),
-                                        TextSpan(
-                                            text: "proteção",
-                                            style:
-                                                LelloTextStyles.bodyBold(theme)!
-                                                    .copyWith(
-                                                        color:
-                                                            Color(0xFF5C0521))),
-                                        TextSpan(text: " e "),
-                                        TextSpan(
-                                            text: "cuidado",
-                                            style:
-                                                LelloTextStyles.bodyBold(theme)!
-                                                    .copyWith(
-                                                        color:
-                                                            Color(0xFF5C0521))),
-                                        TextSpan(text: " para o seu lar"),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                            if (!(state.model?.insuranceData?.cost ==
-                                controller.maxCost)) {
-                              Column(
-                                children: [
-                                  Text(
-                                    "Proporcionar tranquilidade, segurança para você e sua família é o nosso objetivo.",
-                                    textAlign: TextAlign.center,
-                                    style: LelloTextStyles.bodyBold(theme)!
-                                        .copyWith(color: Color(0xFF484848)),
-                                  ),
-                                  SizedBox(height: Dimens.spacingMedium),
-                                  Text(
-                                    "Por isso, oferecer a melhor cobertura do mercado contra possíveis acidentes do dia a dia faz parte do nosso propósito em garantir a sua comodidade.",
-                                    textAlign: TextAlign.center,
-                                    style: LelloTextStyles.body(theme)!
-                                        .copyWith(color: Color(0xFF484848)),
-                                  ),
-                                ],
-                              );
-                            }
+                            // Os textos informativos do plano (custo maximo ou nao) sao
+                            // renderizados pelo BlocBuilder seguinte; os Columns que
+                            // existiam aqui eram construidos e descartados (sem return).
                           }
                           return Container();
                         },

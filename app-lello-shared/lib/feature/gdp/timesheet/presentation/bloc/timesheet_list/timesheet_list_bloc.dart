@@ -71,7 +71,7 @@ class TimesheetListBloc extends Bloc<TimesheetListEvent, TimesheetListState> {
     final condominiumId = state.condominiumId;
     emit(TimesheetInsertingState(
         state.list,
-        state.event!,
+        event,
         state.query!,
         condominiumId!,
         state.selectedMonth,
@@ -81,8 +81,8 @@ class TimesheetListBloc extends Bloc<TimesheetListEvent, TimesheetListState> {
         condominiumId: condominiumId, events: event.timesheetEvent));
 
     final foldedResult = result.fold(
-        (err) => TimesheetInsertFailedState(state.list, state.event!,
-            state.query!, condominiumId, state.selectedMonth, err), (data) {
+        (err) => TimesheetInsertFailedState(state.list, event, state.query!,
+            condominiumId, state.selectedMonth, err), (data) {
       beginRefresh();
       AnalyticsLogEvents.logEvent(
         event: appOriginEnum == AppOriginEnum.manager
@@ -94,7 +94,7 @@ class TimesheetListBloc extends Bloc<TimesheetListEvent, TimesheetListState> {
         referenceValue: sessionBloc?.condominiumReference.toString() ?? "",
         appOrigin: appOriginEnum,
       );
-      return TimesheetInsertedState(state.list, state.event!, state.query!,
+      return TimesheetInsertedState(state.list, event, state.query!,
           condominiumId, state.selectedMonth, true);
     });
 

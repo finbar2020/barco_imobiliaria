@@ -1,7 +1,6 @@
 import 'package:essentials/essentials.dart';
 import 'package:essentials/ui/widget/error_handling_widget/error_handling_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:morar/core/dependency/application_container.dart';
 import 'package:morar/feature/home/domain/entity/home_item_enum.dart';
 import 'package:morar/feature/home/presentation/bloc/home_bloc.dart';
@@ -121,14 +120,6 @@ class _PreferencesHomeCardsPageState extends State<PreferencesHomeCardsPage> {
                   return Expanded(child: _buildError());
                 }
                 if (state is PreferencesHomeCardsLoadedState) {
-                  SchedulerBinding.instance.addPostFrameCallback((_) {
-                    if (_scrollController.hasClients) {
-                      setState(() {
-                        isScrollable =
-                            _scrollController.position.maxScrollExtent != 0;
-                      });
-                    }
-                  });
                   return Expanded(
                     child: Stack(alignment: Alignment.center, children: [
                       if (showScrollIndicator && isScrollable)

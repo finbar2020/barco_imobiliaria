@@ -132,20 +132,17 @@ class MeLocalDataSourceImpl extends MeLocalDataSource {
             ..address = condo.address
             ..regulationUrl = condo.regulationUrl
             ..active_manager = condo.active_manager
-            ..layout = layoutData.length > 0
-                ? layoutData
-                    .where((element) => element.condoId == condo.id)
-                    .map((e) => LayoutModel(
-                          cod: e.cod ?? "",
-                          name: e.name ?? "",
-                          reference: e.reference ?? "",
-                          primary: e.primary ?? "",
-                          secondary: e.secondary ?? "",
-                          logoPath: e.logoPath ?? "",
-                        ))
-                    .toList()
-                    .first
-                : null
+            ..layout = layoutData
+                .where((element) => element.condoId == condo.id)
+                .map<LayoutModel?>((e) => LayoutModel(
+                      cod: e.cod ?? "",
+                      name: e.name ?? "",
+                      reference: e.reference ?? "",
+                      primary: e.primary ?? "",
+                      secondary: e.secondary ?? "",
+                      logoPath: e.logoPath ?? "",
+                    ))
+                .firstWhere((_) => true, orElse: () => null)
             ..blocks = blockData
                 .where((element) => element.condominiumId == condo.id)
                 .map((BlockData e) => BlockModel()

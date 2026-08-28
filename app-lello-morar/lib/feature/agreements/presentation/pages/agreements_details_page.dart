@@ -85,8 +85,8 @@ class AgreementsDetailsPage extends StatelessWidget {
                             Text(
                                 "${sessionBloc.state.session!.unity!.title!} - ${state.agreement.unitOwner}"),
                             SizedBox(height: Dimens.spacing),
-                            Text(
-                                "Formas de pagamento/parcelas"), //TODO: GETSTRING
+                            Text(getString(
+                                context, "agreements_payment_method")),
                           ],
                         ),
                       ),

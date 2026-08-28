@@ -31,6 +31,7 @@ class VacationGDPBloc extends Bloc<VacationGDPEvent, VacationGDPState> {
       required this.getLockedDays})
       : super(const VacationGDPLoadingState(null)) {
     on<VacationGDPLoadEvent>(_mapLoad);
+    on<GetLockedDaysEvent>(_mapLockedDays);
     _onSessionChanged();
   }
 
@@ -65,10 +66,34 @@ class VacationGDPBloc extends Bloc<VacationGDPEvent, VacationGDPState> {
         if (element is VacationParams) p = element;
         if (element is VacationLockedDays) l = element;
       });
+      vacationParams = p;
+      if (l != null) vacationLockedDays = [l!];
       return VacationGDPLoadedState(v, condominiumId, p, l!);
     });
 
     emit(result);
+  }
+
+  Future<void> _mapLockedDays(
+    GetLockedDaysEvent event,
+    Emitter<VacationGDPState> emit,
+  ) async {
+    final condominiumId = sessionBloc?.condominiumId;
+    if (condominiumId == null) return;
+
+    final result = await getLockedDays.call(GetLockedDaysParam(
+        condominiumId: condominiumId,
+        employeeId: event.employeeId,
+        startDate: event.startDate,
+        endDate: event.endDate));
+
+    emit(result.fold(
+        (err) => VacationGDPLoadFailedState(condominiumId, error: err),
+        (data) {
+      vacationLockedDays = [data];
+      return VacationGDPLockedDaysState(
+          vacationLockedDays, event.startDate, event.endDate, condominiumId);
+    }));
   }
 
   void _onSessionChanged() {

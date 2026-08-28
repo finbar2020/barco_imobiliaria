@@ -204,6 +204,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                       ),
                       textCapitalization: TextCapitalization.characters,
                       inputFormatters: [
+                        // Converte para maiusculas antes do filtro, senao as
+                        // minusculas digitadas seriam descartadas.
+                        TextInputFormatter.withFunction((oldValue, newValue) =>
+                            newValue.copyWith(
+                                text: newValue.text.toUpperCase())),
                         FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9-]')),
                         LengthLimitingTextInputFormatter(8),
                       ],

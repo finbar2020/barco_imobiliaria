@@ -36,7 +36,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   bool switchOnStart = false;
   bool loadedFromCache = false;
 
-  late StreamSubscription sessionListener;
+  StreamSubscription? sessionListener;
   late StreamSubscription authListener;
 
   SessionBloc({
@@ -114,15 +114,26 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       logout();
     } else {
       if (session != null) {
-        session.me = event.me!;
+        // Um novo `Session` é obrigatório: o bloc descarta estados iguais ao
+        // atual e `SessionLoadedState` compara pela instância da sessão, então
+        // mutar a sessão existente não notificaria ninguém.
+        final updated = Session(
+          me: event.me!,
+          condominium: session.condominium,
+        );
+        final lastPosition = session.lastPosition;
+        if (lastPosition != null) {
+          updated.setLastPosition(lastPosition);
+        }
         emit(
           SessionLoadedState(
-            session: session,
+            session: updated,
             isTabletSession: await TabletSessionUtils.getIsTabletSession(
                 AppOriginEnum.employee),
           ),
         );
-        await _save(session);
+        store.setSession(session: updated);
+        await _save(updated);
       }
     }
   }
@@ -379,7 +390,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   @override
   Future<void> close() {
     authListener.cancel();
-    sessionListener.cancel();
+    sessionListener?.cancel();
     sessionTimer?.cancel();
     return super.close();
   }

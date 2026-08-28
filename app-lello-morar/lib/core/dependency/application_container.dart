@@ -377,6 +377,8 @@ import 'package:shared_features/feature/comfort/domain/use_case/get_partner_coup
 import 'package:shared_features/feature/comfort/domain/use_case/get_partner_coupons/get_partner_coupons_impl.dart';
 import 'package:shared_features/feature/comfort/domain/use_case/get_partner_is_favorite/get_partner_is_favorite.dart';
 import 'package:shared_features/feature/comfort/domain/use_case/get_partner_is_favorite/get_partner_is_favorite_impl.dart';
+import 'package:shared_features/feature/comfort/domain/use_case/get_subcategories/get_subcategories.dart';
+import 'package:shared_features/feature/comfort/domain/use_case/get_subcategories/get_subcategories_impl.dart';
 import 'package:shared_features/feature/comfort/domain/use_case/resend_request/resend_request.dart';
 import 'package:shared_features/feature/comfort/domain/use_case/resend_request/resend_request_impl.dart';
 import 'package:shared_features/feature/comfort/domain/use_case/send_review_request/send_review_request.dart';
@@ -1204,6 +1206,8 @@ class ApplicationContainer extends SharedApplicationContainer {
         () => GetAllPartnerReviewsUseCaseImpl(repository: resolve()));
     locator.registerFactory<ResendRequestUseCase>(
         () => ResendRequestUseCaseImpl(repository: resolve()));
+    locator.registerFactory<GetSubcategoriesUseCase>(
+        () => GetSubcategoriesUseCaseImpl(repository: resolve()));
     locator.registerFactory<CancelRequestUseCase>(
         () => CancelRequestUseCaseImpl(repository: resolve()));
     locator.registerFactory<UpdateRequestUseCase>(

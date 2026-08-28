@@ -704,7 +704,9 @@ class ApplicationContainer extends SharedApplicationContainer {
       () => ExpiredSessionBloc(
           clearDataUseCase: resolve(),
           logOutUseCase: resolve(),
-          emptySessionState: resolve()),
+          // `VoidCallback` não é um tipo registrado no container: o estado
+          // vazio da sessão é o próprio logout do `SessionBloc`.
+          emptySessionState: resolve<SessionBloc>().logout),
     );
 
     // HOME

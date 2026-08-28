@@ -36,6 +36,11 @@ class FileMethods {
         );
       }
     } catch (e) {
+      // O Flushbar também precisa de Navigator; sem ele só registra o erro.
+      if (Navigator.maybeOf(context) == null) {
+        debugPrint('[FileMethods] viewFile error: $e');
+        return;
+      }
       showSnackBar(context,
           getString(context, "file_invalid", defaultText: "Arquivo inválido"));
     }

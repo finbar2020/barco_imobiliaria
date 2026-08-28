@@ -219,8 +219,9 @@ class AgreementsBloc extends Bloc<AgreementsEvent, AgreementsState> {
   ) async {
     emit(const AgreementsLoadingState());
     event.agreement.unit = sessionBloc.state.session!.unity!.title!;
-    event.agreement.reference =
-        int.parse(sessionBloc.state.session!.condominium!.reference!);
+    event.agreement.reference = int.tryParse(
+            sessionBloc.state.session!.condominium?.reference ?? '') ??
+        event.agreement.reference;
     event.agreement.email = sessionBloc.state.session?.me?.email;
     event.agreement.phone = sessionBloc.state.session?.me?.phone;
     final response = await postAgreementUseCase.call(PostAgreementParams(

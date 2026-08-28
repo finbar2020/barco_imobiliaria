@@ -19,7 +19,8 @@ class EmployeeLoadingState extends EmployeeState {
 class EmployeeLoadFailedState extends EmployeeState {
   final Failure error;
 
-  const EmployeeLoadFailedState(Employee data, String condominiumId, this.error)
+  const EmployeeLoadFailedState(
+      Employee? data, String condominiumId, this.error)
       : super(data, condominiumId);
 
   @override

@@ -68,10 +68,10 @@ class TimesheetMenuBloc extends Bloc<TimesheetMenuEvent, TimesheetMenuState> {
     emit(resultEmployees.fold(
         (err) => TimesheetMenuEmployeesLoadFailedState(
             state.list,
-            state.report!,
-            state.query!,
+            state.report,
+            state.query,
             condominiumId,
-            state.selectedMonth!,
+            state.selectedMonth,
             err), (data) {
       if (data.length == 0) {
         return TimesheetMenuWarningState(data, state.report, state.query,

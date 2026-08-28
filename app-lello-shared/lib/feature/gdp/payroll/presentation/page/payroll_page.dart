@@ -22,7 +22,10 @@ class PayrollPage extends StatefulWidget {
 class _PayrollPageState extends State<PayrollPage> {
   final monthFormat = DateFormat.yMMMM();
 
-  DateTime? selectedMonth;
+  /// Mês do seletor. Começa no mês corrente para que a tela continue usável
+  /// quando a lista de folhas falha (antes ficava nula: seletor vazio e
+  /// "buscar" estourando).
+  DateTime selectedMonth = DateTime(DateTime.now().year, DateTime.now().month);
   String? type;
   String? error;
   late PayrollBloc bloc;
@@ -48,8 +51,10 @@ class _PayrollPageState extends State<PayrollPage> {
                 if (state is PayrollLoadedState) _showDetails(state);
                 if (state is PayrollListLoadedState) {
                   setState(() {
-                    if (state.data.isNotEmpty)
-                      selectedMonth = state.data.last.period;
+                    final last = state.data.isNotEmpty
+                        ? state.data.last.period
+                        : null;
+                    if (last != null) selectedMonth = last;
                   });
                 }
               },
@@ -79,7 +84,7 @@ class _PayrollPageState extends State<PayrollPage> {
                       PrimaryButton(
                           text: getString(context, "search"),
                           onPressed: () {
-                            bloc.beginLoad(selectedMonth!);
+                            bloc.beginLoad(selectedMonth);
                           }),
                       Visibility(
                         visible: error?.isNotEmpty == true,
@@ -98,8 +103,9 @@ class _PayrollPageState extends State<PayrollPage> {
   }
 
   Widget _buildMonthSelector(ThemeData theme, PayrollState state) {
-    DateTime lastDate = DateTime.now();
-    DateTime firstDate = DateTime.now();
+    // Sem folhas carregadas o intervalo se limita ao mês já selecionado.
+    DateTime lastDate = selectedMonth;
+    DateTime firstDate = selectedMonth;
     if (state.data.isNotEmpty) {
       lastDate = state.data.last.period ?? DateTime.now();
       firstDate = state.data.first.period ?? DateTime.now();
@@ -114,9 +120,7 @@ class _PayrollPageState extends State<PayrollPage> {
       child: Row(
         children: [
           Expanded(
-            child: Text(selectedMonth != null
-                ? monthFormat.format(selectedMonth!)
-                : ""),
+            child: Text(monthFormat.format(selectedMonth)),
           ),
           Icon(
             Icons.keyboard_arrow_down_sharp,
@@ -127,7 +131,7 @@ class _PayrollPageState extends State<PayrollPage> {
       onPressed: () async {
         final month = await showMonthPicker(
             context: context,
-            initialDate: selectedMonth!,
+            initialDate: selectedMonth,
             lastDate: lastDate,
             firstDate: firstDate);
         setState(() {

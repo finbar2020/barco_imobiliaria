@@ -117,7 +117,7 @@ class LelloTextStyles {
   /// Tamanho 14.0
   static TextStyle? bodyBold(ThemeData theme) => theme.textTheme.titleSmall;
 
-  /// Tamanho 14.0
+  /// Tamanho 16.0 (deriva de `bodyLarge`)
   static TextStyle? subBody(ThemeData theme) =>
       theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.normal);
 

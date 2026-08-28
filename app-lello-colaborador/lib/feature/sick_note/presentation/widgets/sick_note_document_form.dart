@@ -164,7 +164,11 @@ class _SickNoteDocumentFormState extends State<SickNoteDocumentForm>
                         ),
                         hint:
                             Text(getString(context, "sick_note_how_many_days")),
-                        value: widget.sickNote.sickNoteDays,
+                        // Um valor fora da lista faz o DropdownButton
+                        // estourar por não achar o item correspondente.
+                        value: days.contains(widget.sickNote.sickNoteDays)
+                            ? widget.sickNote.sickNoteDays
+                            : null,
                         items: days.map((int days) {
                           return DropdownMenuItem<int>(
                             value: days,
