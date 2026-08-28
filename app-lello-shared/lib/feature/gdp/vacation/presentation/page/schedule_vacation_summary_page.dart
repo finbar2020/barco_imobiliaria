@@ -168,7 +168,7 @@ class _ScheduleVacationSummaryPageState
                               context, 'gdp_vacation_employee_started_at'),
                           style: LelloTextStyles.bodyBold(theme)),
                       SizedBox(height: Dimens.spacingXSmall),
-                      Text(info[index].getStartFormatted.toString(),
+                      Text((info[index].getStartFormatted ?? '').toString(),
                           style: LelloTextStyles.body(theme)),
                     ],
                   ),
@@ -276,9 +276,11 @@ class _ScheduleVacationSummaryPageState
                         salaryAllowance: info[0].allowanceValue.round(),
                         advance13: info[0].allow13Value,
                         numbersUnitVacation: info.length);
+                    // O `{employee_id}` da URL é o id do funcionário (como em
+                    // todos os outros endpoints de férias); a matrícula vai no
+                    // corpo, em `employee_registration_number`.
                     bloc.createScheduledVacation(
-                        info[0].employeeRegistrationNumber.toString(),
-                        vacationCreated);
+                        info[0].employeeId.toString(), vacationCreated);
                     Navigator.pop(context);
                   },
                   child: Row(children: [

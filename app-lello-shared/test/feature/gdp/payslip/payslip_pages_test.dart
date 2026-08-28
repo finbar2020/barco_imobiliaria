@@ -250,13 +250,34 @@ void main() {
       expect(find.text('Bia'), findsOneWidget);
     });
 
-    /// Defeito (não reproduzível sem derrubar o teste): o listener chama
-    /// `refreshKey.currentState!.show()` a cada estado de carregamento, mas
-    /// durante o carregamento o builder mostra só um
-    /// `CircularProgressIndicator` (sem `RefreshIndicator`); abrir a página
-    /// com o bloc ainda carregando estoura "Null check operator used on a
-    /// null value" no primeiro estado emitido. Por isso os testes acima
-    /// montam a página com o bloc já carregado.
+    /// Corrigido: o listener só chama `refreshKey.currentState!.show()` quando
+    /// o RefreshIndicator está na árvore, então abrir a página com o bloc
+    /// ainda carregando não estoura mais com "Null check operator".
+    testWidgets('abrir a página com o bloc carregando não estoura',
+        (tester) async {
+      // Sem sessão o bloc fica em carregamento: a página monta mostrando só o
+      // indicador, sem RefreshIndicator na árvore.
+      final bloc = env.employeesBloc(withSession: false);
+      final container = env.container()
+        ..register<PayslipEmployeesBloc>(bloc);
+      await pumpPage(tester, PayslipEmployeesPage(appContainer: container),
+          arguments: mes, observer: observer, settle: false);
+      expect(bloc.state, isA<PayslipEmployeesLoadingState>());
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(RefreshIndicator), findsNothing);
+
+      // Novo estado de carregamento com a página já montada.
+      // ignore: invalid_use_of_visible_for_testing_member
+      bloc.emit(PayslipEmployeesLoadingState([], 'x', 'C1', mes));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+
+      // ignore: invalid_use_of_visible_for_testing_member
+      bloc.emit(PayslipEmployeesLoadedState(
+          [employee(id: 'E1', name: 'Ana')], null, 'C1', mes, false));
+      await tester.pumpAndSettle();
+      expect(find.text('Ana'), findsOneWidget);
+    });
   });
 
   group('PayslipSelectionPage', () {

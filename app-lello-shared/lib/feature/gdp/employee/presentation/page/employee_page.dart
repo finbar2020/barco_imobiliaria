@@ -191,8 +191,8 @@ class _EmployeePageState extends State<EmployeePage> {
                 title: Text(getString(context, "gdp_hiring_date"),
                     style: LelloTextStyles.bodyBold(theme)),
                 subtitle: Text(
-                    state.data?.dob != null
-                        ? dateFormat.format(state.data!.dob!)
+                    state.data?.hiringDate != null
+                        ? dateFormat.format(state.data!.hiringDate!)
                         : "-",
                     style: LelloTextStyles.subBody(theme)),
               ),

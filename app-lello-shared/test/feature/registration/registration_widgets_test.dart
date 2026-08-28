@@ -261,9 +261,10 @@ void main() {
       expect(find.byKey(const Key('fake-webview')), findsOneWidget);
       final controller = harness.webView.controllers.single;
       expect(controller.javaScriptMode, JavaScriptMode.unrestricted);
-      // O `loadRequest` fica no `build`, então é chamado a cada reconstrução.
-      expect(controller.loaded, isNotEmpty);
-      expect(controller.loaded.first.toString(),
+      // Corrigido: a configuração da WebView ficou no `initState`, então o
+      // `loadRequest` acontece uma única vez (antes era refeito a cada build).
+      expect(controller.loaded, hasLength(1));
+      expect(controller.loaded.single.toString(),
           'https://www.lellocondominios.com.br/termos-de-uso/');
 
       await tester.binding.handlePopRoute();
@@ -325,10 +326,11 @@ void main() {
       await tester.pumpAndSettle();
       expect(store.profilePicture, isNull);
 
-      /// Defeito: "editar" limpa a foto na store sem `setState`, então a
-      /// prévia continua na tela até a próxima reconstrução.
-      expect(find.text('edit'), findsOneWidget);
-      expect(find.text('camera'), findsNothing);
+      /// Corrigido: "editar" limpa a foto dentro de um `setState`, então a
+      /// prévia sai da tela e as opções de câmera/galeria voltam.
+      expect(find.text('edit'), findsNothing);
+      expect(find.text('camera'), findsOneWidget);
+      expect(find.text('gallery'), findsOneWidget);
     });
 
     testWidgets('concluir envia com a foto e "depois" envia sem',

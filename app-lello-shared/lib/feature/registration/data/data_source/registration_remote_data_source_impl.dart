@@ -32,7 +32,7 @@ class RegistrationRemoteDataSourceImpl extends RegistrationRemoteDataSource {
     if (response.isSuccessful) {
       return true;
     } else {
-      throw response;
+      throw response.error ?? response;
     }
   }
 }

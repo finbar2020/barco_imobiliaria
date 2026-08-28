@@ -73,24 +73,24 @@ void main() {
       await bloc.close();
     });
 
-    /// Defeito: `PayslipEmployeesLoadFailedState(..., selectedMonth!, err)`
-    /// usa `!` no mês selecionado, que ainda é nulo no carregamento inicial
-    /// (a página só o define no `build`). Uma falha nesse momento estoura o
-    /// handler em vez de emitir o estado de erro.
-    test('falha no carregamento inicial sem mês estoura', () async {
+    /// Corrigido: `PayslipEmployeesLoadFailedState` aceita mês nulo, então a
+    /// falha no carregamento inicial (antes do `build` da página definir o
+    /// mês) emite o estado de erro em vez de estourar.
+    test('falha no carregamento inicial sem mês emite LoadFailed', () async {
       env.http.failAll();
       late PayslipEmployeesBloc bloc;
       final errors = await collectUncaught(() async {
         bloc = env.employeesBloc();
         await drain();
       });
-      expect(errors, isNotEmpty);
-      expect(errors.first, isA<TypeError>());
-      expect(bloc.state, isA<PayslipEmployeesLoadingState>());
+      expect(errors, isEmpty);
+      final failed = bloc.state as PayslipEmployeesLoadFailedState;
+      expect(failed.selectedMonth, isNull);
+      expect(failed.error, isA<UnknownFailure>());
       await bloc.close();
     });
 
-    test('beginSearch busca por nome (sem o filtro "ativo") e emite Searching -> Loaded',
+    test('beginSearch busca por nome (com o filtro "ativo") e emite Searching -> Loaded',
         () async {
       env.stubEmployees([employeeJson('E1', name: 'Ana'), employeeJson('E2', name: 'Bia')]);
       final bloc = env.employeesBloc();
@@ -107,8 +107,8 @@ void main() {
 
       final query = env.http.requests.single.url.queryParameters;
       expect(query['name'], 'An');
-      // Defeito: a busca não repete o filtro `condition_name=ativo` do load
-      expect(query.containsKey('condition_name'), isFalse);
+      // Corrigido: a busca repete o filtro `condition_name=ativo` do load
+      expect(query['condition_name'], 'ativo');
       expect(states[0], isA<PayslipEmployeesSearchingState>());
       expect(states[0].query, 'An');
       final loaded = states[1] as PayslipEmployeesLoadedState;

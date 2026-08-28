@@ -272,26 +272,20 @@ void main() {
           findsOneWidget);
     });
 
-    /// Defeito: o widget lê o estado do bloc no `build` mas só escuta com
-    /// `BlocListener`; a troca do botão pelo indicador depende de um rebuild
-    /// externo (no fluxo real, do `setState` que limpa o erro antes do envio).
-    testWidgets('enquanto redefine mostra o indicador só após um rebuild',
+    /// Corrigido: o widget usa `BlocConsumer`, então reage ao estado do bloc
+    /// sem depender de um rebuild externo.
+    testWidgets('enquanto redefine mostra o indicador no lugar do botão',
         (tester) async {
       start();
       await pumpWidgetUnderTest(tester, newPassword());
+      expect(find.text('finish'), findsOneWidget);
+
       await emitState(
           tester,
           bloc,
           ResetPasswordResettingPasswordState(
               bloc.state.reset, bloc.state.step, bloc.state.cpf, null),
           settle: false);
-
-      // Comportamento atual: sem rebuild o botão continua na tela.
-      expect(find.byType(CircularProgressIndicator), findsNothing);
-      expect(find.text('finish'), findsOneWidget);
-
-      await tester.tap(find.byIcon(Icons.visibility_off).first);
-      await tester.pump();
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(find.text('finish'), findsNothing);

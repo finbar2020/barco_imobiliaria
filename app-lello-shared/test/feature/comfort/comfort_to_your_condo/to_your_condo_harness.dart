@@ -185,9 +185,8 @@ Future<void> pushRoute(WidgetTester tester, String name,
   }
 }
 
-/// Avança alguns frames (600 ms) em vez de `pumpAndSettle`: a
-/// `ToYourCondoPage` agenda um `setState` pós-frame em todo `build`, então
-/// nunca "assenta" (ver defeito documentado em `comfort_to_your_condo_page_test`).
+/// Avança alguns frames (600 ms) em vez de `pumpAndSettle`: o `LoadingWidget`
+/// da página anima para sempre, então nem toda tela "assenta".
 Future<void> pumpFrames(WidgetTester tester, {int frames = 6}) async {
   for (var i = 0; i < frames; i++) {
     await tester.pump(const Duration(milliseconds: 100));

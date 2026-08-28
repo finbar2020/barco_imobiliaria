@@ -24,13 +24,19 @@ class ComfortMyRequestsBloc
   void handleLoadedSubcategoriesMyRequests(
       LoadedSubcategoriesMyRequestEvent event,
       Emitter<ComfortMyRequestsState> emit) {
-    emit(LoadedSubcategoriesMyRequestState(subcategories: event.subcategories));
+    emit(LoadedSubcategoriesMyRequestState(
+      subcategories: event.subcategories,
+      flushbarMessage: event.flushbarMessage,
+    ));
   }
 
   void handleLoadedRateRequestEvent(
       LoadedRateRequestEvent event, Emitter<ComfortMyRequestsState> emit) {
     emit(
-      LoadedRateRequestState(selectedRequest: event.selectedRequest),
+      LoadedRateRequestState(
+        selectedRequest: event.selectedRequest,
+        flushbarMessage: event.flushbarMessage,
+      ),
     );
   }
 
@@ -48,7 +54,11 @@ class ComfortMyRequestsBloc
   void handleErrorComfortMyRequestsEvent(
       ErrorComfortMyRequestsEvent event, Emitter<ComfortMyRequestsState> emit) {
     emit(
-      ErrorComfortMyRequestsState(errorMessageKey: event.errorMessageKey),
+      ErrorComfortMyRequestsState(
+        errorMessageKey: event.errorMessageKey,
+        errorCode: event.errorCode,
+        errorDescription: event.errorDescription,
+      ),
     );
   }
 

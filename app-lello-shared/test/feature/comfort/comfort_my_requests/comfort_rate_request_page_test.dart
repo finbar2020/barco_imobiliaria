@@ -132,8 +132,9 @@ void main() {
     await tester.tap(find.text('comfort_rate_title'));
     await tester.pumpAndSettle();
 
-    /// Defeito: o FocusNode é recriado a cada build e nunca é descartado;
-    /// o GestureDetector externo só tira o foco do nó da última build.
+    /// Corrigido: o FocusNode vive no State (e é descartado no dispose), então
+    /// o GestureDetector externo tira o foco do campo de verdade.
+    expect(tester.testTextInput.hasAnyClients, isFalse);
     expect(tester.takeException(), isNull);
   });
 

@@ -39,15 +39,6 @@ void main() {
       return bloc;
     }
 
-    /// Defeito: cada item do seletor de funcionário tem largura fixa
-    /// `MediaQuery.width - 80`, maior que o espaço interno do campo, e o
-    /// Flutter acusa "RenderFlex overflowed" sempre que a lista é montada.
-    void esperaOverflow(WidgetTester tester) {
-      final e = tester.takeException();
-      expect(e, isNotNull);
-      expect('$e', anyOf(contains('overflowed'), contains('Multiple exceptions')));
-    }
-
     Finder dropdown(int index) =>
         find.byWidgetPredicate((w) => w is DropdownButtonFormField).at(index);
 
@@ -57,7 +48,10 @@ void main() {
       final bloc = await pumpQuickFix(tester);
 
       expect(bloc.state, isA<QuickFixLoadedState>());
-      esperaOverflow(tester);
+      /// Corrigido: os itens do seletor de funcionário não têm mais largura
+      /// fixa (`MediaQuery.width - 80`), então a lista é montada sem
+      /// "RenderFlex overflowed".
+      expect(tester.takeException(), isNull);
       expect(find.text('gdp_quick_fix_title'), findsOneWidget);
       expect(find.text('gdp_quick_fix_description'), findsOneWidget);
       expect(find.text('gdp_quick_fix_employee'), findsOneWidget);
@@ -70,18 +64,18 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Bia').last);
       await tester.pumpAndSettle();
-      tester.takeException();
+      expect(tester.takeException(), isNull);
       await tester.tap(dropdown(1));
       await tester.pumpAndSettle();
       expect(find.text('gdp_quick_fix_report_type_vacation'), findsOneWidget);
       await tester.tap(find.text('gdp_quick_fix_report_type_termination').last);
       await tester.pumpAndSettle();
       expect(find.text('gdp_quick_fix_select'), findsNothing);
-      tester.takeException();
+      expect(tester.takeException(), isNull);
 
       await tester.tap(find.text('gdp_quick_fix_generate_report'));
       await tester.pumpAndSettle();
-      tester.takeException();
+      expect(tester.takeException(), isNull);
 
       expect(observer.pushedNames.last, SharedApplicationRoute.gdpQuickFixReport);
       final args = observer.pushed.last.settings.arguments as EmployeeReportFilter;
@@ -93,10 +87,13 @@ void main() {
     testWidgets('gerar sem escolher navega com o filtro vazio', (tester) async {
       env.stubEmployees([employeeJson('E1', name: 'Ana')]);
       await pumpQuickFix(tester);
-      esperaOverflow(tester);
+      /// Corrigido: os itens do seletor de funcionário não têm mais largura
+      /// fixa (`MediaQuery.width - 80`), então a lista é montada sem
+      /// "RenderFlex overflowed".
+      expect(tester.takeException(), isNull);
       await tester.tap(find.text('gdp_quick_fix_generate_report'));
       await tester.pumpAndSettle();
-      tester.takeException();
+      expect(tester.takeException(), isNull);
       final args = observer.pushed.last.settings.arguments as EmployeeReportFilter;
       expect(args.employee, isNull);
       expect(args.reportType, isNull);

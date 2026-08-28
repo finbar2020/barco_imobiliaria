@@ -41,6 +41,11 @@ class CircuitBreakerWidget extends StatelessWidget {
         if (hide) return Container();
         if (disable == false) return child;
 
+        // `disabledMessage` nulo no Firestore vira "" no modelo: trata vazio
+        // como ausente para o modal usar o `circuit_breaker_default_message`.
+        final disabledMessage =
+            (rule?.disabledMessage?.isNotEmpty ?? false) ? rule!.disabledMessage : null;
+
         return InkWell(
           onTap: () {
             // Log analytics event when user tries to interact with disabled widget
@@ -48,8 +53,7 @@ class CircuitBreakerWidget extends StatelessWidget {
                 .logEvent(name: "circuit_breaker_disabled", parameters: {
               'application_rbac': applicationRbac,
               if (reference != null) 'reference': reference!,
-              if (rule?.disabledMessage != null)
-                'disabled_message': rule!.disabledMessage!,
+              if (disabledMessage != null) 'disabled_message': disabledMessage,
             });
 
             showModalBottomSheet(
@@ -57,7 +61,7 @@ class CircuitBreakerWidget extends StatelessWidget {
               builder: (BuildContext context) {
                 return CircuitBreakerModalDisableMessager(
                   title: null,
-                  message: rule?.disabledMessage,
+                  message: disabledMessage,
                 );
               },
             );

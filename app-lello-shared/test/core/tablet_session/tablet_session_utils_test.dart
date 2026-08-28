@@ -82,9 +82,9 @@ void main() {
     });
 
     test('valor inválido gravado devolve null', () async {
-      /// Defeito: `if (dateString == null && dateString?.isEmpty == true)`
-      /// nunca é verdadeiro (null nunca tem `isEmpty == true`); o retorno
-      /// null vem do `catch` em volta do `DateTime.parse(null!)`.
+      /// Corrigido: `if (dateString == null || dateString.isEmpty)` devolve
+      /// null direto para valor ausente ou vazio; texto inválido continua
+      /// caindo no `catch` do `DateTime.parse`.
       final box = await Hive.openBox(SharedPreferencesKeys.sessionStartDate);
       await box.put(SharedPreferencesKeys.sessionStartDate, 'nao-e-data');
       expect(await TabletSessionUtils.getTabletSessionStartDate(), isNull);

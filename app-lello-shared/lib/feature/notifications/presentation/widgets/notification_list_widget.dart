@@ -219,6 +219,9 @@ class _NotificationListWidgetState extends State<NotificationListWidget> {
               thumbColor: LelloTheme.palleteOf(theme).grey(),
               child: ListView.builder(
                 controller: _scrollController,
+                // Garante o puxar-para-atualizar mesmo com a lista menor que
+                // a tela.
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: _countGroupedItems(groupedNotifications),
                 itemBuilder: (context, index) {
                   return _buildGroupedItem(groupedNotifications, index);

@@ -31,8 +31,8 @@ class TabletSessionUtils {
     try {
       var dateString =
           container.get(SharedPreferencesKeys.sessionStartDate)?.toString();
-      if (dateString == null && dateString?.isEmpty == true) return null;
-      return DateTime.parse(dateString!);
+      if (dateString == null || dateString.isEmpty) return null;
+      return DateTime.parse(dateString);
     } catch (ex) {}
     return null;
   }

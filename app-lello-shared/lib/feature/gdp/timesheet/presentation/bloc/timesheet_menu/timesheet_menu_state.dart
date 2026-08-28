@@ -66,10 +66,10 @@ class TimesheetMenuEmployeesLoadFailedState extends TimesheetMenuState {
 
   TimesheetMenuEmployeesLoadFailedState(
       List<Employee> list,
-      TimesheetReportDay report,
-      TimesheetFilter query,
+      TimesheetReportDay? report,
+      TimesheetFilter? query,
       String condominiumId,
-      DateTime selectedMonth,
+      DateTime? selectedMonth,
       this.error)
       : super(list, report, query, condominiumId, selectedMonth);
 

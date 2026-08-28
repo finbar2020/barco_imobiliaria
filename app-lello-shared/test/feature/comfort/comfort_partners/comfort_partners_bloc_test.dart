@@ -62,9 +62,9 @@ void main() {
             errorMessageKey: 'erro', errorCode: '500', errorDescription: 'd'),
         LoadedComfortPartnersState(
           comfortPartnerCategoryIsFilter: true,
-          // Defeito: o bloc copia `isFailedCondoPartners` para
-          // `comfortPartnersIsRandomic` em vez do valor do evento.
-          comfortPartnersIsRandomic: true,
+          // Corrigido: o bloc copia `comfortPartnersIsRandomic` do evento
+          // (antes copiava `isFailedCondoPartners`).
+          comfortPartnersIsRandomic: false,
           categoriesToYourCondo: config,
           isFailedCondoPartners: true,
           isSuccessYourCondoPartners: true,
@@ -75,12 +75,9 @@ void main() {
             couponRequest: request,
             requestPurchase: purchase,
             error: 'e'),
-        // Defeito: `SuccessComfortPartnerCupomEvent` estende
-        // `LoadedComfortPartnerDetailsEvent`, então casa com os DOIS handlers
-        // e o bloc emite um `LoadedComfortPartnerDetailsState` intermediário
-        // antes do `SuccessComfortPartnerCupomState`.
-        LoadedComfortPartnerDetailsState(
-            selectedPartner: partner, couponRequest: request),
+        // Corrigido: `SuccessComfortPartnerCupomEvent` estende
+        // `LoadedComfortPartnerDetailsEvent`, mas o handler dos detalhes o
+        // ignora — sem `LoadedComfortPartnerDetailsState` intermediário.
         SuccessComfortPartnerCupomState(
             selectedPartner: partner, couponRequest: request),
         LoadedComfortPartnerDetailsState(
@@ -91,10 +88,10 @@ void main() {
       ]);
     });
 
-    /// Defeito: `LoadedComfortPartnersEvent.flushbarMessage` não é repassado
+    /// Corrigido: `LoadedComfortPartnersEvent.flushbarMessage` é repassado
     /// ao `LoadedComfortPartnersState` pelo handler do bloc (a tela de
-    /// favoritos nunca recebe a mensagem de erro do "desfavoritar").
-    test('flushbarMessage do evento é descartado pelo handler', () async {
+    /// favoritos recebe a mensagem de erro do "desfavoritar").
+    test('flushbarMessage do evento chega ao estado', () async {
       bloc.add(const LoadedComfortPartnersEvent(
         flushbarMessage: 'mensagem',
         comfortPartnerCategoryIsFilter: true,
@@ -103,7 +100,7 @@ void main() {
       ));
       await Future<void>.delayed(Duration.zero);
       final state = bloc.state as LoadedComfortPartnersState;
-      expect(state.flushbarMessage, isNull);
+      expect(state.flushbarMessage, 'mensagem');
     });
 
     test('estados com os mesmos dados são iguais (Equatable)', () {
@@ -183,10 +180,15 @@ void main() {
       expect(bloc.state, isA<CouponsErrorState>());
     });
 
-    /// Defeito: `EmptyCouponsEvent` existe mas o bloc não registra handler
-    /// para ele — `add` lança `StateError` em vez de voltar ao estado vazio.
-    test('EmptyCouponsEvent não tem handler registrado', () {
-      expect(() => bloc.add(const EmptyCouponsEvent()), throwsStateError);
+    /// Corrigido: `EmptyCouponsEvent` tem handler registrado e volta ao
+    /// estado vazio (antes o `add` lançava `StateError`).
+    test('EmptyCouponsEvent volta ao estado vazio', () async {
+      bloc.add(LoadedCouponsEvent(coupons: [buildCoupon('C1')]));
+      await Future<void>.delayed(Duration.zero);
+      expect(bloc.state, isA<LoadedCouponsState>());
+      bloc.add(const EmptyCouponsEvent());
+      await Future<void>.delayed(Duration.zero);
+      expect(bloc.state, const EmptyCouponsState());
     });
 
     test('props dos eventos e estados', () {

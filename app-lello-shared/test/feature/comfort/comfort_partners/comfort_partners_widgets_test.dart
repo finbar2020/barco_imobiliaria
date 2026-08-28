@@ -266,17 +266,19 @@ void main() {
     testWidgets('sem parceiros não renderiza nada', (tester) async {
       await pumpApp(tester, build(const []), shrinkWrap: false);
       expect(find.text('comfort_back_to_categories'), findsNothing);
-      // Desmonta dentro do teste para capturar o erro do dispose (abaixo).
       await tester.pumpWidget(const SizedBox());
-      expect(tester.takeException(), isA<StateError>());
+      expect(tester.takeException(), isNull);
     });
 
-    /// Defeito: no `dispose` o widget acessa `widget.partners.first` sem
-    /// verificar a lista; com a lista vazia lança `StateError` ("No element").
-    testWidgets('dispose com lista vazia lança StateError', (tester) async {
-      await pumpApp(tester, build(const []), shrinkWrap: false);
+    /// Corrigido: o `dispose` não acessa mais `widget.partners.first` sem
+    /// verificar a lista (com a lista vazia lançava `StateError`).
+    testWidgets('dispose com lista vazia não lança', (tester) async {
+      ComfortPartnerCategory? disposed;
+      await pumpApp(tester, build(const [], onDispose: (c) => disposed = c),
+          shrinkWrap: false);
       await tester.pumpWidget(const SizedBox());
-      expect(tester.takeException(), isA<StateError>());
+      expect(tester.takeException(), isNull);
+      expect(disposed, ComfortPartnerCategory.others);
     });
   });
 
@@ -432,12 +434,11 @@ void main() {
       expect(find.byType(PartnerCouponCard), findsNothing);
     });
 
-    /// Defeito: `onShowDialog`/`onDialogDismissed` são CHAMADOS durante o
-    /// build (`widget.onShowDialog!(...) ?? () {}`) e o RETORNO deles é
-    /// passado como callback do card (um retorno não-função quebra o build
-    /// com TypeError); com `onShowDialog` nulo o build lança erro de null
-    /// check.
-    testWidgets('callbacks de diálogo são disparados no build', (tester) async {
+    /// Corrigido: `onShowDialog`/`onDialogDismissed` viram closures passadas
+    /// ao card e só são chamados quando o diálogo abre/fecha (antes eram
+    /// chamados durante o build e o RETORNO deles era usado como callback).
+    testWidgets('callbacks de diálogo só rodam ao abrir e fechar o diálogo',
+        (tester) async {
       var shown = 0, dismissed = 0;
       await pumpApp(
         tester,
@@ -460,17 +461,17 @@ void main() {
       );
 
       expect(find.byType(PartnerCouponCard), findsNWidgets(2));
-      expect(shown, 2);
-      expect(dismissed, 2);
+      expect(shown, 0);
+      expect(dismissed, 0);
 
-      // Abrir um cupom não chama de novo o onShowDialog original.
       await tester.tap(find.byType(PartnerCouponCard).first);
       await tester.pumpAndSettle();
       expect(find.byType(CouponRequestDialog), findsOneWidget);
-      expect(shown, 2);
+      expect(shown, 1);
+      expect(dismissed, 0);
       await tester.tapAt(const Offset(5, 5));
       await tester.pumpAndSettle();
-      expect(dismissed, 2);
+      expect(dismissed, 1);
 
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
@@ -480,7 +481,9 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('callback que devolve valor não-função quebra o build',
+    /// Corrigido: o retorno dos callbacks é ignorado (antes virava o callback
+    /// do card e um valor não-função quebrava o build com TypeError).
+    testWidgets('callback que devolve valor não-função não quebra o build',
         (tester) async {
       await pumpApp(
         tester,
@@ -497,10 +500,13 @@ void main() {
         ),
         shrinkWrap: false,
       );
-      expect(tester.takeException(), isA<TypeError>());
+      expect(tester.takeException(), isNull);
+      expect(find.byType(PartnerCouponCard), findsOneWidget);
     });
 
-    testWidgets('sem onShowDialog o build falha com null check', (tester) async {
+    /// Corrigido: os callbacks são opcionais e chamados com `?.call`.
+    testWidgets('sem onShowDialog o build funciona e o diálogo abre',
+        (tester) async {
       await pumpApp(
         tester,
         PartnerCouponsListView(
@@ -514,7 +520,13 @@ void main() {
         ),
         shrinkWrap: false,
       );
-      expect(tester.takeException(), isA<TypeError>());
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.byType(PartnerCouponCard));
+      await tester.pumpAndSettle();
+      expect(find.byType(CouponRequestDialog), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
     });
 
     testWidgets('cupom nulo não renderiza o card', (tester) async {

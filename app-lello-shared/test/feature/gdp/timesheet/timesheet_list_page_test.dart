@@ -195,10 +195,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text(loc.okButtonLabel));
       await tester.pumpAndSettle();
-      /// Defeito: a recarga emite `Loading`, o listener chama
-      /// `refreshKey.currentState.show()` e o `onRefresh` do RefreshIndicator
-      /// chama `beginRefresh()` de novo: cada troca de mês faz 2 requisições.
-      expect(stack.http.requests.length, 3);
+      /// Corrigido: a recarga programática (`refreshKey.show()` disparada pelo
+      /// listener) não faz o `onRefresh` do RefreshIndicator pedir outra
+      /// recarga, então a troca de mês faz uma única requisição.
+      expect(stack.http.requests.length, 2);
       expect(bloc().state.query!.dobTo, primeiroDia);
       expect(bloc().state.query!.dobFrom, primeiroDia);
 
@@ -300,11 +300,10 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    /// Defeito: `_allowEdit` faz `if (!periodValidAllowEdit) false;` (sem
-    /// `return`) e a checagem `eventControl?.typeEvent == "ABONO"` vem depois
-    /// do `return true`, então uma ocorrência já abonada continua editável.
-    testWidgets('ocorrência já abonada continua editável (defeito)',
-        (tester) async {
+    /// Corrigido: `_allowEdit` agora faz `return false` quando o período não é
+    /// válido e checa `eventControl?.typeEvent == "ABONO"` antes de liberar a
+    /// edição, então uma ocorrência já abonada não é mais editável.
+    testWidgets('ocorrência já abonada não é editável', (tester) async {
       stack.happyPath(timesheets: [
         timesheetJson(
             events: ['Saida antecipada sem justificativa'],
@@ -313,7 +312,7 @@ void main() {
       await pump(tester, filtro(TimesheetTypeEnum.employee), loc: locEmp);
       final dropdown = tester.widget<DropdownButton<String>>(
           find.byType(DropdownButton<String>));
-      expect(dropdown.onChanged, isNotNull);
+      expect(dropdown.onChanged, isNull);
       expect(dropdown.value, 'ABONO');
     });
 
@@ -333,16 +332,14 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    /// Defeito: confirmar o abono chama `bloc.insertEvent`, que explode com
-    /// "Null check operator" em `state.event!` (nunca preenchido), então a
-    /// ocorrência não é enviada.
-    testWidgets('confirmar abono no fluxo normal explode e não envia (defeito)',
+    /// Corrigido: confirmar o abono chama `bloc.insertEvent`, que agora usa o
+    /// próprio evento recebido em vez de `state.event!`, então a ocorrência é
+    /// enviada mesmo no fluxo normal (sem estado emitido à mão).
+    testWidgets('confirmar abono no fluxo normal envia a ocorrência',
         (tester) async {
       stack.happyPath(timesheets: [
         timesheetJson(events: ['Falta sem justificativa']),
       ]);
-      // O bloc nasce numa zona guardada para capturar o erro que o handler
-      // relança (o flutter_test encerraria o teste na hora).
       final erros = <Object>[];
       final args = filtro(TimesheetTypeEnum.employee);
       late TimesheetListBloc guardado;
@@ -361,6 +358,7 @@ void main() {
       await tester.tap(find.text('cancel'));
       await tester.pumpAndSettle();
       expect(find.byType(AlertDialog), findsNothing);
+      expect(stack.http.requests.where((r) => r.method == 'POST'), isEmpty);
 
       await tester.tap(find.byType(DropdownButton<String>));
       await tester.pumpAndSettle();
@@ -368,9 +366,13 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('yes'));
       await tester.pumpAndSettle();
-      expect(erros.single, isA<TypeError>());
+      expect(erros, isEmpty);
+      final post = stack.http.requests.firstWhere((r) => r.method == 'POST');
+      expect(post.url.path, '/timesheet/event/C1');
+      expect(post.body, contains('"type_event":"ABONO"'));
       expect(bloc().state, isA<TimesheetListLoadedState>());
-      expect(stack.http.requests.where((r) => r.method == 'POST'), isEmpty);
+      await tester.pump(const Duration(seconds: 6));
+      await tester.pumpAndSettle();
     });
 
     testWidgets('com estado que tem evento o abono é enviado e avisa o sucesso',

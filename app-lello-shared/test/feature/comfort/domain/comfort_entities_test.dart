@@ -260,25 +260,16 @@ void main() {
   });
 
   group('ComfortPartnerIntro.getComfortType', () {
-    /// Defeito: `ComfortPartnerIntro.getComfortType` não trata playroom,
-    /// solar_panels, automation, pharmacy, wellness, decoration, biometrics,
-    /// energy e connectivity (existem em `ComfortType` e em
-    /// `ComfortSubcategories.enumToStringSubcategories`), então esses
-    /// parceiros aparecem como "Outros". Comportamento atual documentado.
+    /// Corrigido: `ComfortPartnerIntro.getComfortType` passou a tratar
+    /// playroom, solar_panels, automation, pharmacy, wellness, decoration,
+    /// biometrics, energy e connectivity (que existem em `ComfortType` e em
+    /// `ComfortSubcategories.enumToStringSubcategories`) — antes esses
+    /// parceiros apareciam como "Outros". Só `others` cai em "outros".
     const semTraducao = {
-      ComfortType.playroom,
-      ComfortType.solar_panels,
-      ComfortType.automation,
-      ComfortType.pharmacy,
-      ComfortType.wellness,
-      ComfortType.decoration,
-      ComfortType.biometrics,
-      ComfortType.energy,
-      ComfortType.connectivity,
       ComfortType.others,
     };
 
-    testWidgets('traduz cada tipo (os não mapeados caem em outros)',
+    testWidgets('traduz cada tipo (só "others" cai em outros)',
         (tester) async {
       final ctx = await contextWithLoc(tester);
       for (final type in ComfortType.values) {

@@ -69,7 +69,7 @@ void main() {
     expect(controller.subcategories.map((e) => e.comfortType),
         [ComfortType.gym, ComfortType.cleaning]);
     expect(controller.comfortMyRequestsBloc.state, isA<LoadedMyRequestsState>());
-    expect(controller.comfortMyRequestsTimer.userType, 'owner');
+    expect(controller.comfortMyRequestsTimer!.userType, 'owner');
     await expectLater(find.byType(ComfortMyRequestsPage),
         matchesGoldenFile('goldens/comfort_my_requests_page.png'));
   });
@@ -97,7 +97,7 @@ void main() {
     expect(find.byType(ComfortRequestItem), findsOneWidget);
   });
 
-  testWidgets('erro mostra o widget de erro; tentar de novo não recarrega',
+  testWidgets('erro mostra o widget de erro; tentar de novo recarrega',
       (tester) async {
     harness.mockMyRequests([requestJson('r1')]);
     await pump(tester);
@@ -115,10 +115,20 @@ void main() {
     await tester.tap(find.text('error_handling_widget_button_reTry'));
     await tester.pumpAndSettle();
 
-    /// Defeito: no estado de erro a lista paginada não está montada, e
-    /// `getMyRequests()` só faz `pagingController.refresh()` — nenhuma nova
-    /// requisição é disparada e a tela continua em erro.
-    expect(harness.http.requests, isEmpty);
+    /// Corrigido: no estado de erro a lista paginada não está montada, então
+    /// o retry reinicia o `PagingController` E dispara a busca da primeira
+    /// página; a tela sai do erro e volta a listar.
+    expect(harness.paths, contains(harness.myRequestsPath));
+    expect(find.byType(ErrorHandlingWidget), findsNothing);
+    expect(find.byType(ComfortRequestItem), findsOneWidget);
+
+    // Volta ao erro para exercitar o botão "voltar".
+    // ignore: invalid_use_of_visible_for_testing_member
+    controller.comfortMyRequestsBloc.emit(const ErrorComfortMyRequestsState(
+        errorMessageKey: 'comfort_get_my_requests_error',
+        errorCode: '500',
+        errorDescription: 'x'));
+    await tester.pumpAndSettle();
     expect(find.byType(ErrorHandlingWidget), findsOneWidget);
 
     await tester.tap(find.text('error_handling_widget_button_back'));
@@ -131,8 +141,6 @@ void main() {
   testWidgets('filtro pelo drawer aplica status, mostra o chip e o chip limpa',
       (tester) async {
     harness.mockMyRequests([requestJson('r1')]);
-    // Com um filtro já existente no controller o objeto é estável (ver o
-    // defeito documentado no teste seguinte).
     harness.myRequests.filter = ComfortRequestsFilter(
         status: ComfortFilterRequestStatus.all, subcategories: ComfortType.all);
     await pump(tester);
@@ -166,7 +174,10 @@ void main() {
     expect(harness.queryOf(harness.myRequestsPath).containsKey('status'), isFalse);
   });
 
-  testWidgets('sem filtro no controller a seleção do drawer se perde',
+  /// Corrigido: o filtro padrão do drawer vive no State da página, então
+  /// sobrevive aos rebuilds (a página depende do `ModalRoute` e reconstrói ao
+  /// abrir/fechar o menu do dropdown) e a seleção não é mais descartada.
+  testWidgets('sem filtro no controller a seleção do drawer sobrevive',
       (tester) async {
     harness.mockMyRequests([requestJson('r1')]);
     await pump(tester);
@@ -178,20 +189,17 @@ void main() {
     await tester.tap(find.text('comfort_request_filter_status_sent').last);
     await tester.pumpAndSettle();
 
-    /// Defeito: a página cria um `ComfortRequestsFilter` novo a cada build
-    /// (`controller.filter ?? ComfortRequestsFilter(...)`) e depende do
-    /// `ModalRoute` (rebuild ao abrir/fechar o menu do dropdown), então o
-    /// valor escolhido é descartado e o drawer volta para "todos".
     final widget = tester.widget<ComfortRequestsFilterWidget>(
         find.byType(ComfortRequestsFilterWidget));
-    expect(widget.filter.status, ComfortFilterRequestStatus.all);
-    expect(find.text('comfort_request_filter_status_all'), findsOneWidget);
+    expect(widget.filter.status, ComfortFilterRequestStatus.sended);
+    expect(find.text('comfort_request_filter_status_sent'), findsOneWidget);
 
     await tester.ensureVisible(find.text('find'));
     await tester.tap(find.text('find'));
     await tester.pumpAndSettle();
-    expect(find.byType(ComfortRequestsFilterWidget), findsOneWidget);
-    expect(controller.filter, isNull);
+    expect(find.byType(ComfortRequestsFilterWidget), findsNothing);
+    expect(controller.filter!.status, ComfortFilterRequestStatus.sended);
+    expect(harness.queryOf(harness.myRequestsPath)['status'], 'sended');
   });
 
   testWidgets('drawer reaproveita o filtro atual e as subcategorias',
@@ -220,7 +228,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ComfortMyRequestItemActionsBottomSheet), findsOneWidget);
     expect(controller.isBottomSheetOpen, isTrue);
-    expect(controller.comfortMyRequestsBottomSheetTimer.userType, 'owner');
+    expect(controller.comfortMyRequestsBottomSheetTimer!.userType, 'owner');
 
     await tester.tap(find.byIcon(Icons.keyboard_arrow_down_sharp));
     await tester.pumpAndSettle();

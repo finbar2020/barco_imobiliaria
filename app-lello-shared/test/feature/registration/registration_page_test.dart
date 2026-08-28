@@ -437,10 +437,9 @@ void main() {
 
       // Passo da foto.
       expect(find.text('registration_picture_title'), findsOneWidget);
-      /// Defeito: a validação do código avança a página sem `nextStep()`,
-      /// então `currentStep` fica um passo atrás da página exibida (na foto
-      /// o passo lógico ainda é "password") e o voltar pula o passo do CPF.
-      expect(store().currentStep, RegistrationStep.password);
+      /// Corrigido: a validação do código chama `nextStep()` junto com a
+      /// troca de página, então `currentStep` acompanha a página exibida.
+      expect(store().currentStep, RegistrationStep.picture);
       expect(store().pageController.page, 3);
       expect(find.text('camera'), findsOneWidget);
       expect(find.text('gallery'), findsOneWidget);

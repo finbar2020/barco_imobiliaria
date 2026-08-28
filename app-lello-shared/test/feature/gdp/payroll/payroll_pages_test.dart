@@ -81,20 +81,25 @@ void main() {
       expect(observer.pushedNames, isNot(contains(SharedApplicationRoute.gdppayrollDetail)));
     });
 
-    /// Defeito: quando a lista de folhas falha, `selectedMonth` fica nulo, o
-    /// seletor mostra texto vazio e tocar em "buscar" estoura
-    /// `selectedMonth!` (Null check operator).
-    testWidgets('falha na lista deixa o mês vazio e buscar estoura', (tester) async {
+    /// Corrigido: o mês do seletor começa no mês corrente, então uma falha na
+    /// lista de folhas não deixa o seletor vazio nem faz "buscar" estourar
+    /// com `selectedMonth!`.
+    testWidgets('falha na lista mantém o mês corrente e permite buscar',
+        (tester) async {
       env.http.failAll();
       final bloc = await pumpPayroll(tester);
       expect(bloc().state, isA<PayrollLoadFailedState>());
       expect(find.text('payroll_load_failed'), findsOneWidget);
-      expect(find.text(''), findsOneWidget);
+      final mesCorrente = DateTime(DateTime.now().year, DateTime.now().month);
+      expect(find.text(DateFormat.yMMMM().format(mesCorrente)), findsOneWidget);
 
+      env.http.requests.clear();
       await tester.tap(find.text('search'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      expect(tester.takeException(), isA<TypeError>());
+      expect(tester.takeException(), isNull);
+      expect(env.http.requests, hasLength(1));
+      expect(bloc().state, isA<PayrollLoadFailedState>());
     });
 
     testWidgets('enquanto carrega mostra o indicador', (tester) async {

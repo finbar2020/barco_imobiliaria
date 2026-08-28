@@ -47,14 +47,18 @@ class _PayslipSelectionPageState extends State<PayslipSelectionPage> {
         child: Scaffold(
           appBar: PrimaryAppBar(
               theme: theme, title: getString(context, 'gdp_payslip_title')),
-          body: BlocBuilder(
+          body: BlocConsumer(
               bloc: bloc,
-              builder: (context, state) {
-                if (state is PayslipLoadedState)
-                  return _buildList(theme, state);
+              listener: (context, state) {
+                // Efeito colateral: fica no listener para não repetir a cada
+                // rebuild do builder.
                 if (state is PayslipFileDownloadedState) {
                   renderPdf(context, state, bloc);
                 }
+              },
+              builder: (context, state) {
+                if (state is PayslipLoadedState)
+                  return _buildList(theme, state);
                 if (state is PayslipLoadingState)
                   return Center(child: CircularProgressIndicator());
                 if (state is PayslipLoadFailedState)

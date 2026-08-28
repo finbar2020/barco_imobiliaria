@@ -96,18 +96,6 @@ void main() {
     await settleAccordion(tester);
   }
 
-  /// Defeito: as listas dos dropdowns de quantidade de períodos e de dias só
-  /// são calculadas em `build()` do State, que NÃO é reexecutado quando o
-  /// bloc emite `VacationGDPLoadedState` (só o BlocConsumer é reconstruído).
-  /// Os dois dropdowns ficam desabilitados até algum `setState` — aqui
-  /// forçamos trocando a antecipação do 13º.
-  Future<void> enableForm(WidgetTester tester, {String yes = 'yes'}) async {
-    await tester.tap(periodsCountDropdown());
-    await tester.pumpAndSettle();
-    expect(find.text('3'), findsNothing);
-    await selectDropdown(tester, allow13Dropdown(), yes);
-  }
-
   /// O dropdown do período aquisitivo não recebe `value:`, então só fica
   /// válido depois que o usuário escolhe o (único) item no menu.
   Future<void> selectAcquisitivePeriod(WidgetTester tester) async {
@@ -145,7 +133,9 @@ void main() {
 
       final vazio = PeriodConfig();
       expect(vazio.getEnd, isNull);
-      expect(vazio.getStartFormatted, '');
+      // Corrigido: sem data de início o getter devolve null (e não ""), o que
+      // faz o campo mostrar a dica "selecione a data de início".
+      expect(vazio.getStartFormatted, isNull);
       expect(vazio.getEndFormatted, '');
     });
   });
@@ -238,7 +228,6 @@ void main() {
     env.stubVacationSuccess(lockedDays: lockedDaysJson([bloqueado]));
     await pumpVacation(tester,
         locOverrides: const {'no': 'Não', 'yes': 'Sim'});
-    await enableForm(tester, yes: 'Sim');
     // "Não" -> N.
     await selectDropdown(tester, allow13Dropdown(), 'Não');
     await selectAcquisitivePeriod(tester);
@@ -249,9 +238,9 @@ void main() {
     await selectDropdown(tester, daysDropdown(), '30d');
     expect(find.byType(AccordionSectionContent), findsOneWidget);
     expect(find.text('gdp_vacation_period'), findsOneWidget);
-    // Defeito: a dica "selecione a data" nunca aparece (getStartFormatted
-    // devolve "" em vez de null).
-    expect(find.text('gdp_vacation_employee_select_start_date'), findsNothing);
+    // Corrigido: a dica "selecione a data" aparece enquanto não há data.
+    expect(find.text('gdp_vacation_employee_select_start_date'),
+        findsOneWidget);
 
     // Avançar sem data: validação do período.
     await tapNext(tester);
@@ -297,7 +286,6 @@ void main() {
     env.stubVacationSuccess();
     await pumpVacation(tester,
         locOverrides: const {'no': 'Não', 'yes': 'Sim'});
-    await enableForm(tester, yes: 'Sim');
     await selectAcquisitivePeriod(tester);
 
     await selectDropdown(tester, periodsCountDropdown(), '2');
@@ -371,13 +359,13 @@ void main() {
     await settleAccordion(tester);
   });
 
-  /// Defeito: a troca do dropdown "antecipação do 13º" compara o texto com os
-  /// literais "No"/"Não"; em qualquer outro idioma a opção "não" vira "S".
+  /// Corrigido: a troca do dropdown "antecipação do 13º" compara pela posição
+  /// na lista de opções ([não, sim]) e não pelos literais "No"/"Não", então
+  /// funciona em qualquer idioma.
   testWidgets('fluxo com 3 períodos e antecipação "yes"', (tester) async {
     env.stubVacationSuccess();
     // Três seções abertas precisam de uma superfície ainda mais alta.
     await pumpVacation(tester, surface: const Size(480, 2600));
-    await enableForm(tester);
     await selectAcquisitivePeriod(tester);
 
     await selectDropdown(tester, periodsCountDropdown(), '3');
@@ -386,7 +374,7 @@ void main() {
     expect(find.text('3 - gdp_vacation_period'), findsOneWidget);
 
     await selectDropdown(tester, allow13Dropdown(), 'yes');
-    // Com a localização de teste "no" não bate com "No"/"Não" -> "S".
+    // Com a localização de teste "no" continua sendo a primeira opção -> "N".
     await selectDropdown(tester, allow13Dropdown(), 'no');
 
     // Terceiro período antes do segundo: aviso.
@@ -414,15 +402,14 @@ void main() {
     expect(args.periodConfig[1].start, inicio1.add(const Duration(days: 10)));
     expect(args.periodConfig[2].start, inicio1.add(const Duration(days: 20)));
     expect(args.periodConfig[0].allowanceValue, 0);
-    expect(args.periodConfig[0].allow13Value, 'S');
-    expect(args.periodConfig[0].formatedAllow13, 'yes');
+    expect(args.periodConfig[0].allow13Value, 'N');
+    expect(args.periodConfig[0].formatedAllow13, 'no');
     await settleAccordion(tester);
   });
 
   testWidgets('trocar a quantidade de períodos limpa as seções', (tester) async {
     env.stubVacationSuccess();
     await pumpVacation(tester);
-    await enableForm(tester);
 
     await selectDropdown(tester, periodsCountDropdown(), '1');
     await selectDropdown(tester, daysDropdown(), '20d');
@@ -494,10 +481,28 @@ void main() {
     expect(findRoute(SharedApplicationRoute.gdpVacationDetails), findsOneWidget);
   });
 
-  // Defeito (não testável aqui): com férias agendadas
-  // (`vacation_start_date` preenchido) mas sem a lista `scheduled_vacations`,
-  // o listener faz `scheduledVacations!` e lança um erro de null dentro do
-  // callback do bloc, derrubando a tela.
+  /// Corrigido: com férias agendadas (`vacation_start_date` preenchido) mas
+  /// sem a lista `scheduled_vacations`, o listener trata a lista nula em vez
+  /// de estourar com `scheduledVacations!`.
+  testWidgets('férias agendadas sem a lista de períodos não quebra a tela',
+      (tester) async {
+    env.stubVacationSuccess(
+      vacation: vacationJson(
+        vacationStartDate: '10/01/2030',
+        vacationEndDate: '08/02/2030',
+        scheduledDays: 30,
+        numbersUnitVacation: 1,
+      ),
+    );
+    await pumpVacation(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(pushedRoutes(observer), [SharedApplicationRoute.gdpVacationDetails]);
+    final route = observer.pushed.firstWhere(
+        (r) => r.settings.name == SharedApplicationRoute.gdpVacationDetails);
+    final args = route.settings.arguments as ScheduleVacationDetailsPageArgs;
+    expect(args.periodConfig, isEmpty);
+  });
 }
 
 /// Marcador para usar o funcionário padrão como argumento.

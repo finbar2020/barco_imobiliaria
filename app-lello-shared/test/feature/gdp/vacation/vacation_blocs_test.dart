@@ -90,29 +90,70 @@ void main() {
       await bloc.close();
     });
 
-    /// Defeito: `getVacationLockedDays` adiciona um `GetLockedDaysEvent` que
-    /// não tem handler registrado no bloc — em modo debug o `add` lança
-    /// StateError e em release o evento é ignorado.
-    test('getVacationLockedDays lança StateError (evento sem handler)', () {
+    /// Corrigido: `GetLockedDaysEvent` tem handler no bloc, então
+    /// `getVacationLockedDays` busca os dias bloqueados e emite
+    /// `VacationGDPLockedDaysState` em vez de lançar StateError.
+    test('getVacationLockedDays emite VacationGDPLockedDaysState', () async {
+      env.stubVacationSuccess();
       final bloc = env.vacationBloc();
-      expect(
-          () => bloc.getVacationLockedDays(
-              employeeId, DateTime(2030), DateTime(2031)),
-          throwsStateError);
+      final states = <VacationGDPState>[];
+      bloc.stream.listen(states.add);
+
+      bloc.getVacationLockedDays(employeeId, DateTime(2030), DateTime(2031));
+      await drain();
+
       expect(bloc.pendingEmployeeId, employeeId);
+      final locked = states.last as VacationGDPLockedDaysState;
+      expect(locked.condominiumId, condominiumId);
+      expect(locked.startDate, DateTime(2030));
+      expect(locked.endDate, DateTime(2031));
+      expect(locked.vacationLockedDays!.single!.locked_days, ['01/01/2030']);
+      expect(bloc.vacationLockedDays, hasLength(1));
+      expect(env.http.requests.single.url.path, lockedDaysPath);
+      // `VacationGDPPeriodEvent` continua sem handler.
       expect(() => bloc.add(const VacationGDPPeriodEvent()), throwsStateError);
-      bloc.close();
+      await bloc.close();
     });
 
-    /// Defeito: `vacationParams` nunca é preenchido pelo bloc, logo
-    /// `getVacationParams()` sempre lança ao fazer `!` em null.
-    test('getVacationParams lança porque vacationParams nunca é preenchido',
-        () {
+    test('falha ao buscar os dias bloqueados emite LoadFailedState', () async {
+      env.stubVacationSuccess();
+      env.http.on('GET', lockedDaysPath, status: 500, body: {'title': 'x'});
+      final bloc = env.vacationBloc();
+
+      bloc.getVacationLockedDays(employeeId, DateTime(2030), DateTime(2031));
+      await drain();
+
+      expect(bloc.state, isA<VacationGDPLoadFailedState>());
+      expect(bloc.vacationLockedDays, isNull);
+      await bloc.close();
+    });
+
+    test('sem sessão o GetLockedDaysEvent não faz requisição', () async {
+      env.stubVacationSuccess();
+      final bloc = env.vacationBloc(withSession: false);
+
+      bloc.getVacationLockedDays(employeeId, DateTime(2030), DateTime(2031));
+      await drain();
+
+      expect(env.http.requests, isEmpty);
+      expect(bloc.state, isA<VacationGDPLoadingState>());
+      await bloc.close();
+    });
+
+    /// Corrigido: `_mapLoad` guarda os parâmetros carregados, então
+    /// `getVacationParams()` devolve o que veio da API em vez de lançar.
+    test('getVacationParams devolve os parâmetros carregados', () async {
+      env.stubVacationSuccess();
       final bloc = env.vacationBloc();
       expect(bloc.vacationParams, isNull);
       expect(bloc.vacationLockedDays, isNull);
-      expect(() => bloc.getVacationParams(), throwsA(isA<TypeError>()));
-      bloc.close();
+
+      bloc.beginLoad(employeeId);
+      await drain();
+
+      expect(bloc.getVacationParams().qtdInitDays, 1);
+      expect(bloc.vacationLockedDays!.single.locked_days, ['01/01/2030']);
+      await bloc.close();
     });
 
     test('eventos e estados comparam por props', () {
@@ -249,10 +290,9 @@ void main() {
       await bloc.close();
     });
 
-    /// Defeito: a busca pendente registrada durante o carregamento inicial só
-    /// é disparada quando outra busca termina (`_handlePendingSearch` só roda
-    /// em `_mapSearch`), então o texto digitado durante o loading é perdido.
-    test('busca pendente durante o carregamento inicial não é disparada',
+    /// Corrigido: `_mapLoad` também trata a busca pendente, então o texto
+    /// digitado durante o carregamento inicial é buscado em vez de perdido.
+    test('busca pendente durante o carregamento inicial é disparada',
         () async {
       env.stubEmployees([ana]);
       final bloc = env.employeesBloc();
@@ -260,9 +300,10 @@ void main() {
       await drain();
 
       expect(bloc.state, isA<VacationEmployeesLoadedState>());
-      expect(bloc.state.query, '');
-      expect(bloc.pendingSearch, 'Zé');
-      expect(env.http.requests, hasLength(2));
+      expect(bloc.state.query, 'Zé');
+      expect(bloc.pendingSearch, isNull);
+      expect(env.http.requests.map((r) => r.url.queryParameters['name']),
+          contains('Zé'));
       await bloc.close();
     });
 

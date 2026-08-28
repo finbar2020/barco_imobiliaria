@@ -11,15 +11,14 @@ class VacationPeriod {
 
   List<String> get getIntervals {
     List<String> list = [];
-    if (periodsNumber >= intervals.length) {
-      return list;
-    }
     intervals.forEach((intervalDays) {
       String daysFormatted = '';
       String delimitador = "d - ";
       intervalDays?.intervals.forEach((interval) {
         daysFormatted = "$daysFormatted$interval$delimitador";
       });
+      // Sem dias (intervalo nulo ou vazio) não há opção para exibir.
+      if (daysFormatted.length < delimitador.length - 1) return;
       daysFormatted = daysFormatted.substring(0, daysFormatted.length - 3);
       list.add(daysFormatted);
     });

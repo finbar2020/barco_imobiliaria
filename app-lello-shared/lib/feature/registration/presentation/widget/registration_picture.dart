@@ -108,7 +108,9 @@ class _RegistrationPictureState extends State<RegistrationPicture> {
             onPressed: widget.store.profilePicture == null
                 ? () {}
                 : () {
-                    widget.store.profilePicture = null;
+                    setState(() {
+                      widget.store.profilePicture = null;
+                    });
                   })
       ],
     );

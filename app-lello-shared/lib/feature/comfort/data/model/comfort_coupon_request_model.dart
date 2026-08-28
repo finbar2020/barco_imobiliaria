@@ -36,7 +36,9 @@ class ComfortCouponRequestModel {
                 : entity.params
                     .map((e) => ComfortCouponRequestParamModel.fromEntity(e))
                     .toList()
-            ..linkRedirectPartner = entity.linkRedirectPartner);
+            ..linkRedirectPartner = entity.linkRedirectPartner
+            ..redirectExternal = entity.redirectExternal
+            ..cta = enumToString(entity.cta) ?? "cupom");
 
   ComfortCouponRequest toEntity() => ComfortCouponRequest(
         idRequest: this.idRequest,

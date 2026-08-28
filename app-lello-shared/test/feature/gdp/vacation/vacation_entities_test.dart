@@ -69,23 +69,28 @@ void main() {
       expect(periodo.getIntervals, ['30d', '20d']);
     });
 
-    /// Defeito: a guarda `periodsNumber >= intervals.length` devolve lista
-    /// vazia quando o número de períodos é igual ou maior que a quantidade de
-    /// intervalos disponíveis (ex.: 1 período com 1 opção de dias), escondendo
-    /// opções válidas no dropdown "dias por período".
-    test('devolve vazio quando periodsNumber >= intervals.length', () {
+    /// Corrigido: a guarda `periodsNumber >= intervals.length` foi removida,
+    /// então as opções continuam disponíveis quando o número de períodos é
+    /// igual ou maior que a quantidade de intervalos (ex.: 1 período com 1
+    /// opção de dias).
+    test('mantém as opções quando periodsNumber >= intervals.length', () {
       final periodo = VacationPeriod(periodsNumber: 1, intervals: [
         VacationPeriodInterval(intervals: [30], allowence: 0),
       ]);
-      expect(periodo.getIntervals, isEmpty);
+      expect(periodo.getIntervals, ['30d']);
       expect(VacationPeriod(periodsNumber: 0, intervals: []).getIntervals,
           isEmpty);
     });
 
-    test('intervalo nulo na lista gera string vazia truncada com erro', () {
-      final periodo = VacationPeriod(periodsNumber: 0, intervals: [null]);
-      // substring(0, -3) em string vazia lança RangeError.
-      expect(() => periodo.getIntervals, throwsRangeError);
+    /// Corrigido: um intervalo nulo (ou sem dias) é ignorado em vez de estourar
+    /// com `RangeError` no `substring`.
+    test('intervalo nulo na lista é ignorado', () {
+      final periodo = VacationPeriod(periodsNumber: 0, intervals: [
+        null,
+        VacationPeriodInterval(intervals: [], allowence: 0),
+        VacationPeriodInterval(intervals: [30], allowence: 0),
+      ]);
+      expect(periodo.getIntervals, ['30d']);
     });
   });
 

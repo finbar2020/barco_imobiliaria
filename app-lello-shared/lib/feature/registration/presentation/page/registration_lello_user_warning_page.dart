@@ -27,11 +27,14 @@ class RegistrationLelloUserWarningPage extends StatelessWidget {
         store.currentStep = RegistrationStep.cpf;
         store.cpf = null;
         store.dispose();
-        await Navigator.pushReplacementNamed(
+        // Substitui esta rota pela de login; a navegação já foi tratada aqui,
+        // por isso não se aguarda a future (ela só completa quando o login for
+        // fechado) e não se deixa o `pop` seguir adiante.
+        Navigator.pushReplacementNamed(
           context,
           SharedApplicationRoute.login,
         );
-        return true;
+        return false;
       },
       child: Theme(
         data: theme,
@@ -96,169 +99,91 @@ class RegistrationLelloUserWarningPage extends StatelessWidget {
                           }
                           if (state.error
                               is RegistrationPhoneAndEmailFoundFailure) {
-                            return Theme(
-                              data: theme,
-                              child: Scaffold(
-                                appBar: PrimaryAppBar(
-                                    theme: theme,
-                                    title: getString(context, "registration")),
-                                body: Container(
-                                  padding: EdgeInsets.only(
-                                      left: Dimens.spacingMedium,
-                                      right: Dimens.spacingMedium,
-                                      top: Dimens.spacingMedium),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.all(Dimens.spacingLarge),
-                                    child: Center(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: <Widget>[
-                                              Text(
-                                                  getString(context,
-                                                      "registration_lello_warning_no_data_title"),
-                                                  style: LelloTextStyles
-                                                          .bodyBold(theme)!
-                                                      .copyWith(
-                                                          fontSize: 22,
-                                                          color: Colors.white)),
-                                              SizedBox(
-                                                  height: Dimens.spacingLarge),
-                                              Text(
-                                                  getString(context,
-                                                      "registration_lello_warning_no_data_1"),
-                                                  style: LelloTextStyles.body(
-                                                          theme)!
-                                                      .copyWith(
-                                                          color: Colors.white)),
-                                              SizedBox(
-                                                  height: Dimens.spacingLarge),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "• ${getString(context, "registration_lello_warning_no_data_2")}",
-                                                    style: LelloTextStyles.body(
-                                                            theme)!
-                                                        .copyWith(
-                                                            color:
-                                                                Colors.white),
-                                                  ),
-                                                  InkWell(
-                                                      child: Text(
-                                                        getString(context,
-                                                            "registration_lello_warning_no_data_2_click"),
-                                                        style: LelloTextStyles
-                                                                .body(theme)!
-                                                            .copyWith(
-                                                                color:
-                                                                    Colors.red),
-                                                      ),
-                                                      onTap: () {
-                                                        _openWebPortal(context);
-                                                      }),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                  height: Dimens.spacingLarge),
-                                              Text(
-                                                  "• ${getString(context, "registration_lello_warning_no_data_3").replaceAll('{email}', FlavorConfig.config.supportEmail)}",
-                                                  style: LelloTextStyles.body(
-                                                          theme)!
-                                                      .copyWith(
-                                                          color: Colors.white)),
-                                              SizedBox(
-                                                  height: Dimens.spacingLarge),
-                                              Text(
-                                                  "• ${getString(context, "registration_lello_warning_no_data_4")}",
-                                                  style: LelloTextStyles.body(
-                                                          theme)!
-                                                      .copyWith(
-                                                          color: Colors.white)),
-                                              SizedBox(
-                                                  height: Dimens.spacingXLarge),
-                                              ConstrainedBox(
-                                                constraints:
-                                                    const BoxConstraints(
-                                                        minWidth:
-                                                            double.infinity),
-                                                child: OutlinedButton(
-                                                  onPressed: () {
-                                                    _openWhatsapp(context);
-                                                  },
-                                                  child: Container(
-                                                    child: Text(
-                                                        getString(context,
-                                                            "registration_lello_warning_no_data_btn"),
-                                                        style: LelloTextStyles
-                                                                .button(theme)!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .black)),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                    getString(context,
+                                        "registration_lello_warning_no_data_title"),
+                                    style: LelloTextStyles.bodyBold(theme)!
+                                        .copyWith(
+                                            fontSize: 22,
+                                            color: Colors.white)),
+                                SizedBox(height: Dimens.spacingLarge),
+                                Text(
+                                    getString(context,
+                                        "registration_lello_warning_no_data_1"),
+                                    style: LelloTextStyles.body(theme)!
+                                        .copyWith(color: Colors.white)),
+                                SizedBox(height: Dimens.spacingLarge),
+                                Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text(
+                                      "\u2022 ${getString(context, "registration_lello_warning_no_data_2")}",
+                                      style: LelloTextStyles.body(theme)!
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                    InkWell(
+                                        child: Text(
+                                          getString(context,
+                                              "registration_lello_warning_no_data_2_click"),
+                                          style: LelloTextStyles.body(theme)!
+                                              .copyWith(color: Colors.red),
+                                        ),
+                                        onTap: () {
+                                          _openWebPortal(context);
+                                        }),
+                                  ],
+                                ),
+                                SizedBox(height: Dimens.spacingLarge),
+                                Text(
+                                    "\u2022 ${getString(context, "registration_lello_warning_no_data_3").replaceAll('{email}', FlavorConfig.config.supportEmail)}",
+                                    style: LelloTextStyles.body(theme)!
+                                        .copyWith(color: Colors.white)),
+                                SizedBox(height: Dimens.spacingLarge),
+                                Text(
+                                    "\u2022 ${getString(context, "registration_lello_warning_no_data_4")}",
+                                    style: LelloTextStyles.body(theme)!
+                                        .copyWith(color: Colors.white)),
+                                SizedBox(height: Dimens.spacingXLarge),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                      minWidth: double.infinity),
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      _openWhatsapp(context);
+                                    },
+                                    child: Container(
+                                      child: Text(
+                                          getString(context,
+                                              "registration_lello_warning_no_data_btn"),
+                                          style: LelloTextStyles.button(theme)!
+                                              .copyWith(color: Colors.black)),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             );
                           }
                           if (state.error is RegistrationLockedRolloutFailure) {
-                            return Theme(
-                              data: theme,
-                              child: Scaffold(
-                                appBar: PrimaryAppBar(
-                                    theme: theme,
-                                    title: getString(context, "registration")),
-                                body: Container(
-                                  padding: EdgeInsets.only(
-                                      left: Dimens.spacingMedium,
-                                      right: Dimens.spacingMedium,
-                                      top: Dimens.spacingMedium),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.all(Dimens.spacingLarge),
-                                    child: Center(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: <Widget>[
-                                              Text(
-                                                  getString(context,
-                                                      "registration_lello_warning_rollout_title"),
-                                                  style: LelloTextStyles
-                                                          .bodyBold(theme)!
-                                                      .copyWith(fontSize: 22)),
-                                              SizedBox(
-                                                  height: Dimens.spacingLarge),
-                                              Text(
-                                                  getString(context,
-                                                      "registration_lello_warning_rollout_text"),
-                                                  style: LelloTextStyles.body(
-                                                      theme)),
-                                              SizedBox(
-                                                  height: Dimens.spacingLarge),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                    getString(context,
+                                        "registration_lello_warning_rollout_title"),
+                                    style: LelloTextStyles.bodyBold(theme)!
+                                        .copyWith(
+                                            fontSize: 22,
+                                            color: Colors.white)),
+                                SizedBox(height: Dimens.spacingLarge),
+                                Text(
+                                    getString(context,
+                                        "registration_lello_warning_rollout_text"),
+                                    style: LelloTextStyles.body(theme)!
+                                        .copyWith(color: Colors.white)),
+                              ],
                             );
                           }
                           return Column(

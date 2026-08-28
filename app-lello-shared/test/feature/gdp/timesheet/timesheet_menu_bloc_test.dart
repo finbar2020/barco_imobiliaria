@@ -103,12 +103,11 @@ void main() {
     await bloc.close();
   });
 
-  /// Defeito: `_mapLoadEmployees` monta `TimesheetMenuEmployeesLoadFailedState`
-  /// com `state.query!` e `state.selectedMonth!`, mas o bloc nunca preenche
-  /// `query` (e `selectedMonth` só vem dos argumentos da rota). Assim, qualquer
-  /// falha ao listar funcionários explode com "Null check operator" em vez de
-  /// emitir o estado de erro, e o bloc fica preso em EmployeesLoading.
-  test('falha ao listar funcionários explode em vez de emitir erro (defeito)',
+  /// Corrigido: `_mapLoadEmployees` não força mais `state.report!`,
+  /// `state.query!` e `state.selectedMonth!` (nunca preenchidos no fluxo
+  /// normal). Uma falha ao listar funcionários emite
+  /// `TimesheetMenuEmployeesLoadFailedState` em vez de explodir.
+  test('falha ao listar funcionários emite EmployeesLoadFailedState',
       () async {
     stack.happyPath();
     stack.http.on('GET', '/timesheet/employees/C1', status: 500);
@@ -116,13 +115,14 @@ void main() {
     late TimesheetMenuBloc bloc;
     await runZonedGuarded(() async {
       bloc = stack.menuBloc(session: session);
-      await coletar(bloc, (s) => s is TimesheetMenuEmployeesLoadingState);
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await coletar(bloc, (s) => s is TimesheetMenuEmployeesLoadFailedState);
     }, (e, _) => errors.add(e));
 
-    expect(errors, isNotEmpty);
-    expect(errors.first, isA<TypeError>());
-    expect(bloc.state, isA<TimesheetMenuEmployeesLoadingState>());
+    expect(errors, isEmpty);
+    final failed = bloc.state as TimesheetMenuEmployeesLoadFailedState;
+    expect(failed.error, isA<UnknownFailure>());
+    expect(failed.query, isNull);
+    expect(failed.selectedMonth, isNull);
     await bloc.close();
   });
 

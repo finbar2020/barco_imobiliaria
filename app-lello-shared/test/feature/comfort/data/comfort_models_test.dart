@@ -183,14 +183,18 @@ void main() {
       expect(entity.dateRequest.isBefore(before), isFalse);
     });
 
-    test('toEntity sem parceiro lança erro', () {
-      /// Defeito: `ComfortCompletedRequestModel.toEntity` usa `partner!`;
-      /// uma solicitação sem `partner` no JSON derruba a conversão
-      /// (TypeError) em vez de tratar o nulo. Comportamento atual documentado.
+    test('toEntity sem parceiro usa um parceiro mínimo', () {
+      /// Corrigido: `ComfortCompletedRequestModel.toEntity` usava `partner!`
+      /// e uma solicitação sem `partner` no JSON derrubava a conversão
+      /// (TypeError). Agora o nulo é tratado com os dados da própria
+      /// solicitação.
       final model = ComfortCompletedRequestModel.fromJson(
           completedRequestJson(includePartner: false));
       expect(model.partner, isNull);
-      expect(() => model.toEntity(), throwsA(isA<TypeError>()));
+      final entity = model.toEntity();
+      expect(entity.partner.id, model.idPartner);
+      expect(entity.partner.partnerIntro.comfortType, ComfortType.cleaning);
+      expect(entity.partner.partnerIntro.favorite, isFalse);
     });
 
     test('fromEntity e toJson', () {
@@ -274,9 +278,9 @@ void main() {
     });
 
     test('fromEntity e toJson', () {
-      /// Defeito: `ComfortCouponRequestModel.fromEntity` não copia
-      /// `redirectExternal` nem `cta` (ficam nos padrões `false`/`"cupom"`),
-      /// então a conversão entidade -> modelo perde esses dados.
+      /// Corrigido: `ComfortCouponRequestModel.fromEntity` copia
+      /// `redirectExternal` e `cta` (antes ficavam nos padrões
+      /// `false`/`"cupom"` e a conversão entidade -> modelo perdia os dados).
       final entity = ComfortCouponRequest(
         idRequest: 'x',
         params: [
@@ -292,8 +296,8 @@ void main() {
       expect(model.params, hasLength(2));
       expect(model.params.first!.nameParam, 'h');
       expect(model.params.last, isNull);
-      expect(model.redirectExternal, isFalse);
-      expect(model.cta, 'cupom');
+      expect(model.redirectExternal, isTrue);
+      expect(model.cta, 'email');
       final json = roundTrip(model.toJson());
       expect(json['params'][0]['name_param'], 'h');
       expect(json['link_redirect_partner'], 'https://l');
@@ -357,8 +361,8 @@ void main() {
     });
 
     test('fromEntity e toJson', () {
-      /// Defeito: `ComfortRequestPurchaseModel.fromEntity` não copia
-      /// `purchaseDate` (fica nulo), embora `toEntity` o leia.
+      /// Corrigido: `ComfortRequestPurchaseModel.fromEntity` copia
+      /// `purchaseDate` (antes ficava nulo, embora `toEntity` o lesse).
       final entity = ComfortRequestPurchase(
         requestId: 'r',
         userId: 'u',
@@ -379,7 +383,7 @@ void main() {
       expect(model.requestId, 'r');
       expect(model.usedCoupon, 2);
       expect(model.dateResend, DateTime(2026, 3, 2));
-      expect(model.purchaseDate, isNull);
+      expect(model.purchaseDate, DateTime(2026, 3, 1));
       expect(model.typeSubject, 't');
       final json = roundTrip(model.toJson());
       expect(json['type_c_t_a'], 'link');

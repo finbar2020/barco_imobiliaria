@@ -116,9 +116,13 @@ class _AccordionSectionContentState extends State<AccordionSectionContent> {
                   onTap: () async {
                     //FocusScope.of(context).requestFocus(new FocusNode());
                     final date = await datePickerPeriod(context, periodConfig);
+                    if (date != null) periodConfig.start = date;
+                    // O Accordion recria os States a cada rebuild da página,
+                    // então o State pode ter sido descartado durante o
+                    // calendário: só atualiza se ainda estiver montado.
+                    if (!mounted) return;
                     setState(() {
-                      if (date != null) periodConfig.start = date;
-                      periodConfig.key.currentState!.validate();
+                      periodConfig.key.currentState?.validate();
                     });
                   },
                 ),
@@ -219,7 +223,7 @@ class _AccordionSectionContentState extends State<AccordionSectionContent> {
         context: context,
         selectableDayPredicate: (DateTime val) {
           String sanitized = sanitizeDateTime(val);
-          return !lockedDays!.locked_days.contains(sanitized);
+          return !(lockedDays?.locked_days.contains(sanitized) ?? false);
         },
         initialDate: firstDate,
         firstDate: firstDate,

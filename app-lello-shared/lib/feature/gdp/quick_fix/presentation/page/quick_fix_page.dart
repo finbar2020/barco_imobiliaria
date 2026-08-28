@@ -87,18 +87,18 @@ class _QuickFixPageState extends State<QuickFixPage> {
           subtitle: Container(
             width: double.infinity,
             child: DropdownButtonFormField(
+              // `isExpanded` faz o item ocupar a largura do campo; antes cada
+              // item tinha largura fixa maior que o campo e estourava.
+              isExpanded: true,
               hint: Text(getString(context, 'gdp_quick_fix_select'),
                   style: LelloTextStyles.body(theme)),
               items: disabled
                   ? null
                   : state.data
                       .map((e) => DropdownMenuItem(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width - 80,
-                            child: Text(
-                              e.name!,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          child: Text(
+                            e.name!,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           value: e))
                       .toList(),

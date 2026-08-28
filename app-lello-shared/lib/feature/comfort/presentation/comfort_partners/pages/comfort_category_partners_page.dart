@@ -34,22 +34,14 @@ class ComfortCategoryPartnersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final partners =
-        comfortPartnersController.partnersList(category: category);
     return Scaffold(
       appBar: CustomAppBar(title: "comfort"),
       body: BlocConsumer<ComfortPartnersBloc, ComfortPartnersState>(
         bloc: comfortPartnersController.comfortPartnersBloc,
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is! LoadedComfortPartnersState) {
-            return Column(
-              children: [
-                Expanded(child: LoadingWidget()),
-              ],
-            );
-          }
-
+          // O estado de erro não estende o carregado: precisa ser testado
+          // antes, senão o `ErrorHandlingWidget` nunca aparece.
           if (state is ErrorComfortPartnersState) {
             return Padding(
               padding: EdgeInsets.all(Dimens.spacingMedium),
@@ -63,6 +55,20 @@ class ComfortCategoryPartnersPage extends StatelessWidget {
               ),
             );
           }
+
+          if (state is! LoadedComfortPartnersState) {
+            return Column(
+              children: [
+                Expanded(child: LoadingWidget()),
+              ],
+            );
+          }
+
+          // A lista precisa ser lida a cada build do BlocConsumer: calculada
+          // uma única vez no `build` da página ela ficaria vazia quando a
+          // tela é aberta antes do carregamento.
+          final partners =
+              comfortPartnersController.partnersList(category: category);
 
           return SingleChildScrollView(
             child: ComfortPartnersListViewHorizontalScrolling(

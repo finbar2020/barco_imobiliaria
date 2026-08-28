@@ -122,21 +122,18 @@ void main() {
     expect(find.byType(ComfortPartnerCard), findsNothing);
     expect(find.text('comfort_back_to_categories'), findsNothing);
 
-    /// Defeito: ao sair da lista vazia o `dispose` da lista horizontal acessa
-    /// `partners.first` e lança `StateError`. Removemos só a lista (estado de
-    /// carregamento) para o erro não interromper o desmonte do resto da
-    /// árvore (o Tooltip do botão voltar vazaria para o próximo teste).
+    /// Corrigido: sair da lista vazia não lança mais no `dispose` da lista
+    /// horizontal (antes ele acessava `partners.first`).
     await emitState(tester, controller.comfortPartnersBloc,
         const LoadingComfortPartnersState(),
         settle: false);
-    expect(tester.takeException(), isA<StateError>());
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
 
-  /// Defeito: `partners` é calculado uma única vez no `build` do
-  /// StatelessWidget (antes do carregamento); quando a lista chega, só o
-  /// `builder` do BlocConsumer reconstrói e a página continua sem parceiros.
-  testWidgets('aberta antes do carregamento mostra o loading e depois vazio',
+  /// Corrigido: `partners` é lido a cada build do `BlocConsumer`; quando a
+  /// lista chega a página passa a mostrar os parceiros da categoria.
+  testWidgets('aberta antes do carregamento mostra o loading e depois a lista',
       (tester) async {
     // O LoadingWidget anima para sempre: sem pumpAndSettle.
     final controller =
@@ -150,22 +147,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(LoadingWidget), findsNothing);
     expect(controller.allPartnersList, hasLength(3));
-    expect(find.byType(ComfortPartnerCard), findsNothing);
+    expect(find.byType(ComfortPartnerCard), findsNWidgets(2));
+    expect(find.text('Alfa'), findsOneWidget);
+    expect(find.text('Gama'), findsOneWidget);
 
-    // Lista vazia: o dispose da lista horizontal lança (ver defeito acima).
     await emitState(tester, controller.comfortPartnersBloc,
         const LoadingComfortPartnersState(),
         settle: false);
-    expect(tester.takeException(), isA<StateError>());
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
 
-  /// Defeito: a verificação `state is! LoadedComfortPartnersState` vem antes
-  /// da de erro, e `ErrorComfortPartnersState` não estende o estado carregado,
-  /// então o `ErrorHandlingWidget` da página nunca é exibido — erros aparecem
-  /// como carregamento infinito.
-  testWidgets('estado de erro mostra o loading em vez do widget de erro',
-      (tester) async {
+  /// Corrigido: o estado de erro é verificado antes de
+  /// `state is! LoadedComfortPartnersState`, então o `ErrorHandlingWidget`
+  /// aparece em vez de um carregamento infinito.
+  testWidgets('estado de erro mostra o widget de erro', (tester) async {
     final controller = await pumpCategory(tester);
 
     await emitState(
@@ -173,13 +169,29 @@ void main() {
       controller.comfortPartnersBloc,
       const ErrorComfortPartnersState(
           errorMessageKey: 'k', errorCode: null, errorDescription: null),
-      settle: false,
     );
 
-    expect(find.byType(LoadingWidget), findsOneWidget);
+    expect(find.byType(LoadingWidget), findsNothing);
+    expect(find.byType(ErrorHandlingWidget), findsOneWidget);
+
+    // "Tentar novamente" recarrega os parceiros.
+    harness.http.requests.clear();
+    await tester.tap(find.text('error_handling_widget_button_reTry'));
+    await tester.pumpAndSettle();
+    expect(harness.http.requests, isNotEmpty);
     expect(find.byType(ErrorHandlingWidget), findsNothing);
-    // Desmonta ainda no teste: o loading anima para sempre.
-    await tester.pumpWidget(const SizedBox());
+    expect(find.byType(ComfortPartnerCard), findsNWidgets(2));
+
+    // "Voltar" fecha a página.
+    await emitState(
+      tester,
+      controller.comfortPartnersBloc,
+      const ErrorComfortPartnersState(
+          errorMessageKey: 'k', errorCode: null, errorDescription: null),
+    );
+    await tester.tap(find.text('error_handling_widget_button_back'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ComfortCategoryPartnersPage), findsNothing);
   });
 
   testWidgets('ciclo de vida do app para e reinicia o timer da categoria',

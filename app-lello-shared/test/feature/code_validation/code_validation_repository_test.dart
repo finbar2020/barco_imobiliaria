@@ -50,7 +50,14 @@ void main() {
       expect(await dataSource.insertValidation(model), same(model));
 
       harness.mockGeneratedValidate(status: 200, body: {'ok': true});
-      expect(() => dataSource.insertValidation(model), throwsA(isA<Exception>()));
+      await expectLater(
+          () => dataSource.insertValidation(model), throwsA(isA<Exception>()));
+
+      harness.mockGeneratedValidate(
+          status: 404,
+          body: apiFailureBody(status: 404, failure: 'user_not_found_failure'));
+      await expectLater(
+          () => dataSource.insertValidation(model), throwsA(isA<ApiFailure>()));
     });
 
     test('getDados2faAsync monta o caminho e a query', () async {
@@ -114,12 +121,11 @@ void main() {
       expect(result.fold((l) => null, (r) => r)!.code, '1234');
     });
 
-    test('validate nunca mapeia as falhas conhecidas da API', () async {
-      /// Defeito: `insertValidation` não usa o `ApiMapper` e lança uma
-      /// `Exception` genérica para qualquer status diferente de 202, então
-      /// o `_mapApiFailure` de `validate` é código morto: toda falha vira
-      /// `UnknownFailure`, mesmo `user_not_found_failure`,
-      /// `code_previously_validated` e `max_attempts_exceeded`.
+    test('validate mapeia as falhas conhecidas da API', () async {
+      /// Corrigido: `insertValidation` propaga o `ApiFailure` da resposta,
+      /// então o `_mapApiFailure` de `validate` passa a ser alcançado e
+      /// `user_not_found_failure`, `code_previously_validated` e
+      /// `max_attempts_exceeded` viram as falhas de domínio corretas.
       Future<Failure> failing(int status, String? failure) async {
         harness.mockGeneratedValidate(
             status: status, body: apiFailureBody(status: status, failure: failure));
@@ -128,15 +134,17 @@ void main() {
         return (result as Rejection).get();
       }
 
-      expect(await failing(404, 'user_not_found_failure'), isA<UnknownFailure>());
+      expect(await failing(404, 'user_not_found_failure'),
+          isA<RegistrationUserNotFoundFailure>());
       expect(
           await failing(409, 'validate_code_code_previously_validated_failure'),
-          isA<UnknownFailure>());
+          isA<RequestCodeAlreadyValidatedFailure>());
       expect(
           await failing(
               429, 'validate_code_max_failed_attempts_exceeded_failure'),
-          isA<UnknownFailure>());
-      expect(await failing(400, null), isA<UnknownFailure>());
+          isA<ValidateCodeMaxAttemptsExceededFailure>());
+      expect(await failing(400, null), isA<UserUnkonwFailure>());
+      expect(await failing(500, 'outra'), isA<UnknownFailure>());
     });
 
     test('getDados2faAsync mapeia as falhas conhecidas da API', () async {

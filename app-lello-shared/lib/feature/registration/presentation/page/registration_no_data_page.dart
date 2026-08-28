@@ -49,7 +49,9 @@ class RegistrationLelloUserNoDataPage extends StatelessWidget {
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w400)),
                                     SizedBox(height: Dimens.spacingLarge),
-                                    Row(
+                                    Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
                                       children: [
                                         Text(
                                           "• ${getString(context, "registration_lello_warning_no_data_2")}",

@@ -90,6 +90,24 @@ class ComfortPartnerIntro {
         return getString(context, "comfort_pedestrian_access_control");
       case ComfortType.educational:
         return getString(context, "comfort_educational");
+      case ComfortType.playroom:
+        return getString(context, "comfort_playroom");
+      case ComfortType.solar_panels:
+        return getString(context, "comfort_solar_panels");
+      case ComfortType.automation:
+        return getString(context, "comfort_automation");
+      case ComfortType.pharmacy:
+        return getString(context, "comfort_pharmacy");
+      case ComfortType.wellness:
+        return getString(context, "comfort_wellness");
+      case ComfortType.decoration:
+        return getString(context, "comfort_decoration");
+      case ComfortType.biometrics:
+        return getString(context, "comfort_biometrics");
+      case ComfortType.energy:
+        return getString(context, "comfort_energy");
+      case ComfortType.connectivity:
+        return getString(context, "comfort_connectivity");
       case ComfortType.security:
         return getString(context, "comfort_security");
       case ComfortType.beauty:

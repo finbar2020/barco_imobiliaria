@@ -146,14 +146,12 @@ void main() {
     });
 
     testWidgets('puxar a lista recarrega', (tester) async {
-      /// Defeito: a `ListView.builder` da lista não usa
-      /// `AlwaysScrollableScrollPhysics`, então com poucos itens (lista menor
-      /// que a tela) o gesto de puxar não dispara o `RefreshIndicator` no
-      /// Android. O teste usa itens suficientes para a lista rolar.
+      /// Corrigido: a `ListView.builder` usa `AlwaysScrollableScrollPhysics`,
+      /// então o gesto de puxar dispara o `RefreshIndicator` mesmo com poucos
+      /// itens (lista menor que a tela).
       harness.stubList([notificationJson()]);
-      final many = List.generate(
-          15, (i) => buildNotification(id: 'n$i', date: DateTime.now()));
-      await pumpList(tester, many, surface: const Size(400, 600));
+      await pumpList(tester, [buildNotification(date: DateTime.now())],
+          surface: const Size(400, 600));
 
       await tester.fling(
           find.byType(NotificationListTile).first, const Offset(0, 300), 1000);

@@ -149,15 +149,17 @@ void main() {
       final today = DateTime(now.year, now.month, now.day, 14, 5);
       expect(SingleNotification(date: today).dateFormatted, 'Hoje, às 14:05');
 
-      /// Defeito: "Ontem" só é detectado quando ontem cai no mesmo mês
-      /// (`date.day - now.day == -1`); no dia 1º a data de ontem cai no
-      /// formato completo. O teste cobre o comportamento atual.
-      final yesterday = today.subtract(const Duration(days: 1));
-      final expectedYesterday = yesterday.month == now.month
-          ? 'Ontem, às 14:05'
-          : '${DateFormat("d 'de' MMMM 'de' yyyy", 'pt_BR').format(yesterday)}, às 14:05';
+      /// Corrigido: "Ontem" passa a comparar a data do dia anterior de
+      /// verdade, então também vale na virada de mês e de ano.
+      final yesterday = DateTime(now.year, now.month, now.day - 1, 14, 5);
       expect(SingleNotification(date: yesterday).dateFormatted,
-          expectedYesterday);
+          'Ontem, às 14:05');
+
+      final anteontem = DateTime(now.year, now.month, now.day - 2, 14, 5);
+      expect(
+          SingleNotification(date: anteontem).dateFormatted,
+          '${DateFormat("d 'de' MMMM 'de' yyyy", 'pt_BR').format(anteontem)}'
+          ', às 14:05');
 
       expect(SingleNotification(date: DateTime(2025, 3, 7, 8, 1)).dateFormatted,
           '7 de março de 2025, às 08:01');

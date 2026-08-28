@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:essentials/enum/app_origin_enum.dart';
 import 'package:essentials/essentials.dart' hide isNull, isNotNull;
 import 'package:flutter/material.dart';
@@ -28,6 +26,7 @@ void main() {
     Widget page, {
     Object? arguments,
     String name = '/pagina',
+    Map<String, String> locOverrides = const {},
     bool settle = true,
   }) async {
     await tester.pumpWidget(const SizedBox());
@@ -48,6 +47,7 @@ void main() {
       observer: observer,
       surface: const Size(500, 1000),
       providers: withTestAssets,
+      locOverrides: locOverrides,
     );
     await tester.tap(find.byKey(_launcherKey));
     if (settle) {
@@ -103,10 +103,17 @@ void main() {
       store = harness.buildStore();
     });
 
+    /// Textos curtos para a linha "• texto + link" caber na largura.
+    const textosCurtosPortal = {
+      'registration_lello_warning_no_data_2': 'Acesse o ',
+      'registration_lello_warning_no_data_2_click': 'portal',
+    };
+
     Future<void> pumpWarning(
       WidgetTester tester, {
       RegistrationState? state,
       AppOriginEnum origin = AppOriginEnum.owner,
+      Map<String, String> locOverrides = const {},
       bool settle = true,
     }) async {
       if (state != null) {
@@ -121,6 +128,7 @@ void main() {
         ),
         arguments: RegistrationLelloUserWarningPageArgs(store: store),
         name: SharedApplicationRoute.registrationWarning,
+        locOverrides: locOverrides,
         settle: settle,
       );
     }
@@ -152,46 +160,59 @@ void main() {
       expect(find.byType(RegistrationLelloUserWarningPage), findsNothing);
     });
 
-    /// Monta a página com um único frame (a tela quebra no layout e cada
-    /// frame geraria uma nova exceção).
-    Future<void> pumpBroken(WidgetTester tester, Failure error) async {
-      // ignore: invalid_use_of_visible_for_testing_member
-      store.bloc.emit(RegistrationRequestMyUserFailedState(error: error));
-      await pumpPage(
-        tester,
-        RegistrationLelloUserWarningPage(
-          appContainer: harness.container,
-          appOriginEnum: AppOriginEnum.owner,
-        ),
-        arguments: RegistrationLelloUserWarningPageArgs(store: store),
-        settle: false,
-        providers: withTestAssets,
-      );
-    }
-
     testWidgets('rollout bloqueado', (tester) async {
-      /// Defeito: o ramo de rollout bloqueado devolve um `Scaffold` dentro
-      /// de uma `Column` rolável (altura infinita) e a tela quebra no layout
-      /// ("RenderCustomMultiChildLayoutBox object was given an infinite
-      /// size").
-      await pumpBroken(tester, RegistrationLockedRolloutFailure());
-      // Cada render object do Scaffold relata o erro: várias exceções.
-      final error = tester.takeException();
-      expect(error, isNotNull);
-      expect(error.toString(), contains('Multiple exceptions'));
-      await tester.pumpWidget(const SizedBox());
-      tester.takeException();
+      /// Corrigido: o ramo de rollout bloqueado devolve uma `Column` (antes
+      /// era um `Scaffold` dentro da `Column` rolável, que quebrava o layout
+      /// com "RenderBox was given an infinite size").
+      await pumpWarning(tester,
+          state: RegistrationRequestMyUserFailedState(
+              error: RegistrationLockedRolloutFailure()));
+      expect(tester.takeException(), isNull);
+      expect(find.text('registration_lello_warning_rollout_title'),
+          findsOneWidget);
+      expect(find.text('registration_lello_warning_rollout_text'),
+          findsOneWidget);
+      expect(find.byType(Scaffold), findsOneWidget);
     });
 
     testWidgets('sem e-mail e telefone', (tester) async {
-      /// Defeito: mesmo problema do rollout — `Scaffold` aninhado numa
-      /// `Column` rolável, a tela quebra no layout.
-      await pumpBroken(tester, RegistrationPhoneAndEmailFoundFailure());
-      final error = tester.takeException();
-      expect(error, isNotNull);
-      expect(error.toString(), contains('Multiple exceptions'));
-      await tester.pumpWidget(const SizedBox());
-      tester.takeException();
+      /// Corrigido: mesmo ajuste do rollout — sem `Scaffold` aninhado a tela
+      /// monta normalmente e mostra as orientações e o botão do WhatsApp.
+      await pumpWarning(tester,
+          state: RegistrationRequestMyUserFailedState(
+              error: RegistrationPhoneAndEmailFoundFailure()),
+          locOverrides: textosCurtosPortal);
+      expect(tester.takeException(), isNull);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.text('registration_lello_warning_no_data_title'),
+          findsOneWidget);
+      expect(find.text('registration_lello_warning_no_data_1'), findsOneWidget);
+      expect(find.text('• Acesse o '), findsOneWidget);
+      expect(find.text('• registration_lello_warning_no_data_4'),
+          findsOneWidget);
+
+      await tester.tap(find.text('portal'));
+      await tester.pumpAndSettle();
+      expect(harness.launcher.launched.last,
+          'https://resolvafacil.lello.com.br');
+
+      await tester.tap(find.text('registration_lello_warning_no_data_btn'));
+      await tester.pumpAndSettle();
+      expect(harness.launcher.launched.last,
+          startsWith('https://wa.me/'
+              '${FlavorConfig.config.supportMoradorWhatsAppNumber}/'));
+    });
+
+    testWidgets('sem e-mail e telefone com textos longos não estoura',
+        (tester) async {
+      /// Corrigido: a linha "• texto + link do portal" usa `Wrap`, então os
+      /// textos longos quebram em outra linha em vez de estourar a largura.
+      await pumpWarning(tester,
+          state: RegistrationRequestMyUserFailedState(
+              error: RegistrationPhoneAndEmailFoundFailure()));
+      expect(tester.takeException(), isNull);
+      expect(find.text('registration_lello_warning_no_data_2_click'),
+          findsOneWidget);
     });
 
     testWidgets('outra falha de busca mostra erro desconhecido',
@@ -234,15 +255,16 @@ void main() {
           state: RegistrationRequestMyUserFailedState(
               error: RegistrationUserNotFoundFailure()));
 
-      /// Defeito: o `onWillPop` faz `await pushReplacementNamed(login)` —
-      /// a future só completa quando a tela de login for fechada — então o
-      /// `maybePop` nunca termina (aqui não aguardamos o `handlePopRoute`).
-      unawaited(tester.binding.handlePopRoute());
+      /// Corrigido: o `onWillPop` não aguarda mais o `pushReplacementNamed`
+      /// (a future só completaria quando a tela de login fosse fechada), então
+      /// o `maybePop` termina normalmente.
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
 
       expect(store.cpf, isNull);
       expect(store.currentStep, RegistrationStep.cpf);
       expect(observer.pushedNames.last, SharedApplicationRoute.login);
+      expect(findRoute(SharedApplicationRoute.login), findsOneWidget);
       expect(find.byType(RegistrationLelloUserWarningPage), findsNothing);
     });
 
@@ -345,17 +367,17 @@ void main() {
           FlavorConfig.config.supportSindicoWhatsAppNumber);
     });
 
-    testWidgets('com textos longos a linha do portal estoura a largura',
+    testWidgets('com textos longos a linha do portal quebra em outra linha',
         (tester) async {
-      /// Defeito: a linha "• texto + link do portal" é uma `Row` sem
-      /// `Expanded`/`Wrap`; com textos maiores que a largura da tela o
-      /// layout estoura ("A RenderFlex overflowed").
-      await pumpNoData(tester, locOverrides: const {}, settle: false);
-      final error = tester.takeException();
-      expect(error, isA<FlutterError>());
-      expect(error.toString(), contains('overflowed'));
-      await tester.pumpWidget(const SizedBox());
-      tester.takeException();
+      /// Corrigido: a linha "• texto + link do portal" usa `Wrap` em vez de
+      /// `Row`, então textos maiores que a largura da tela quebram a linha em
+      /// vez de estourar o layout ("A RenderFlex overflowed").
+      await pumpNoData(tester, locOverrides: const {});
+      expect(tester.takeException(), isNull);
+      expect(find.text('• registration_lello_warning_no_data_2'),
+          findsOneWidget);
+      expect(find.text('registration_lello_warning_no_data_2_click'),
+          findsOneWidget);
     });
   });
 }

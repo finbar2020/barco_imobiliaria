@@ -34,12 +34,13 @@ void main() {
       const EmptyComfortPartnerReviewsState(),
       const LoadingComfortPartnerReviewsState(),
       const ErrorComfortPartnerReviewsState(errorMessageKey: 'erro'),
-      LoadedComfortPartnerReviewsState(partnerReviews: reviews),
+      LoadedComfortPartnerReviewsState(
+          partnerReviews: reviews, flushbarMessage: 'f'),
     ]);
 
-    /// Defeito: o handler de Loaded descarta `flushbarMessage`.
+    /// Corrigido: o handler de Loaded repassa `flushbarMessage` ao estado.
     expect((states.last as LoadedComfortPartnerReviewsState).flushbarMessage,
-        isNull);
+        'f');
   });
 
   test('props', () {

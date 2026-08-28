@@ -372,11 +372,9 @@ void main() {
         ?['origem_acesso'], 'coupon');
   });
 
-  /// Defeito: `onCouponSelected` usa `firstWhere(..., orElse: null)`; quando o
-  /// parceiro do cupom não está na lista o `firstWhere` lança `StateError`
-  /// ("No element") em vez de ignorar o toque.
-  testWidgets('cupom de parceiro fora da lista lança StateError',
-      (tester) async {
+  /// Corrigido: quando o parceiro do cupom não está na lista o toque é
+  /// ignorado (antes o `firstWhere(..., orElse: null)` lançava `StateError`).
+  testWidgets('cupom de parceiro fora da lista é ignorado', (tester) async {
     mockDefaultPartners();
     harness.controller().coupons = [
       buildCoupon('C2', discount: 50, partnerId: 'inexistente'),
@@ -386,7 +384,7 @@ void main() {
     await tester.tap(find.text('50'));
     await tester.pumpAndSettle();
 
-    expect(tester.takeException(), isA<StateError>());
+    expect(tester.takeException(), isNull);
     expect(findRoute(SharedApplicationRoute.comfortPartner), findsNothing);
   });
 

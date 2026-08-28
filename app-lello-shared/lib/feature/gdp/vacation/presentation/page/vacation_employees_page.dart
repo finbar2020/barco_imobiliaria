@@ -57,10 +57,11 @@ class _VacationEmployeesPageState extends State<VacationEmployeesPage> {
               }
             },
             builder: (context, state) {
-              if (state is VacationEmployeesLoadingState)
-                Center(child: LoadingWidget());
-              if ((state as VacationEmployeesState).data.isEmpty &&
-                  !(state is VacationEmployeesLoadingState)) {
+              final current = state as VacationEmployeesState;
+              if (current is VacationEmployeesLoadingState) {
+                return Center(child: LoadingWidget());
+              }
+              if (current.data.isEmpty) {
                 return Center(
                   child: Text(
                     getString(
@@ -71,20 +72,19 @@ class _VacationEmployeesPageState extends State<VacationEmployeesPage> {
                   ),
                 );
               }
-              if (state is VacationEmployeesLoadedState) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildSearch(theme, state),
-                    _chooseEmployeeText(theme),
-                    Container(
-                        color: LelloTheme.palleteOf(theme).separator(),
-                        height: 1),
-                    _buildList(theme, state)
-                  ],
-                );
-              }
-              return Container();
+              // Busca, paginação e falhas com dados continuam mostrando a
+              // lista e o campo de busca.
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildSearch(theme, current),
+                  _chooseEmployeeText(theme),
+                  Container(
+                      color: LelloTheme.palleteOf(theme).separator(),
+                      height: 1),
+                  _buildList(theme, current)
+                ],
+              );
             }),
       ),
     );

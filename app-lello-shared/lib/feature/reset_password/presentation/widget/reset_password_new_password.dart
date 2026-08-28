@@ -37,7 +37,10 @@ class _ResetPasswordNewPasswordState extends State<ResetPasswordNewPassword> {
       focused = true;
     }
 
-    return BlocListener<ResetPasswordBloc, ResetPasswordState>(
+    // `BlocConsumer` (e não `BlocListener`) para que a troca do botão pelo
+    // indicador de carregamento reaja ao estado sem depender de um rebuild
+    // externo.
+    return BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
       bloc: widget.resetPasswordController.resetPasswordBloc,
       listener: (context, state) {
         if (state is ResetPasswordFailedState) {
@@ -47,7 +50,7 @@ class _ResetPasswordNewPasswordState extends State<ResetPasswordNewPassword> {
           TextInput.finishAutofillContext(shouldSave: true);
         }
       },
-      child: SingleChildScrollView(
+      builder: (context, state) => SingleChildScrollView(
         padding: EdgeInsets.all(Dimens.spacingMedium),
         child: Form(
           key: _formKey,
@@ -138,8 +141,7 @@ class _ResetPasswordNewPasswordState extends State<ResetPasswordNewPassword> {
                         style: LelloTextStyles.error(theme))),
                 SizedBox(height: Dimens.spacing),
                 Visibility(
-                    visible: !(widget.resetPasswordController.resetPasswordBloc
-                        .state is ResetPasswordResettingPasswordState),
+                    visible: !(state is ResetPasswordResettingPasswordState),
                     child: PrimaryButton(
                         text: getString(context, "finish"),
                         buttonColor: theme.primaryColor,

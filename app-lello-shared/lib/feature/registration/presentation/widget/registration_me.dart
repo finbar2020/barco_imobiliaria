@@ -84,6 +84,7 @@ class _RegistrationMeState extends State<RegistrationMeWidget> {
               onSuccess: (validation) {
                 widget.store.codeValidationId = validation!.id;
                 widget.store.token = validation.token;
+                widget.store.nextStep();
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
                   widget.store.pageController.nextPage(
                     duration: Duration(milliseconds: 300),

@@ -40,7 +40,9 @@ class CircuitItemRule {
           maximumVersion: e["maximumVersion"] ?? "",
           situation: stringToEnum(
               CircuitBreakerSituationEnum.values, e["situation"] ?? "display"));
-    } on Exception {
+      // Captura ampla: além de `Exception`, campo ausente lança `StateError` e
+      // campo com tipo inesperado lança `TypeError` (ambos `Error`).
+    } catch (_) {
       return CircuitItemRule(
         disabledMessage: null,
         excludedReferenceContext: null,

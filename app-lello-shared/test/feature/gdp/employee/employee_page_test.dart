@@ -52,12 +52,12 @@ void main() {
       expect(find.text(NumberFormat.currency(symbol: 'R\$').format(2500.5)),
           findsOneWidget);
 
-      /// Defeito: o campo "gdp_hiring_date" mostra a data de nascimento
-      /// (`state.data.dob`) em vez da data de admissão (`hiringDate`).
+      /// Corrigido: o campo "gdp_hiring_date" mostra a data de admissão
+      /// (`hiringDate`) e não mais a data de nascimento (`dob`).
       final dob = DateFormat.yMd().format(DateTime(1990, 1, 2));
       final hiring = DateFormat.yMd().format(DateTime(2020, 3, 4));
-      expect(find.text(dob), findsNWidgets(2));
-      expect(find.text(hiring), findsNothing);
+      expect(find.text(dob), findsOneWidget);
+      expect(find.text(hiring), findsOneWidget);
 
       await expectLater(find.byType(EmployeePage),
           matchesGoldenFile('goldens/employee_page.png'));

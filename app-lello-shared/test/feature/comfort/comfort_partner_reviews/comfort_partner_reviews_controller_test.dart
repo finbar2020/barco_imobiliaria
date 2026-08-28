@@ -60,10 +60,12 @@ void main() {
     });
   }
 
-  test('close entra em recursão infinita', () {
+  test('close fecha o bloc', () async {
     final controller = harness.buildPartnerReviewsController();
 
-    /// Defeito: `close()` chama a si mesmo em vez de fechar o bloc.
-    expect(() => controller.close(), throwsA(isA<StackOverflowError>()));
+    /// Corrigido: `close()` fecha o bloc em vez de chamar a si mesmo
+    /// (StackOverflow).
+    await controller.close();
+    expect(controller.comfortPartnerReviewsBloc.isClosed, isTrue);
   });
 }

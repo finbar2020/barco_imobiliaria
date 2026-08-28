@@ -62,7 +62,7 @@ class PayslipEmployeesBloc
         origin: DataOrigin.remote));
     emit(result.fold(
         (err) => PayslipEmployeesLoadFailedState(
-            data, query, condominiumId, selectedMonth!, err), (data) {
+            data, query, condominiumId, selectedMonth, err), (data) {
       return PayslipEmployeesLoadedState(
           data, query, condominiumId, selectedMonth, data.length == 0);
     }));
@@ -104,10 +104,13 @@ class PayslipEmployeesBloc
     emit(PayslipEmployeesSearchingState(
         data, event.query, condominiumId!, selectedMonth!));
 
+    final searchFilter = _getFilter(event.query);
+    searchFilter.conditionName = "ativo";
+
     final result = await listEmployee.call(ListEmployeeParam(
         condominiumId: condominiumId,
         lastEmployeeId: null,
-        filter: _getFilter(event.query),
+        filter: searchFilter,
         origin: DataOrigin.remote));
     emit(result.fold(
         (err) => PayslipEmployeesLoadFailedState(

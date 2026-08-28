@@ -109,13 +109,27 @@ void main() {
       expect(list.first, isA<Payslip>());
     });
 
-    /// Defeito: o comparador `b.processingDate?.compareTo(a.processingDate!)`
-    /// não é consistente com datas nulas (devolve sempre 1 quando `b` é nulo
-    /// e usa `!` em `a`); com todas as datas nulas a lista é invertida.
-    test('repositório com datas nulas inverte a ordem sem estourar', () async {
-      env.stubPayslips('M1', [payslipJson(name: 'a', date: null), payslipJson(name: 'b', date: null)]);
+    /// Corrigido: o comparador trata datas nulas de forma consistente — a
+    /// ordem relativa dos itens sem data é preservada e eles vão para o fim.
+    test('repositório mantém a ordem dos itens sem data de processamento',
+        () async {
+      env.stubPayslips('M1', [
+        payslipJson(name: 'a', date: null),
+        payslipJson(name: 'b', date: null),
+      ]);
       final result = await env.repository.getPayslip('M1');
-      expect(result.getOrElse(() => []).map((e) => e.name), ['b', 'a']);
+      expect(result.getOrElse(() => []).map((e) => e.name), ['a', 'b']);
+    });
+
+    test('repositório manda os itens sem data para o fim', () async {
+      env.stubPayslips('M1', [
+        payslipJson(name: 'sem data', date: null),
+        payslipJson(name: 'antigo', date: '2026-01-01T00:00:00.000'),
+        payslipJson(name: 'novo', date: '2026-08-01T00:00:00.000'),
+      ]);
+      final result = await env.repository.getPayslip('M1');
+      expect(result.getOrElse(() => []).map((e) => e.name),
+          ['novo', 'antigo', 'sem data']);
     });
 
     test('repositório devolve o arquivo convertido', () async {

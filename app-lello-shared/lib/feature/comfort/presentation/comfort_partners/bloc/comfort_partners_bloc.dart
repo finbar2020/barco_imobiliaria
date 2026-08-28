@@ -26,6 +26,11 @@ class ComfortPartnersBloc
   void handleLoadedComfortPartnerDetailsEvent(
       LoadedComfortPartnerDetailsEvent event,
       Emitter<ComfortPartnersState> emit) {
+    // `SuccessComfortPartnerCupomEvent` herda deste evento e tem o seu
+    // próprio handler: sem esta guarda o bloc emitiria um
+    // `LoadedComfortPartnerDetailsState` intermediário antes do estado de
+    // sucesso (a tela pisca os detalhes antes do cupom).
+    if (event is SuccessComfortPartnerCupomEvent) return;
     emit(
       LoadedComfortPartnerDetailsState(
         selectedPartner: event.selectedPartner,
@@ -54,11 +59,12 @@ class ComfortPartnersBloc
     emit(
       LoadedComfortPartnersState(
         comfortPartnerCategoryIsFilter: event.comfortPartnerCategoryIsFilter,
-        comfortPartnersIsRandomic: event.isFailedCondoPartners,
+        comfortPartnersIsRandomic: event.comfortPartnersIsRandomic,
         categoriesToYourCondo: event.categoriesToYourCondo,
         isFailedCondoPartners: event.isFailedCondoPartners,
         isSuccessYourCondoPartners: event.isSuccessYourCondoPartners,
         partnerFocus: event.partnerFocus,
+        flushbarMessage: event.flushbarMessage,
       ),
     );
   }

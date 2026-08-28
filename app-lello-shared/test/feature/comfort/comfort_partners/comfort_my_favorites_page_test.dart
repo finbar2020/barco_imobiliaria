@@ -173,9 +173,11 @@ void main() {
 
     expect(find.byType(ComfortDisfavorSuccessPage), findsNothing);
     expect(find.byType(FavoritePartnerCard), findsNWidgets(2));
-    /// Defeito: a mensagem de erro (`flushbarMessage`) é descartada pelo
-    /// bloc, então nenhum SnackBar aparece.
-    expect(find.byType(SnackBar), findsNothing);
+    /// Corrigido: a mensagem de erro (`flushbarMessage`) é repassada pelo
+    /// bloc e o SnackBar aparece.
+    expect(find.byType(SnackBar), findsOneWidget);
+    expect(find.text('comfort_change_partner_favorite_status_error'),
+        findsOneWidget);
   });
 
   testWidgets('mensagem do flushbar vira SnackBar', (tester) async {

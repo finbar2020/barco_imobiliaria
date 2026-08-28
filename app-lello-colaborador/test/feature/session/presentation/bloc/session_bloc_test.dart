@@ -154,22 +154,35 @@ class _FakeWorkmanagerPlatform extends WorkmanagerPlatform {
 }
 
 /// Escala de hoje com os quatro horários ainda no futuro.
+/// Escala com os quatro horários sempre no futuro.
+///
+/// Os horários são gerados a partir de `agora + N horas`, mas o
+/// `WorkShiftDetails` combina a hora com a data de [date]: perto da meia-noite
+/// `agora + 3h` viraria "00:15 de hoje" (no passado) e o lembrete não seria
+/// agendado. Por isso a escala é a do dia em que os quatro horários ainda
+/// cabem — hoje ou amanhã.
 WorkShiftDetails _escalaDeHoje({bool isDayOff = false}) {
   final agora = DateTime.now();
-  final base = DateTime(agora.year, agora.month, agora.day);
+  final ultimo = agora.add(const Duration(hours: 4));
+  final base = DateTime(ultimo.year, ultimo.month, ultimo.day);
+  final primeiro = base.isAfter(DateTime(agora.year, agora.month, agora.day))
+      // Virou o dia: a escala é a de amanhã, começando às 08:00.
+      ? base.add(const Duration(hours: 8))
+      : agora.add(const Duration(hours: 1));
+
   String hora(Duration offset) {
-    final h = agora.add(offset);
+    final h = primeiro.add(offset);
     final hh = h.hour.toString().padLeft(2, '0');
     final mm = h.minute.toString().padLeft(2, '0');
-    return hh + ':' + mm + ':00';
+    return '$hh:$mm:00';
   }
 
   return WorkShiftDetails(
     badageNumber: '1',
-    entry1: hora(const Duration(hours: 1)),
-    out1: hora(const Duration(hours: 2)),
-    entry2: hora(const Duration(hours: 3)),
-    out2: hora(const Duration(hours: 4)),
+    entry1: hora(Duration.zero),
+    out1: hora(const Duration(hours: 1)),
+    entry2: hora(const Duration(hours: 2)),
+    out2: hora(const Duration(hours: 3)),
     isDayOff: isDayOff,
     date: base,
     reference: 'R1',

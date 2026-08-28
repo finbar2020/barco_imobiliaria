@@ -210,10 +210,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(loc.okButtonLabel));
     await tester.pumpAndSettle();
-    /// Defeito: a recarga emite `Loading`, o listener chama
-    /// `refreshKey.currentState.show()` e o `onRefresh` do RefreshIndicator
-    /// chama `beginRefresh()` de novo: cada troca de mês faz 2 requisições.
-    expect(stack.http.requests.length, 3);
+    /// Corrigido: a recarga programática (`refreshKey.show()` disparada pelo
+    /// listener) não faz o `onRefresh` do RefreshIndicator pedir outra
+    /// recarga, então a troca de mês faz uma única requisição.
+    expect(stack.http.requests.length, 2);
     expect(bloc().state.query!.dobTo, primeiroDia);
     expect(bloc().state.query!.dobFrom, primeiroDia);
     expect(stack.http.requests.last.url.queryParameters['dob_to'],

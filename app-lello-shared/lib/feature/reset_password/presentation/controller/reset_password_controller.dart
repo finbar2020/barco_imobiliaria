@@ -220,11 +220,11 @@ class ResetPasswordController {
             reset: resetPasswordBloc.state.reset,
             cpf: resetPasswordBloc.state.cpf),
       );
-    } else {
-      resetPasswordBloc.add(
-        PasswordResetEvent(),
-      );
     }
+    // No último passo (`password`) não há próximo passo: a conclusão do fluxo
+    // é feita por `beginResetPassword`. Antes era adicionado um
+    // `PasswordResetEvent` sem handler no bloc, que em debug lançava
+    // `StateError` (e em release era silenciosamente descartado).
   }
 
   bool previousStep({required PasswordResetStep currentStep}) {

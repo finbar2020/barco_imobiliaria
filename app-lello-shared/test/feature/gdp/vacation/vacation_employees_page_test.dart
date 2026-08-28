@@ -86,10 +86,9 @@ void main() {
         findsOneWidget);
   });
 
-  /// Defeito: no estado de carregamento o `Center(LoadingWidget())` é criado
-  /// mas não é retornado pelo builder (falta o `return`), então a tela fica
-  /// vazia enquanto carrega.
-  testWidgets('estado de carregamento não mostra o indicador', (tester) async {
+  /// Corrigido: o builder devolve o `Center(LoadingWidget())` no estado de
+  /// carregamento (faltava o `return`), então o indicador aparece.
+  testWidgets('estado de carregamento mostra o indicador', (tester) async {
     env.stubEmployees([employeeJson('E1', name: 'Ana')]);
     final bloc = await pumpEmployees(tester);
     expect(find.text('Ana'), findsOneWidget);
@@ -99,7 +98,7 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.byType(LoadingWidget), findsNothing);
+    expect(find.byType(LoadingWidget), findsOneWidget);
     expect(find.byType(ListTile), findsNothing);
     expect(find.text('Ana'), findsNothing);
 
@@ -127,21 +126,20 @@ void main() {
     expect(find.text('Bia'), findsNothing);
     expect(env.http.requests.single.url.queryParameters['name'], 'An');
 
-    /// Defeito: durante a busca (`VacationEmployeesSearchingState`) o builder
-    /// devolve um `Container()` vazio — a lista e o próprio campo de busca
-    /// somem da tela (e o indicador de busca nunca aparece).
+    /// Corrigido: durante a busca (`VacationEmployeesSearchingState`) o
+    /// builder mantém a lista e o campo de busca, e mostra o indicador.
     // ignore: invalid_use_of_visible_for_testing_member
     bloc.emit(VacationEmployeesSearchingState(bloc.state.data, 'An', condominiumId));
     await tester.pump();
     await tester.pump();
-    expect(find.byType(TextField), findsNothing);
-    expect(find.byType(LoadingWidget), findsNothing);
-    expect(find.text('Ana'), findsNothing);
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byType(LoadingWidget), findsOneWidget);
+    expect(find.text('Ana'), findsOneWidget);
   });
 
-  /// Defeito: com dados já carregados, uma falha (`LoadFailedState`) faz o
-  /// builder devolver `Container()` — a lista some sem nenhuma mensagem.
-  testWidgets('falha com dados carregados esvazia a tela', (tester) async {
+  /// Corrigido: com dados já carregados, uma falha (`LoadFailedState`) mantém
+  /// a lista e o campo de busca na tela.
+  testWidgets('falha com dados carregados mantém a lista', (tester) async {
     env.stubEmployees([employeeJson('E1', name: 'Ana')]);
     final bloc = await pumpEmployees(tester);
 
@@ -151,7 +149,8 @@ void main() {
 
     expect(bloc.state, isA<VacationEmployeesLoadFailedState>());
     expect(bloc.state.data, isNotEmpty);
-    expect(find.text('Ana'), findsNothing);
+    expect(find.text('Ana'), findsOneWidget);
+    expect(find.byType(TextField), findsOneWidget);
     expect(find.text('gdp_vacation_employees_no_panding_vacation'),
         findsNothing);
   });

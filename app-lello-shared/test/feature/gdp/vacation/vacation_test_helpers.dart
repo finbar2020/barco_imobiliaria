@@ -313,10 +313,10 @@ List<String> pushedRoutes(RecordingNavigatorObserver observer) => observer
     .cast<String>()
     .toList();
 
-/// Caminho do POST de agendamento: a tela envia a MATRÍCULA como id do
-/// funcionário.
+/// Caminho do POST de agendamento: o id na URL é o do funcionário (a matrícula
+/// vai no corpo, em `employee_registration_number`).
 String get createVacationPath =>
-    '/condominiums/$condominiumId/employees/M123/vacations/periods';
+    '/condominiums/$condominiumId/employees/$employeeId/vacations/periods';
 
 /// Espera a fila de eventos assíncronos (HTTP falso é assíncrono).
 Future<void> drain([int times = 40]) => pumpEventQueue(times: times);

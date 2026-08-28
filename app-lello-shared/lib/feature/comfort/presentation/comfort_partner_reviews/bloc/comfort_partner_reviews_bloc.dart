@@ -17,7 +17,10 @@ class ComfortPartnerReviewsBloc
       LoadedComfortPartnerReviewsEvent event,
       Emitter<ComfortPartnerReviewsState> emit) {
     emit(
-      LoadedComfortPartnerReviewsState(partnerReviews: event.partnerReviews),
+      LoadedComfortPartnerReviewsState(
+        partnerReviews: event.partnerReviews,
+        flushbarMessage: event.flushbarMessage,
+      ),
     );
   }
 

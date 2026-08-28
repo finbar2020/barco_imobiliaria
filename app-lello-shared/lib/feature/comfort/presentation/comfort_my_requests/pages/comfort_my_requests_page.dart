@@ -36,6 +36,13 @@ class _ComfortMyRequestsPageState extends State<ComfortMyRequestsPage>
   late ComfortPartnersController comfortPartnersController;
   final scaffoldState = GlobalKey<ScaffoldState>();
 
+  /// Filtro padrão do drawer enquanto o controller ainda não tem um.
+  /// Precisa viver no State: o `build` da página roda de novo a cada abertura
+  /// do dropdown (dependência do `ModalRoute`) e, se um objeto novo fosse
+  /// criado a cada build, a seleção feita no drawer seria descartada.
+  final ComfortRequestsFilter _defaultFilter = ComfortRequestsFilter(
+      status: ComfortFilterRequestStatus.all, subcategories: ComfortType.all);
+
   @override
   void dispose() {
     widget.appContainer.resetLazySingleton<ComfortMyRequestsController>();
@@ -122,10 +129,8 @@ class _ComfortMyRequestsPageState extends State<ComfortMyRequestsPage>
                 child: Drawer(
                   backgroundColor: theme.primaryColor,
                   child: ComfortRequestsFilterWidget(
-                    filter: comfortMyRequestsController.filter ??
-                        ComfortRequestsFilter(
-                            status: ComfortFilterRequestStatus.all,
-                            subcategories: ComfortType.all),
+                    filter:
+                        comfortMyRequestsController.filter ?? _defaultFilter,
                     subcategories: comfortMyRequestsController.subcategories,
                     onSearch: (filter) {
                       setState(() {
@@ -168,8 +173,16 @@ class _ComfortMyRequestsPageState extends State<ComfortMyRequestsPage>
                                       .comfortMyRequestsBloc
                                       .state as ErrorComfortMyRequestsState)
                                   .errorDescription,
-                              reTryFunction: () =>
-                                  comfortMyRequestsController.getMyRequests(),
+                              // A lista paginada não está montada no estado
+                              // de erro: além de reiniciar o
+                              // `PagingController` é preciso disparar a
+                              // busca da primeira página.
+                              reTryFunction: () {
+                                comfortMyRequestsController.pagingController
+                                    .refresh();
+                                comfortMyRequestsController.pagingController
+                                    .fetchNextPage();
+                              },
                               backFunction: () {
                                 _onPop();
                                 Navigator.pop(context, true);

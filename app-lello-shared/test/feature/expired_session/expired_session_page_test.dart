@@ -79,14 +79,13 @@ void main() {
     await tester.tap(find.text('expired_session_ok'));
     await tester.pumpAndSettle();
 
-    /// Defeito: `expired_session_page.dart:41-46` chama `beginLogOut` em
-    /// `didChangeDependencies`, que roda de novo na transição de rota: o
-    /// logout inteiro (logout + clearData + logs no Crashlytics) é refeito ao
-    /// sair da tela. Por isso `emptied` chega a 3 (1 do logout inicial, 1 do
-    /// toque e 1 do logout repetido) e `logout.calls` a 2.
-    expect(emptied, 3);
-    expect(logout.calls, 2);
-    expect(clearData.calls, 2);
+    /// Corrigido: `beginLogOut` é disparado uma única vez (o
+    /// `didChangeDependencies` roda de novo na transição de rota), então o
+    /// logout não é refeito ao sair da tela: `emptied` fica em 2 (1 do logout
+    /// inicial e 1 do toque) e o logout/clearData continuam com 1 chamada.
+    expect(emptied, 2);
+    expect(logout.calls, 1);
+    expect(clearData.calls, 1);
     expect(findRoute(SharedApplicationRoute.splash), findsOneWidget);
     expect(find.byType(ExpiredSessionPage), findsNothing);
   });

@@ -139,18 +139,25 @@ void main() {
       expect((result as Rejection).get(), isA<UnknownFailure>());
     });
 
-    /// Defeito: ao registrar o erro no Crashlytics o repositório faz
-    /// `credentials.username.substring(0, 5)`; com um usuário de menos de 5
-    /// caracteres o `RangeError` escapa do `catch` e a chamada lança em vez
-    /// de devolver uma rejeição.
-    test('post com usuário curto e erro genérico lança RangeError', () async {
+    /// Corrigido: o prefixo do usuário enviado ao Crashlytics é calculado com
+    /// um helper tolerante a valores curtos, então o `catch` nunca lança e a
+    /// chamada devolve a rejeição normalmente.
+    test('post com usuário curto e erro genérico devolve rejeição', () async {
       final repository = AccessTokenRepositoryImpl(
           remoteDataSource: ThrowingAccessTokenRemoteDataSource(),
           dataSource: local);
 
-      await expectLater(
-          repository.post(Credentials(username: '123', password: 'p')),
-          throwsA(isA<RangeError>()));
+      final generico =
+          await repository.post(Credentials(username: '123', password: 'p'));
+      expect((generico as Rejection).get(), isA<UnknownFailure>());
+
+      // Mesmo caminho pelo `on ApiFailure` que cai em UnknownFailure.
+      final daApi = await AccessTokenRepositoryImpl(
+              remoteDataSource: ApiFailureAccessTokenRemoteDataSource(
+                  buildApiFailure(status: 500, failure: 'outra')),
+              dataSource: local)
+          .post(Credentials(username: '12', password: 'p'));
+      expect((daApi as Rejection).get(), isA<UnknownFailure>());
     });
 
     test('postInvite devolve o token, mapeia falhas e cobre exceção genérica',

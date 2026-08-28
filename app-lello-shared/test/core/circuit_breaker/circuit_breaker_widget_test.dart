@@ -155,13 +155,13 @@ void main() {
         providers: withFakeAssets);
     await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
-    // disabledMessage null no Firestore vira "" no modelo (`?? ""`): o
-    // evento leva a mensagem vazia e o modal mostra "" em vez do texto padrão.
+    /// Corrigido: `disabledMessage` null no Firestore vira "" no modelo
+    /// (`?? ""`); o widget trata mensagem vazia como ausente, então o evento
+    /// não leva `disabled_message` e o modal mostra o texto padrão.
     expect(fakeAnalytics.events['circuit_breaker_disabled'],
-        {'application_rbac': 'morar.teste', 'disabled_message': ''});
+        {'application_rbac': 'morar.teste'});
     expect(find.byType(CircuitBreakerModalDisableMessager), findsOneWidget);
-    expect(find.text('circuit_breaker_default_message'), findsNothing);
-    expect(find.text(''), findsOneWidget);
+    expect(find.text('circuit_breaker_default_message'), findsOneWidget);
   });
 
   group('CircuitBreakerModalDisableMessager', () {

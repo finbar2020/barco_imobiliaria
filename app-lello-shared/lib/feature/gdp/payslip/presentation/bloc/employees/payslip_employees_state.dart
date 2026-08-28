@@ -30,7 +30,7 @@ class PayslipEmployeesLoadFailedState extends PayslipEmployeesState {
   final Failure error;
 
   PayslipEmployeesLoadFailedState(List<Employee> data, String? query,
-      String condominiumId, DateTime selectedMonth, this.error)
+      String condominiumId, DateTime? selectedMonth, this.error)
       : super(data, query, condominiumId, selectedMonth);
 
   @override

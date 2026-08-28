@@ -53,14 +53,13 @@ class _NotificationDetailsWidgetState extends State<NotificationDetailsWidget> {
   void initState() {
     if (widget.notification != null) {
       notification = widget.notification!;
-    } else if (widget.notification == null &&
-        widget.listNotificationContext != null) {
+    } else if (widget.listNotificationContext != null) {
       widget.controller.loadSingleNotification(
           notificationId: widget.listNotificationContext!,
           fromPush: widget.fromPush);
-    } else {
-      notification = widget.notification!;
     }
+    // Sem notificação e sem contexto da lista mantém a notificação vazia
+    // criada acima (antes o `widget.notification!` quebrava a montagem).
 
     super.initState();
   }

@@ -64,7 +64,7 @@ void main() {
 
       harness.mockDisableFcm(status: 500, body: apiFailureBody());
       expect(() => dataSource.disableFcmToken(model),
-          throwsA(isA<Response>()));
+          throwsA(isA<ApiFailure>()));
     });
 
     test('erros da API lançam ApiFailure', () async {
@@ -107,16 +107,17 @@ void main() {
       expect(rejected(result), isA<UnknownFailure>());
     });
 
-    test('post com cpf curto quebra dentro do catch', () async {
-      /// Defeito: ao registrar o erro no Crashlytics o repositório faz
-      /// `entity.cpf!.substring(0, 5)`; com cpf nulo ou menor que 5
-      /// caracteres o próprio `catch` lança e a falha não é devolvida.
+    test('post com cpf curto ou nulo devolve a falha', () async {
+      /// Corrigido: o prefixo do cpf enviado ao Crashlytics tolera cpf nulo
+      /// ou menor que 5 caracteres, então o `catch` não lança mais e a
+      /// falha é devolvida normalmente.
       harness.mockRegistration(status: 200, body: 'nao-json');
       expect(
-          () => harness.repository.post(Registration(cpf: '123', password: 'x')),
-          throwsA(isA<RangeError>()));
-      expect(() => harness.repository.post(Registration(password: 'x')),
-          throwsA(isA<TypeError>()));
+          rejected(await harness.repository
+              .post(Registration(cpf: '123', password: 'x'))),
+          isA<UnknownFailure>());
+      expect(rejected(await harness.repository.post(Registration(password: 'x'))),
+          isA<UnknownFailure>());
     });
 
     test('get devolve o usuário e mapeia falhas', () async {
@@ -152,20 +153,20 @@ void main() {
           isA<UnknownFailure>());
     });
 
-    test('disableFcmToken devolve true e falhas viram UnknownFailure',
+    test('disableFcmToken devolve true e mapeia as falhas conhecidas',
         () async {
       harness.mockDisableFcm();
       expect(await harness.repository.disableFcmToken(buildFcmToken()),
           isA<Success<bool>>());
 
-      /// Defeito: `disableFcmToken` do data source lança a `Response` inteira
-      /// (não o `ApiFailure`), então `_mapApiFailure` nunca é alcançado e
-      /// `user_not_found_failure` vira `UnknownFailure`.
+      /// Corrigido: `disableFcmToken` do data source propaga o `ApiFailure`
+      /// da resposta, então `_mapApiFailure` é alcançado e
+      /// `user_not_found_failure` vira `RegistrationUserNotFoundFailure`.
       harness.mockDisableFcm(
           status: 404,
           body: apiFailureBody(status: 404, failure: 'user_not_found_failure'));
       expect(rejected(await harness.repository.disableFcmToken(buildFcmToken())),
-          isA<UnknownFailure>());
+          isA<RegistrationUserNotFoundFailure>());
 
       harness.mockDisableFcm(status: 500, body: 'x');
       expect(rejected(await harness.repository.disableFcmToken(buildFcmToken())),

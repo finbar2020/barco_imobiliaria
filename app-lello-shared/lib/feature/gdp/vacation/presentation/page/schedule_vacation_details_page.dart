@@ -167,7 +167,7 @@ class _ScheduleVacationDetailsPageState
                               context, 'gdp_vacation_employee_started_at'),
                           style: LelloTextStyles.bodyBold(theme)),
                       SizedBox(height: Dimens.spacingXSmall),
-                      Text(info[index].getStartFormatted.toString(),
+                      Text((info[index].getStartFormatted ?? '').toString(),
                           style: LelloTextStyles.body(theme)),
                     ],
                   ),

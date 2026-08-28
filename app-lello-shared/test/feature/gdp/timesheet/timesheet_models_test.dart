@@ -216,11 +216,12 @@ void main() {
       expect(TimesheetFilterModel.fromJson({}).dobFrom, isNull);
     });
 
-    /// Defeito: `toEntity` usa `this.type!`, então um filtro sem tipo
-    /// explode em vez de devolver `type` nulo.
-    test('toEntity sem tipo lança (defeito documentado)', () {
-      expect(() => TimesheetFilterModel.fromJson({}).toEntity(),
-          throwsA(isA<TypeError>()));
+    /// Corrigido: `toEntity` não força mais `this.type!`, então um filtro sem
+    /// tipo devolve `type` nulo em vez de explodir.
+    test('toEntity sem tipo devolve tipo nulo', () {
+      final entity = TimesheetFilterModel.fromJson({}).toEntity();
+      expect(entity.type, isNull);
+      expect(entity.name, isNull);
     });
 
     test('toEntity com tipo desconhecido devolve tipo nulo', () {

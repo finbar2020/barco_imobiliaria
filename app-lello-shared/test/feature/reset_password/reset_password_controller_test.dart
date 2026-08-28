@@ -266,10 +266,15 @@ void main() {
     expect(controller.previousStep(currentStep: PasswordResetStep.cpf), isTrue);
   });
 
-  /// Defeito: no último passo `nextStep` adiciona `PasswordResetEvent`, que
-  /// não tem handler registrado no bloc; em debug o `add` lança StateError.
-  test('nextStep no último passo lança por falta de handler', () {
-    expect(() => controller.nextStep(currentStep: PasswordResetStep.password),
-        throwsStateError);
+  /// Corrigido: no último passo (`password`) não há próximo passo — a
+  /// conclusão do fluxo é feita por `beginResetPassword` — então `nextStep`
+  /// não adiciona mais o `PasswordResetEvent` sem handler (que lançava
+  /// `StateError` em debug) e simplesmente não faz nada.
+  test('nextStep no último passo não emite nada', () async {
+    controller.nextStep(currentStep: PasswordResetStep.password);
+    await settle();
+
+    expect(states, isEmpty);
+    expect(bloc.state, isA<ResetPasswordRequestPhoneState>());
   });
 }

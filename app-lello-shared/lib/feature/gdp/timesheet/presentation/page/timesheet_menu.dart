@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:essentials/essentials.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,11 @@ class TimesheetMenuPage extends StatefulWidget {
   _TimesheetMenuPageState createState() => _TimesheetMenuPageState();
 }
 
+/// Proporção desejada dos cards do resumo e altura mínima que o conteúdo
+/// (valor + título) precisa para não estourar em telas estreitas.
+const double _summaryCardRatio = 1.4;
+const double _summaryCardMinHeight = 140;
+
 class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
   // final TimesheetMenuBloc bloc = ApplicationContainer.instance().resolve();
   late TimesheetMenuBloc bloc;
@@ -32,6 +38,11 @@ class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
   GlobalKey<RefreshIndicatorState> refreshKey2 =
       GlobalKey<RefreshIndicatorState>();
   late Completer<void> _refreshCompleter;
+
+  /// Marcam a recarga disparada pelo próprio listener (`refreshKey.show()`),
+  /// para que o `onRefresh` dos RefreshIndicator não peça outra recarga.
+  bool _programmaticRefresh = false;
+  bool _programmaticRefresh2 = false;
   late ScrollController controller;
 
   DateTime today = new DateTime(
@@ -76,9 +87,11 @@ class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
               listener: (context, state) {
                 if (state is TimesheetMenuReportLoadingState) {
                   if (refreshKey.currentState != null) {
+                    _programmaticRefresh = true;
                     refreshKey.currentState!.show();
                   }
                   if (refreshKey2.currentState != null) {
+                    _programmaticRefresh2 = true;
                     refreshKey2.currentState!.show();
                   }
                 } else {
@@ -94,7 +107,7 @@ class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
                 if (state is TimesheetRequestLoadedState) {
                   pushNamedAndPopUntil(
                       context,
-                      SharedApplicationRoute.gdpTimesheetSignSuccess,
+                      SharedApplicationRoute.gdpTimesheetRequestSuccess,
                       ModalRoute.withName(SharedApplicationRoute.gdp));
                 }
               },
@@ -161,92 +174,106 @@ class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
     return RefreshIndicator(
       key: refreshKey,
       onRefresh: () async {
-        bloc.beginRefresh();
+        if (_programmaticRefresh) {
+          _programmaticRefresh = false;
+          // A recarga já estava em curso: só acompanha o fim dela.
+          if (bloc.state is! TimesheetMenuReportLoadingState) return;
+        } else {
+          bloc.beginRefresh();
+        }
         return _refreshCompleter.future;
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: Dimens.spacingMedium),
-        child: GridView.count(
-          shrinkWrap: true,
-          childAspectRatio: 1.4,
-          crossAxisCount: 2,
-          mainAxisSpacing: Dimens.spacing,
-          crossAxisSpacing: Dimens.spacingSmall,
-          children: <Widget>[
-            _retangularButton(
-                theme,
-                state.report?.presentAmount?.toString() ?? "0",
-                state.report?.totalAmount?.toString() ?? "0",
-                getString(context, "gdp_timesheet_grid_working"), () {
-              Navigator.of(context).pushNamed(
-                  SharedApplicationRoute.gdpTimesheetList,
-                  arguments: TimesheetFilter(
-                      type: TimesheetTypeEnum.present,
-                      dobFrom: today,
-                      dobTo: today));
-            }),
-            _retangularButton(
-                theme,
-                state.report?.dayOffAmount?.toString() ?? "0",
-                state.report?.totalAmount?.toString() ?? "0",
-                getString(context, "gdp_timesheet_grid_day_off"), () {
-              Navigator.of(context).pushNamed(
-                  SharedApplicationRoute.gdpTimesheetList,
-                  arguments: TimesheetFilter(
-                      type: TimesheetTypeEnum.dayOff,
-                      dobFrom: today,
-                      dobTo: today));
-            }),
-            _retangularButton(
-                theme,
-                state.report?.vacationAmount?.toString() ?? "0",
-                state.report?.totalAmount?.toString() ?? "0",
-                getString(context, "gdp_timesheet_grid_vacation"), () {
-              Navigator.of(context).pushNamed(
-                  SharedApplicationRoute.gdpTimesheetList,
-                  arguments: TimesheetFilter(
-                      type: TimesheetTypeEnum.vacation,
-                      dobFrom: today,
-                      dobTo: today));
-            }),
-            _retangularButton(
-                theme,
-                state.report?.attestationAmount?.toString() ?? "0",
-                state.report?.totalAmount?.toString() ?? "0",
-                getString(context, "gdp_timesheet_grid_attestation"), () {
-              Navigator.of(context).pushNamed(
-                  SharedApplicationRoute.gdpTimesheetList,
-                  arguments: TimesheetFilter(
-                      type: TimesheetTypeEnum.attestation,
-                      dobFrom: today,
-                      dobTo: today));
-            }),
-            _retangularButton(
-                theme,
-                state.report?.unmarkedAmount?.toString() ?? "0",
-                state.report?.totalAmount?.toString() ?? "0",
-                getString(context, "gdp_timesheet_grid_unmarked"), () {
-              Navigator.of(context).pushNamed(
-                  SharedApplicationRoute.gdpTimesheetList,
-                  arguments: TimesheetFilter(
-                      type: TimesheetTypeEnum.unmarked,
-                      dobFrom: today,
-                      dobTo: today));
-            }),
-            _retangularButton(
-                theme,
-                state.report?.shiftNotStartedAmount?.toString() ?? "0",
-                state.report?.totalAmount?.toString() ?? "0",
-                getString(context, "gdp_timesheet_grid_shift_not_started"), () {
-              Navigator.of(context).pushNamed(
-                  SharedApplicationRoute.gdpTimesheetList,
-                  arguments: TimesheetFilter(
-                      type: TimesheetTypeEnum.shiftNotStarted,
-                      dobFrom: today,
-                      dobTo: today));
-            }),
-          ],
-        ),
+        child: LayoutBuilder(builder: (context, constraints) {
+          // Em telas estreitas a proporção fixa deixava o card mais baixo que o
+          // seu conteúdo (estouro na vertical), então a altura tem um mínimo.
+          final tileWidth =
+              (constraints.maxWidth - Dimens.spacingSmall) / 2;
+          final tileHeight =
+              math.max(tileWidth / _summaryCardRatio, _summaryCardMinHeight);
+          return GridView.count(
+            shrinkWrap: true,
+            childAspectRatio: tileWidth / tileHeight,
+            crossAxisCount: 2,
+            mainAxisSpacing: Dimens.spacing,
+            crossAxisSpacing: Dimens.spacingSmall,
+            children: <Widget>[
+              _retangularButton(
+                  theme,
+                  state.report?.presentAmount?.toString() ?? "0",
+                  state.report?.totalAmount?.toString() ?? "0",
+                  getString(context, "gdp_timesheet_grid_working"), () {
+                Navigator.of(context).pushNamed(
+                    SharedApplicationRoute.gdpTimesheetList,
+                    arguments: TimesheetFilter(
+                        type: TimesheetTypeEnum.present,
+                        dobFrom: today,
+                        dobTo: today));
+              }),
+              _retangularButton(
+                  theme,
+                  state.report?.dayOffAmount?.toString() ?? "0",
+                  state.report?.totalAmount?.toString() ?? "0",
+                  getString(context, "gdp_timesheet_grid_day_off"), () {
+                Navigator.of(context).pushNamed(
+                    SharedApplicationRoute.gdpTimesheetList,
+                    arguments: TimesheetFilter(
+                        type: TimesheetTypeEnum.dayOff,
+                        dobFrom: today,
+                        dobTo: today));
+              }),
+              _retangularButton(
+                  theme,
+                  state.report?.vacationAmount?.toString() ?? "0",
+                  state.report?.totalAmount?.toString() ?? "0",
+                  getString(context, "gdp_timesheet_grid_vacation"), () {
+                Navigator.of(context).pushNamed(
+                    SharedApplicationRoute.gdpTimesheetList,
+                    arguments: TimesheetFilter(
+                        type: TimesheetTypeEnum.vacation,
+                        dobFrom: today,
+                        dobTo: today));
+              }),
+              _retangularButton(
+                  theme,
+                  state.report?.attestationAmount?.toString() ?? "0",
+                  state.report?.totalAmount?.toString() ?? "0",
+                  getString(context, "gdp_timesheet_grid_attestation"), () {
+                Navigator.of(context).pushNamed(
+                    SharedApplicationRoute.gdpTimesheetList,
+                    arguments: TimesheetFilter(
+                        type: TimesheetTypeEnum.attestation,
+                        dobFrom: today,
+                        dobTo: today));
+              }),
+              _retangularButton(
+                  theme,
+                  state.report?.unmarkedAmount?.toString() ?? "0",
+                  state.report?.totalAmount?.toString() ?? "0",
+                  getString(context, "gdp_timesheet_grid_unmarked"), () {
+                Navigator.of(context).pushNamed(
+                    SharedApplicationRoute.gdpTimesheetList,
+                    arguments: TimesheetFilter(
+                        type: TimesheetTypeEnum.unmarked,
+                        dobFrom: today,
+                        dobTo: today));
+              }),
+              _retangularButton(
+                  theme,
+                  state.report?.shiftNotStartedAmount?.toString() ?? "0",
+                  state.report?.totalAmount?.toString() ?? "0",
+                  getString(context, "gdp_timesheet_grid_shift_not_started"), () {
+                Navigator.of(context).pushNamed(
+                    SharedApplicationRoute.gdpTimesheetList,
+                    arguments: TimesheetFilter(
+                        type: TimesheetTypeEnum.shiftNotStarted,
+                        dobFrom: today,
+                        dobTo: today));
+              }),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -288,10 +315,12 @@ class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
                   ],
                 ),
               ),
-              Text(
-                title,
-                style: LelloTextStyles.subtitleBold(theme)!
-                    .copyWith(color: pallete.hubText()),
+              Flexible(
+                child: Text(
+                  title,
+                  style: LelloTextStyles.subtitleBold(theme)!
+                      .copyWith(color: pallete.hubText()),
+                ),
               ),
             ],
           ),
@@ -371,7 +400,13 @@ class _TimesheetMenuPageState extends State<TimesheetMenuPage> {
       child: RefreshIndicator(
         key: refreshKey2,
         onRefresh: () async {
-          bloc.beginRefresh();
+          if (_programmaticRefresh2) {
+            _programmaticRefresh2 = false;
+            // A recarga já estava em curso: só acompanha o fim dela.
+            if (bloc.state is! TimesheetMenuReportLoadingState) return;
+          } else {
+            bloc.beginRefresh();
+          }
           return _refreshCompleter.future;
         },
         child: ListView.separated(

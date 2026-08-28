@@ -82,11 +82,10 @@ void main() {
       await bloc.close();
     });
 
-    /// Defeito: `EmployeeLoadFailedState(data!, ...)` usa `!` no dado
-    /// anterior; quando a primeira busca falha ainda não há dado e o handler
-    /// estoura com "Null check operator used on a null value" em vez de
-    /// emitir o estado de erro.
-    test('falha na primeira busca estoura em vez de emitir erro', () async {
+    /// Corrigido: `EmployeeLoadFailedState` aceita dado nulo, então a falha
+    /// na primeira busca (sem dado anterior) emite o estado de erro em vez de
+    /// estourar com "Null check operator used on a null value".
+    test('falha na primeira busca emite EmployeeLoadFailedState', () async {
       env.http.failAll();
       late EmployeeBloc bloc;
       final errors = await collectUncaught(() async {
@@ -94,9 +93,10 @@ void main() {
         bloc.beginLoad('E1');
         await drain();
       });
-      expect(errors, isNotEmpty);
-      expect(errors.first, isA<TypeError>());
-      expect(bloc.state, isA<EmployeeLoadingState>());
+      expect(errors, isEmpty);
+      final failed = bloc.state as EmployeeLoadFailedState;
+      expect(failed.data, isNull);
+      expect(failed.error, isA<UnknownFailure>());
       await bloc.close();
     });
 

@@ -23,8 +23,17 @@ void main() {
           matchesGoldenFile('goldens/partner_contact_widget.png'));
     });
 
-    testWidgets('tipo sem tradução específica cai em "outros"', (tester) async {
+    testWidgets('tipo recém-mapeado usa a própria tradução', (tester) async {
+      // Corrigido: `playroom` deixou de cair em "outros".
       final partner = buildPartner(comfortType: ComfortType.playroom);
+      await pumpApp(
+          tester, PartnerContactWidget(partnerIntro: partner.partnerIntro));
+      expect(find.text('comfort_playroom'), findsOneWidget);
+      expect(find.text('comfort_others'), findsNothing);
+    });
+
+    testWidgets('tipo sem tradução específica cai em "outros"', (tester) async {
+      final partner = buildPartner(comfortType: ComfortType.others);
       await pumpApp(
           tester, PartnerContactWidget(partnerIntro: partner.partnerIntro));
       expect(find.text('comfort_others'), findsOneWidget);

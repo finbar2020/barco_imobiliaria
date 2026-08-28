@@ -70,7 +70,13 @@ void main() {
       expect(find.text('2'), findsOneWidget);
       expect(find.text('30'), findsOneWidget);
 
-      // Defeito: o botão "salvar" está com a chamada ao bloc comentada.
+      // Pendência (não corrigido): o botão "salvar" está com a chamada ao bloc
+      // comentada, e a chamada comentada
+      // (`createScheduledVacation(reference, employeeId, period, days)`) não
+      // bate com a API atual do bloc
+      // (`createScheduledVacation(employeeId, VacationCreated)`). A tela não
+      // coleta as datas de início, o abono nem a antecipação do 13º, então não
+      // há como montar o `VacationCreated` sem inventar comportamento.
       await tester.tap(find.text('gdp_vacation_schedule_save'));
       await tester.pumpAndSettle();
       expect(bloc.state, isA<ScheduleVacationLoadedState>());

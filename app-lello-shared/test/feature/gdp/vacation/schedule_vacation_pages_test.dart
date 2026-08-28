@@ -116,8 +116,10 @@ void main() {
 
       expect(bloc.state, const ScheduleVacationLoadedState(null, condominiumId));
       final request = env.http.requests.single;
-      // O id enviado na URL é o número de matrícula.
+      // Corrigido: o id enviado na URL é o id do funcionário (antes ia a
+      // matrícula); a matrícula continua no corpo.
       expect(request.url.path, createVacationPath);
+      expect(request.url.path, contains('/employees/$employeeId/'));
       final body = jsonDecode(request.body);
       expect(body['employee_id'], employeeId);
       expect(body['company'], 7);

@@ -82,7 +82,16 @@ class ComfortCompletedRequestModel {
         rating: this.rating,
         purchased: this.purchased,
         imageHash: this.imageHash,
-        partner: this.partner!.toEntity(),
+        // Sem parceiro no JSON o `partner!` derrubava a conversão: usa um
+        // parceiro mínimo com os dados que a própria solicitação já traz.
+        partner: (this.partner ??
+                ComfortPartnerModel(
+                  id: this.idPartner,
+                  comfortType: this.comfortType,
+                  imageHash: this.imageHash,
+                  favorite: this.isFavorite,
+                ))
+            .toEntity(),
         isCanCancel: this.isCanCancel,
         isCanResend: this.isCanResend,
         resendDate: this.resendDate,

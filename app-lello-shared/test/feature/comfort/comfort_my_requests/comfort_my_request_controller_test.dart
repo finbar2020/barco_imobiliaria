@@ -95,10 +95,13 @@ void main() {
       expect(controller.subcategories.map((e) => e.comfortType),
           [ComfortType.gym, ComfortType.cleaning]);
 
-      /// Defeito: cada chamada faz `addAll` na mesma lista, duplicando as
+      /// Corrigido: a lista é reescrita a cada chamada, sem duplicar as
       /// subcategorias já carregadas.
       await controller.getSubcategories();
-      expect(controller.subcategories.length, 4);
+      await flush();
+      expect(controller.subcategories.length, 2);
+      expect(controller.subcategories.map((e) => e.comfortType),
+          [ComfortType.gym, ComfortType.cleaning]);
     });
 
     test('falha emite erro com chave genérica', () async {
@@ -108,9 +111,8 @@ void main() {
       final state =
           controller.comfortMyRequestsBloc.state as ErrorComfortMyRequestsState;
 
-      /// Defeito: a chave de erro é o literal 'errorMessageKey', não uma
-      /// chave de tradução real.
-      expect(state.errorMessageKey, 'errorMessageKey');
+      /// Corrigido: a chave de erro é uma chave de tradução real.
+      expect(state.errorMessageKey, 'comfort_get_subcategories_error');
     });
   });
 
@@ -184,23 +186,26 @@ void main() {
       expect(controller.pagingController.value.pages!.length, 2);
     });
 
-    test('falha na primeira página emite erro e o PagingController relança',
+    test('falha na primeira página emite erro e registra no PagingController',
         () async {
       harness.http.failAll();
       final states = <ComfortMyRequestsState>[];
       final sub = controller.comfortMyRequestsBloc.stream.listen(states.add);
 
-      /// Defeito: `_fetchPage` relança o `Failure` (que não é `Exception`),
-      /// e o PagingController propaga o erro para quem chamou
-      /// `fetchNextPage()` — na tela isso vira uma exceção não tratada.
+      /// Corrigido: o `Failure` (que não é `Exception`) não é mais relançado;
+      /// ele é registrado no `PagingController`, que passa a exibir o
+      /// indicador de erro em vez de estourar uma exceção não tratada.
       final error = await fetchPageGuarded(controller.pagingController);
-      expect(error, isA<Failure>());
+      expect(error, isNull);
       await sub.cancel();
 
+      // Corrigido: `errorCode`/`errorDescription` do evento chegam ao estado.
       expect(states, [
         const LoadingComfortMyRequestsState(),
         const ErrorComfortMyRequestsState(
-            errorMessageKey: 'comfort_get_my_requests_error'),
+            errorMessageKey: 'comfort_get_my_requests_error',
+            errorCode: 'UNKNOWN',
+            errorDescription: ''),
       ]);
       expect(controller.pagingController.value.error, isA<Failure>());
     });
@@ -210,7 +215,8 @@ void main() {
       await fetchPageGuarded(controller.pagingController);
       harness.http.failAll();
       final error = await fetchPageGuarded(controller.pagingController);
-      expect(error, isA<Failure>());
+      expect(error, isNull);
+      expect(controller.pagingController.value.error, isA<Failure>());
       expect(controller.comfortMyRequestsBloc.state, isA<LoadedMyRequestsState>());
       expect(controller.myRequests.length, 10);
     });
@@ -263,13 +269,14 @@ void main() {
       await flush();
       await sub.cancel();
 
-      /// Defeito: o controller envia `flushbarMessage`
-      /// 'comfort_change_partner_favorite_status_error', mas o handler
-      /// `handleLoadedRateRequestEvent` do bloc descarta a mensagem — o
-      /// estado final não tem flushbar e a tela nunca mostra o aviso.
+      /// Corrigido: o `flushbarMessage`
+      /// 'comfort_change_partner_favorite_status_error' enviado pelo
+      /// controller chega ao estado e a tela mostra o aviso.
       expect(events, [
         const LoadingComfortMyRequestsState(),
-        LoadedRateRequestState(selectedRequest: request),
+        LoadedRateRequestState(
+            selectedRequest: request,
+            flushbarMessage: 'comfort_change_partner_favorite_status_error'),
       ]);
       expect(request.partner.partnerIntro.favorite, isFalse);
     });
@@ -333,9 +340,13 @@ void main() {
           LoadedMyRequestsState(myRequests: controller.myRequests));
     });
 
-    test('close entra em recursão infinita', () {
-      /// Defeito: `close()` chama a si mesmo em vez de fechar o bloc.
-      expect(() => controller.close(), throwsA(isA<StackOverflowError>()));
+    test('close fecha o bloc e o PagingController', () async {
+      /// Corrigido: `close()` fecha os recursos internos em vez de chamar a
+      /// si mesmo (StackOverflow).
+      final c = harness.buildMyRequestsController();
+      await c.close();
+      expect(c.comfortMyRequestsBloc.isClosed, isTrue);
+      expect(() => c.pagingController.addListener(() {}), throwsFlutterError);
     });
 
     test('sendMessage é um no-op', () {
@@ -438,9 +449,9 @@ void main() {
       controller.comfortMyRequestsBottomSheetAnalyticsTimerStart();
       await flush();
       expect(harness.getToken.calls, 2);
-      expect(controller.comfortMyRequestsTimer.userType, 'owner');
-      expect(controller.comfortMyRequestsBottomSheetTimer.userType, 'owner');
-      expect(controller.comfortMyRequestsTimer.referenceValue, condoReference);
+      expect(controller.comfortMyRequestsTimer!.userType, 'owner');
+      expect(controller.comfortMyRequestsBottomSheetTimer!.userType, 'owner');
+      expect(controller.comfortMyRequestsTimer!.referenceValue, condoReference);
       controller.comfortMyRequestsAnalyticsTimerStop();
       controller.comfortMyRequestsBottomSheetAnalyticsTimerStop();
     });
@@ -450,15 +461,16 @@ void main() {
           .buildMyRequestsController();
       c.comfortMyRequestsAnalyticsTimerStart();
       await flush();
-      expect(c.comfortMyRequestsTimer.userType, '');
+      expect(c.comfortMyRequestsTimer!.userType, '');
     });
 
-    test('stop antes do start lança LateInitializationError', () {
-      /// Defeito: os temporizadores são `late` e só são criados após o
-      /// `await` do token; parar antes disso quebra.
-      expect(() => controller.comfortMyRequestsAnalyticsTimerStop(), throwsA(isA<Error>()));
-      expect(() => controller.comfortMyRequestsBottomSheetAnalyticsTimerStop(),
-          throwsA(isA<Error>()));
+    test('stop antes do start não faz nada', () {
+      /// Corrigido: os temporizadores são nulos até serem criados (depois do
+      /// `await` do token); parar antes disso é um no-op.
+      expect(controller.comfortMyRequestsTimer, isNull);
+      expect(controller.comfortMyRequestsBottomSheetTimer, isNull);
+      controller.comfortMyRequestsAnalyticsTimerStop();
+      controller.comfortMyRequestsBottomSheetAnalyticsTimerStop();
     });
   });
 }

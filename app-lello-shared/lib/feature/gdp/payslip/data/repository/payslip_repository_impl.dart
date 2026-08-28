@@ -13,8 +13,15 @@ class PayslipRepositoryImpl extends PayslipRepository {
   Future<Try<List<Payslip>>> getPayslip(String registrationNumber) async {
     try {
       final result = await remoteDataSource.find(registrationNumber);
-      result
-          .sort((a, b) => b.processingDate?.compareTo(a.processingDate!) ?? 1);
+      // Mais recentes primeiro; sem data de processamento vai para o fim.
+      result.sort((a, b) {
+        final dateA = a.processingDate;
+        final dateB = b.processingDate;
+        if (dateA == null && dateB == null) return 0;
+        if (dateA == null) return 1;
+        if (dateB == null) return -1;
+        return dateB.compareTo(dateA);
+      });
       return Success(result.map((e) => e.toEntity()).toList());
     } catch (ex) {
       return Rejection(UnknownFailure(ex));

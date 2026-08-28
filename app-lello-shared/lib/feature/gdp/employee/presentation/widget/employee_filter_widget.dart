@@ -271,7 +271,7 @@ class _EmployeeFilterWidgetState extends State<EmployeeFilterWidget> {
                           );
                           setState(() {
                             widget.entity.hiringDateFrom = date;
-                            toHiringDateController.text =
+                            fromHiringDateController.text =
                                 dateFormat.format(date);
                           });
                         },
@@ -305,7 +305,7 @@ class _EmployeeFilterWidgetState extends State<EmployeeFilterWidget> {
                           );
                           setState(() {
                             widget.entity.hiringDateTo = date;
-                            fromHiringDateController.text =
+                            toHiringDateController.text =
                                 dateFormat.format(date);
                           });
                         },

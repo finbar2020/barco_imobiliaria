@@ -141,10 +141,9 @@ void main() {
     expect(args.comfortPartnersController, same(harness.controller));
     expect(args.applicationContainer, same(harness.container));
 
-    /// Defeito: `onPartnerSelected` envia `AppOriginEnum.manager` fixo nos
-    /// argumentos em vez de `widget.appOriginEnum`; a página do parceiro
-    /// sempre recebe origem "síndico". Comportamento atual documentado.
-    expect(args.appOriginEnum, AppOriginEnum.manager);
+    /// Corrigido: `onPartnerSelected` envia `widget.appOriginEnum` nos
+    /// argumentos (antes era `AppOriginEnum.manager` fixo).
+    expect(args.appOriginEnum, harness.origin);
 
     expect(harness.controller.selectedPartner!.id, 'p4');
     expect(harness.bloc.state, isA<LoadedComfortPartnerDetailsState>());
@@ -156,6 +155,36 @@ void main() {
     expect(harness.controller.comfortPartnerAnalyticsTimer, isNotNull);
     // Estado de detalhes não é "loaded" da lista: a página mostra loading.
     expect(find.byType(LoadingWidget), findsOneWidget);
+  });
+
+  testWidgets('detalhes do parceiro usam a origem da página', (tester) async {
+    // Controller de síndico (única origem que recebe as categorias), mas a
+    // página é montada com outra origem: os argumentos devem seguir a página.
+    harness = ToYourCondoHarness.create();
+    await harness.loadPartners();
+    await pumpPage(
+      tester,
+      basePage(),
+      observer: observer,
+      routes: {
+        condoRouteName: (_) => ToYourCondoPage(
+              comfortPartnersController: harness.controller,
+              appContainer: harness.container,
+              appOriginEnum: AppOriginEnum.owner,
+              reference: 'R1',
+              unit: '101',
+            ),
+      },
+    );
+    await pushRoute(tester, condoRouteName, settle: false);
+    await tester.tap(categoryTitle('Manutenção'));
+    await pumpFrames(tester);
+    await tester.tap(find.text('details'));
+    await pumpFrames(tester);
+
+    final args =
+        observer.pushed.last.settings.arguments as ComfortPartnerPageArgs;
+    expect(args.appOriginEnum, AppOriginEnum.owner);
   });
 
   testWidgets('tocar no card do parceiro também abre os detalhes', (tester) async {
@@ -275,29 +304,25 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('a página agenda um frame novo a cada frame', (tester) async {
-    /// Defeito: `ToYourCondoPage.build` registra um `addPostFrameCallback`
-    /// que chama `setState` incondicionalmente; cada frame agenda outro, e a
-    /// tela fica sendo reconstruída para sempre (`pumpAndSettle` estoura e,
-    /// no app, o widget é reconstruído a cada frame enquanto estiver visível).
-    /// Comportamento atual documentado.
+  testWidgets('a página para de agendar frames', (tester) async {
+    /// Corrigido: `ToYourCondoPage.build` registrava um
+    /// `addPostFrameCallback` que chamava `setState` incondicionalmente e cada
+    /// frame agendava outro (rebuild infinito). Agora o `setState` só roda
+    /// quando o valor muda e a tela "assenta".
     harness = ToYourCondoHarness.create();
     await harness.loadPartners();
     await pumpCondo(tester);
+    await tester.pumpAndSettle();
 
-    for (var i = 0; i < 5; i++) {
-      await tester.pump(const Duration(seconds: 1));
-      expect(tester.binding.hasScheduledFrame, isTrue);
-    }
+    expect(tester.binding.hasScheduledFrame, isFalse);
     expect(find.text('Para seu condomínio'), findsOneWidget);
   });
 
-  testWidgets('estado de erro não chega ao widget de erro', (tester) async {
-    /// Defeito: em `ToYourCondoPage.build` o teste `state is!
-    /// LoadedComfortPartnersState` vem antes de `state is
-    /// ErrorComfortPartnersState`, então o ramo de erro (com
-    /// `ErrorHandlingWidget` e "tentar novamente") nunca executa: qualquer
-    /// erro fica preso no loading. Comportamento atual documentado.
+  testWidgets('estado de erro mostra o widget de erro', (tester) async {
+    /// Corrigido: em `ToYourCondoPage.build` o teste
+    /// `state is ErrorComfortPartnersState` vem antes de
+    /// `state is! LoadedComfortPartnersState`, então o ramo de erro (com
+    /// `ErrorHandlingWidget` e "tentar novamente") é alcançado.
     harness = ToYourCondoHarness.create();
     await harness.loadPartners();
     await pumpCondo(tester);
@@ -308,12 +333,20 @@ void main() {
             errorMessageKey: 'comfort_error_message',
             errorCode: '500',
             errorDescription: ''));
-    await tester.pump();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    expect(find.byType(ErrorHandlingWidget), findsNothing);
-    expect(find.byType(LoadingWidget), findsOneWidget);
+    expect(find.byType(ErrorHandlingWidget), findsOneWidget);
+    expect(find.byType(LoadingWidget), findsNothing);
+    // O ramo de erro não faz mais `Navigator.pop` durante o build.
     expect(observer.popped, isEmpty);
+
+    // "Tentar novamente" recarrega os parceiros.
+    harness.http.requests.clear();
+    await tester.tap(find.text('error_handling_widget_button_reTry'));
+    await pumpFrames(tester);
+    expect(harness.http.requests, isNotEmpty);
+    expect(find.byType(ErrorHandlingWidget), findsNothing);
+    expect(find.text('Para seu condomínio'), findsOneWidget);
   });
 }
 

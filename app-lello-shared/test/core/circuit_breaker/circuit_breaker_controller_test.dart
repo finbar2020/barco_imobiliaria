@@ -64,9 +64,9 @@ void main() {
     session = FakeCircuitSessionBloc();
   });
 
-  /// Cria o controller e aguarda o snapshot inicial: `dispose()` fecha o
-  /// StreamController sem cancelar a inscrição no Firestore, então um
-  /// snapshot que chegue depois do dispose lança (ver teste do defeito).
+  /// Cria o controller e aguarda o snapshot inicial. `dispose()` cancela a
+  /// inscrição no Firestore antes de fechar o `ruleStream`, então é seguro
+  /// chamá-lo mesmo com snapshots chegando depois (ver teste correspondente).
   Future<CircuitBreakerController> build({bool production = false}) async {
     final c = CircuitBreakerController(
       database: db,
@@ -105,13 +105,14 @@ void main() {
       controller.dispose();
     });
 
-    test('dispose não cancela a inscrição no Firestore', () async {
-      /// Defeito: `dispose()` só fecha o `ruleStream`; a inscrição em
-      /// `snapshots()` continua viva e o próximo snapshot faz
+    test('dispose cancela a inscrição no Firestore', () async {
+      /// Corrigido: `dispose()` cancela a inscrição em `snapshots()` antes de
+      /// fechar o `ruleStream`, então snapshots posteriores não fazem
       /// `ruleStream.add` lançar "Cannot add new events after calling close".
       final errors = <Object>[];
+      late CircuitBreakerController controller;
       await runZonedGuarded(() async {
-        final controller = CircuitBreakerController(
+        controller = CircuitBreakerController(
           database: db,
           sessionBloc: session,
           environment: _Env(),
@@ -121,8 +122,10 @@ void main() {
         await db.collection('circuit_break_homolog').add(rule('depois'));
         await pumpEventQueue();
       }, (e, _) => errors.add(e));
-      expect(errors, isNotEmpty);
-      expect(errors.first, isA<StateError>());
+      expect(errors, isEmpty);
+      expect(controller.ruleStream.isClosed, isTrue);
+      // dispose é idempotente e seguro de chamar mais de uma vez.
+      controller.dispose();
     });
 
     test('falha ao abrir a coleção é registrada no Crashlytics sem quebrar',
@@ -183,16 +186,24 @@ void main() {
       expect(r.situation, isNull);
     });
 
-    test('documento sem campos lança em vez de cair no fallback', () async {
-      /// Defeito: `fromMap` captura só `on Exception`, mas campo ausente no
-      /// documento lança `StateError` (um `Error`) e campo com tipo errado
-      /// lança `TypeError`; o construtor vazio de fallback nunca é usado e o
-      /// erro sobe até o listener do snapshot.
+    test('documento sem campos ou com tipo errado cai no fallback', () async {
+      /// Corrigido: `fromMap` captura amplamente (`catch`), então campo ausente
+      /// (`StateError`) e campo com tipo inesperado (`TypeError`) — ambos
+      /// `Error` — caem no construtor de fallback em vez de subir até o
+      /// listener do snapshot.
       await db.collection('c').add({'name': 'so-nome'});
       await db.collection('c').add(rule('tipo')..['situation'] = 5);
       final docs = (await db.collection('c').get()).docs;
-      expect(() => CircuitItemRule.fromMap(docs[0]), throwsStateError);
-      expect(() => CircuitItemRule.fromMap(docs[1]), throwsA(isA<TypeError>()));
+      for (final doc in docs) {
+        final r = CircuitItemRule.fromMap(doc);
+        expect(r.name, '');
+        expect(r.disabledMessage, isNull);
+        expect(r.excludedReferenceContext, isNull);
+        expect(r.includedReferenceContext, isNull);
+        expect(r.minimumVersion, isNull);
+        expect(r.maximumVersion, isNull);
+        expect(r.situation, isNull);
+      }
     });
   });
 
@@ -220,19 +231,20 @@ void main() {
       expect(check('2.0.1', '1.0.0', ''), isTrue);
       expect(check('0.9.0', '1.0.0', ''), isFalse);
       expect(check('1.0.0', '1.0.0', ''), isTrue);
-      /// Defeito: com versões iguais até o tamanho comparado, uma versão
-      /// atual MAIS longa que a mínima (2.0.0.1 >= 2.0.0) é considerada fora
-      /// do intervalo (`currentParts.length <= minParts.length`).
-      expect(check('2.0.0.1', '2.0.0', ''), isFalse);
+      /// Corrigido: a comparação é feita segmento a segmento (ausentes valem
+      /// 0), então uma versão atual mais longa que a mínima (2.0.0.1 >= 2.0.0)
+      /// está dentro do intervalo.
+      expect(check('2.0.0.1', '2.0.0', ''), isTrue);
+      expect(check('2.0.0.0', '2.0.0', ''), isTrue);
     });
 
     test('mínimo e máximo', () {
       expect(check('2.5.0', '2.0.0', '3.0.0'), isTrue);
       expect(check('1.9.0', '2.0.0', '3.0.0'), isFalse);
-      /// Defeito: com mínimo e máximo, a comparação devolve true assim que
-      /// uma parte é maior que a do mínimo, sem verificar as partes seguintes
-      /// contra o máximo: 3.1.0 é aceito em [2.0.0, 3.0.0].
-      expect(check('3.1.0', '2.0.0', '3.0.0'), isTrue);
+      /// Corrigido: com mínimo e máximo, a versão é comparada por completo
+      /// contra os dois limites, então 3.1.0 fica fora de [2.0.0, 3.0.0].
+      expect(check('3.1.0', '2.0.0', '3.0.0'), isFalse);
+      expect(check('3.0.0', '2.0.0', '3.0.0'), isTrue);
       expect(check('4.0.0', '2.0.0', '3.0.0'), isFalse);
       expect(check('2.0.0', '2.0.0', '2.0.0'), isTrue);
       expect(check('2.0.5', '2.0', '2.1'), isTrue);

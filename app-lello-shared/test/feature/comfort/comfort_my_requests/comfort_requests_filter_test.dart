@@ -168,13 +168,20 @@ void main() {
     expect(find.text('comfort_request_filter_date_error'), findsOneWidget);
     expect(find.text(fmt(filter.endDate!)), findsOneWidget);
 
-    /// Defeito (não exercitado: a asserção derruba o teste): com data final
-    /// no passado e sem data inicial, tocar na data inicial chama
-    /// `showDatePicker(initialDate: hoje, lastDate: dataFinal)` e viola a
-    /// asserção `initialDate <= lastDate` — a tela quebra.
+    /// Corrigido: com data final no passado e sem data inicial, tocar na
+    /// data inicial chamava `showDatePicker(initialDate: hoje,
+    /// lastDate: dataFinal)` e violava a asserção `initialDate <= lastDate`.
+    /// O `initialDate` agora é limitado ao intervalo permitido.
+    await tester.tap(startField);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await confirmDatePicker(tester);
+    expect(filter.startDate, isNotNull);
+    expect(filter.startDate!.isAfter(filter.endDate!), isFalse);
+
     await tester.tap(find.text('find'));
     await tester.pumpAndSettle();
-    expect(searched, isEmpty);
+    expect(searched, hasLength(1));
   });
 
   testWidgets('limpar zera todos os campos', (tester) async {

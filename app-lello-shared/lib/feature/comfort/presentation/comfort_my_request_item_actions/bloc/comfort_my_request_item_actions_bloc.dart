@@ -13,6 +13,10 @@ class ComfortMyRequestItemActionsBloc extends Bloc<
       : super(const ComfortMyRequestItemActionsInitialState()) {
     on<ComfortMyRequestItemActionsEvent>((event, emit) {});
     on<ComfortMyRequestItemActionsLoadedEvent>((event, emit) {
+      // Loading/Error/Success herdam de `...LoadedEvent`: sem esta guarda
+      // este handler também rodaria para eles e emitiria um `LoadedState`
+      // intermediário antes do estado específico.
+      if (event.runtimeType != ComfortMyRequestItemActionsLoadedEvent) return;
       emit(ComfortMyRequestItemActionsLoadedState(event.request));
     });
     on<ComfortMyRequestItemActionsLoadingEvent>((event, emit) => emit(

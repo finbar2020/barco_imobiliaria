@@ -34,22 +34,19 @@ void main() {
     await flush();
     await sub.cancel();
 
-    /// Defeito: Loading/Error/Success herdam de LoadedEvent, então o handler
-    /// `on<ComfortMyRequestItemActionsLoadedEvent>` também roda para eles e
-    /// um `LoadedState` intermediário é emitido antes de cada estado
-    /// específico (a tela pisca o corpo carregado antes do loading).
+    /// Corrigido: Loading/Error/Success herdam de LoadedEvent, mas o handler
+    /// `on<ComfortMyRequestItemActionsLoadedEvent>` só trata o evento exato,
+    /// sem emitir um `LoadedState` intermediário (a tela não pisca mais).
     expect(states, [
       ComfortMyRequestItemActionsLoadedState(request),
       ComfortMyRequestItemActionsLoadingState(
           ComfortMyRequestItemActions.resend, request),
-      ComfortMyRequestItemActionsLoadedState(request),
       ComfortMyRequestItemActionsErrorState(
           request: request,
           action: ComfortMyRequestItemActions.cancel,
           errorMessageKey: 'erro',
           errorCode: '500',
           errorDescription: 'desc'),
-      ComfortMyRequestItemActionsLoadedState(request),
       ComfortMyRequestItemActionsSuccessState(
           ComfortMyRequestItemActions.rate, request),
     ]);

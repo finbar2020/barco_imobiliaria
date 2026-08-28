@@ -15,7 +15,7 @@ class PasswordResetRepositoryImpl extends PasswordResetRepository {
       FirebaseCrashlytics.instance.recordError(
         e,
         stacktrace,
-        reason: 'cpfId: ${reset.cpf!.substring(0, 5)}',
+        reason: 'cpfId: ${_cpfId(reset.cpf)}',
       );
       return Rejection(UnknownFailure(e));
     }
@@ -34,9 +34,17 @@ class PasswordResetRepositoryImpl extends PasswordResetRepository {
       FirebaseCrashlytics.instance.recordError(
         e,
         stacktrace,
-        reason: 'cpfId: ${params.cpf!.substring(0, 5)}',
+        reason: 'cpfId: ${_cpfId(params.cpf)}',
       );
       return Rejection(UnknownFailure(e));
     }
+  }
+
+  /// Prefixo do cpf usado apenas para identificar o erro no Crashlytics.
+  /// Tolera cpf nulo ou menor que 5 caracteres para nunca lançar dentro do
+  /// `catch` e sempre devolver a falha ao chamador.
+  String _cpfId(String? cpf) {
+    if (cpf == null) return '';
+    return cpf.length <= 5 ? cpf : cpf.substring(0, 5);
   }
 }

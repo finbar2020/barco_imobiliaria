@@ -123,11 +123,11 @@ void main() {
     await bloc.close();
   });
 
-  /// Defeito: `_mapInsert` usa `state.event!`, mas nenhum estado do fluxo
-  /// normal recebe `event` (sempre `null`). Inserir uma ocorrência a partir de
-  /// um estado carregado pelo próprio bloc explode com "Null check operator"
-  /// antes de chamar a API, e nada é emitido.
-  test('insertEvent após o carregamento normal explode (defeito)', () async {
+  /// Corrigido: `_mapInsert` usa o próprio `TimesheetListInsertEvent`
+  /// recebido em vez de `state.event!`, que nunca é preenchido pelo fluxo
+  /// normal. Inserir uma ocorrência a partir de um estado carregado pelo bloc
+  /// chama a API e recarrega a lista.
+  test('insertEvent após o carregamento normal insere e recarrega', () async {
     stack.happyPath();
     final errors = <Object>[];
     late TimesheetListBloc bloc;
@@ -136,12 +136,14 @@ void main() {
       await coletar(bloc, (s) => s is TimesheetListLoadedState);
       bloc.insertEvent(
           TimesheetEvent(typeEvent: 'ABONO', effectiveDate: hoje));
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await coletar(bloc, (s) => s is TimesheetListLoadedState);
     }, (e, _) => errors.add(e));
 
-    expect(errors.first, isA<TypeError>());
+    expect(errors, isEmpty);
     expect(bloc.state, isA<TimesheetListLoadedState>());
-    expect(stack.http.requests.map((r) => r.method), ['GET']);
+    expect(stack.http.requests.map((r) => r.method), ['GET', 'POST', 'GET']);
+    final post = stack.http.requests.firstWhere((r) => r.method == 'POST');
+    expect(post.url.path, '/timesheet/event/C1');
     await bloc.close();
   });
 

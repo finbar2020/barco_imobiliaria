@@ -198,11 +198,11 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  /// Defeito: o erro dos cupons é renderizado com `ErrorMessageWidget`
-  /// (Column + Expanded) dentro do `SingleChildScrollView` da página, o que
-  /// quebra o layout ("RenderFlex children have non-zero flex but incoming
-  /// height constraints are unbounded").
-  testWidgets('erro dos cupons quebra o layout da página', (tester) async {
+  /// Corrigido: o erro dos cupons continua sendo o `ErrorMessageWidget`
+  /// (Column + Expanded), mas dentro de uma altura limitada — sem o
+  /// "RenderFlex children have non-zero flex but incoming height constraints
+  /// are unbounded" que quebrava o layout da página.
+  testWidgets('erro dos cupons aparece sem quebrar o layout', (tester) async {
     harness.http.failAll();
     final partner = buildPartner('P1');
     final errors = <FlutterErrorDetails>[];
@@ -233,10 +233,7 @@ void main() {
           isA<CouponsErrorState>());
       expect(find.byType(ErrorMessageWidget), findsOneWidget);
       expect(find.text('comfort_get_partner_coupons_error'), findsOneWidget);
-      expect(
-        errors.map((e) => e.exceptionAsString()),
-        anyElement(contains('non-zero flex')),
-      );
+      expect(errors, isEmpty);
       await tester.pumpWidget(const SizedBox());
     } finally {
       FlutterError.onError = previous;
@@ -295,10 +292,10 @@ void main() {
     expect(fakeAnalytics.eventNames, contains('comodidades_cta_redirect'));
   });
 
-  /// Defeito: quando a criação da solicitação falha o controller emite
-  /// `LoadedComfortPartnerDetailsState(error: ...)`, mas a página só reage a
-  /// `SuccessComfortPartnerCupomState`; o usuário não recebe feedback.
-  testWidgets('falha ao ativar o cupom não mostra nenhuma mensagem',
+  /// Corrigido: quando a criação da solicitação falha o controller emite
+  /// `LoadedComfortPartnerDetailsState(error: ...)` e a página passa a
+  /// reagir a esse estado, mostrando a página de resultado com erro.
+  testWidgets('falha ao ativar o cupom mostra a página de erro',
       (tester) async {
     harness.mockCoupons('P1', [couponJson('C1')]);
     harness.http.on('POST', '/condominiums/C1/comfort/couponResponse',
@@ -313,8 +310,8 @@ void main() {
     final state =
         controller.comfortPartnersBloc.state as LoadedComfortPartnerDetailsState;
     expect(state.error, 'comfort_get_coupon_request_error');
-    expect(find.byType(ComfortCupomRequesResultPage), findsNothing);
-    expect(find.byType(PartnerCouponsListView), findsOneWidget);
+    expect(find.byType(ComfortCupomRequesResultPage), findsOneWidget);
+    expect(find.text('comfort_request_error_title'), findsOneWidget);
   });
 
   testWidgets('erro na solicitação abre a página de resultado com erro',
@@ -381,7 +378,7 @@ void main() {
     expect(harness.launcher.launched.last, 'https://www.parceiro.com/promo?');
   });
 
-  testWidgets('solicitação sem link abre "null" no launcher', (tester) async {
+  testWidgets('solicitação sem link não chama o launcher', (tester) async {
     harness.mockCouponRequest(couponRequestJson(link: '', params: []));
     final partner = buildPartner('P1', cta: 'link');
 
@@ -390,8 +387,9 @@ void main() {
     await tester.pumpAndSettle();
     await acceptCouponDialog(tester, 'comfort_get_coupon_description_go');
 
-    /// Defeito: `urlAndQueries` nulo vira a string "null" no `openUrl`.
-    expect(harness.launcher.launched.last, 'null');
+    /// Corrigido: com `urlAndQueries` nulo nada é aberto (antes virava a
+    /// string "null" no `openUrl`).
+    expect(harness.launcher.launched, isEmpty);
   });
 
   group('diálogo de avaliação da compra', () {

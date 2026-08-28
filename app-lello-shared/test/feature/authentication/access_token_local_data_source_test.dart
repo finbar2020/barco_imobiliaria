@@ -82,19 +82,14 @@ void main() {
     expect(selected!.refreshToken, isNull);
   });
 
-  /// Defeito: `save(null)` chama `box.clear()`/`boxRefresh.clear()` sem
-  /// `await`; logo depois do retorno o token ainda pode ser lido — a limpeza
-  /// só se completa quando a escrita assíncrona do Hive termina.
-  test('save nulo limpa as duas caixas (de forma assíncrona)', () async {
+  /// Corrigido: `save(null)` aguarda `box.clear()`/`boxRefresh.clear()`, então
+  /// imediatamente após o retorno as duas caixas já estão vazias.
+  test('save nulo limpa as duas caixas antes de retornar', () async {
     await dataSource.save(AccessTokenModel.fromJson(tokenJson()), role: 'R');
 
     final result = await dataSource.save(null, role: '');
 
     expect(result, isNull);
-    // Comportamento atual: imediatamente após o retorno ainda há token.
-    expect(await dataSource.select(role: 'R'), isNotNull);
-
-    await Future.delayed(const Duration(milliseconds: 200));
     expect(await dataSource.select(role: 'R'), isNull);
     final refreshBox = await Hive.openBox('refreshToken');
     expect(refreshBox.isEmpty, isTrue);

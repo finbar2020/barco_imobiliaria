@@ -37,9 +37,6 @@ void main() {
   TimesheetFilter argsDoUltimoPush() =>
       observer.pushed.last.settings.arguments as TimesheetFilter;
 
-  /// Largura em que os cards do resumo cabem sem estourar (ver defeito abaixo).
-  const superficie = Size(480, 900);
-
   Future<void> voltar(WidgetTester tester, String rota) async {
     Navigator.of(tester.element(findRoute(rota))).pop();
     await tester.pumpAndSettle();
@@ -49,8 +46,7 @@ void main() {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
         observer: observer,
-        arguments: DateTime(hoje.year, hoje.month),
-        surface: superficie);
+        arguments: DateTime(hoje.year, hoje.month));
 
     expect(find.text('gdp_timesheet_appBar'), findsOneWidget);
     expect(find.text('gdp_timesheet_tab_overview'), findsOneWidget);
@@ -80,7 +76,7 @@ void main() {
       (tester) async {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
 
     final casos = {
       'gdp_timesheet_grid_working': TimesheetTypeEnum.present,
@@ -106,7 +102,7 @@ void main() {
       (tester) async {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
 
     await tester.tap(find.text('gdp_timesheet_menu_option_event'));
     await tester.pumpAndSettle();
@@ -130,7 +126,7 @@ void main() {
       (tester) async {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
 
     await tester.tap(find.text('gdp_timesheet_tab_employees'));
     await tester.pumpAndSettle();
@@ -154,7 +150,7 @@ void main() {
     stack.happyPath();
     stack.http.on('GET', '/timesheet/employees/C1', body: []);
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
 
     expect(bloc().state, isA<TimesheetMenuWarningState>());
     expect(findRoute(SharedApplicationRoute.gdpTimesheetWarning), findsOneWidget);
@@ -167,7 +163,7 @@ void main() {
       for (var i = 0; i < 30; i++) employeeJson(id: 'E$i', name: 'Func $i'),
     ]);
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
     final antes = stack.http.requests.length;
 
     await tester.fling(find.byType(GridView), const Offset(0, 300), 1000);
@@ -194,7 +190,7 @@ void main() {
       (tester) async {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
     final b = bloc();
 
     // ignore: invalid_use_of_visible_for_testing_member
@@ -223,7 +219,7 @@ void main() {
   testWidgets('sem funcionários carregados a aba mostra vazio', (tester) async {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
+        observer: observer);
     final b = bloc();
     // ignore: invalid_use_of_visible_for_testing_member
     b.emit(TimesheetMenuEmployeesLoadedState(
@@ -234,30 +230,29 @@ void main() {
     expect(find.text('gdp_timesheet_empty'), findsOneWidget);
   });
 
-  /// Defeito: ao concluir a solicitação do ponto digital o menu navega para a
-  /// tela de "espelhos assinados" (`gdpTimesheetSignSuccess`) e não para a de
-  /// "email enviado" (`gdpTimesheetRequestSuccess`).
-  testWidgets('solicitação concluída navega para o sucesso de assinatura (defeito)',
-      (tester) async {
-    stack.happyPath();
-    await pumpPage(tester, TimesheetMenuPage(appContainer: container),
-        observer: observer, surface: superficie);
-    bloc().beginRequest();
-    await tester.pumpAndSettle();
-    expect(bloc().state, isA<TimesheetRequestLoadedState>());
-    expect(findRoute(SharedApplicationRoute.gdpTimesheetSignSuccess),
-        findsOneWidget);
-  });
-
-  /// Defeito: em telas de 400px de largura o card do resumo
-  /// (`_retangularButton`, `childAspectRatio: 1.4`) estoura ~6px na vertical.
-  testWidgets('cards do resumo estouram em telas estreitas (defeito)',
+  /// Corrigido: ao concluir a solicitação do ponto digital o menu navega para
+  /// a tela de "email enviado" (`gdpTimesheetRequestSuccess`) e não para a de
+  /// "espelhos assinados".
+  testWidgets('solicitação concluída navega para o sucesso da solicitação',
       (tester) async {
     stack.happyPath();
     await pumpPage(tester, TimesheetMenuPage(appContainer: container),
         observer: observer);
-    final erro = tester.takeException();
-    expect(erro, isA<FlutterError>());
-    expect(erro.toString(), contains('overflowed'));
+    bloc().beginRequest();
+    await tester.pumpAndSettle();
+    expect(bloc().state, isA<TimesheetRequestLoadedState>());
+    expect(findRoute(SharedApplicationRoute.gdpTimesheetRequestSuccess),
+        findsOneWidget);
+    expect(findRoute(SharedApplicationRoute.gdpTimesheetSignSuccess),
+        findsNothing);
+  });
+
+  /// Corrigido: a altura dos cards do resumo tem um mínimo, então em telas de
+  /// 400px de largura eles não estouram mais na vertical.
+  testWidgets('cards do resumo cabem em telas estreitas', (tester) async {
+    stack.happyPath();
+    await pumpPage(tester, TimesheetMenuPage(appContainer: container),
+        observer: observer);
+    expect(tester.takeException(), isNull);
   });
 }

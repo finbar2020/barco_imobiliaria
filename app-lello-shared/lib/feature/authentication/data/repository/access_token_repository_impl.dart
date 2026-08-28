@@ -42,7 +42,7 @@ class AccessTokenRepositoryImpl extends AccessTokenRepository {
         FirebaseCrashlytics.instance.recordError(
           e,
           stacktrace,
-          reason: 'idCpf: ${credentials.username.substring(0, 5)}',
+          reason: 'idCpf: ${_cpfId(credentials.username)}',
         );
       }
       return Rejection(faliure);
@@ -50,7 +50,7 @@ class AccessTokenRepositoryImpl extends AccessTokenRepository {
       FirebaseCrashlytics.instance.recordError(
         e,
         stacktrace,
-        reason: 'idCpf: ${credentials.username.substring(0, 5)}',
+        reason: 'idCpf: ${_cpfId(credentials.username)}',
       );
       return Rejection(UnknownFailure(e));
     }
@@ -113,6 +113,14 @@ class AccessTokenRepositoryImpl extends AccessTokenRepository {
     } catch (err) {
       return Rejection(UnknownFailure(err));
     }
+  }
+
+  /// Prefixo do usuário (cpf) usado apenas para identificar o erro no
+  /// Crashlytics. Tolera valores nulos ou com menos de 5 caracteres para
+  /// nunca lançar dentro do `catch` e sempre devolver a falha ao chamador.
+  String _cpfId(String? cpf) {
+    if (cpf == null) return '';
+    return cpf.length <= 5 ? cpf : cpf.substring(0, 5);
   }
 
   Failure _mapApiFailure(ApiFailure err) {

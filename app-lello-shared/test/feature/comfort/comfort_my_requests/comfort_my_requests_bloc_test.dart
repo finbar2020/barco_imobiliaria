@@ -42,24 +42,26 @@ void main() {
     expect(states, [
       const EmptyComfortMyRequestsState(),
       const SuccessComfortMyRequestsState(),
-      const ErrorComfortMyRequestsState(errorMessageKey: 'erro'),
+      const ErrorComfortMyRequestsState(
+          errorMessageKey: 'erro', errorCode: '500', errorDescription: 'desc'),
       LoadedMyRequestsState(
           myRequests: [request], flushbarMessage: 'msg', selectedRequest: request),
-      LoadedRateRequestState(selectedRequest: request),
+      LoadedRateRequestState(selectedRequest: request, flushbarMessage: 'f'),
       const LoadingComfortMyRequestsState(),
-      LoadedSubcategoriesMyRequestState(subcategories: subcategories),
+      LoadedSubcategoriesMyRequestState(
+          subcategories: subcategories, flushbarMessage: 'f'),
     ]);
-    /// Defeito: o handler de erro descarta `errorCode` e `errorDescription`
-    /// do evento; o estado só carrega a chave da mensagem.
+    /// Corrigido: o handler de erro repassa `errorCode` e `errorDescription`
+    /// do evento para o estado.
     final error = states[2] as ErrorComfortMyRequestsState;
-    expect(error.errorCode, isNull);
-    expect(error.errorDescription, isNull);
+    expect(error.errorCode, '500');
+    expect(error.errorDescription, 'desc');
 
-    /// Defeito: os handlers de LoadedRateRequestEvent e
-    /// LoadedSubcategoriesMyRequestEvent também descartam `flushbarMessage`.
-    expect((states[4] as LoadedRateRequestState).flushbarMessage, isNull);
+    /// Corrigido: os handlers de LoadedRateRequestEvent e
+    /// LoadedSubcategoriesMyRequestEvent também repassam `flushbarMessage`.
+    expect((states[4] as LoadedRateRequestState).flushbarMessage, 'f');
     expect((states[6] as LoadedSubcategoriesMyRequestState).flushbarMessage,
-        isNull);
+        'f');
   });
 
   test('props dos eventos e estados consideram todos os campos', () {

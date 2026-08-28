@@ -95,29 +95,27 @@ void main() {
     expect(env.http.requests, isEmpty);
   });
 
-  /// Defeito: todo estado de carregamento chama `_indicatorKey.currentState.show()`;
-  /// quando a animação do RefreshIndicator termina, o `onRefresh` chama
-  /// `bloc.beginRefresh()` com a lista já carregada e a tela busca a lista
-  /// remota uma segunda vez (cache + remoto + remoto de novo).
-  testWidgets('abrir a tela dispara o carregamento remoto duas vezes',
+  /// Corrigido: a recarga programática (`_indicatorKey.show()` disparada pelo
+  /// listener) não faz o `onRefresh` do RefreshIndicator pedir outra recarga,
+  /// então abrir a tela busca a lista remota uma única vez (cache + remoto).
+  testWidgets('abrir a tela dispara o carregamento remoto uma vez',
       (tester) async {
     env.stubEmployees([employeeJson('E1', name: 'Ana')]);
     await pumpList(tester);
-    expect(env.paths, [employeesPath, employeesPath, employeesPath]);
+    expect(env.paths, [employeesPath, employeesPath]);
   });
 
-  /// Defeito: o corpo de erro usa `Center(child: Expanded(...))` — `Expanded`
-  /// só pode ficar dentro de `Flex`, e o Flutter lança "Incorrect use of
-  /// ParentDataWidget" ao montar a mensagem de erro.
-  testWidgets('falha no carregamento mostra a mensagem mas lança erro de layout',
+  /// Corrigido: o corpo de erro não usa mais `Center(child: Expanded(...))`,
+  /// então a mensagem é montada sem "Incorrect use of ParentDataWidget".
+  testWidgets('falha no carregamento mostra a mensagem de erro',
       (tester) async {
     env.http.failAll();
     final bloc = await pumpList(tester);
     expect(bloc().state, isA<EmployeeListLoadFailedState>());
-    final exception = tester.takeException();
-    expect(exception, isNotNull);
-    expect('$exception', contains('ParentDataWidget'));
+    expect(tester.takeException(), isNull);
     expect(find.text('Ocorreu um erro, tente novamente mais tarde'),
+        findsOneWidget);
+    expect(find.text('Se o problema persistir entre em contato com o suporte'),
         findsOneWidget);
     expect(find.byType(RefreshIndicator), findsNothing);
   });
@@ -167,8 +165,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(EmployeeFilterWidget), findsNothing);
-    // mesmo defeito do refresh: o filtro também é buscado duas vezes
-    expect(env.paths, [employeesPath, employeesPath]);
+    // corrigido junto com o laço de refresh: o filtro é buscado uma vez
+    expect(env.paths, [employeesPath]);
     final query = env.http.requests.first.url.queryParameters;
     expect(query['name'], 'Car');
     expect(query['role'], 'Zelador');

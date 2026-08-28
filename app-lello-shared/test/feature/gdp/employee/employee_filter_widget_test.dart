@@ -155,12 +155,10 @@ void main() {
     expect(entity.dobTo, hoje);
   });
 
-  /// Defeito: os campos de data de admissão escrevem no controller trocado
-  /// ("de" escreve em `toHiringDateController` e "até" em
-  /// `fromHiringDateController`). O `build` re-sincroniza o campo certo a
-  /// partir da entidade, então escolher "de" preenche os DOIS campos e, ao
-  /// buscar, `hiringDateTo` também é salvo com a data de "de".
-  testWidgets('datas de admissão preenchem também o campo trocado',
+  /// Corrigido: cada campo de data de admissão escreve no próprio controller
+  /// ("de" em `fromHiringDateController` e "até" em `toHiringDateController`),
+  /// então escolher uma data preenche só o campo correspondente.
+  testWidgets('datas de admissão preenchem só o próprio campo',
       (tester) async {
     final entity = EmployeeListFilter();
     await pumpFilter(tester, entity, onApply: (_) {});
@@ -174,16 +172,14 @@ void main() {
     expect(entity.hiringDateTo, isNull);
     expect((tester.widget(field(6)) as TextFormField).controller?.text,
         fmt.format(hoje));
-    expect((tester.widget(field(7)) as TextFormField).controller?.text,
-        fmt.format(hoje));
+    expect((tester.widget(field(7)) as TextFormField).controller?.text, '');
 
     await tester.tap(find.text('search'));
     await tester.pumpAndSettle();
     expect(entity.hiringDateFrom, hoje);
-    expect(entity.hiringDateTo, hoje);
+    expect(entity.hiringDateTo, isNull);
 
-    // o campo "até" também escreve no "de"
-    final ontem = hoje.subtract(const Duration(days: 1));
+    // o campo "até" escreve apenas no próprio controller
     entity
       ..hiringDateFrom = null
       ..hiringDateTo = null;
@@ -195,9 +191,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(entity.hiringDateTo, hoje);
     expect(entity.hiringDateFrom, isNull);
-    expect((tester.widget(field(6)) as TextFormField).controller?.text,
+    expect((tester.widget(field(6)) as TextFormField).controller?.text, '');
+    expect((tester.widget(field(7)) as TextFormField).controller?.text,
         fmt.format(hoje));
-    expect(ontem.isBefore(hoje), isTrue);
   });
 
   testWidgets('enviar o campo pelo teclado passa o foco adiante',

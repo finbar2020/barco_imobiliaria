@@ -31,6 +31,10 @@ class _TimesheetListPageState extends State<TimesheetListPage> {
   GlobalKey<RefreshIndicatorState> refreshKey =
       GlobalKey<RefreshIndicatorState>();
   late Completer<void> _refreshCompleter;
+
+  /// Marca a recarga disparada pelo próprio listener (`refreshKey.show()`),
+  /// para que o `onRefresh` do RefreshIndicator não peça outra recarga.
+  bool _programmaticRefresh = false;
   late ScrollController controller2;
   bool periodValidAllowEdit = false;
   DateTime firstDayMonth =
@@ -78,7 +82,10 @@ class _TimesheetListPageState extends State<TimesheetListPage> {
                 )..show(context);
               }
               if (state is TimesheetListLoadingState) {
-                refreshKey.currentState?.show();
+                if (refreshKey.currentState != null) {
+                  _programmaticRefresh = true;
+                  refreshKey.currentState!.show();
+                }
               } else {
                 _refreshCompleter.complete();
                 _refreshCompleter = Completer<void>();
@@ -250,7 +257,13 @@ class _TimesheetListPageState extends State<TimesheetListPage> {
       child: RefreshIndicator(
         key: refreshKey,
         onRefresh: () async {
-          bloc.beginRefresh();
+          if (_programmaticRefresh) {
+            _programmaticRefresh = false;
+            // A recarga já estava em curso: só acompanha o fim dela.
+            if (bloc.state is! TimesheetListLoadingState) return;
+          } else {
+            bloc.beginRefresh();
+          }
           return _refreshCompleter.future;
         },
         child: ListView.separated(
@@ -454,16 +467,15 @@ class _TimesheetListPageState extends State<TimesheetListPage> {
 
   bool _allowEdit(Timesheet entity) {
     //Strings must be hard coded because can't be in english
-    if (!periodValidAllowEdit)
-      false;
-    else if (entity.events != null &&
+    if (!periodValidAllowEdit) return false;
+    if (entity.eventControl?.typeEvent == "ABONO") return false;
+    if (entity.events != null &&
         entity.events!.any((element) =>
             element.toLowerCase().contains("atraso sem justificativa") ||
             element.toLowerCase().contains("falta sem justificativa") ||
             element
                 .toLowerCase()
                 .contains("saida antecipada sem justificativa"))) return true;
-    if (entity.eventControl?.typeEvent == "ABONO") return false;
     return false;
   }
 

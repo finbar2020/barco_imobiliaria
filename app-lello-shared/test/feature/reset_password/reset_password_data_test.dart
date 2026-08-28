@@ -78,19 +78,27 @@ void main() {
       expect((result as Rejection).get(), isA<UnknownFailure>());
     });
 
-    /// Defeito: ao registrar o erro no Crashlytics o repositório faz
-    /// `cpf!.substring(0, 5)`; com CPF de menos de 5 caracteres (ou nulo) o
-    /// erro escapa do `catch` e a chamada lança em vez de rejeitar.
-    test('erro com CPF curto lança RangeError', () async {
+    /// Corrigido: o prefixo do CPF enviado ao Crashlytics passa por um helper
+    /// tolerante a valores curtos ou nulos, então o `catch` sempre devolve a
+    /// rejeição.
+    test('erro com CPF curto ou nulo rejeita em vez de lançar', () async {
       final repository = PasswordResetRepositoryImpl(
           dataSource: ThrowingPasswordResetDataSource());
 
-      await expectLater(repository.post(buildReset(cpf: '123')),
-          throwsA(isA<RangeError>()));
-      await expectLater(
-          repository.post2fa(
-              ResetPassword2faParams(cpf: '12', password: 'p', token: 't')),
-          throwsA(isA<RangeError>()));
+      expect(((await repository.post(buildReset(cpf: '123'))) as Rejection)
+          .get(), isA<UnknownFailure>());
+      expect(((await repository.post(buildReset(cpf: null))) as Rejection)
+          .get(), isA<UnknownFailure>());
+      expect(
+          ((await repository.post2fa(ResetPassword2faParams(
+                  cpf: '12', password: 'p', token: 't'))) as Rejection)
+              .get(),
+          isA<UnknownFailure>());
+      expect(
+          ((await repository.post2fa(ResetPassword2faParams(
+                  cpf: null, password: 'p', token: 't'))) as Rejection)
+              .get(),
+          isA<UnknownFailure>());
     });
   });
 

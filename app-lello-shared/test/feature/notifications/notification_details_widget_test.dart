@@ -129,12 +129,15 @@ void main() {
     expect(find.text('null'), findsOneWidget);
   });
 
-  testWidgets('sem notificação e sem contexto da lista quebra na montagem',
+  testWidgets('sem notificação e sem contexto da lista monta vazia',
       (tester) async {
-    /// Defeito: o `initState` faz `widget.notification!` quando não há
-    /// notificação nem `listNotificationContext`, em vez de tratar o caso.
-    await pumpDetails(tester, notification: null, settle: false);
-    expect(tester.takeException(), isA<TypeError>());
+    /// Corrigido: sem notificação e sem `listNotificationContext` o
+    /// `initState` mantém a notificação vazia em vez de fazer
+    /// `widget.notification!` e quebrar a montagem.
+    await pumpDetails(tester, notification: null);
+    expect(tester.takeException(), isNull);
+    expect(find.byType(NotificationDetailsWidget), findsOneWidget);
+    expect(harness.requestedPaths, isEmpty);
   });
 
   testWidgets('estados de loading e erro', (tester) async {

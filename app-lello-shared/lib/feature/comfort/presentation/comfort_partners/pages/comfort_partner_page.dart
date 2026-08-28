@@ -22,6 +22,7 @@ import 'package:shared_features/feature/comfort/presentation/comfort_partners/pa
 import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/comfort_partner_details/coupon_request_dialog.dart';
 import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/comfort_partner_details/coupon_request_result_page.dart';
 import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/comfort_partner_details/partner_general_rating_widget.dart';
+import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/partner_coupons_list_view/partner_coupon_card.dart';
 import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/partner_coupons_list_view/partner_coupons_list_view.dart';
 import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/partner_coupons_list_view/partner_no_coupon_widget.dart';
 import 'package:shared_features/feature/comfort/presentation/comfort_partners/widgets/review_request_dialog.dart';
@@ -159,6 +160,11 @@ class _ComfortPartnerPageState extends State<ComfortPartnerPage>
               _launchPartnerPage(
                   state.couponRequest, state.selectedPartner, state.error);
               _showReviewDialog(partner, state.requestPurchase, arguments);
+            } else if (state is LoadedComfortPartnerDetailsState &&
+                (state.error?.isNotEmpty ?? false)) {
+              // Falha ao criar a solicitação: sem isto o usuário não recebe
+              // nenhum retorno.
+              _launchPartnerPage(null, state.selectedPartner, state.error);
             }
           },
           bloc: comfortPartnersController.comfortPartnersBloc,
@@ -282,8 +288,14 @@ class _ComfortPartnerPageState extends State<ComfortPartnerPage>
                 if (state is LoadingCouponsState) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is CouponsErrorState) {
-                  return ErrorMessageWidget(
-                    message: getString(context, state.errorMessageKey),
+                  // O `ErrorMessageWidget` é um Column com Expanded: dentro
+                  // do `SingleChildScrollView` da página ele precisa de uma
+                  // altura limitada, senão o layout quebra.
+                  return SizedBox(
+                    height: PartnerCouponCard.cardHeight(),
+                    child: ErrorMessageWidget(
+                      message: getString(context, state.errorMessageKey),
+                    ),
                   );
                 } else if (state is LoadedCouponsState) {
                   if (state.coupons.isEmpty) {
@@ -438,10 +450,14 @@ class _ComfortPartnerPageState extends State<ComfortPartnerPage>
       switch (request.cta) {
         case ComfortCTA.link:
         case ComfortCTA.cupom:
-          await UrlLauncherNative.openUrl(
-            request.urlAndQueries.toString(),
-            headers: request.headers,
-          );
+          final url = request.urlAndQueries;
+          // Sem a guarda um `urlAndQueries` nulo viraria a string "null".
+          if (url != null) {
+            await UrlLauncherNative.openUrl(
+              url.toString(),
+              headers: request.headers,
+            );
+          }
         case ComfortCTA.email:
           Navigator.push(
             context,

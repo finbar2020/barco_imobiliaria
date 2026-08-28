@@ -33,6 +33,13 @@ class _ComfortRateRequestPageState extends State<ComfortRateRequestPage> {
   String? userOpinion;
 
   final TextEditingController controller = TextEditingController();
+  final FocusNode textFieldFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    textFieldFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -122,7 +129,6 @@ class _ComfortRateRequestPageState extends State<ComfortRateRequestPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showSnackBar(context, state.flushbarMessage);
     });
-    FocusNode textFieldFocusNode = FocusNode();
     ThemeData theme = Theme.of(context);
     return GestureDetector(
       onTap: () {

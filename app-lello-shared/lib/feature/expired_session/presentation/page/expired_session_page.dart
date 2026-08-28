@@ -33,6 +33,10 @@ class _ExpiredSessionPageState extends State<ExpiredSessionPage> {
   final _theme = LelloTheme.light;
   late final ExpiredSessionBloc _bloc;
 
+  /// `didChangeDependencies` roda de novo nas transições de rota; o logout
+  /// precisa acontecer uma única vez.
+  bool _logOutStarted = false;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +46,8 @@ class _ExpiredSessionPageState extends State<ExpiredSessionPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (_logOutStarted) return;
+    _logOutStarted = true;
     ExpiredSessionArguments? args =
         ModalRoute.of(context)!.settings.arguments as ExpiredSessionArguments?;
     _bloc.beginLogOut(args);

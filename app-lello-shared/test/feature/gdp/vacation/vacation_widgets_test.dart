@@ -98,10 +98,10 @@ void main() {
       expect(find.text('gdp_vacation_employee_days'), findsOneWidget);
       expect(find.text('10'), findsOneWidget);
       expect(find.text('gdp_vacation_employee_start'), findsOneWidget);
-      /// Defeito: `PeriodConfig.getStartFormatted` devolve "" (nunca null)
-      /// quando não há data, então a dica "selecione a data de início" nunca
-      /// é exibida — o campo fica com a dica vazia.
-      expect(find.text('gdp_vacation_employee_select_start_date'), findsNothing);
+      /// Corrigido: `PeriodConfig.getStartFormatted` devolve null quando não
+      /// há data, então a dica "selecione a data de início" é exibida.
+      expect(find.text('gdp_vacation_employee_select_start_date'),
+          findsOneWidget);
       expect(find.text('gdp_vacation_employee_end'), findsOneWidget);
       await expectLater(findGoldenSurface(),
           matchesGoldenFile('goldens/vacation_accordion_content.png'));
@@ -222,8 +222,18 @@ void main() {
       expect(find.text('validation_required'), findsOneWidget);
     });
 
-    // Defeito (não testável aqui): `selectableDayPredicate` faz
-    // `lockedDays!` — com dias bloqueados nulos o `showDatePicker` lança um
-    // erro de null dentro do `onTap` assíncrono do campo.
+    /// Corrigido: `selectableDayPredicate` não faz mais `lockedDays!`, então
+    /// o calendário abre normalmente quando não há dias bloqueados.
+    testWidgets('sem dias bloqueados o calendário abre e escolhe a data',
+        (tester) async {
+      await pumpContent(tester, useLocked: false);
+
+      await tester.tap(find.byType(TextFormField).first);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await confirmarCalendario(tester);
+
+      expect(config.start, hoje.add(const Duration(days: 2)));
+    });
   });
 }
